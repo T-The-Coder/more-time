@@ -344,7 +344,17 @@ var catalog = {
     moonWaxing: "Moon · {percent} % · waxing",
     moonWaning: "Moon · {percent} % · waning",
     optionNightHint: "In three steps, each darker: civil twilight (sun 0° to −6°), nautical twilight (−6° to −12°), then astronomical twilight and night.",
-    searchEnterNominatim: "Not found yet. Enter also asks OpenStreetMap (Nominatim)."
+    searchEnterNominatim: "Not found yet. Enter also asks OpenStreetMap (Nominatim).",
+    alarmPlace: "Place",
+    alarmPlaceHere: "Here (this computer)",
+    alarmAtPlace: "{place} · {time} here",
+    timerPresets: "Presets",
+    timerPresetsHint: "Lengths in minutes for the row of buttons, separated by commas: 1 to 12 of them, each 1 to 1440.",
+    pomodoroTally: "Today {today} · this week {week}",
+    optionPomodoroTally: "Pomodoro rounds today and this week",
+    entry_pomodoroTally: "Pomodoro rounds",
+    citiesFull: "At most 24 cities: remove one to add another.",
+    alarmZoneUnknown: "Time zone {zone} is not known on this computer; this alarm cannot ring."
   },
   de: {
     appTitle: "More Time",
@@ -685,7 +695,17 @@ var catalog = {
     moonWaxing: "Mond · {percent} % · zunehmend",
     moonWaning: "Mond · {percent} % · abnehmend",
     optionNightHint: "In drei Stufen, jede dunkler: bürgerliche Dämmerung (Sonne 0° bis −6°), nautische Dämmerung (−6° bis −12°), dann astronomische Dämmerung und Nacht.",
-    searchEnterNominatim: "Noch nichts gefunden. Enter fragt auch OpenStreetMap (Nominatim)."
+    searchEnterNominatim: "Noch nichts gefunden. Enter fragt auch OpenStreetMap (Nominatim).",
+    alarmPlace: "Ort",
+    alarmPlaceHere: "Hier (dieser Rechner)",
+    alarmAtPlace: "{place} · {time} hier",
+    timerPresets: "Vorgaben",
+    timerPresetsHint: "Längen in Minuten für die Knopfreihe, durch Kommas getrennt: 1 bis 12 Stück, jede 1 bis 1440.",
+    pomodoroTally: "Heute {today} · diese Woche {week}",
+    optionPomodoroTally: "Pomodoro-Runden heute und diese Woche",
+    entry_pomodoroTally: "Pomodoro-Runden",
+    citiesFull: "Höchstens 24 Städte: Entferne eine, um eine andere hinzuzufügen.",
+    alarmZoneUnknown: "Die Zeitzone {zone} kennt dieser Rechner nicht; dieser Wecker kann nicht klingeln."
   }
 }
 
@@ -992,7 +1012,17 @@ addCatalog("es", {
   moonWaxing: "Luna · {percent} % · creciente",
   moonWaning: "Luna · {percent} % · menguante",
   optionNightHint: "En tres pasos, cada uno más oscuro: crepúsculo civil (sol de 0° a −6°), náutico (−6° a −12°) y luego astronómico y noche.",
-  searchEnterNominatim: "Aún no se encontró nada. Enter también consulta OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Aún no se encontró nada. Enter también consulta OpenStreetMap (Nominatim).",
+  alarmPlace: "Lugar",
+  alarmPlaceHere: "Aquí (este equipo)",
+  alarmAtPlace: "{place} · {time} aquí",
+  timerPresets: "Predefinidos",
+  timerPresetsHint: "Duraciones en minutos para la fila de botones, separadas por comas: de 1 a 12, cada una de 1 a 1440.",
+  pomodoroTally: "Hoy {today} · esta semana {week}",
+  optionPomodoroTally: "Rondas de pomodoro hoy y esta semana",
+  entry_pomodoroTally: "Rondas de pomodoro",
+  citiesFull: "Como mucho 24 ciudades: quita una para añadir otra.",
+  alarmZoneUnknown: "Este equipo no conoce el huso {zone}; esta alarma no puede sonar."
 })
 
 addCatalog("fr", {
@@ -1193,7 +1223,17 @@ addCatalog("fr", {
   moonWaxing: "Lune · {percent} % · croissante",
   moonWaning: "Lune · {percent} % · décroissante",
   optionNightHint: "En trois paliers, chacun plus sombre : crépuscule civil (soleil de 0° à −6°), nautique (−6° à −12°), puis astronomique et nuit.",
-  searchEnterNominatim: "Rien trouvé pour l’instant. Entrée interroge aussi OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Rien trouvé pour l’instant. Entrée interroge aussi OpenStreetMap (Nominatim).",
+  alarmPlace: "Lieu",
+  alarmPlaceHere: "Ici (cet ordinateur)",
+  alarmAtPlace: "{place} · {time} ici",
+  timerPresets: "Préréglages",
+  timerPresetsHint: "Durées en minutes pour la rangée de boutons, séparées par des virgules : de 1 à 12, chacune de 1 à 1440.",
+  pomodoroTally: "Aujourd’hui {today} · cette semaine {week}",
+  optionPomodoroTally: "Tours de pomodoro aujourd’hui et cette semaine",
+  entry_pomodoroTally: "Tours de pomodoro",
+  citiesFull: "24 villes au plus : retire-en une pour en ajouter une autre.",
+  alarmZoneUnknown: "Le fuseau {zone} est inconnu de cet ordinateur ; cette alarme ne peut pas sonner."
 })
 
 addCatalog("pt", {
@@ -1394,7 +1434,17 @@ addCatalog("pt", {
   moonWaxing: "Lua · {percent} % · crescente",
   moonWaning: "Lua · {percent} % · minguante",
   optionNightHint: "Em três passos, cada um mais escuro: crepúsculo civil (sol de 0° a −6°), náutico (−6° a −12°) e depois astronômico e noite.",
-  searchEnterNominatim: "Nada encontrado ainda. Enter também consulta o OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Nada encontrado ainda. Enter também consulta o OpenStreetMap (Nominatim).",
+  alarmPlace: "Local",
+  alarmPlaceHere: "Aqui (este computador)",
+  alarmAtPlace: "{place} · {time} aqui",
+  timerPresets: "Predefinições",
+  timerPresetsHint: "Durações em minutos para a fileira de botões, separadas por vírgulas: de 1 a 12, cada uma de 1 a 1440.",
+  pomodoroTally: "Hoje {today} · esta semana {week}",
+  optionPomodoroTally: "Rodadas de pomodoro hoje e nesta semana",
+  entry_pomodoroTally: "Rodadas de pomodoro",
+  citiesFull: "No máximo 24 cidades: remova uma para adicionar outra.",
+  alarmZoneUnknown: "Este computador não conhece o fuso {zone}; este alarme não pode tocar."
 })
 
 addCatalog("it", {
@@ -1595,7 +1645,17 @@ addCatalog("it", {
   moonWaxing: "Luna · {percent} % · crescente",
   moonWaning: "Luna · {percent} % · calante",
   optionNightHint: "In tre gradi, ciascuno più scuro: crepuscolo civile (sole da 0° a −6°), nautico (−6° a −12°), poi astronomico e notte.",
-  searchEnterNominatim: "Ancora niente. Invio chiede anche a OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Ancora niente. Invio chiede anche a OpenStreetMap (Nominatim).",
+  alarmPlace: "Luogo",
+  alarmPlaceHere: "Qui (questo computer)",
+  alarmAtPlace: "{place} · qui {time}",
+  timerPresets: "Preimpostazioni",
+  timerPresetsHint: "Durate in minuti per la fila di pulsanti, separate da virgole: da 1 a 12, ciascuna da 1 a 1440.",
+  pomodoroTally: "Oggi {today} · questa settimana {week}",
+  optionPomodoroTally: "Giri di pomodoro oggi e questa settimana",
+  entry_pomodoroTally: "Giri di pomodoro",
+  citiesFull: "Al massimo 24 città: rimuovine una per aggiungerne un’altra.",
+  alarmZoneUnknown: "Questo computer non conosce il fuso {zone}; questa sveglia non può suonare."
 })
 
 addCatalog("nl", {
@@ -1796,7 +1856,17 @@ addCatalog("nl", {
   moonWaxing: "Maan · {percent} % · wassend",
   moonWaning: "Maan · {percent} % · afnemend",
   optionNightHint: "In drie stappen, elk donkerder: burgerlijke schemering (zon 0° tot −6°), nautische (−6° tot −12°), dan astronomische schemering en nacht.",
-  searchEnterNominatim: "Nog niets gevonden. Enter vraagt ook OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Nog niets gevonden. Enter vraagt ook OpenStreetMap (Nominatim).",
+  alarmPlace: "Plaats",
+  alarmPlaceHere: "Hier (deze computer)",
+  alarmAtPlace: "{place} · hier {time}",
+  timerPresets: "Voorinstellingen",
+  timerPresetsHint: "Duren in minuten voor de rij knoppen, gescheiden door komma’s: 1 tot 12, elk 1 tot 1440.",
+  pomodoroTally: "Vandaag {today} · deze week {week}",
+  optionPomodoroTally: "Pomodororondes vandaag en deze week",
+  entry_pomodoroTally: "Pomodororondes",
+  citiesFull: "Hooguit 24 steden: verwijder er een om een andere toe te voegen.",
+  alarmZoneUnknown: "Deze computer kent tijdzone {zone} niet; deze wekker kan niet afgaan."
 })
 
 addCatalog("pl", {
@@ -1997,7 +2067,17 @@ addCatalog("pl", {
   moonWaxing: "Księżyc · {percent} % · przybywa",
   moonWaning: "Księżyc · {percent} % · ubywa",
   optionNightHint: "W trzech stopniach, każdy ciemniejszy: zmierzch cywilny (słońce od 0° do −6°), żeglarski (−6° do −12°), potem astronomiczny i noc.",
-  searchEnterNominatim: "Na razie nic nie znaleziono. Enter zapyta też OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Na razie nic nie znaleziono. Enter zapyta też OpenStreetMap (Nominatim).",
+  alarmPlace: "Miejsce",
+  alarmPlaceHere: "Tutaj (ten komputer)",
+  alarmAtPlace: "{place} · tutaj {time}",
+  timerPresets: "Ustawienia gotowe",
+  timerPresetsHint: "Długości w minutach dla rzędu przycisków, oddzielone przecinkami: od 1 do 12, każda od 1 do 1440.",
+  pomodoroTally: "Dziś {today} · w tym tygodniu {week}",
+  optionPomodoroTally: "Rundy pomodoro dziś i w tym tygodniu",
+  entry_pomodoroTally: "Rundy pomodoro",
+  citiesFull: "Najwyżej 24 miasta: usuń jedno, by dodać inne.",
+  alarmZoneUnknown: "Ten komputer nie zna strefy {zone}; ten budzik nie może dzwonić."
 })
 
 addCatalog("ru", {
@@ -2198,7 +2278,17 @@ addCatalog("ru", {
   moonWaxing: "Луна · {percent} % · растущая",
   moonWaning: "Луна · {percent} % · убывающая",
   optionNightHint: "В три ступени, каждая темнее: гражданские сумерки (солнце от 0° до −6°), навигационные (−6°…−12°), затем астрономические сумерки и ночь.",
-  searchEnterNominatim: "Пока ничего не найдено. Enter спросит и OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Пока ничего не найдено. Enter спросит и OpenStreetMap (Nominatim).",
+  alarmPlace: "Место",
+  alarmPlaceHere: "Здесь (этот компьютер)",
+  alarmAtPlace: "{place} · здесь {time}",
+  timerPresets: "Заготовки",
+  timerPresetsHint: "Длительности в минутах для ряда кнопок через запятую: от 1 до 12, каждая от 1 до 1440.",
+  pomodoroTally: "Сегодня {today} · за неделю {week}",
+  optionPomodoroTally: "Раунды помидоро сегодня и за неделю",
+  entry_pomodoroTally: "Раунды помидоро",
+  citiesFull: "Не больше 24 городов: удалите один, чтобы добавить другой.",
+  alarmZoneUnknown: "Этот компьютер не знает часовой пояс {zone}; этот будильник не может звонить."
 })
 
 addCatalog("uk", {
@@ -2399,7 +2489,17 @@ addCatalog("uk", {
   moonWaxing: "Місяць · {percent} % · молодий",
   moonWaning: "Місяць · {percent} % · старий",
   optionNightHint: "У три ступені, кожна темніша: громадянські сутінки (сонце від 0° до −6°), навігаційні (−6°…−12°), далі астрономічні сутінки й ніч.",
-  searchEnterNominatim: "Поки нічого не знайдено. Enter запитає й OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Поки нічого не знайдено. Enter запитає й OpenStreetMap (Nominatim).",
+  alarmPlace: "Місце",
+  alarmPlaceHere: "Тут (цей комп’ютер)",
+  alarmAtPlace: "{place} · тут {time}",
+  timerPresets: "Заготовки",
+  timerPresetsHint: "Тривалості в хвилинах для ряду кнопок через кому: від 1 до 12, кожна від 1 до 1440.",
+  pomodoroTally: "Сьогодні {today} · цього тижня {week}",
+  optionPomodoroTally: "Раунди помодоро сьогодні й цього тижня",
+  entry_pomodoroTally: "Раунди помодоро",
+  citiesFull: "Не більше 24 міст: вилучіть одне, щоб додати інше.",
+  alarmZoneUnknown: "Цей комп’ютер не знає часового поясу {zone}; цей будильник не може дзвонити."
 })
 
 addCatalog("tr", {
@@ -2600,7 +2700,17 @@ addCatalog("tr", {
   moonWaxing: "Ay · {percent} % · büyüyen",
   moonWaning: "Ay · {percent} % · küçülen",
   optionNightHint: "Her biri daha koyu üç adımda: sivil alacakaranlık (güneş 0° ile −6°), denizcilik (−6° ile −12°), ardından astronomik alacakaranlık ve gece.",
-  searchEnterNominatim: "Henüz bir şey bulunamadı. Enter OpenStreetMap’e (Nominatim) de sorar."
+  searchEnterNominatim: "Henüz bir şey bulunamadı. Enter OpenStreetMap’e (Nominatim) de sorar.",
+  alarmPlace: "Yer",
+  alarmPlaceHere: "Burası (bu bilgisayar)",
+  alarmAtPlace: "{place} · burada {time}",
+  timerPresets: "Hazır süreler",
+  timerPresetsHint: "Düğme sırası için dakika cinsinden süreler, virgülle ayrılmış: 1 ile 12 arası, her biri 1 ile 1440 arası.",
+  pomodoroTally: "Bugün {today} · bu hafta {week}",
+  optionPomodoroTally: "Bugün ve bu hafta pomodoro turları",
+  entry_pomodoroTally: "Pomodoro turları",
+  citiesFull: "En fazla 24 şehir: başka bir şehir eklemek için birini kaldırın.",
+  alarmZoneUnknown: "Bu bilgisayar {zone} saat dilimini tanımıyor; bu alarm çalamaz."
 })
 
 addCatalog("cs", {
@@ -2801,7 +2911,17 @@ addCatalog("cs", {
   moonWaxing: "Měsíc · {percent} % · dorůstá",
   moonWaning: "Měsíc · {percent} % · couvá",
   optionNightHint: "Ve třech stupních, každý tmavší: občanský soumrak (slunce 0° až −6°), nautický (−6° až −12°), pak astronomický soumrak a noc.",
-  searchEnterNominatim: "Zatím nic nenalezeno. Enter se zeptá i OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Zatím nic nenalezeno. Enter se zeptá i OpenStreetMap (Nominatim).",
+  alarmPlace: "Místo",
+  alarmPlaceHere: "Zde (tento počítač)",
+  alarmAtPlace: "{place} · zde {time}",
+  timerPresets: "Předvolby",
+  timerPresetsHint: "Délky v minutách pro řadu tlačítek oddělené čárkami: 1 až 12, každá 1 až 1440.",
+  pomodoroTally: "Dnes {today} · tento týden {week}",
+  optionPomodoroTally: "Kola pomodora dnes a tento týden",
+  entry_pomodoroTally: "Kola pomodora",
+  citiesFull: "Nejvýš 24 měst: odeberte jedno, chcete-li přidat jiné.",
+  alarmZoneUnknown: "Tento počítač nezná pásmo {zone}; tento budík nemůže zvonit."
 })
 
 addCatalog("sv", {
@@ -3002,7 +3122,17 @@ addCatalog("sv", {
   moonWaxing: "Måne · {percent} % · tilltagande",
   moonWaning: "Måne · {percent} % · avtagande",
   optionNightHint: "I tre steg, vart och ett mörkare: borgerlig skymning (solen 0° till −6°), nautisk (−6° till −12°), sedan astronomisk skymning och natt.",
-  searchEnterNominatim: "Inget hittat än. Enter frågar också OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Inget hittat än. Enter frågar också OpenStreetMap (Nominatim).",
+  alarmPlace: "Plats",
+  alarmPlaceHere: "Här (den här datorn)",
+  alarmAtPlace: "{place} · {time} här",
+  timerPresets: "Förval",
+  timerPresetsHint: "Längder i minuter för knappraden, åtskilda med komman: 1 till 12, var och en 1 till 1440.",
+  pomodoroTally: "I dag {today} · denna vecka {week}",
+  optionPomodoroTally: "Pomodororundor i dag och denna vecka",
+  entry_pomodoroTally: "Pomodororundor",
+  citiesFull: "Högst 24 städer: ta bort en för att lägga till en annan.",
+  alarmZoneUnknown: "Den här datorn känner inte tidszonen {zone}; det här alarmet kan inte ringa."
 })
 
 addCatalog("fi", {
@@ -3203,7 +3333,17 @@ addCatalog("fi", {
   moonWaxing: "Kuu · {percent} % · kasvava",
   moonWaning: "Kuu · {percent} % · vähenevä",
   optionNightHint: "Kolmessa portaassa, kukin tummempi: porvarillinen hämärä (aurinko 0°…−6°), nauttinen (−6°…−12°), sitten tähtitieteellinen hämärä ja yö.",
-  searchEnterNominatim: "Mitään ei vielä löytynyt. Enter kysyy myös OpenStreetMapilta (Nominatim)."
+  searchEnterNominatim: "Mitään ei vielä löytynyt. Enter kysyy myös OpenStreetMapilta (Nominatim).",
+  alarmPlace: "Paikka",
+  alarmPlaceHere: "Täällä (tämä tietokone)",
+  alarmAtPlace: "{place} · täällä {time}",
+  timerPresets: "Valmiit ajat",
+  timerPresetsHint: "Pituudet minuutteina painikeriville pilkuilla eroteltuina: 1–12 kpl, kukin 1–1440.",
+  pomodoroTally: "Tänään {today} · tällä viikolla {week}",
+  optionPomodoroTally: "Pomodorokierrokset tänään ja tällä viikolla",
+  entry_pomodoroTally: "Pomodorokierrokset",
+  citiesFull: "Enintään 24 kaupunkia: poista yksi lisätäksesi toisen.",
+  alarmZoneUnknown: "Tämä tietokone ei tunne aikavyöhykettä {zone}; tämä herätys ei voi soida."
 })
 
 addCatalog("nb", {
@@ -3404,7 +3544,17 @@ addCatalog("nb", {
   moonWaxing: "Måne · {percent} % · voksende",
   moonWaning: "Måne · {percent} % · avtagende",
   optionNightHint: "I tre trinn, hvert mørkere: borgerlig skumring (solen 0° til −6°), nautisk (−6° til −12°), så astronomisk skumring og natt.",
-  searchEnterNominatim: "Ingenting funnet ennå. Enter spør også OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Ingenting funnet ennå. Enter spør også OpenStreetMap (Nominatim).",
+  alarmPlace: "Sted",
+  alarmPlaceHere: "Her (denne datamaskinen)",
+  alarmAtPlace: "{place} · {time} her",
+  timerPresets: "Forhåndsvalg",
+  timerPresetsHint: "Lengder i minutter for knapperaden, skilt med komma: 1 til 12, hver 1 til 1440.",
+  pomodoroTally: "I dag {today} · denne uken {week}",
+  optionPomodoroTally: "Pomodororunder i dag og denne uken",
+  entry_pomodoroTally: "Pomodororunder",
+  citiesFull: "Høyst 24 byer: fjern én for å legge til en annen.",
+  alarmZoneUnknown: "Denne datamaskinen kjenner ikke tidssonen {zone}; denne alarmen kan ikke ringe."
 })
 
 addCatalog("da", {
@@ -3605,7 +3755,17 @@ addCatalog("da", {
   moonWaxing: "Måne · {percent} % · tiltagende",
   moonWaning: "Måne · {percent} % · aftagende",
   optionNightHint: "I tre trin, hvert mørkere: borgerligt tusmørke (solen 0° til −6°), nautisk (−6° til −12°), derefter astronomisk tusmørke og nat.",
-  searchEnterNominatim: "Intet fundet endnu. Enter spørger også OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Intet fundet endnu. Enter spørger også OpenStreetMap (Nominatim).",
+  alarmPlace: "Sted",
+  alarmPlaceHere: "Her (denne computer)",
+  alarmAtPlace: "{place} · {time} her",
+  timerPresets: "Forvalg",
+  timerPresetsHint: "Længder i minutter til knaprækken, adskilt med kommaer: 1 til 12, hver 1 til 1440.",
+  pomodoroTally: "I dag {today} · denne uge {week}",
+  optionPomodoroTally: "Pomodororunder i dag og denne uge",
+  entry_pomodoroTally: "Pomodororunder",
+  citiesFull: "Højst 24 byer: fjern én for at tilføje en anden.",
+  alarmZoneUnknown: "Denne computer kender ikke tidszonen {zone}; denne alarm kan ikke ringe."
 })
 
 addCatalog("ro", {
@@ -3806,7 +3966,17 @@ addCatalog("ro", {
   moonWaxing: "Luna · {percent} % · în creștere",
   moonWaning: "Luna · {percent} % · în descreștere",
   optionNightHint: "În trei trepte, fiecare mai întunecată: crepuscul civil (soare de la 0° la −6°), nautic (−6° la −12°), apoi astronomic și noapte.",
-  searchEnterNominatim: "Nimic găsit încă. Enter întreabă și OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Nimic găsit încă. Enter întreabă și OpenStreetMap (Nominatim).",
+  alarmPlace: "Loc",
+  alarmPlaceHere: "Aici (acest computer)",
+  alarmAtPlace: "{place} · aici {time}",
+  timerPresets: "Presetări",
+  timerPresetsHint: "Durate în minute pentru rândul de butoane, separate prin virgule: de la 1 la 12, fiecare de la 1 la 1440.",
+  pomodoroTally: "Azi {today} · săptămâna aceasta {week}",
+  optionPomodoroTally: "Runde pomodoro azi și săptămâna aceasta",
+  entry_pomodoroTally: "Runde pomodoro",
+  citiesFull: "Cel mult 24 de orașe: elimină unul ca să adaugi altul.",
+  alarmZoneUnknown: "Acest computer nu cunoaște fusul {zone}; această alarmă nu poate suna."
 })
 
 addCatalog("hu", {
@@ -4007,7 +4177,17 @@ addCatalog("hu", {
   moonWaxing: "Hold · {percent} % · növő",
   moonWaning: "Hold · {percent} % · fogyó",
   optionNightHint: "Három, egyre sötétebb fokozatban: polgári szürkület (nap 0° és −6° között), navigációs (−6° és −12°), aztán csillagászati szürkület és éjszaka.",
-  searchEnterNominatim: "Még nincs találat. Az Enter az OpenStreetMapet (Nominatim) is megkérdezi."
+  searchEnterNominatim: "Még nincs találat. Az Enter az OpenStreetMapet (Nominatim) is megkérdezi.",
+  alarmPlace: "Hely",
+  alarmPlaceHere: "Itt (ez a gép)",
+  alarmAtPlace: "{place} · itt {time}",
+  timerPresets: "Előbeállítások",
+  timerPresetsHint: "Hosszak percben a gombsorhoz, vesszővel elválasztva: 1–12 darab, mindegyik 1 és 1440 között.",
+  pomodoroTally: "Ma {today} · ezen a héten {week}",
+  optionPomodoroTally: "Pomodorókörök ma és ezen a héten",
+  entry_pomodoroTally: "Pomodorókörök",
+  citiesFull: "Legfeljebb 24 város: távolíts el egyet, hogy újat vehess fel.",
+  alarmZoneUnknown: "Ez a gép nem ismeri a(z) {zone} időzónát; ez az ébresztő nem tud szólni."
 })
 
 addCatalog("el", {
@@ -4208,7 +4388,17 @@ addCatalog("el", {
   moonWaxing: "Σελήνη · {percent} % · αύξουσα",
   moonWaning: "Σελήνη · {percent} % · φθίνουσα",
   optionNightHint: "Σε τρία στάδια, το καθένα πιο σκούρο: πολιτικό λυκόφως (ήλιος 0° έως −6°), ναυτικό (−6° έως −12°), μετά αστρονομικό λυκόφως και νύχτα.",
-  searchEnterNominatim: "Τίποτα ακόμη. Το Enter ρωτά και το OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Τίποτα ακόμη. Το Enter ρωτά και το OpenStreetMap (Nominatim).",
+  alarmPlace: "Τόπος",
+  alarmPlaceHere: "Εδώ (αυτός ο υπολογιστής)",
+  alarmAtPlace: "{place} · εδώ {time}",
+  timerPresets: "Προεπιλογές",
+  timerPresetsHint: "Διάρκειες σε λεπτά για τη σειρά κουμπιών, χωρισμένες με κόμματα: 1 έως 12, η καθεμία 1 έως 1440.",
+  pomodoroTally: "Σήμερα {today} · αυτή την εβδομάδα {week}",
+  optionPomodoroTally: "Γύροι pomodoro σήμερα και αυτή την εβδομάδα",
+  entry_pomodoroTally: "Γύροι pomodoro",
+  citiesFull: "Το πολύ 24 πόλεις: αφαίρεσε μία για να προσθέσεις άλλη.",
+  alarmZoneUnknown: "Αυτός ο υπολογιστής δεν γνωρίζει τη ζώνη {zone}· αυτό το ξυπνητήρι δεν μπορεί να χτυπήσει."
 })
 
 addCatalog("hi", {
@@ -4409,7 +4599,17 @@ addCatalog("hi", {
   moonWaxing: "चंद्रमा · {percent} % · बढ़ता",
   moonWaning: "चंद्रमा · {percent} % · घटता",
   optionNightHint: "तीन चरणों में, हर एक गहरा: नागरिक संधिप्रकाश (सूर्य 0° से −6°), नौवहन (−6° से −12°), फिर खगोलीय संधिप्रकाश और रात।",
-  searchEnterNominatim: "अभी कुछ नहीं मिला। Enter OpenStreetMap (Nominatim) से भी पूछता है।"
+  searchEnterNominatim: "अभी कुछ नहीं मिला। Enter OpenStreetMap (Nominatim) से भी पूछता है।",
+  alarmPlace: "जगह",
+  alarmPlaceHere: "यहाँ (यह कंप्यूटर)",
+  alarmAtPlace: "{place} · यहाँ {time}",
+  timerPresets: "प्रीसेट",
+  timerPresetsHint: "बटनों की पंक्ति के लिए मिनटों में अवधियाँ, अल्पविराम से अलग: 1 से 12, हर एक 1 से 1440।",
+  pomodoroTally: "आज {today} · इस सप्ताह {week}",
+  optionPomodoroTally: "आज और इस सप्ताह के पोमोडोरो दौर",
+  entry_pomodoroTally: "पोमोडोरो दौर",
+  citiesFull: "अधिकतम 24 शहर: दूसरा जोड़ने के लिए एक हटाएँ।",
+  alarmZoneUnknown: "यह कंप्यूटर समय क्षेत्र {zone} नहीं जानता; यह अलार्म नहीं बज सकता।"
 })
 
 addCatalog("id", {
@@ -4610,7 +4810,17 @@ addCatalog("id", {
   moonWaxing: "Bulan · {percent} % · membesar",
   moonWaning: "Bulan · {percent} % · mengecil",
   optionNightHint: "Dalam tiga tahap, masing-masing lebih gelap: senja sipil (matahari 0° sampai −6°), nautika (−6° sampai −12°), lalu senja astronomi dan malam.",
-  searchEnterNominatim: "Belum ada yang ditemukan. Enter juga bertanya ke OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Belum ada yang ditemukan. Enter juga bertanya ke OpenStreetMap (Nominatim).",
+  alarmPlace: "Tempat",
+  alarmPlaceHere: "Di sini (komputer ini)",
+  alarmAtPlace: "{place} · {time} di sini",
+  timerPresets: "Prasetel",
+  timerPresetsHint: "Durasi dalam menit untuk deretan tombol, dipisah koma: 1 sampai 12, masing-masing 1 sampai 1440.",
+  pomodoroTally: "Hari ini {today} · minggu ini {week}",
+  optionPomodoroTally: "Ronde pomodoro hari ini dan minggu ini",
+  entry_pomodoroTally: "Ronde pomodoro",
+  citiesFull: "Paling banyak 24 kota: hapus satu untuk menambah yang lain.",
+  alarmZoneUnknown: "Komputer ini tidak mengenal zona waktu {zone}; alarm ini tidak dapat berbunyi."
 })
 
 addCatalog("vi", {
@@ -4811,7 +5021,17 @@ addCatalog("vi", {
   moonWaxing: "Trăng · {percent} % · đang tròn",
   moonWaning: "Trăng · {percent} % · đang khuyết",
   optionNightHint: "Ba bậc, mỗi bậc tối hơn: chạng vạng dân dụng (mặt trời 0° đến −6°), hàng hải (−6° đến −12°), rồi chạng vạng thiên văn và đêm.",
-  searchEnterNominatim: "Chưa tìm thấy. Enter cũng hỏi OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "Chưa tìm thấy. Enter cũng hỏi OpenStreetMap (Nominatim).",
+  alarmPlace: "Nơi",
+  alarmPlaceHere: "Tại đây (máy tính này)",
+  alarmAtPlace: "{place} · {time} tại đây",
+  timerPresets: "Mặc định sẵn",
+  timerPresetsHint: "Thời lượng bằng phút cho hàng nút, cách nhau bằng dấu phẩy: từ 1 đến 12, mỗi số từ 1 đến 1440.",
+  pomodoroTally: "Hôm nay {today} · tuần này {week}",
+  optionPomodoroTally: "Số vòng pomodoro hôm nay và tuần này",
+  entry_pomodoroTally: "Số vòng pomodoro",
+  citiesFull: "Tối đa 24 thành phố: xóa một để thêm cái khác.",
+  alarmZoneUnknown: "Máy tính này không biết múi giờ {zone}; báo thức này không thể reo."
 })
 
 addCatalog("th", {
@@ -5012,7 +5232,17 @@ addCatalog("th", {
   moonWaxing: "ดวงจันทร์ · {percent} % · ข้างขึ้น",
   moonWaning: "ดวงจันทร์ · {percent} % · ข้างแรม",
   optionNightHint: "สามขั้น แต่ละขั้นมืดขึ้น: แสงสนธยาทางพลเรือน (ดวงอาทิตย์ 0° ถึง −6°) ทางทะเล (−6° ถึง −12°) แล้วจึงทางดาราศาสตร์และกลางคืน",
-  searchEnterNominatim: "ยังไม่พบ Enter จะถาม OpenStreetMap (Nominatim) ด้วย"
+  searchEnterNominatim: "ยังไม่พบ Enter จะถาม OpenStreetMap (Nominatim) ด้วย",
+  alarmPlace: "สถานที่",
+  alarmPlaceHere: "ที่นี่ (คอมพิวเตอร์เครื่องนี้)",
+  alarmAtPlace: "{place} · ที่นี่ {time}",
+  timerPresets: "ค่าที่ตั้งไว้",
+  timerPresetsHint: "ระยะเวลาเป็นนาทีสำหรับแถวปุ่ม คั่นด้วยจุลภาค: 1 ถึง 12 ค่า แต่ละค่า 1 ถึง 1440",
+  pomodoroTally: "วันนี้ {today} · สัปดาห์นี้ {week}",
+  optionPomodoroTally: "รอบโพโมโดโรวันนี้และสัปดาห์นี้",
+  entry_pomodoroTally: "รอบโพโมโดโร",
+  citiesFull: "มีได้สูงสุด 24 เมือง ลบเมืองหนึ่งออกเพื่อเพิ่มเมืองอื่น",
+  alarmZoneUnknown: "คอมพิวเตอร์เครื่องนี้ไม่รู้จักเขตเวลา {zone} นาฬิกาปลุกนี้ดังไม่ได้"
 })
 
 addCatalog("ja", {
@@ -5213,7 +5443,17 @@ addCatalog("ja", {
   moonWaxing: "月 · {percent} % · 満ちていく",
   moonWaning: "月 · {percent} % · 欠けていく",
   optionNightHint: "3 段階で順に暗く: 市民薄明（太陽 0°〜−6°）、航海薄明（−6°〜−12°）、そして天文薄明と夜。",
-  searchEnterNominatim: "まだ見つかりません。Enter で OpenStreetMap（Nominatim）にも問い合わせます。"
+  searchEnterNominatim: "まだ見つかりません。Enter で OpenStreetMap（Nominatim）にも問い合わせます。",
+  alarmPlace: "場所",
+  alarmPlaceHere: "現在地（このコンピューター）",
+  alarmAtPlace: "{place} · 現在地 {time}",
+  timerPresets: "プリセット",
+  timerPresetsHint: "ボタン列に使う分数をカンマ区切りで: 1〜12 個、各 1〜1440。",
+  pomodoroTally: "今日 {today} · 今週 {week}",
+  optionPomodoroTally: "今日と今週のポモドーロ回数",
+  entry_pomodoroTally: "ポモドーロ回数",
+  citiesFull: "都市は最大 24 件です。追加するには 1 件削除してください。",
+  alarmZoneUnknown: "このコンピューターはタイムゾーン {zone} を知りません。このアラームは鳴りません。"
 })
 
 addCatalog("ko", {
@@ -5414,7 +5654,17 @@ addCatalog("ko", {
   moonWaxing: "달 · {percent} % · 차는 중",
   moonWaning: "달 · {percent} % · 기우는 중",
   optionNightHint: "세 단계로 점점 어둡게: 시민 박명(태양 0°~−6°), 항해 박명(−6°~−12°), 그다음 천문 박명과 밤.",
-  searchEnterNominatim: "아직 찾지 못했습니다. Enter를 누르면 OpenStreetMap(Nominatim)에도 묻습니다."
+  searchEnterNominatim: "아직 찾지 못했습니다. Enter를 누르면 OpenStreetMap(Nominatim)에도 묻습니다.",
+  alarmPlace: "장소",
+  alarmPlaceHere: "현재 위치(이 컴퓨터)",
+  alarmAtPlace: "{place} · 여기 {time}",
+  timerPresets: "프리셋",
+  timerPresetsHint: "버튼 줄에 쓸 분 단위 길이, 쉼표로 구분: 1~12개, 각각 1~1440.",
+  pomodoroTally: "오늘 {today} · 이번 주 {week}",
+  optionPomodoroTally: "오늘과 이번 주 뽀모도로 횟수",
+  entry_pomodoroTally: "뽀모도로 횟수",
+  citiesFull: "도시는 최대 24개입니다. 다른 도시를 추가하려면 하나를 제거하세요.",
+  alarmZoneUnknown: "이 컴퓨터는 시간대 {zone}을(를) 모릅니다. 이 알람은 울릴 수 없습니다."
 })
 
 addCatalog("zh_CN", {
@@ -5615,7 +5865,17 @@ addCatalog("zh_CN", {
   moonWaxing: "月亮 · {percent} % · 盈",
   moonWaning: "月亮 · {percent} % · 亏",
   optionNightHint: "分三级，一级比一级暗：民用晨昏蒙影（太阳 0° 到 −6°）、航海晨昏蒙影（−6° 到 −12°），然后是天文晨昏蒙影和黑夜。",
-  searchEnterNominatim: "暂未找到。按 Enter 还会查询 OpenStreetMap（Nominatim）。"
+  searchEnterNominatim: "暂未找到。按 Enter 还会查询 OpenStreetMap（Nominatim）。",
+  alarmPlace: "地点",
+  alarmPlaceHere: "此地（本机）",
+  alarmAtPlace: "{place} · 此地 {time}",
+  timerPresets: "预设",
+  timerPresetsHint: "按钮行使用的分钟数，用逗号分隔：1 到 12 个，每个 1 到 1440。",
+  pomodoroTally: "今天 {today} · 本周 {week}",
+  optionPomodoroTally: "今天和本周的番茄钟轮数",
+  entry_pomodoroTally: "番茄钟轮数",
+  citiesFull: "最多 24 个城市：移除一个才能添加另一个。",
+  alarmZoneUnknown: "本机不认识时区 {zone}；这个闹钟无法响铃。"
 })
 
 addCatalog("zh_TW", {
@@ -5816,7 +6076,17 @@ addCatalog("zh_TW", {
   moonWaxing: "月亮 · {percent} % · 盈",
   moonWaning: "月亮 · {percent} % · 虧",
   optionNightHint: "分三級，一級比一級暗：民用曙暮光（太陽 0° 到 −6°）、航海曙暮光（−6° 到 −12°），然後是天文曙暮光和黑夜。",
-  searchEnterNominatim: "暫未找到。按 Enter 也會查詢 OpenStreetMap（Nominatim）。"
+  searchEnterNominatim: "暫未找到。按 Enter 也會查詢 OpenStreetMap（Nominatim）。",
+  alarmPlace: "地點",
+  alarmPlaceHere: "此地（本機）",
+  alarmAtPlace: "{place} · 此地 {time}",
+  timerPresets: "預設",
+  timerPresetsHint: "按鈕列使用的分鐘數，以逗號分隔：1 到 12 個，每個 1 到 1440。",
+  pomodoroTally: "今天 {today} · 本週 {week}",
+  optionPomodoroTally: "今天和本週的番茄鐘輪數",
+  entry_pomodoroTally: "番茄鐘輪數",
+  citiesFull: "最多 24 個城市：移除一個才能加入另一個。",
+  alarmZoneUnknown: "本機不認識時區 {zone}；這個鬧鐘無法響鈴。"
 })
 
 addCatalog("ar", {
@@ -6017,7 +6287,17 @@ addCatalog("ar", {
   moonWaxing: "القمر · {percent} % · متزايد",
   moonWaning: "القمر · {percent} % · متناقص",
   optionNightHint: "على ثلاث درجات، كل منها أغمق: الشفق المدني (الشمس من 0° إلى −6°)، والبحري (−6° إلى −12°)، ثم الفلكي والليل.",
-  searchEnterNominatim: "لم يُعثر على شيء بعد. يسأل Enter أيضًا OpenStreetMap (Nominatim)."
+  searchEnterNominatim: "لم يُعثر على شيء بعد. يسأل Enter أيضًا OpenStreetMap (Nominatim).",
+  alarmPlace: "المكان",
+  alarmPlaceHere: "هنا (هذا الحاسوب)",
+  alarmAtPlace: "{place} · {time} هنا",
+  timerPresets: "المدد الجاهزة",
+  timerPresetsHint: "مدد بالدقائق لصف الأزرار، تفصلها فواصل: من 1 إلى 12، كل منها من 1 إلى 1440.",
+  pomodoroTally: "اليوم {today} · هذا الأسبوع {week}",
+  optionPomodoroTally: "جولات بومودورو اليوم وهذا الأسبوع",
+  entry_pomodoroTally: "جولات بومودورو",
+  citiesFull: "24 مدينة على الأكثر: أزل واحدة لإضافة أخرى.",
+  alarmZoneUnknown: "لا يعرف هذا الحاسوب المنطقة الزمنية {zone}؛ لا يمكن لهذا المنبه أن يرن."
 })
 
 addCatalog("he", {
@@ -6218,7 +6498,17 @@ addCatalog("he", {
   moonWaxing: "ירח · {percent} % · מתמלא",
   moonWaning: "ירח · {percent} % · מתמעט",
   optionNightHint: "בשלוש מדרגות, כל אחת כהה יותר: דמדומים אזרחיים (השמש 0° עד −6°), ימיים (−6° עד −12°), ואז דמדומים אסטרונומיים ולילה.",
-  searchEnterNominatim: "עדיין לא נמצא דבר. Enter שואל גם את OpenStreetMap ‏(Nominatim)."
+  searchEnterNominatim: "עדיין לא נמצא דבר. Enter שואל גם את OpenStreetMap ‏(Nominatim).",
+  alarmPlace: "מקום",
+  alarmPlaceHere: "כאן (המחשב הזה)",
+  alarmAtPlace: "{place} · כאן {time}",
+  timerPresets: "קבועים מראש",
+  timerPresetsHint: "אורכים בדקות לשורת הכפתורים, מופרדים בפסיקים: 1 עד 12, כל אחד 1 עד 1440.",
+  pomodoroTally: "היום {today} · השבוע {week}",
+  optionPomodoroTally: "סבבי פומודורו היום והשבוע",
+  entry_pomodoroTally: "סבבי פומודורו",
+  citiesFull: "לכל היותר 24 ערים: הסר אחת כדי להוסיף אחרת.",
+  alarmZoneUnknown: "המחשב הזה לא מכיר את אזור הזמן {zone}; המעורר הזה לא יכול לצלצל."
 })
 
 addCatalog("fa", {
@@ -6419,5 +6709,15 @@ addCatalog("fa", {
   moonWaxing: "ماه · {percent} % · رو به افزایش",
   moonWaning: "ماه · {percent} % · رو به کاهش",
   optionNightHint: "در سه پله، هر کدام تیره‌تر: گرگ‌ومیش شهری (خورشید ۰° تا −۶°)، دریایی (−۶° تا −۱۲°)، سپس نجومی و شب.",
-  searchEnterNominatim: "هنوز چیزی پیدا نشد. Enter از OpenStreetMap ‏(Nominatim) هم می‌پرسد."
+  searchEnterNominatim: "هنوز چیزی پیدا نشد. Enter از OpenStreetMap ‏(Nominatim) هم می‌پرسد.",
+  alarmPlace: "مکان",
+  alarmPlaceHere: "این‌جا (همین رایانه)",
+  alarmAtPlace: "{place} · این‌جا {time}",
+  timerPresets: "زمان‌های آماده",
+  timerPresetsHint: "مدت‌ها به دقیقه برای ردیف دکمه‌ها، جداشده با ویرگول: ۱ تا ۱۲ عدد، هر کدام ۱ تا ۱۴۴۰.",
+  pomodoroTally: "امروز {today} · این هفته {week}",
+  optionPomodoroTally: "دورهای پومودورو امروز و این هفته",
+  entry_pomodoroTally: "دورهای پومودورو",
+  citiesFull: "حداکثر ۲۴ شهر: برای افزودن شهر دیگر یکی را حذف کنید.",
+  alarmZoneUnknown: "این رایانه منطقهٔ زمانی {zone} را نمی‌شناسد؛ این زنگ نمی‌تواند به صدا درآید."
 })

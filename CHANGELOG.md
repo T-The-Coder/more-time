@@ -6,6 +6,12 @@ All notable changes to More Time are documented here.
 
 First release.
 
+> **Chimes are on by default:** a short beep every quarter hour (one at :15,
+> two at :30, three at :45, four on the hour). Mute them with `m` in the
+> widget or the app, the bell next to the clock, Settings → Sounds → Mute the
+> chimes, or `qs ipc -p /usr/share/omarchy/shell call more-time muteChimes`;
+> Settings → Sounds → Chime → Off turns them off.
+
 - **Clock in the bar:**
   - Time, seconds, weekday, date, week number, cities, the next alarm, running
     timers, stopwatches and pomodoros, and a bell while something rings.
@@ -57,16 +63,17 @@ First release.
   per notch, touchpad deltas scaled up), in the view and in the settings;
   the globe and the editors' values keep the wheel where they use it.
 - **Alarms:** as many as you like, once or on weekdays, with a name and a
-  snooze length. Missed alarms are announced, and alarms up to ten minutes late
+  snooze length, optionally at a city's time (its zone, summer time included). Missed alarms are announced, and alarms up to ten minutes late
   still ring. The last check is kept on disk, so an alarm due while the
   computer was off is announced as missed after a reboot, and a once-alarm is
   switched off instead of ringing the next day.
-- **Timers:** as many as you like, from presets or typed lengths, with
-  pause, ±1 minute and progress. A name can follow the typed length
-  (`10 Tea`).
+- **Timers:** as many as you like, from presets (your own list) or typed
+  lengths, with pause, ±1 minute and progress. A name can follow the typed
+  length (`10 Tea`).
 - **Stopwatches:** as many as you like, with laps and hundredths.
 - **Pomodoros:** as many as you like, with focus and break lengths (25/5 to
-  begin with), an optional long break and auto continue.
+  begin with), an optional long break and auto continue; a tally of focus
+  rounds today and this week (list, clock, bar).
 - **Ringing:** sound through PipeWire, notifications with Stop and Snooze, and a
   banner in the popup and the app. Only one instance rings, even with the app
   and several monitors.

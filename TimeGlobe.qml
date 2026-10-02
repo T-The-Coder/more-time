@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import qs.Commons
 import "WorldMap.js" as WorldMap
+import "Moon.js" as Moon
 import "Globe.js" as Globe
 
 // The World tab's other map: the earth as a globe, seen from above the
@@ -29,6 +30,10 @@ Item {
   // Where the Moon was drawn on the front side, for the hover, or null.
   property var moonHit: null
   readonly property real moonRadius: Style.space(6)
+  // What painting costs (the screenshot harness measures a turn): frames,
+  // total and longest milliseconds, and the total per part (zones, land and
+  // grid, twilight and sky, places).
+  property var paintStats: ({ count: 0, total: 0, max: 0 })
   // The pointer resting over the globe, for the hover, or null.
   property var pointer: null
   readonly property bool showLabels: panel.displaySetting("worldMapLabels", true)
@@ -119,7 +124,7 @@ Item {
     var shapes = {}
     var elevations = WorldMap.twilightElevations(layers)
     for (var i = 0; i < elevations.length; i++)
-      shapes[elevations[i]] = WorldMap.twilightRings(ms, elevations[i]).map(function(r) { return Globe.prepareLatLon(r) })
+      shapes[elevations[i]] = WorldMap.twilightRings(ms, elevations[i], rotating ? 4 : 2).map(function(r) { return Globe.prepareLatLon(r) })
     return { layers: layers, shapes: shapes, sun: WorldMap.subsolarPoint(ms) }
   }
   property var hover: null
@@ -166,16 +171,20 @@ Item {
     onTriggered: globe.rotating = true
   }
 
+  // A frame for every pixel the surface moves at the centre, not more
+  // often than 30 a second: at one turn in four minutes about five a second,
+  // which keeps a frame of 30–40 ms (QML, every layer on) cheap.
   Timer {
     id: rotateTimer
-    interval: 33
+    interval: Math.max(33, Math.min(250, (180 / Math.PI / Math.max(1, globe.radius))
+      / (360 / (globe.rotateTurnMinutes * 60000))))
     repeat: true
     running: globe.canRotate && globe.rotating
     property double last: 0
     onRunningChanged: last = Date.now()
     onTriggered: {
       var now = Date.now()
-      var elapsed = Math.min(200, now - last)
+      var elapsed = Math.min(500, now - last)
       last = now
       if (!turnAnimation.running) globe.centerLon += elapsed * 360 / (globe.rotateTurnMinutes * 60000)
     }
@@ -227,6 +236,7 @@ Item {
     }
 
     onPaint: {
+      var started = Date.now()
       var ctx = getContext("2d")
       ctx.reset()
       var data = globe.globeData
@@ -250,6 +260,8 @@ Item {
           : (band === 2 ? hatch : rgba(ink, band === 1 ? 0.12 : 0.035)))
       }
 
+      var zonesDone = Date.now()
+
       // Meridians every 15° and the equator, faintly.
       ctx.strokeStyle = rgba(ink, 0.07)
       ctx.lineWidth = 1
@@ -268,6 +280,8 @@ Item {
       ctx.strokeStyle = rgba(ink, 0.55)
       ctx.lineWidth = 0.8
       ctx.stroke()
+
+      var landDone = Date.now()
 
       // The twilight layers: the golden and the blue band with soft edges,
       // the night in three steps (WorldMap.twilightLayers); then the Sun at
@@ -297,18 +311,18 @@ Item {
       // The Moon floats above its sub-lunar point, lifted along the view
       // direction (1.15 of its distance from the centre), its shadow on the
       // surface; hidden on the back side, drawn after the clip.
-      var moon = globe.showMoon ? WorldMap.moonPosition(globe.minuteMs) : null
+      var moon = globe.showMoon ? Moon.moonPosition(globe.minuteMs) : null
       var moonAt = moon ? screenPoint(moon.lat, moon.lon, lon) : null
-      if (moon && moonAt.visible) WorldMap.paintMoonShadow(ctx, moonAt.x, moonAt.y, globe.moonRadius)
+      if (moon && moonAt.visible) Moon.paintMoonShadow(ctx, moonAt.x, moonAt.y, globe.moonRadius)
       ctx.restore()
 
       globe.moonHit = null
       if (moon && moonAt.visible) {
         var mx = globe.centerX + (moonAt.x - globe.centerX) * 1.15
         var my = globe.centerY + (moonAt.y - globe.centerY) * 1.15
-        var angle = WorldMap.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) })
-        WorldMap.paintMoon(ctx, mx, my, globe.moonRadius, angle, moon.illuminated, "238,236,226",
-          WorldMap.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), WorldMap.rgbText(ink))
+        var angle = Moon.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) })
+        Moon.paintMoon(ctx, mx, my, globe.moonRadius, angle, moon.illuminated, "238,236,226",
+          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
         globe.moonHit = { x: mx, y: my, moon: moon }
       }
 
@@ -317,8 +331,14 @@ Item {
       disc(ctx)
       ctx.stroke()
 
+      var skyDone = Date.now()
       paintPlaces(ctx, lon)
       mouse.updateHover()
+      var done = Date.now()
+      var st = globe.paintStats
+      globe.paintStats = { count: st.count + 1, total: st.total + done - started, max: Math.max(st.max, done - started),
+        zones: (st.zones || 0) + zonesDone - started, land: (st.land || 0) + landDone - zonesDone,
+        sky: (st.sky || 0) + skyDone - landDone, places: (st.places || 0) + done - skyDone }
     }
 
     function screenPoint(lat, lon, centerLon) {

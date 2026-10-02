@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import "Time" as Time
 import "Time/WorldMap.js" as WorldMap
+import "Time/Moon.js" as Moon
 import qs.Commons
 
 // Screenshot run for tests/ui-shots.sh: the app view with sample items, every
@@ -11,6 +12,7 @@ ShellRoot {
   id: harness
   readonly property string shots: Quickshell.env("MT_SHOTS") || "/tmp"
   property int step: 0
+  property var backdrop: null
 
   function shot(name) {
     var target = panel.contentRoot
@@ -91,7 +93,7 @@ ShellRoot {
     // Night side with and without the bands, globe facing the evening line.
     function() {
       display("worldMoon", true)
-      var m = WorldMap.moonPosition(Date.now())
+      var m = Moon.moonPosition(Date.now())
       console.log("MOON", m.lat.toFixed(1), m.lon.toFixed(1), Math.round(m.illuminated * 100) + " %", m.waxing ? "waxing" : "waning", panel.moonText(m))
       globe().hover = null
       globe().centerLon = WorldMap.subsolarPoint(Date.now()).lon + 80
@@ -106,13 +108,31 @@ ShellRoot {
     // The Moon's tooltip on the globe, centred on it; the hero's clock face
     // set to Roman for all places.
     function() { display("worldStyle", "globe"); display("heroDial", "roman") },
-    function() { var g = globe(); g.finishTurn(); g.centerLon = WorldMap.moonPosition(Date.now()).lon },
+    function() { var g = globe(); g.finishTurn(); g.centerLon = Moon.moonPosition(Date.now()).lon },
     function() {
       var g = globe()
       g.hover = g.moonHit ? { moon: g.moonHit.moon, x: g.moonHit.x, y: g.moonHit.y } : null
       console.log("MOON hit", JSON.stringify(g.moonHit ? { x: Math.round(g.moonHit.x), y: Math.round(g.moonHit.y) } : null))
     },
     function() { shot("01k-globe-moon") },
+    // What a frame of turning costs: the globe turns by itself for a few
+    // seconds with every layer on (bands, night steps, moon).
+    function() {
+      display("heroGoldenHour", true); display("heroBlueHour", true); display("globeAutoRotate", true)
+      var g = globe()
+      g.hover = null
+      g.paintStats = { count: 0, total: 0, max: 0 }
+      g.rotating = true
+    },
+    function() {},
+    function() {},
+    function() {
+      var st = globe().paintStats
+      var per = function(v) { return ((v || 0) / Math.max(1, st.count)).toFixed(1) }
+      console.log("GLOBE frames", st.count, "ms/frame", per(st.total), "max", st.max,
+        "zones", per(st.zones), "land", per(st.land), "sky", per(st.sky), "places", per(st.places))
+      display("globeAutoRotate", false); display("heroGoldenHour", false); display("heroBlueHour", false)
+    },
     function() { globe().hover = null; display("worldStyle", "map"); display("worldMoon", false); display("heroDial", "place") },
     // Clock faces: one style per place, the chooser open under here; the
     // hero shows here's 24-hour face with the night shaded.
@@ -281,6 +301,84 @@ ShellRoot {
     },
     function() { panel.settingsItem.focusId = "menubarAccents"; panel.settingsItem.scrollBy(240) },
     function() { shot("15-settings-menubar-accents") },
+    // The README's pictures (screenshots/, preview.png): English, the app.
+    function() {
+      general("language", "en")
+      // Nothing ringing, no timer run out; the popup's background behind the
+      // view (the window's colour is not part of a grab).
+      panel.ringer.stopAll()
+      panel.itemsStore.items.timers.forEach(function(t) { if (t.state === "done") panel.resetItem("timers", t.id) })
+      harness.backdrop = Qt.createQmlObject('import QtQuick; import qs.Commons; Rectangle { anchors.fill: parent; z: -1; color: Color.popups.background }',
+        panel.contentRoot)
+      panel.settingsOpen = false
+      panel.settingsTargetSurface = "app"
+      panel.setCurrentPlace(-1)
+      display("worldStyle", "map"); display("worldMoon", true); display("worldMap", true)
+      display("heroGoldenHour", true); display("heroBlueHour", true)
+      panel.activeTab = "world"
+    },
+    function() { shot("readme-preview") },
+    function() { display("worldStyle", "globe") },
+    function() { var g = globe(); g.finishTurn(); g.hover = null; g.centerLon = WorldMap.subsolarPoint(Date.now()).lon + 75 },
+    function() { shot("readme-globe") },
+    function() {
+      display("worldStyle", "map")
+      panel.activeTab = "alarms"
+      var alarm = panel.itemsStore.items.alarms[0]
+      panel.updateItem("alarms", alarm.id, { tz: "Asia/Tokyo", placeName: "Tokyo", hour: 7, minute: 0, days: [1, 2, 3, 4, 5] })
+      panel.addItem("alarms")
+      panel.editingId = panel.itemsStore.items.alarms[1].id
+      panel.editField = 9
+    },
+    function() { shot("readme-alarms") },
+    function() { panel.editingId = ""; panel.activeTab = "timers" },
+    function() { shot("readme-timers") },
+    function() {
+      var today = new Date()
+      panel.itemsStore.updateMany([{ kind: "pomodoroLog", fn: function(log) {
+        var next = {}
+        for (var d = 0; d < 6; d++) {
+          var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - d)
+          next[Qt.formatDate(day, "yyyy-MM-dd")] = [4, 3, 5, 2, 6, 1][d]
+        }
+        return next
+      } }])
+      panel.activeTab = "pomodoros"
+    },
+    function() { shot("readme-pomodoros") },
+    function() { panel.openSettings("sounds") },
+    function() { shot("readme-sounds") },
+    function() { panel.openSettings("display"); panel.settingsTargetSurface = "app" },
+    function() { shot("readme-display") },
+    function() { panel.settingsOpen = false; panel.activeTab = "world"; display("worldMoon", false); harness.backdrop.destroy() },
+    // Deleting a city before the current one keeps the same city current.
+    function() {
+      panel.setCurrentPlace(2)
+      var before = panel.currentPlace
+      panel.deleteItem("world", panel.cityDeleteId(0))
+      panel.deleteItem("world", panel.cityDeleteId(0))
+      console.log("CHECK delete keeps place", before, "->", panel.currentPlace, panel.placeStore.current,
+        before === panel.currentPlace ? "ok" : "WRONG")
+    },
+    // A change before the items file is read (an IPC startTimer right after
+    // a start) waits for it instead of wiping the file.
+    function() {
+      var alarmsBefore = panel.itemsStore.items.alarms.length
+      var timersBefore = panel.itemsStore.items.timers.length
+      panel.itemsStore.loaded = false
+      panel.startTimer(5 * 60000, "Race")
+      var queued = panel.itemsStore.pending.length
+      panel.itemsStore.file.reload()
+      var items = panel.itemsStore.items
+      console.log("CHECK early change", "queued", queued, "alarms", alarmsBefore, "->", items.alarms.length,
+        "timers", timersBefore, "->", items.timers.length,
+        queued === 1 && items.alarms.length === alarmsBefore ? "ok" : "WRONG")
+    },
+    function() {
+      var items = panel.itemsStore.items
+      console.log("CHECK early change after load", "timers", items.timers.length,
+        items.timers.some(function(t) { return t.label === "Race" }) ? "ok" : "WRONG")
+    },
     function() { console.log("STATUS", panel.statusSummary().join(" | ")); Qt.quit() }
   ]
 

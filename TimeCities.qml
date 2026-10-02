@@ -20,7 +20,7 @@ Item {
     atomicWrites: true
     printErrors: false
     onFileChanged: reload()
-    onLoaded: cities.apply(Model.parseCities(text(), false))
+    onLoaded: if (!cities.echo.isEcho(text())) cities.apply(Model.parseCities(text(), false))
     onLoadFailed: cities.apply(Model.parseCities("", true))
   }
 
@@ -30,9 +30,14 @@ Item {
     loaded = true
   }
 
+  // Late reports of this instance's own older writes are skipped.
+  property TimeEchoGuard echo: TimeEchoGuard {}
+
   function write(next) {
     apply(next)
-    file.setText(JSON.stringify(next, null, 1) + "\n")
+    var text = JSON.stringify(next, null, 1) + "\n"
+    echo.wrote(text)
+    file.setText(text)
   }
 
   function indexOfCity(city) {
@@ -42,9 +47,11 @@ Item {
   }
 
   // Returns the city's index; a city already in the list is not added twice.
+  // -1: the list is full (Model.MAX_CITIES).
   function add(city) {
     var index = indexOfCity(city)
     if (index >= 0) return index
+    if (list.length >= Model.MAX_CITIES) return -1
     write(list.concat([{ name: city.name, country: city.country || "", tz: city.tz,
       lat: city.lat === undefined ? null : city.lat, lon: city.lon === undefined ? null : city.lon,
       dial: Model.dialStyle(city.dial) }]))

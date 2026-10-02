@@ -287,16 +287,38 @@ function makeAlarm(hour, minute, nowMs, defaults) {
     sound: "",
     snoozeMinutes: Number(opts.snoozeMinutes) || 9,
     armedAt: nowMs,
-    snoozeUntil: 0
+    snoozeUntil: 0,
+    tz: "",
+    placeName: ""
   }
+}
+
+// The instant a wall-clock time (year, month 0–11, day, hour, minute) has in
+// a zone (parseZoneDump), with the offsets the zone has around it, so
+// summer time is right on both sides of a change. A time the spring change
+// skips comes out an hour later (the offset from before the change); one
+// the autumn change doubles takes the later of its two instants.
+function zonedInstant(zone, year, month, day, hour, minute) {
+  var wall = Date.UTC(year, month, day, hour, minute)
+  var before = zoneOffsetAt(zone, wall - MS_PER_DAY)
+  var offsets = [before, zoneOffsetAt(zone, wall), zoneOffsetAt(zone, wall + MS_PER_DAY)]
+  var best = 0
+  for (var i = 0; i < offsets.length; i++) {
+    var instant = wall - offsets[i] * 1000
+    if (zoneOffsetAt(zone, instant) === offsets[i] && instant > best) best = instant
+  }
+  return best || wall - before * 1000
 }
 
 // The first time strictly after `afterMs` at which the alarm's wall-clock
 // time comes round (ignoring snooze). Once alarms count from when they were
-// switched on, so switching one on at 7:30 for 7:00 means tomorrow.
-function alarmNextOccurrence(alarm, afterMs) {
+// switched on, so switching one on at 7:30 for 7:00 means tomorrow. An
+// alarm with a place (alarm.tz) rings at that time there: `zone` is that
+// zone's table (TimeZoneTable); without it no time can be told (0).
+function alarmNextOccurrence(alarm, afterMs, zone) {
   if (!alarm) return 0
   var from = Math.max(Number(afterMs) || 0, alarm.days && alarm.days.length ? 0 : Number(alarm.armedAt) || 0)
+  if (alarm.tz) return zone ? zonedAlarmOccurrence(alarm, from, zone) : 0
   var start = new Date(from)
   for (var add = 0; add <= 8; add++) {
     var candidate = new Date(start.getFullYear(), start.getMonth(), start.getDate() + add,
@@ -311,10 +333,23 @@ function alarmNextOccurrence(alarm, afterMs) {
   return 0
 }
 
-// When the alarm rings next, snooze included; 0 if it is off.
-function alarmNextRing(alarm, nowMs) {
+function zonedAlarmOccurrence(alarm, from, zone) {
+  var start = zonedParts(from, zoneOffsetAt(zone, from))
+  for (var add = 0; add <= 8; add++) {
+    var date = new Date(Date.UTC(start.year, start.month, start.day + add))
+    var ms = zonedInstant(zone, date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), alarm.hour, alarm.minute)
+    if (ms <= from) continue
+    if (alarm.days && alarm.days.length && alarm.days.indexOf(date.getUTCDay()) < 0) continue
+    return ms
+  }
+  return 0
+}
+
+// When the alarm rings next, snooze included; 0 if it is off. zone: as for
+// alarmNextOccurrence.
+function alarmNextRing(alarm, nowMs, zone) {
   if (!alarm || !alarm.enabled) return 0
-  var next = alarmNextOccurrence(alarm, nowMs)
+  var next = alarmNextOccurrence(alarm, nowMs, zone)
   if (alarm.snoozeUntil && alarm.snoozeUntil > nowMs && (!next || alarm.snoozeUntil < next)) return alarm.snoozeUntil
   return next
 }
@@ -322,17 +357,17 @@ function alarmNextRing(alarm, nowMs) {
 // What became due between the last check and now. Returns events
 // { key, kind: "ring" | "missed", at } — the key makes each one fire once,
 // even with two instances or a restart in between.
-function dueAlarmEvents(alarm, lastCheckMs, nowMs) {
+function dueAlarmEvents(alarm, lastCheckMs, nowMs, zone) {
   var events = []
   if (!alarm || !alarm.enabled) return events
   if (alarm.snoozeUntil && alarm.snoozeUntil > lastCheckMs && alarm.snoozeUntil <= nowMs)
     events.push({ key: alarm.id + "@snooze@" + alarm.snoozeUntil, kind: "ring", at: alarm.snoozeUntil })
-  var occurrence = alarmNextOccurrence(alarm, lastCheckMs)
+  var occurrence = alarmNextOccurrence(alarm, lastCheckMs, zone)
   // Only the latest missed occurrence counts: a week asleep is one notice.
   var latest = 0
   while (occurrence && occurrence <= nowMs) {
     latest = occurrence
-    occurrence = alarmNextOccurrence(alarm, occurrence)
+    occurrence = alarmNextOccurrence(alarm, occurrence, zone)
   }
   if (latest) {
     events.push({
@@ -628,7 +663,35 @@ function pomodoroReset(pomodoro) {
 // ---- Items file --------------------------------------------------------------
 
 function emptyItems() {
-  return { version: 1, alarms: [], timers: [], stopwatches: [], pomodoros: [] }
+  return { version: 1, alarms: [], timers: [], stopwatches: [], pomodoros: [], pomodoroLog: {} }
+}
+
+// ---- Pomodoro tally: finished focus rounds per local day, { "2026-10-03":
+//      4 }, kept for 60 days.
+var POMODORO_LOG_DAYS = 60
+
+// The log with one more round on the day of `endedAt`, days older than 60
+// before `nowMs` left out.
+function pomodoroLogged(log, endedAt, nowMs) {
+  var next = {}
+  var oldest = localDayKey(nowMs - POMODORO_LOG_DAYS * MS_PER_DAY)
+  for (var key in log || {}) if (key >= oldest) next[key] = log[key]
+  var day = localDayKey(endedAt)
+  if (day >= oldest) next[day] = (Number(next[day]) || 0) + 1
+  return next
+}
+
+// Rounds today and this week (from the locale's first weekday, 0 = Sunday,
+// up to today): { today, week }.
+function pomodoroTally(log, nowMs, firstDayOfWeek) {
+  var now = new Date(nowMs)
+  var back = (now.getDay() - (Number(firstDayOfWeek) || 0) + 7) % 7
+  var week = 0
+  for (var d = 0; d <= back; d++) {
+    var day = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d)
+    week += Number((log || {})[dayKey(day.getFullYear(), day.getMonth(), day.getDate())]) || 0
+  }
+  return { today: Number((log || {})[localDayKey(nowMs)]) || 0, week: week }
 }
 
 // Anything unreadable becomes an empty list rather than a crash; fields are
@@ -643,6 +706,11 @@ function parseItems(raw) {
   function num(value, fallback) { var n = Number(value); return isFinite(n) ? n : fallback }
   function id(value, prefix, index) { return typeof value === "string" && value !== "" ? value : prefix + "-" + index }
   var states = ["idle", "running", "paused", "done"]
+  var log = parsed.pomodoroLog && typeof parsed.pomodoroLog === "object" ? parsed.pomodoroLog : {}
+  for (var key in log) {
+    var rounds = Math.round(num(log[key], 0))
+    if (/^\d{4}-\d{2}-\d{2}$/.test(key) && rounds > 0) items.pomodoroLog[key] = Math.min(rounds, 999)
+  }
   list("alarms").forEach(function(a, i) {
     if (!a || typeof a !== "object") return
     items.alarms.push({
@@ -650,7 +718,10 @@ function parseItems(raw) {
       hour: clamp(Math.round(num(a.hour, 7)), 0, 23), minute: clamp(Math.round(num(a.minute, 0)), 0, 59),
       days: normalizedDays(a.days), enabled: a.enabled !== false, sound: text(a.sound),
       snoozeMinutes: clamp(Math.round(num(a.snoozeMinutes, 9)), 1, 60),
-      armedAt: num(a.armedAt, 0), snoozeUntil: num(a.snoozeUntil, 0)
+      armedAt: num(a.armedAt, 0), snoozeUntil: num(a.snoozeUntil, 0),
+      // A place (its zone and name), or "" for this computer.
+      tz: typeof a.tz === "string" && /^[A-Za-z0-9_+\-\/]+$/.test(a.tz) ? a.tz : "",
+      placeName: typeof a.tz === "string" && a.tz !== "" ? text(a.placeName).slice(0, 60) : ""
     })
   })
   list("timers").forEach(function(t, i) {
@@ -731,6 +802,10 @@ function dialStyle(value) {
   return DIAL_STYLES.indexOf(String(value)) >= 0 ? String(value) : "classic"
 }
 
+// The world clock keeps at most this many cities; adding and importing
+// stop there.
+var MAX_CITIES = 24
+
 // A missing file gives the sample cities; an emptied list stays empty.
 function parseCities(raw, missing) {
   if (missing) return defaultCities()
@@ -738,7 +813,7 @@ function parseCities(raw, missing) {
   try { parsed = JSON.parse(String(raw || "")) } catch (e) { return defaultCities() }
   if (!parsed || parsed.length === undefined) return defaultCities()
   var result = []
-  for (var i = 0; i < parsed.length && result.length < 24; i++) {
+  for (var i = 0; i < parsed.length && result.length < MAX_CITIES; i++) {
     var c = parsed[i]
     if (!c || typeof c.tz !== "string" || !/^[A-Za-z0-9_+\-\/]+$/.test(c.tz)) continue
     var lat = Number(c.lat)
@@ -801,7 +876,7 @@ function parseZoneIndex(zoneTab, isoTab) {
 // Lower case without accents, for matching typed text against names.
 function foldText(text) {
   var value = String(text || "").toLowerCase()
-  if (typeof value.normalize === "function") value = value.normalize("NFD").replace(/[̀-ͯ]/g, "")
+  if (typeof value.normalize === "function") value = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   return value.replace(/[_\-]/g, " ")
 }
 
@@ -922,12 +997,13 @@ function knownCity(cities, city, samePlace) {
 }
 
 // Imported places with their zones ([{ name, lat, lon, tz }]) added to the
-// cities in their order, skipping known ones (knownCity): { list, added,
-// existing }.
+// cities in their order, skipping known ones (knownCity) and stopping at
+// MAX_CITIES: { list, added, existing, full (not added for lack of room) }.
 function mergeImportedPlaces(cities, places, samePlace) {
   var list = (cities || []).slice()
   var added = 0
   var existing = 0
+  var full = 0
   for (var i = 0; i < (places || []).length; i++) {
     var p = places[i]
     if (!p || !p.tz) continue
@@ -937,10 +1013,14 @@ function mergeImportedPlaces(cities, places, samePlace) {
       existing++
       continue
     }
+    if (list.length >= MAX_CITIES) {
+      full++
+      continue
+    }
     list.push(city)
     added++
   }
-  return { list: list, added: added, existing: existing }
+  return { list: list, added: added, existing: existing, full: full }
 }
 
 // ---- Here: an approximate place from IP geolocation --------------------
@@ -978,6 +1058,32 @@ function weatherLocation(raw) {
   if (!data || typeof data !== "object") return null
   return placeFrom(data.name, data.latitude !== undefined ? data.latitude : data.lat,
     data.longitude !== undefined ? data.longitude : data.lon)
+}
+
+// ---- Timer presets ----
+// The preset row of the Timers tab: 1 to 12 lengths in minutes, each 1 to
+// 1440, typed as "1, 3, 5, 10". Returns them sorted and once each, or null
+// when the text is not such a list.
+var DEFAULT_TIMER_PRESETS = "1,3,5,10,15,25,60"
+
+function parseTimerPresets(text) {
+  var parts = String(text === undefined || text === null ? "" : text).split(/[,;\s]+/)
+    .filter(function(part) { return part !== "" })
+  if (!parts.length || parts.length > 12) return null
+  var minutes = []
+  for (var i = 0; i < parts.length; i++) {
+    if (!/^\d{1,4}$/.test(parts[i])) return null
+    var n = Number(parts[i])
+    if (n < 1 || n > 1440) return null
+    if (minutes.indexOf(n) < 0) minutes.push(n)
+  }
+  return minutes.sort(function(a, b) { return a - b })
+}
+
+// The stored form: "1,3,5" (or the default when the text is not a list).
+function timerPresetsText(text) {
+  var minutes = parseTimerPresets(text)
+  return minutes ? minutes.join(",") : DEFAULT_TIMER_PRESETS
 }
 
 // ---- Chimes ---------------------------------------------------------------
@@ -1067,7 +1173,7 @@ if (typeof module !== "undefined") module.exports = {
   nextZoneChange: nextZoneChange, zoneTableExpires: zoneTableExpires,
   offsetText: offsetText, utcOffsetLabel: utcOffsetLabel, clockText: clockText,
   durationText: durationText, parseDuration: parseDuration,
-  makeAlarm: makeAlarm, alarmNextOccurrence: alarmNextOccurrence, alarmNextRing: alarmNextRing,
+  makeAlarm: makeAlarm, zonedInstant: zonedInstant, alarmNextOccurrence: alarmNextOccurrence, alarmNextRing: alarmNextRing,
   dueAlarmEvents: dueAlarmEvents, alarmAfterRing: alarmAfterRing, alarmSnoozed: alarmSnoozed,
   alarmToggled: alarmToggled, normalizedDays: normalizedDays,
   makeTimer: makeTimer, timerRemaining: timerRemaining, timerProgress: timerProgress,
@@ -1079,13 +1185,14 @@ if (typeof module !== "undefined") module.exports = {
   pomodoroProgress: pomodoroProgress, pomodoroToggled: pomodoroToggled, pomodoroAdvanced: pomodoroAdvanced,
   pomodoroSkipped: pomodoroSkipped, pomodoroDue: pomodoroDue, pomodoroReset: pomodoroReset,
   pomodoroNextPhase: pomodoroNextPhase,
-  emptyItems: emptyItems, parseItems: parseItems, replaceItem: replaceItem, removeItem: removeItem,
+  emptyItems: emptyItems, pomodoroLogged: pomodoroLogged, pomodoroTally: pomodoroTally, parseItems: parseItems, replaceItem: replaceItem, removeItem: removeItem,
   moveItem: moveItem, findItem: findItem,
-  defaultCities: defaultCities, parseCities: parseCities, cityKey: cityKey, zoneCityName: zoneCityName,
+  defaultCities: defaultCities, MAX_CITIES: MAX_CITIES, parseCities: parseCities, cityKey: cityKey, zoneCityName: zoneCityName,
   parseIso6709: parseIso6709, parseZoneIndex: parseZoneIndex, foldText: foldText,
   searchZoneIndex: searchZoneIndex,
   chimeMinutesValue: chimeMinutesValue, chimePlan: chimePlan, chimesActive: chimesActive,
-  nextChimeAt: nextChimeAt, chimeMinuteFor: chimeMinuteFor,
+  nextChimeAt: nextChimeAt, parseTimerPresets: parseTimerPresets, timerPresetsText: timerPresetsText,
+  DEFAULT_TIMER_PRESETS: DEFAULT_TIMER_PRESETS, chimeMinuteFor: chimeMinuteFor,
   distanceKm: distanceKm, nearestZone: nearestZone, cityFromPlace: cityFromPlace, zoneForPlace: zoneForPlace,
   parseWeatherPlaces: parseWeatherPlaces, DIAL_STYLES: DIAL_STYLES, dialStyle: dialStyle, knownCity: knownCity, mergeImportedPlaces: mergeImportedPlaces,
   IP_PLACE_PROVIDERS: IP_PLACE_PROVIDERS, ipPlace: ipPlace, placeFrom: placeFrom, weatherLocation: weatherLocation

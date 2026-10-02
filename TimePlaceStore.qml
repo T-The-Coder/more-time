@@ -18,7 +18,8 @@ Item {
   property string current: "here"
   property string hereDial: "classic"
   property bool loaded: false
-  property var recentWrites: []
+  // Late reports of this instance's own older writes are skipped.
+  property TimeEchoGuard echo: TimeEchoGuard {}
 
   property FileView file: FileView {
     path: Quickshell.env("HOME") + "/.local/state/omarchy/settings/more-time-place.json"
@@ -31,9 +32,7 @@ Item {
   }
 
   function adopt(raw) {
-    // An older write of ours reported after a newer one is an echo.
-    var echo = recentWrites.indexOf(String(raw))
-    if (echo >= 0 && echo < recentWrites.length - 1) return
+    if (echo.isEcho(raw)) return
     var parsed = null
     try { parsed = JSON.parse(String(raw || "")) } catch (e) { parsed = null }
     current = parsed && typeof parsed.current === "string" && parsed.current !== "" ? parsed.current : "here"
@@ -66,7 +65,7 @@ Item {
 
   function save() {
     var text = JSON.stringify({ current: current, hereDial: hereDial }) + "\n"
-    recentWrites = recentWrites.concat([text]).slice(-8)
+    echo.wrote(text)
     file.setText(text)
   }
 

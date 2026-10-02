@@ -2,6 +2,7 @@ import QtQuick
 import qs.Commons
 import qs.Ui
 import "I18n.js" as I18n
+import "Model.js" as Model
 
 // The settings, over the panel while open: General (language, time format,
 // snooze, pomodoro lengths, app launcher, export and import), Display (per
@@ -49,6 +50,9 @@ Rectangle {
         { value: "24", label: panel.i18n("timeFormat24") },
         { value: "12", label: panel.i18n("timeFormat12") }] },
       { id: "snoozeMinutes", title: panel.i18n("snoozeDefault"), options: minuteOptions(choices.snoozeMinutes) },
+      { id: "timerPresets", title: panel.i18n("timerPresets"), kind: "field", section: "timers",
+        hint: "timerPresetsHint", fieldWidth: Style.space(260),
+        parse: function(text) { var list = Model.parseTimerPresets(text); return list ? list.join(",") : null } },
       { id: "detectLocation", title: panel.i18n("detectLocation"), kind: "switch", section: "location",
         hint: "detectLocationHint" },
       { id: "alarmSound", page: "sounds", title: panel.i18n("alarmSound"), options: soundOptions, test: true, section: "sounds" },
@@ -66,7 +70,8 @@ Rectangle {
     var interval = chimeIntervalValue
     if (interval === "daily") list.push({ id: "chimeDailyHour", page: "sounds", title: panel.i18n("chimeDailyTime"),
       options: choices.chimeDailyHour.map(function(h) { return { value: String(h), label: panel.wallClock(h, 0) } }) })
-    if (interval === "custom") list.push({ id: "chimeMinutes", page: "sounds", title: panel.i18n("chimeCustomMinutes"), kind: "field" })
+    if (interval === "custom") list.push({ id: "chimeMinutes", page: "sounds", title: panel.i18n("chimeCustomMinutes"), kind: "field",
+      hint: "chimeCustomHint", parse: function(text) { return Model.chimeMinutesValue(text) || null } })
     list = list.concat([
       { id: "chimeTone", page: "sounds", title: panel.i18n("chimeTone"), test: true, options: [
         { value: "beep", label: panel.i18n("chimeTone_beep") },
@@ -98,7 +103,7 @@ Rectangle {
   property var dropdownItems: ({})
   property var fieldItems: ({})
   readonly property var sectionTitles: ({ sounds: "sounds", chimes: "chimes", pomodoro: "pomodoroDefaults",
-    location: "location" })
+    location: "location", timers: "timersTab" })
   readonly property var sectionHints: ({ chimes: "chimesHint", pomodoro: "pomodoroDefaultsHint",
     location: "locationHint" })
 
@@ -116,11 +121,12 @@ Rectangle {
     else panel.ringer.testSound(dropdownValue(id))
   }
 
-  // The custom chime minutes, from the field: kept when valid, else the
-  // field shows the setting again.
-  function commitField(id, field) {
-    if (field.acceptableInput) panel.displayOptionsStore.setGeneralSetting(id, Number(field.text))
-    field.text = dropdownValue(id)
+  // A text field's setting (custom chime minutes, timer presets): kept when
+  // the entry's parse() takes it, else the field shows the setting again.
+  function commitField(entry, field) {
+    var value = entry.parse(field.text)
+    if (value !== null) panel.displayOptionsStore.setGeneralSetting(entry.id, value)
+    field.text = dropdownValue(entry.id)
   }
 
   function dropdownValue(id) {
@@ -184,7 +190,8 @@ Rectangle {
     { key: "heroSunNext", title: panel.i18n("sunNext") },
     { key: "heroGoldenHour", title: panel.i18n("optionGoldenHour"), hint: "optionGoldenHourHint" },
     { key: "heroBlueHour", title: panel.i18n("optionBlueHour"), hint: "optionBlueHourHint" },
-    { key: "heroNextAlarm", title: panel.i18n("optionNextAlarm") }
+    { key: "heroNextAlarm", title: panel.i18n("optionNextAlarm") },
+    { key: "heroPomodoroTally", title: panel.i18n("optionPomodoroTally") }
   ]
   readonly property var tabOptions: ({
     world: [
@@ -537,22 +544,23 @@ Rectangle {
           }
         }
 
-        // A number of minutes (custom chime interval).
+        // A typed value (custom chime minutes, timer presets), checked by the
+        // entry's parse().
         TextField {
           id: numberField
+          readonly property bool valid: dropdownRow.kind !== "field" || text === ""
+            || dropdownRow.modelData.parse(text) !== null
           visible: dropdownRow.kind === "field"
-          width: Style.space(110)
+          width: dropdownRow.modelData.fieldWidth || Style.space(110)
           text: visible ? settingsView.dropdownValue(dropdownRow.modelData.id) : ""
           foreground: panel.foreground
           font.family: panel.fontFamily
-          inputMethodHints: Qt.ImhDigitsOnly
-          validator: IntValidator { bottom: 1; top: 1440 }
           hasCursor: settingsView.focusId === dropdownRow.modelData.id
           onHasCursorChanged: if (hasCursor) settingsView.ensureVisible(this)
           // Enter keeps the number, Esc drops it; both hand the keys
           // back to the settings, as does leaving the field.
           onAccepted: panel.restoreKeyFocus()
-          onActiveFocusChanged: if (!activeFocus && visible) settingsView.commitField(dropdownRow.modelData.id, numberField)
+          onActiveFocusChanged: if (!activeFocus && visible) settingsView.commitField(dropdownRow.modelData, numberField)
           Keys.onEscapePressed: {
             numberField.text = settingsView.dropdownValue(dropdownRow.modelData.id)
             panel.restoreKeyFocus()
@@ -576,11 +584,6 @@ Rectangle {
         }
       }
 
-      Hint {
-        visible: dropdownRow.kind === "field"
-        text: visible ? panel.i18n("chimeCustomHint") : ""
-        color: numberField.text !== "" && !numberField.acceptableInput ? Color.urgent : panel.mutedText
-      }
 
       TimeSwitchRow {
         visible: dropdownRow.kind === "switch"
@@ -594,9 +597,11 @@ Rectangle {
         onToggled: function(value) { panel.displayOptionsStore.setGeneralSetting(dropdownRow.modelData.id, value) }
       }
 
+      // Red while a typed value is not one the field takes.
       Hint {
         visible: !!dropdownRow.modelData.hint
         text: visible ? panel.i18n(dropdownRow.modelData.hint) : ""
+        color: numberField.valid ? panel.mutedText : Color.urgent
       }
     }
   }
@@ -868,7 +873,8 @@ Rectangle {
             visible: status !== null || panel.placesImport.busy
             width: parent.width
             text: panel.placesImport.busy ? panel.i18n("searching")
-              : (status ? panel.i18n("importCitiesResult", { added: status.added, existing: status.existing }) : "")
+              : (status ? panel.i18n("importCitiesResult", { added: status.added, existing: status.existing })
+                + (status.full ? "  ·  " + panel.i18n("citiesFull") : "") : "")
             color: panel.foreground
             font.family: panel.fontFamily
             font.pixelSize: Style.font.caption

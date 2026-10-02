@@ -202,6 +202,17 @@ Column {
       }
     }
 
+    // The list is full (Model.MAX_CITIES): adding waits for a removal.
+    Text {
+      visible: view.cities.length >= Model.MAX_CITIES
+      width: parent.width
+      text: view.panel.i18n("citiesFull")
+      color: Color.urgent
+      font.family: view.panel.fontFamily
+      font.pixelSize: Style.font.caption
+      wrapMode: Text.WordWrap
+    }
+
     Text {
       visible: view.search.query.trim() !== "" && view.search.results.length === 0
       // Nothing in the zone list or from Open-Meteo: Enter also asks

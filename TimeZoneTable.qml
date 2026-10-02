@@ -19,6 +19,9 @@ Item {
   // Raised with every new table, so bindings that look up offsets update.
   property int revision: 0
   property double fetchedAt: 0
+  // A lookup has run at least once (it may have failed): a zone missing
+  // after that is not coming.
+  property bool fetched: false
   property double expiresAt: 0
   property var pendingZones: []
 
@@ -86,6 +89,7 @@ Item {
     }
     onExited: function(exitCode) {
       if (exitCode !== 0) console.warn("more-time: zone lookup failed with exit code", exitCode)
+      table.fetched = true
       if (table.pendingZones.length) {
         table.pendingZones = []
         table.fetch()

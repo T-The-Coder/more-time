@@ -318,4 +318,14 @@ Column {
       }
     }
   }
+
+  // Focus rounds today and this week, from the pomodoro log.
+  Text {
+    visible: view.list.length > 0 || view.panel.pomodoroTally.week > 0
+    width: parent.width
+    text: view.panel.i18n("pomodoroTally", view.panel.pomodoroTally)
+    color: view.panel.mutedText
+    font.family: view.panel.fontFamily
+    font.pixelSize: Style.font.caption
+  }
 }

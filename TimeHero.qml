@@ -244,6 +244,17 @@ Item {
       elide: Text.ElideRight
     }
 
+    // Focus rounds today and this week (heroPomodoroTally).
+    Text {
+      visible: hero.panel.displaySetting("heroPomodoroTally", false)
+      width: parent.width
+      text: "\u{f0996}  " + hero.panel.i18n("pomodoroTally", hero.panel.pomodoroTally)
+      color: hero.panel.mutedText
+      font.family: hero.panel.fontFamily
+      font.pixelSize: Style.font.bodySmall
+      elide: Text.ElideRight
+    }
+
     Text {
       visible: hero.panel.displaySetting("heroNextAlarm", true) && hero.panel.nextAlarm !== null
       width: parent.width

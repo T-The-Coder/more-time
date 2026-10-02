@@ -18,7 +18,7 @@ Column {
     var item = panel.selectedItem("timers")
     return item ? item.id : ""
   }
-  readonly property var presets: [1, 3, 5, 10, 15, 25, 60]
+  readonly property var presets: panel.timerPresets
 
   TimeTabHeader {
     width: parent.width

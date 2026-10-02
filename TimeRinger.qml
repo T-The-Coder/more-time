@@ -224,8 +224,18 @@ Item {
     var events = []
     var changes = []
     var alarms = items.alarms
+    // An alarm at a city's time needs that zone's table. Until the table's
+    // first read (a moment after a start) such alarms are skipped and the
+    // last check stays where it is, so they are not passed by; timers and
+    // pomodoros go on. A zone the system does not know is skipped for good.
+    var holdCheck = false
     for (var a = 0; a < alarms.length; a++) {
-      var due = Model.dueAlarmEvents(alarms[a], from, nowMs)
+      var zone = panel.alarmZone(alarms[a])
+      if (alarms[a].tz && !zone) {
+        if (!panel.zoneTable.fetched) holdCheck = true
+        continue
+      }
+      var due = Model.dueAlarmEvents(alarms[a], from, nowMs, zone)
       for (var d = 0; d < due.length; d++) {
         if (fired[due[d].key]) continue
         events.push({ key: due[d].key, kind: due[d].kind === "missed" ? "missedAlarm" : "alarm",
@@ -247,13 +257,18 @@ Item {
       var pomodoroKey = pomodoros[p].id + "@" + endedAt
       changes.push({ kind: "pomodoros", id: pomodoros[p].id,
         fn: (function(at) { return function(item) { return Model.pomodoroAdvanced(item, at, nowMs) } })(endedAt) })
-      if (!fired[pomodoroKey]) events.push({ key: pomodoroKey, kind: "pomodoro", item: pomodoros[p], at: endedAt })
+      if (!fired[pomodoroKey]) {
+        events.push({ key: pomodoroKey, kind: "pomodoro", item: pomodoros[p], at: endedAt })
+        // A finished focus round counts on its day (the tally).
+        if (pomodoros[p].phase === "work") changes.push({ kind: "pomodoroLog",
+          fn: (function(at) { return function(log) { return Model.pomodoroLogged(log, at, nowMs) } })(endedAt) })
+      }
     }
 
     // Kept in memory; written with the next event, or with a heartbeat once
     // persistEveryMs has passed. Fired keys guard against a check window
     // that starts a little early.
-    current.lastCheck = nowMs
+    if (!holdCheck) current.lastCheck = nowMs
     if (!events.length && !changes.length) return false
     // Keys are only needed while their moment can still come round in a
     // check window; two days covers suspend and restarts.
@@ -295,7 +310,7 @@ Item {
     } else if (event.kind === "pomodoro") {
       var next = Model.pomodoroAdvanced(event.item, event.at, Date.now())
       notify(panel.pomodoroPhaseTitle(next), panel.pomodoroPhaseBody(next), "normal")
-      playSound(panel.soundFor("pomodoro"), 0)
+      playCue(panel.soundFor("pomodoro"))
     }
   }
 
@@ -349,6 +364,22 @@ Item {
     }
     soundProc.running = true
   }
+
+  // A one-off sound (a pomodoro phase ending) in its own process, so a
+  // ringing alarm's or timer's sound keeps going.
+  function playCue(file) {
+    if (!file) return
+    var command = ["pw-play", "--volume=" + panel.soundVolume, file]
+    if (soundDryRun) {
+      console.log("more-time: dry run:", command.join(" "))
+      return
+    }
+    if (cueProc.running) cueProc.running = false
+    cueProc.command = command
+    cueProc.running = true
+  }
+
+  property Process cueProc: Process {}
 
   // ---- Chime beeps ----
   // Five synthesized tones (data/chime-tones.py): each an interval tone and,
@@ -537,5 +568,6 @@ Item {
     for (var key in notifiers) if (notifiers[key]) notifiers[key].running = false
     if (soundProc.running) soundProc.running = false
     if (chimeProc.running) chimeProc.running = false
+    if (cueProc.running) cueProc.running = false
   }
 }

@@ -4,6 +4,7 @@ import Quickshell.Io
 import qs.Commons
 import "Model.js" as Model
 import "WorldMap.js" as WorldMap
+import "Moon.js" as Moon
 
 // The world map of the World tab, Equal Earth (less distorted than Mercator,
 // equal in area): the time zones in alternating stripes, the night side, the
@@ -201,17 +202,17 @@ Item {
       }
       // The Moon floats a little up-left of its sub-lunar point, where its
       // shadow falls; drawn after the clip so it may stand out of the map.
-      var moon = map.showMoon ? WorldMap.moonPosition(map.minuteMs) : null
+      var moon = map.showMoon ? Moon.moonPosition(map.minuteMs) : null
       var moonAt = moon ? map.px(WorldMap.project(moon.lat, moon.lon)) : null
-      if (moon) WorldMap.paintMoonShadow(ctx, moonAt.x, moonAt.y, map.moonRadius)
+      if (moon) Moon.paintMoonShadow(ctx, moonAt.x, moonAt.y, map.moonRadius)
       ctx.restore()
 
       map.moonHit = null
       if (moon) {
         var lift = Style.space(4)
-        var angle = WorldMap.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) })
-        WorldMap.paintMoon(ctx, moonAt.x - lift, moonAt.y - lift, map.moonRadius, angle, moon.illuminated,
-          map.moonLit, WorldMap.rgbText(WorldMap.nightFill(map.panel.rgbOf(Color.popups.background))), WorldMap.rgbText(ink))
+        var angle = Moon.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) })
+        Moon.paintMoon(ctx, moonAt.x - lift, moonAt.y - lift, map.moonRadius, angle, moon.illuminated,
+          map.moonLit, Moon.rgbText(WorldMap.nightFill(map.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
         map.moonHit = { x: moonAt.x - lift, y: moonAt.y - lift, moon: moon }
       }
 

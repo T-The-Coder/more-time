@@ -482,4 +482,82 @@ test("places: More Weather's list merged into the cities", () => {
   const near = M.mergeImportedPlaces(merged.list, [{ name: "Bobingen", lat: 48.30, lon: 10.86, tz: "Europe/Zurich" }], P.samePlace)
   assert.equal(near.added, 0)
   assert.equal(near.existing, 1)
+  // At most MAX_CITIES: the rest counts as full, and parseCities keeps them all.
+  const many = Array.from({ length: 30 }, (_, i) => ({ name: "P" + i, lat: i, lon: i, tz: "UTC" }))
+  const capped = M.mergeImportedPlaces([], many, P.samePlace)
+  assert.equal(capped.added, M.MAX_CITIES)
+  assert.equal(capped.full, 30 - M.MAX_CITIES)
+  assert.equal(M.parseCities(JSON.stringify(capped.list)).length, M.MAX_CITIES)
+})
+
+// ---- Alarms at a place's time ----
+
+test("alarms at a city's local time, across summer time there", () => {
+  const ny = zones["America/New_York"]
+  const tokyo = zones["Asia/Tokyo"]
+  const daily = (tz) => ({ ...M.makeAlarm(7, 0, 0), days: [0, 1, 2, 3, 4, 5, 6], tz, placeName: "x" })
+  // 07:00 in New York: 11:00 UTC on summer time, 12:00 UTC once it ends
+  // (1 Nov 2026, 02:00).
+  assert.equal(M.alarmNextOccurrence(daily("America/New_York"), utc(2026, 9, 31, 1), ny), utc(2026, 9, 31, 11))
+  assert.equal(M.alarmNextOccurrence(daily("America/New_York"), utc(2026, 9, 31, 12), ny), utc(2026, 10, 1, 12))
+  // 07:00 in Tokyo (UTC+9) is 22:00 UTC the day before.
+  assert.equal(M.alarmNextOccurrence(daily("Asia/Tokyo"), utc(2026, 9, 2, 12), tokyo), utc(2026, 9, 2, 22))
+  // Weekdays are Tokyo's: a Monday alarm rings Monday 07:00 there, still
+  // Sunday in UTC.
+  const monday = { ...daily("Asia/Tokyo"), days: [1] }
+  assert.equal(M.alarmNextOccurrence(monday, utc(2026, 9, 2, 12), tokyo), utc(2026, 9, 4, 22))
+  // A wall time skipped by the spring change rings an hour later: 02:30 on
+  // 8 Mar 2026 in New York is 03:30 EDT = 07:30 UTC.
+  assert.equal(M.zonedInstant(ny, 2026, 2, 8, 2, 30), utc(2026, 2, 8, 7, 30))
+  // A wall time the autumn change doubles takes the later instant: 01:30 on
+  // 1 Nov 2026 in New York is 05:30 UTC (EDT) and 06:30 UTC (EST); in Berlin
+  // 02:30 on 25 Oct is 00:30 and 01:30 UTC.
+  assert.equal(M.zonedInstant(ny, 2026, 10, 1, 1, 30), utc(2026, 10, 1, 6, 30))
+  assert.equal(M.zonedInstant(zones["Europe/Berlin"], 2026, 9, 25, 2, 30), utc(2026, 9, 25, 1, 30))
+  // Berlin's spring gap: 02:30 on 29 Mar 2026 rings at 03:30 CEST.
+  assert.equal(M.zonedInstant(zones["Europe/Berlin"], 2026, 2, 29, 2, 30), utc(2026, 2, 29, 1, 30))
+  // Without the zone table no time can be told; without a place, local.
+  assert.equal(M.alarmNextOccurrence(daily("America/New_York"), utc(2026, 9, 31, 1), null), 0)
+  assert.equal(M.alarmNextOccurrence(daily(""), local(2026, 9, 2, 6), null), local(2026, 9, 2, 7))
+  // Ringing: the due event at the place's time.
+  const events = M.dueAlarmEvents({ ...daily("Asia/Tokyo"), enabled: true }, utc(2026, 9, 2, 21, 55), utc(2026, 9, 2, 22, 1), tokyo)
+  assert.equal(events.length, 1)
+  assert.equal(events[0].at, utc(2026, 9, 2, 22))
+  // The items file keeps the place, and drops a bad zone name.
+  const items = M.parseItems(JSON.stringify({ alarms: [{ hour: 7, tz: "Asia/Tokyo", placeName: "Tokyo" }, { hour: 8, tz: "x; y" }] }))
+  assert.deepEqual([items.alarms[0].tz, items.alarms[0].placeName, items.alarms[1].tz], ["Asia/Tokyo", "Tokyo", ""])
+})
+
+test("timer presets: a list of minutes, validated", () => {
+  assert.deepEqual([...M.parseTimerPresets("1, 3, 5, 10, 15, 25, 60")], [1, 3, 5, 10, 15, 25, 60])
+  assert.deepEqual([...M.parseTimerPresets("90 30;30 2")], [2, 30, 90])
+  assert.equal(M.parseTimerPresets(""), null)
+  assert.equal(M.parseTimerPresets("0, 5"), null)
+  assert.equal(M.parseTimerPresets("5, 1441"), null)
+  assert.equal(M.parseTimerPresets("5, ten"), null)
+  assert.equal(M.parseTimerPresets("1,2,3,4,5,6,7,8,9,10,11,12,13"), null)
+  assert.equal(M.parseTimerPresets("1,2,3,4,5,6,7,8,9,10,11,12").length, 12)
+  assert.equal(M.timerPresetsText("10, 5"), "5,10")
+  assert.equal(M.timerPresetsText("nonsense"), "1,3,5,10,15,25,60")
+})
+
+test("pomodoro tally: rounds per day, today and this week", () => {
+  // Saturday 3 October 2026.
+  const now = local(2026, 9, 3, 15)
+  let log = {}
+  log = M.pomodoroLogged(log, local(2026, 9, 3, 9), now)
+  log = M.pomodoroLogged(log, local(2026, 9, 3, 11), now)
+  log = M.pomodoroLogged(log, local(2026, 8, 28, 10), now)
+  log = M.pomodoroLogged(log, local(2026, 8, 27, 10), now)
+  assert.deepEqual({ ...log }, { "2026-10-03": 2, "2026-09-28": 1, "2026-09-27": 1 })
+  // Week from Monday: Mon 28 Sep … Sat 3 Oct; from Sunday: Sun 27 Sep on.
+  assert.deepEqual({ ...M.pomodoroTally(log, now, 1) }, { today: 2, week: 3 })
+  assert.deepEqual({ ...M.pomodoroTally(log, now, 0) }, { today: 2, week: 4 })
+  // Older than 60 days drops out at the next round.
+  const old = M.pomodoroLogged({ "2026-07-01": 5 }, local(2026, 9, 3, 9), now)
+  assert.deepEqual({ ...old }, { "2026-10-03": 1 })
+  // The items file keeps it, sane.
+  const items = M.parseItems(JSON.stringify({ pomodoroLog: { "2026-10-03": 4, bad: 2, "2026-10-01": -1 } }))
+  assert.deepEqual({ ...items.pomodoroLog }, { "2026-10-03": 4 })
+  assert.deepEqual({ ...M.pomodoroTally({}, now, 1) }, { today: 0, week: 0 })
 })

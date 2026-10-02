@@ -85,7 +85,7 @@ Item {
   function finish() {
     var merged = Model.mergeImportedPlaces(panel.cityList, resolved, PlaceSearch.samePlace)
     if (merged.added > 0) panel.citiesStore.replaceAll(merged.list)
-    status = { added: merged.added, existing: existing + merged.existing }
+    status = { added: merged.added, existing: existing + merged.existing, full: merged.full }
     busy = false
   }
 

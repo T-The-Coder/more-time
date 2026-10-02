@@ -52,7 +52,7 @@ test("placeholders survive translation", () => {
 // with the values the code uses.
 test("every key used in the QML exists", () => {
   const families = {
-    entry_: ["time", "seconds", "weekday", "date", "week", "cities", "nextAlarm", "timers", "stopwatches", "pomodoros", "ringing"],
+    entry_: ["time", "seconds", "weekday", "date", "week", "cities", "nextAlarm", "timers", "stopwatches", "pomodoros", "ringing", "pomodoroTally"],
     sound_: ["alarm", "bell", "complete", "message", "phone", "none"],
     settingsPage_: ["general", "display", "sounds", "shortcuts", "sources"],
     dial_: ["classic", "minimal", "roman", "twentyFour", "dots"]

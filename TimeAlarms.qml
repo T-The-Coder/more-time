@@ -4,8 +4,9 @@ import qs.Ui
 import "Model.js" as Model
 
 // Alarms, as many as needed: a time, the weekdays it repeats on (none: once),
-// a name and the snooze length. They ring on this computer's clock, with the
-// panel closed too (TimeRinger in the bar).
+// a place, a name and the snooze length. They ring on this computer's clock,
+// or at that time in a city of the World tab (its zone, summer time
+// included), with the panel closed too (TimeRinger in the bar).
 Column {
   id: view
   required property var panel
@@ -18,10 +19,33 @@ Column {
   }
   readonly property var editing: panel.editingId !== "" ? panel.itemsStore.find("alarms", panel.editingId) : null
   // Editor fields, in the order ← → walk them: hour, minute, the seven
-  // weekdays in the locale's order, snooze, name.
+  // weekdays in the locale's order, place, snooze, name.
   readonly property int dayFieldStart: 2
-  readonly property int snoozeField: 9
-  readonly property int labelField: 10
+  readonly property int placeField: 9
+  readonly property int snoozeField: 10
+  readonly property int labelField: 11
+
+  // The places an alarm can ring at: here (this computer) and the cities.
+  readonly property var placeOptions: [{ value: "", label: panel.i18n("alarmPlaceHere") }].concat(
+    panel.cityList.map(function(c) { return { value: c.tz + "|" + c.name, label: c.name } }))
+
+  function placeValue(alarm) {
+    return alarm && alarm.tz ? alarm.tz + "|" + alarm.placeName : ""
+  }
+
+  function setPlace(value) {
+    if (!editing) return
+    var cut = value.indexOf("|")
+    panel.updateItem("alarms", editing.id, { tz: cut > 0 ? value.slice(0, cut) : "",
+      placeName: cut > 0 ? value.slice(cut + 1) : "", armedAt: Date.now(), enabled: true })
+  }
+
+  function stepPlace(delta) {
+    var index = 0
+    for (var i = 0; i < placeOptions.length; i++) if (placeOptions[i].value === placeValue(editing)) index = i
+    var next = Math.max(0, Math.min(placeOptions.length - 1, index + delta))
+    if (next !== index) setPlace(placeOptions[next].value)
+  }
   property bool labelEditing: false
   Connections {
     target: view.panel
@@ -74,11 +98,12 @@ Column {
       if (field === 0) stepTime(0, sign)
       else if (field === 1) stepTime(1, sign * (shift || text === "K" || text === "J" ? 1 : 5))
       else if (field === snoozeField) stepSnooze(sign)
-      else if (field >= dayFieldStart && field < snoozeField) toggleDay(panel.weekdayOrder[field - dayFieldStart])
+      else if (field === placeField) stepPlace(-sign)
+      else if (field >= dayFieldStart && field < placeField) toggleDay(panel.weekdayOrder[field - dayFieldStart])
       return true
     }
     if (key === Qt.Key_Space) {
-      if (field >= dayFieldStart && field < snoozeField) toggleDay(panel.weekdayOrder[field - dayFieldStart])
+      if (field >= dayFieldStart && field < placeField) toggleDay(panel.weekdayOrder[field - dayFieldStart])
       return true
     }
     if (key === Qt.Key_Return || key === Qt.Key_Enter) {
@@ -136,7 +161,7 @@ Column {
       selected: modelData.id === view.selectedId
       armed: view.panel.armedDeleteId === modelData.id
       readonly property bool editingThis: view.panel.editingId === modelData.id
-      readonly property double nextRing: Model.alarmNextRing(modelData, view.panel.nowMs)
+      readonly property double nextRing: Model.alarmNextRing(modelData, view.panel.nowMs, view.panel.alarmZone(modelData))
       onClicked: view.panel.select("alarms", modelData.id)
 
       Item {
@@ -160,12 +185,36 @@ Column {
             elide: Text.ElideRight
           }
 
+          Row {
+            spacing: Style.space(8)
+
+            Text {
+              id: alarmTime
+              text: view.panel.wallClock(card.modelData.hour, card.modelData.minute)
+              color: view.panel.foreground
+              font.family: view.panel.fontFamily
+              font.pixelSize: Style.font.displayLarge
+              font.bold: true
+            }
+
+            // At a city's time: "Tokyo · 00:00 here".
+            Text {
+              visible: card.modelData.tz !== ""
+              anchors.baseline: alarmTime.baseline
+              text: visible ? view.panel.i18n("alarmAtPlace", { place: card.modelData.placeName,
+                time: card.nextRing > 0 ? view.panel.wallClockAt(card.nextRing) : "…" }) : ""
+              color: view.panel.mutedText
+              font.family: view.panel.fontFamily
+              font.pixelSize: Style.font.bodySmall
+            }
+          }
+
           Text {
-            text: view.panel.wallClock(card.modelData.hour, card.modelData.minute)
-            color: view.panel.foreground
+            visible: view.panel.alarmZoneUnknown(card.modelData)
+            text: visible ? view.panel.i18n("alarmZoneUnknown", { zone: card.modelData.tz }) : ""
+            color: Color.urgent
             font.family: view.panel.fontFamily
-            font.pixelSize: Style.font.displayLarge
-            font.bold: true
+            font.pixelSize: Style.font.caption
           }
 
           Text {
@@ -296,6 +345,34 @@ Column {
                   view.toggleDay(parent.modelData)
                 }
               }
+            }
+          }
+        }
+
+        // The place: here, or a city of the World tab.
+        Row {
+          spacing: Style.space(8)
+
+          Text {
+            anchors.verticalCenter: parent.verticalCenter
+            text: view.panel.i18n("alarmPlace")
+            color: view.panel.mutedText
+            font.family: view.panel.fontFamily
+            font.pixelSize: Style.font.caption
+          }
+
+          Dropdown {
+            id: placeDropdown
+            width: Style.space(200)
+            showLabel: false
+            fontFamily: view.panel.fontFamily
+            hasCursor: view.panel.editField === view.placeField
+            onPopupOpenChanged: if (!popupOpen) view.panel.restoreKeyFocus()
+            value: view.placeValue(card.modelData)
+            options: view.placeOptions
+            onChanged: function(value) {
+              view.panel.editField = view.placeField
+              view.setPlace(value)
             }
           }
         }

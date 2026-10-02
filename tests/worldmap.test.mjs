@@ -258,32 +258,6 @@ test("twilight bands along the map's outline: only where the sun is in range", (
   }
 })
 
-test("the Moon: phase as in More Weather, position on the sky", () => {
-  // Full moon 7 Oct 2025 03:47 UTC, new moon 21 Oct 2025 12:25 UTC.
-  const full = W.moonPosition(Date.UTC(2025, 9, 7, 3, 47))
-  const fresh = W.moonPosition(Date.UTC(2025, 9, 21, 12, 25))
-  near(full.phase, 0.5, 0.01)
-  assert.ok(full.illuminated > 0.99)
-  assert.ok(Math.min(fresh.phase, 1 - fresh.phase) < 0.01)
-  assert.ok(fresh.illuminated < 0.01)
-  // The same numbers as More Weather's Model.moonPhaseFraction (same terms).
-  near(W.moonPhaseFraction(Date.UTC(2025, 9, 7, 3, 47)), full.phase, 1e-12)
-  // A full moon stands opposite the Sun, a new one beside it.
-  const sunFull = W.subsolarPoint(Date.UTC(2025, 9, 7, 3, 47))
-  const sunFresh = W.subsolarPoint(Date.UTC(2025, 9, 21, 12, 25))
-  const gap = (a, b) => Math.abs(((a - b) % 360 + 540) % 360 - 180)
-  assert.ok(gap(full.lon, sunFull.lon) > 170, `full: ${full.lon} vs ${sunFull.lon}`)
-  assert.ok(gap(fresh.lon, sunFresh.lon) < 10, `new: ${fresh.lon} vs ${sunFresh.lon}`)
-  // Declination within the Moon's range, westward by about 14.5° an hour.
-  for (let d = 0; d < 30; d++) assert.ok(Math.abs(W.moonPosition(Date.UTC(2026, 0, 1) + d * 86400000).lat) <= 28.7)
-  const a = W.moonPosition(Date.UTC(2026, 9, 2, 12)), b = W.moonPosition(Date.UTC(2026, 9, 2, 13))
-  const step = ((b.lon - a.lon) % 360 + 540) % 360 - 180
-  near(step, -14.5, 0.3)
-  assert.equal(W.moonPosition(Date.UTC(2025, 9, 10)).waxing, false)
-  assert.equal(W.moonPosition(Date.UTC(2025, 9, 1)).waxing, true)
-  // Halfway towards a point 90° east on the equator.
-  near(W.towards(0, 0, 0, 90, 45).lon, 45, 1e-9)
-})
 
 test("twilight layers: soft bands, then the night in three steps", () => {
   const bg = W.hexRgb("#eff1f5")

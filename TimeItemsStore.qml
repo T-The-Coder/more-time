@@ -29,19 +29,33 @@ Item {
     onLoadFailed: store.apply("")
   }
 
-  // What this instance wrote last, newest at the end. The watch reports
-  // each write; one that reports an older write of ours after a newer one
-  // is an echo and would roll the newer change back.
-  property var recentWrites: []
+  // Late reports of this instance's own older writes are skipped.
+  property TimeEchoGuard echo: TimeEchoGuard {}
 
   function apply(raw) {
-    var echo = recentWrites.indexOf(String(raw))
-    if (echo >= 0 && echo < recentWrites.length - 1) return
+    if (echo.isEcho(raw)) return
     var next = Model.parseItems(raw)
     // Unchanged content keeps the arrays, so list delegates stay put.
     if (loaded && JSON.stringify(next) === JSON.stringify(items)) return
     items = next
+    var first = !loaded
     loaded = true
+    if (first) flushPending()
+  }
+
+  // Changes asked for before the file was read (an IPC startTimer right
+  // after a start) wait for it: written on top of an empty list they would
+  // wipe the file.
+  property var pending: []
+
+  function later(fn) {
+    pending = pending.concat([fn])
+  }
+
+  function flushPending() {
+    var queued = pending
+    pending = []
+    for (var i = 0; i < queued.length; i++) queued[i]()
   }
 
   function current() {
@@ -52,13 +66,14 @@ Item {
     items = next
     loaded = true
     var text = JSON.stringify(next, null, 1) + "\n"
-    recentWrites = recentWrites.concat([text]).slice(-8)
+    echo.wrote(text)
     file.setText(text)
   }
 
   // Applies fn(list) → list to one kind and writes the result.
   function change(kind, fn) {
     if (kinds.indexOf(kind) < 0) return
+    if (!loaded) return later(function() { store.change(kind, fn) })
     var next = current()
     next[kind] = fn(next[kind])
     write(next)
@@ -89,9 +104,15 @@ Item {
   // everything due in the same second.
   function updateMany(changes) {
     if (!changes.length) return
+    if (!loaded) return later(function() { store.updateMany(changes) })
     var next = current()
     for (var i = 0; i < changes.length; i++) {
       var c = changes[i]
+      // The pomodoro tally is one object, not a list.
+      if (c.kind === "pomodoroLog") {
+        next.pomodoroLog = c.fn(next.pomodoroLog)
+        continue
+      }
       var item = Model.findItem(next[c.kind] || [], c.id)
       if (item) next[c.kind] = Model.replaceItem(next[c.kind], c.fn(item))
     }
@@ -104,6 +125,7 @@ Item {
 
   // Replaces everything, for settings import.
   function replaceAll(raw) {
+    if (!loaded) return later(function() { store.replaceAll(raw) })
     write(Model.parseItems(JSON.stringify(raw || {})))
   }
 }

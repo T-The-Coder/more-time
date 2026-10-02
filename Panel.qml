@@ -109,7 +109,6 @@ Panel {
     activeTab = defaultTab
     nowMs = Date.now()
     displayOptionsStore.reloadAll()
-    citiesStore.file.reload()
   }
 
   function close() {
@@ -290,7 +289,7 @@ Panel {
   function upperLabel(text) {
     var upper = String(text || "").toLocaleUpperCase()
     if (interfaceLanguage === "el" && typeof upper.normalize === "function")
-      upper = upper.normalize("NFD").replace(/́/g, "").normalize("NFC")
+      upper = upper.normalize("NFD").replace(/\u0301/g, "").normalize("NFC")
     return upper
   }
 
@@ -342,6 +341,14 @@ Panel {
     displayOptionsStore.setGeneralSetting("chimesMuted", !!muted)
   }
 
+  // Finished focus rounds today and this week (from the locale's first
+  // weekday): { today, week }, from the items file's pomodoroLog.
+  readonly property var pomodoroTally: Model.pomodoroTally(itemsStore.items.pomodoroLog, nowMs, formatLocale.firstDayOfWeek)
+
+  // The Timers tab's preset row (Settings → General → Timers), in minutes.
+  readonly property var timerPresets: Model.parseTimerPresets(generalSetting("timerPresets", Model.DEFAULT_TIMER_PRESETS))
+    || Model.parseTimerPresets(Model.DEFAULT_TIMER_PRESETS)
+
   function alarmSnoozeMinutes(alarmId) {
     var alarm = itemsStore.find("alarms", alarmId)
     return alarm ? alarm.snoozeMinutes : Number(generalSetting("snoozeMinutes", 9))
@@ -380,7 +387,8 @@ Panel {
   }
 
   function defaultEntryOrder() {
-    return ["ringing", "weekday", "date", "week", "time", "cities", "nextAlarm", "timers", "stopwatches", "pomodoros"]
+    return ["ringing", "weekday", "date", "week", "time", "cities", "nextAlarm", "timers", "stopwatches", "pomodoros",
+      "pomodoroTally"]
   }
 
   function defaultDisplayOptions() {
@@ -393,6 +401,7 @@ Panel {
       heroAnalog: true,
       heroDial: "place",
       heroNextAlarm: true,
+      heroPomodoroTally: false,
       heroSun: true,
       heroSunNext: false,
       heroGoldenHour: false,
@@ -448,7 +457,8 @@ Panel {
     // Each entry: always, when relevant, on hover (see menubarEntryShown).
     var defaults = {
       time: "always", seconds: "hover", weekday: "", date: "", week: "", cities: "hover",
-      nextAlarm: "relevant", timers: "relevant", stopwatches: "relevant", pomodoros: "relevant", ringing: "relevant"
+      nextAlarm: "relevant", timers: "relevant", stopwatches: "relevant", pomodoros: "relevant", ringing: "relevant",
+      pomodoroTally: ""
     }
     for (var key in defaults) {
       options[key] = defaults[key] === "always"
@@ -549,7 +559,7 @@ Panel {
   // or only while the pointer rests on the widget ("<key>OnHover").
 
   property bool menubarHovered: false
-  readonly property var menubarEntryKeys: ["time", "seconds", "weekday", "date", "week", "cities",
+  readonly property var menubarEntryKeys: ["time", "seconds", "weekday", "date", "week", "cities", "pomodoroTally",
     "nextAlarm", "timers", "stopwatches", "pomodoros", "ringing"]
   readonly property bool menubarShowClock: menubarDisplaySetting("showClock", true)
   readonly property bool menubarBoldOnHover: menubarDisplaySetting("boldOnHover", true)
@@ -585,13 +595,14 @@ Panel {
 
   // What "when relevant" means per entry. Entries without a rule offer the
   // choice greyed out in settings.
-  readonly property var relevantEntries: ["nextAlarm", "timers", "stopwatches", "pomodoros", "ringing"]
+  readonly property var relevantEntries: ["nextAlarm", "timers", "stopwatches", "pomodoros", "ringing", "pomodoroTally"]
   function menubarEntryRelevant(key) {
     var items = itemsStore.items
     if (key === "nextAlarm") return nextAlarm !== null && nextAlarm.at - nowMs <= 12 * 3600000
     if (key === "timers") return items.timers.some(function(t) { return t.state === "running" || t.state === "paused" })
     if (key === "stopwatches") return items.stopwatches.some(function(s) { return s.running })
     if (key === "pomodoros") return items.pomodoros.some(function(p) { return p.state === "running" || p.state === "paused" })
+    if (key === "pomodoroTally") return pomodoroTally.today > 0
     if (key === "ringing") return ringer.ringing.length > 0
     return false
   }
@@ -702,6 +713,10 @@ Panel {
             : (pomodoroLeft <= 60000 ? "urgent" : (pomodoro.phase === "work" ? "accent" : "muted")))
           break
         }
+      } else if (key === "pomodoroTally") {
+        // Focus rounds today · this week.
+        entry.glyph = "\u{f0996}"
+        entry.text = latinDigits(pomodoroTally.today + " · " + pomodoroTally.week)
       } else if (key === "ringing") {
         if (ringer.ringing.length) {
           entry.glyph = "\u{f009e}"
@@ -757,6 +772,18 @@ Panel {
   readonly property var cityList: citiesStore.list
   readonly property var wantedZones: cityList.map(function(c) { return c.tz })
     .concat(zoneTable.localTz !== "" ? [zoneTable.localTz] : [])
+    .concat(itemsStore.items.alarms.map(function(a) { return a.tz }).filter(function(tz) { return tz !== "" }))
+
+  // The zone table of an alarm's place, or null (this computer's clock, or
+  // not read yet).
+  function alarmZone(alarm) {
+    return alarm && alarm.tz && zoneTable.revision >= 0 ? zoneTable.zones[alarm.tz] || null : null
+  }
+  // An alarm whose place's zone the system does not know (marked in its
+  // card; it cannot ring).
+  function alarmZoneUnknown(alarm) {
+    return !!alarm && !!alarm.tz && zoneTable.fetched && !alarmZone(alarm)
+  }
   onWantedZonesChanged: zoneTable.want(wantedZones)
   // A new zone for this computer (omarchy-menu-timezone) shows as a new
   // offset; read which one it is.
@@ -787,7 +814,7 @@ Panel {
     var best = null
     var alarms = itemsStore.items.alarms
     for (var i = 0; i < alarms.length; i++) {
-      var at = Model.alarmNextRing(alarms[i], nowMs)
+      var at = Model.alarmNextRing(alarms[i], nowMs, alarmZone(alarms[i]))
       if (at && (!best || at < best.at)) best = { alarm: alarms[i], at: at }
     }
     return best
@@ -813,7 +840,8 @@ Panel {
   }
 
   function ringBody(kind, item, at) {
-    if (kind === "alarm") return wallClock(item.hour, item.minute) + " · " + alarmDaysText(item.days)
+    if (kind === "alarm") return wallClock(item.hour, item.minute) + (item.tz ? " " + item.placeName : "")
+      + " · " + alarmDaysText(item.days)
     return i18n("timerDoneBody", { duration: durationText(item.duration) })
   }
 
@@ -906,7 +934,8 @@ Panel {
 
   function moveSelected(tab, delta) {
     if (tab === "world") {
-      if (selectedCity >= 0 && citiesStore.move(selectedCity, delta)) selectedCity += delta
+      // The place store follows the selected city to its new index.
+      if (selectedCity >= 0) citiesStore.move(selectedCity, delta)
       return
     }
     var item = selectedItem(tab)
@@ -1004,9 +1033,9 @@ Panel {
       // "city:<index>": the selected city, or the one marked in the search.
       var at = Number(String(id).split(":")[1])
       if (!(at >= 0 && at < cityList.length)) return
+      // The place store re-indexes the current place (TimePlaceStore.apply);
+      // a removed current city falls back to here.
       citiesStore.removeAt(at)
-      if (at < selectedCity) selectedCity--
-      else if (at === selectedCity) selectedCity = Math.max(-1, Math.min(selectedCity, cityList.length - 1))
       return
     }
     // Something ringing for the item stops with it.
@@ -1157,9 +1186,12 @@ Panel {
     citySearch.query = ""
   }
 
+  // A full list (Model.MAX_CITIES) keeps the search open with its notice.
   function addCity(city) {
     if (!city) return
-    selectedCity = citiesStore.add(city)
+    var at = citiesStore.add(city)
+    if (at < 0) return
+    selectedCity = at
     searchOpen = false
     restoreKeyFocus()
   }

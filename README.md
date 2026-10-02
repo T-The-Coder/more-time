@@ -14,7 +14,8 @@ control.
 **In the bar**
 - The time, and whatever else you choose: seconds, weekday, date, week number,
   the time in your first cities, the next alarm, a running timer, stopwatch or
-  pomodoro, and a blinking bell while something rings.
+  pomodoro, today's and this week's pomodoro rounds, and a blinking bell while
+  something rings.
 - Every entry shows **always**, **when relevant**, or on **hover**:
   - "Relevant" means the next alarm within 12 hours, timers, stopwatches and
     pomodoros while they run, and the bell while something rings.
@@ -118,11 +119,17 @@ control.
 - **Alarms:**
   - As many as you like, each with a time, the weekdays it repeats on (none: once),
     a name and its own snooze length.
+  - Optionally at a city's time: the editor's **Place** picks here or a city of
+    the World tab, and the alarm rings at that time there, summer time
+    included (from the zone's own changes). The card shows both, e.g.
+    "7:00 Tokyo · 12:00 AM here"; a zone this computer does not know is
+    marked.
   - The bar rings them with the popup closed. An alarm missed while the laptop was
     asleep still rings if it is at most ten minutes late; an older one leaves a
     "missed" notification.
 - **Timers:**
-  - As many as you like, from presets (1 to 60 minutes) or typed: `10`,
+  - As many as you like, from presets (1, 3, 5, 10, 15, 25 and 60 minutes to
+    begin with; Settings → General → Timers takes your own list) or typed: `10`,
     `1:30`, `1h30`, `45s`. A name can follow the length: `10 Tea` starts a
     ten-minute timer called Tea.
   - Each can be paused, given a minute more or less, reset and named (`e`), and
@@ -135,7 +142,9 @@ control.
   - An optional long break every few rounds.
   - Whether the next phase starts by itself.
   - Skipping a phase.
-  - A dot for each finished round.
+  - A dot for each finished round, and a tally of focus rounds: today and this
+    week under the list, optionally in the clock and in the bar. The items file
+    keeps the count per day for 60 days.
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.
@@ -168,9 +177,9 @@ control.
   not as counters.
 - **Settings** (`Ctrl ,` or the gear):
   - **General:** language (automatic or one of 30), 24 or 12 hours, the
-    position in the bar, the snooze length, detecting your location, the
-    lengths of new pomodoros, the app launcher entry, and export and import of
-    everything.
+    position in the bar, the snooze length, the timer presets, detecting
+    your location, the lengths of new pomodoros, the app launcher entry, and
+    export and import of everything.
   - **Display:** separately for the menu bar, the widget and the app.
     - Menu bar: which entries show, when, and in what order; bold while
       hovered; coloured values; open the widget on hover.
@@ -188,13 +197,13 @@ control.
 
 ## Screenshots
 
-| World | Alarms, with the editor open | Timers |
+| World on the globe, with golden and blue hour | Alarms: one at Tokyo's time, the editor open | Timers |
 |---|---|---|
-| ![World](screenshots/world.png) | ![Alarms](screenshots/alarms.png) | ![Timers](screenshots/timers.png) |
+| ![Globe](screenshots/globe.png) | ![Alarms](screenshots/alarms.png) | ![Timers](screenshots/timers.png) |
 
-| Pomodoros | Settings → Display | Settings → Shortcuts |
+| Pomodoros with today's tally | Settings → Sounds and chimes | Settings → Display |
 |---|---|---|
-| ![Pomodoros](screenshots/pomodoros.png) | ![Display settings](screenshots/settings-display.png) | ![Shortcuts](screenshots/shortcuts.png) |
+| ![Pomodoros](screenshots/pomodoros.png) | ![Sounds settings](screenshots/sounds.png) | ![Display settings](screenshots/settings-display.png) |
 
 ## Keyboard
 
@@ -368,7 +377,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release notes.
 | `~/.local/state/omarchy/settings/more-time-cities.json` | World clock cities |
 | `~/.local/state/omarchy/settings/more-time-place.json` | The current place (`here` or a city), shared by the bar and the app, and here's clock face style |
 | `~/.local/state/omarchy/settings/more-weather-locations.json` | More Weather's saved places; only read, by **Import places from More Weather** |
-| `~/.local/state/omarchy/settings/more-time-items.json` | Alarms, timers, stopwatches, pomodoros |
+| `~/.local/state/omarchy/settings/more-time-items.json` | Alarms, timers, stopwatches, pomodoros, and the pomodoro rounds per day (60 days) |
 | `~/.local/state/omarchy/settings/more-time-ringer.json` | When the last check for due alarms ran and what already rang, so alarms missed while the computer was off are reported after a reboot |
 | `~/.local/state/omarchy/settings/more-time-settings-backup.json` | The settings from before the last import |
 | `$XDG_RUNTIME_DIR/more-time/runtime.json` | Which instance rings, what rings now and the minute that last chimed (gone after a reboot) |
@@ -426,8 +435,8 @@ That is only needed when the source data changes; the result is committed.
 
 Some files are shared with [More Weather](https://github.com/T-The-Coder/more-weather)
 (the switches, buttons, bar placement, app launcher entry, the request helper,
-the place search with `PlaceSearch.js` and its test, and parts of the test
-setup). With both repositories side by side,
+the place search with `PlaceSearch.js` and its test, the Moon with `Moon.js`,
+its test and the `MoonSphere` component, and parts of the test setup). With both repositories side by side,
 `tests/shared-files.test.mjs` checks that the copies match, and
 `tools/sync-shared.sh from-sibling` or `to-sibling` copies them across with the
 names changed.

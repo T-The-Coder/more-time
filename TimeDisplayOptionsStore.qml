@@ -53,7 +53,8 @@ Item {
     chimeTone: "beep",
     chimeVolume: 50,
     chimesMuted: false,
-    detectLocation: false
+    detectLocation: false,
+    timerPresets: "1,3,5,10,15,25,60"
   })
   // Read once: until then the chimes stay quiet, so a start does not beep
   // with the defaults before the chosen settings are known.
@@ -78,6 +79,8 @@ Item {
     if (typeof fallback === "boolean") return typeof value === "boolean" ? value : fallback
     // A free number of minutes (custom chime interval), 1–1440.
     if (key === "chimeMinutes") return Model.chimeMinutesValue(value) || fallback
+    // The timer presets: "1,3,5" (Model.parseTimerPresets).
+    if (key === "timerPresets") return Model.timerPresetsText(value)
     var choices = generalChoices[key] || []
     for (var i = 0; i < choices.length; i++)
       if (String(choices[i]) === String(value)) return choices[i]
@@ -91,7 +94,26 @@ Item {
     return result
   }
 
+  // Each file this store writes, guarded against late reports of its own
+  // older writes (TimeEchoGuard).
+  property TimeEchoGuard generalEcho: TimeEchoGuard {}
+  property TimeEchoGuard appEcho: TimeEchoGuard {}
+  property TimeEchoGuard widgetEcho: TimeEchoGuard {}
+  property TimeEchoGuard menubarEcho: TimeEchoGuard {}
+
+  function echoFor(surface) {
+    return surface === "app" ? appEcho : (surface === "widget" ? widgetEcho : menubarEcho)
+  }
+
+  function writeGeneral(next) {
+    panel.generalOptions = next
+    var text = JSON.stringify(next) + "\n"
+    generalEcho.wrote(text)
+    generalOptionsFile.setText(text)
+  }
+
   function loadGeneralOptions(raw) {
+    if (generalEcho.isEcho(raw)) return
     var parsed = ({})
     try { parsed = JSON.parse(String(raw || "{}")) || ({}) } catch (e) { parsed = ({}) }
     panel.generalOptions = sanitizedGeneral(parsed)
@@ -101,8 +123,7 @@ Item {
   function setGeneralSetting(key, value) {
     var next = sanitizedGeneral(panel.generalOptions)
     next[key] = normalizedGeneral(key, value)
-    panel.generalOptions = next
-    generalOptionsFile.setText(JSON.stringify(next) + "\n")
+    writeGeneral(next)
   }
 
   function generalIsDefault() {
@@ -113,8 +134,7 @@ Item {
 
   function restoreGeneralDefaults() {
     var next = sanitizedGeneral({})
-    panel.generalOptions = next
-    generalOptionsFile.setText(JSON.stringify(next) + "\n")
+    writeGeneral(next)
   }
 
   // ---- Display options per surface ----
@@ -198,6 +218,7 @@ Item {
 
   function assign(surface, next, writeFile) {
     var text = JSON.stringify(next) + "\n"
+    if (writeFile) echoFor(surface).wrote(text)
     if (surface === "app") {
       panel.appDisplayOptions = next
       if (writeFile) appDisplayOptionsFile.setText(text)
@@ -211,6 +232,7 @@ Item {
   }
 
   function loadDisplayOptionsFor(surface, raw) {
+    if (echoFor(surface).isEcho(raw)) return
     var parsed = ({})
     try { parsed = JSON.parse(String(raw || "{}")) } catch (e) { parsed = ({}) }
     var next = sanitizedDisplayOptions(parsed, surface)
@@ -280,9 +302,7 @@ Item {
   // Everything an import brings, for settings import; parts it lacks stay.
   function replaceAll(general, display) {
     if (general && typeof general === "object") {
-      var next = sanitizedGeneral(general)
-      panel.generalOptions = next
-      generalOptionsFile.setText(JSON.stringify(next) + "\n")
+      writeGeneral(sanitizedGeneral(general))
     }
     var surfaces = ["menubar", "widget", "app"]
     for (var i = 0; i < surfaces.length; i++) {

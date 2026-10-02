@@ -52,13 +52,14 @@ Item {
     onLoadFailed: here.weatherPlace = null
   }
 
+  property TimeEchoGuard cacheEcho: TimeEchoGuard {}
   property FileView cacheFile: FileView {
     path: Quickshell.env("HOME") + "/.local/state/omarchy/settings/more-time-here.json"
     watchChanges: true
     atomicWrites: true
     printErrors: false
     onFileChanged: reload()
-    onLoaded: here.adoptCache(text())
+    onLoaded: if (!here.cacheEcho.isEcho(text())) here.adoptCache(text())
     onLoadFailed: here.adoptCache("")
   }
 
@@ -121,7 +122,9 @@ Item {
       if (place) {
         var entry = { name: place.name, lat: place.lat, lon: place.lon, at: Date.now(), route: here.route, provider: provider.id }
         here.ipPlace = entry
-        here.cacheFile.setText(JSON.stringify(entry) + "\n")
+        var text2 = JSON.stringify(entry) + "\n"
+        here.cacheEcho.wrote(text2)
+        here.cacheFile.setText(text2)
         return
       }
       if (here.providerIndex + 1 < Model.IP_PLACE_PROVIDERS.length) {

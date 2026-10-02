@@ -101,6 +101,7 @@ Item {
     var city = results[index]
     if (!city) return
     var at = panel.citiesStore.add(city)
+    if (at < 0) return
     section = "saved"
     savedIndex = at
   }
