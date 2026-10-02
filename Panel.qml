@@ -174,9 +174,20 @@ Panel {
     return next
   }
 
+  // For the picture runs only (tests/ui-showcase.sh): what the views show
+  // is this far from the real clock. The ringer and the chimes keep the real
+  // one, so nothing rings for the shown time.
+  property double clockOffsetMs: 0
+  onClockOffsetMsChanged: {
+    nowMs = Date.now() + clockOffsetMs
+    fineNowMs = nowMs
+  }
+
   function tick() {
-    var now = Date.now()
-    if (fastTick || Math.floor(now / 60000) !== Math.floor(nowMs / 60000)) nowMs = now
+    var real = Date.now()
+    var shown = real + clockOffsetMs
+    if (fastTick || Math.floor(shown / 60000) !== Math.floor(nowMs / 60000)) nowMs = shown
+    var now = real
     var minuteTurned = Math.floor(now / 60000) !== Math.floor(lastRingerTickMs / 60000)
     if (minuteTurned || (nextDueMs > 0 && now >= nextDueMs) || now - lastRingerTickMs >= 5000) {
       lastRingerTickMs = now
@@ -202,8 +213,8 @@ Panel {
     repeat: true
     running: root.opened && root.currentTab === "stopwatches" && root.displaySetting("stopwatchHundredths", true)
       && root.itemsStore.items.stopwatches.some(function(s) { return s.running })
-    onTriggered: root.fineNowMs = Date.now()
-    onRunningChanged: root.fineNowMs = Date.now()
+    onTriggered: root.fineNowMs = Date.now() + root.clockOffsetMs
+    onRunningChanged: root.fineNowMs = Date.now() + root.clockOffsetMs
   }
 
   readonly property int localOffset: Model.localOffsetSeconds(nowMs)

@@ -197,13 +197,17 @@ control.
 
 ## Screenshots
 
-| World on the globe, with golden and blue hour | Alarms: one at Tokyo's time, the editor open | Timers |
+| Berlin with the globe, golden and blue hour, the cities' clock faces | The flat map: hour ruler, three-step night, the sun | Alarms: one at Tokyo's time, the editor open |
 |---|---|---|
-| ![Globe](screenshots/globe.png) | ![Alarms](screenshots/alarms.png) | ![Timers](screenshots/timers.png) |
+| ![Globe](screenshots/world-globe.png) | ![Map](screenshots/world-map.png) | ![Alarms](screenshots/alarms.png) |
 
-| Pomodoros with today's tally | Settings → Sounds and chimes | Settings → Display |
+| Timers running, one named | Pomodoros: focus, a break, today's tally | Menu bar with coloured values, and the widget |
 |---|---|---|
-| ![Pomodoros](screenshots/pomodoros.png) | ![Sounds settings](screenshots/sounds.png) | ![Display settings](screenshots/settings-display.png) |
+| ![Timers](screenshots/timers.png) | ![Pomodoros](screenshots/pomodoros.png) | ![Menu bar and widget](screenshots/menubar-widget.png) |
+
+| Settings → Sounds: the chimes |
+|---|
+| ![Sounds settings](screenshots/settings-sounds.png) |
 
 ## Keyboard
 
@@ -424,7 +428,12 @@ Node's built-in test runner:
 node --test tests/*.test.mjs
 tests/qml-syntax.sh    # every QML file parses (qmllint)
 tests/ui-shots.sh      # screenshots of every view, offscreen, with a throwaway HOME
+tests/ui-showcase.sh   # the README pictures: cities, alarms, timers, pomodoros, Berlin as here
 ```
+
+`tools/build-preview.sh <its output directory>` puts `screenshots/` and
+`preview.png` together from a showcase run, in the colours of the current
+Omarchy theme.
 
 With `MORE_TIME_SOUND_DRY_RUN=1` in the environment, sounds and chimes are
 only logged (`pw-play` command lines), never played; the screenshot run uses
