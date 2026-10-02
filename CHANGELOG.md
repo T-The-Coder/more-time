@@ -35,7 +35,7 @@ First release.
     in an orthographic view, with the golden and blue hour as bands along the
     day/night line; it turns to the picked place, by drag or sideways wheel,
     and optionally by itself after 5, 10 or 30 idle seconds, one turn in 1, 2,
-    4 or 8 minutes.
+    4 or 8 minutes; a click, drag or the wheel stops it, hovering does not.
   - Optionally the Moon at its sub-lunar point with its phase, on the map and
     the globe, with More Weather's phase numbers.
   - Your own place is shown with More Weather's location pin, not a word.

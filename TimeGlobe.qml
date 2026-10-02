@@ -138,11 +138,13 @@ Item {
   }
 
   // ---- Turning by itself ----
-  // Ten seconds after the last touch it turns east, once in four minutes,
-  // only while it can be seen: popup open, World tab, no pointer on it.
+  // After the set delay (globeRotateDelay) it turns east, one turn in the set
+  // minutes (globeRotateSpeed),
+  // only while it can be seen (popup open, World tab); a press, drag, wheel or
+  // selection change stops it and restarts the wait, hovering does not.
   property bool rotating: false
   readonly property bool canRotate: autoRotate && panel.opened && panel.currentTab === "world"
-    && visible && !mouse.containsMouse && !mouse.pressed
+    && visible && !mouse.pressed
   onCanRotateChanged: if (!canRotate) rotating = false
 
   function touched() {
@@ -397,7 +399,6 @@ Item {
     property real pressX: 0
     property real pressLon: 0
     property bool dragged: false
-    onContainsMouseChanged: if (containsMouse) globe.touched()
 
     function zoneUnder(x, y) {
       if (!globe.mapData) return null

@@ -75,7 +75,8 @@ control.
     the short way round, a drag or the sideways wheel (⇧ wheel) turns it by
     hand, the vertical wheel scrolls the tab, and if you like it turns by
     itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4 or 8
-    minutes (only while you can see it; the pointer over it pauses it).
+    minutes (only while you can see it; a click, drag or the wheel stops it,
+    the pointer merely resting on it does not, and the tooltips keep working).
   - Optionally the Moon on the map and the globe, where it stands at the
     zenith right now, with its phase lit towards the Sun (the same phase
     numbers as More Weather); hovering it names the phase ("Moon · 61 % ·
