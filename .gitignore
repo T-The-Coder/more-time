@@ -1,0 +1,7 @@
+.DS_Store
+*.bak
+*.orig
+*~
+node_modules/
+tools/.cache/
+__pycache__/

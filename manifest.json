@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "more-time",
+  "name": "More Time",
+  "version": "1.0.0",
+  "description": "Clock with a world map of the time zones, favourite cities, alarms, stopwatches, timers, pomodoros and a standalone app",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "More Time",
+    "description": "Clock with a world map of the time zones, favourite cities, alarms, stopwatches, timers, pomodoros and a standalone app",
+    "category": "Time",
+    "allowMultiple": false,
+    "settingsForm": "timeSettings",
+    "defaultSection": "center"
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.clock"
+  },
+  "author": "T-The-Coder"
+}

@@ -1,0 +1,163 @@
+#!/bin/bash
+# More Time standalone app launcher.
+#
+#   more-time                         open the app (raises a running instance)
+#   more-time --install-desktop-entry add the app to the app launcher
+#   more-time --remove-desktop-entry  remove the app from the app launcher
+#
+# The app is a separate Quickshell process that runs this plugin's panel in a
+# normal window. Quickshell expects the Omarchy shell's Commons and Ui modules
+# next to its shell.qml, and plugin folders may not contain symlinks, so the
+# launcher assembles that layout in the user's runtime directory.
+
+set -u
+
+plugin_dir=$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)
+omarchy_shell="${OMARCHY_PATH:-/usr/share/omarchy}/shell"
+runtime_base="${XDG_RUNTIME_DIR:-$HOME/.cache}"
+config_dir="$runtime_base/more-time-app"
+data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
+desktop_file="$data_home/applications/more-time.desktop"
+icon_dir="$data_home/icons/hicolor/scalable/apps"
+icon_file="$icon_dir/more-time.svg"
+entry_script="$data_home/more-time/launch"
+theme_colors="$HOME/.local/state/omarchy/current/theme/colors.toml"
+
+# Creates or corrects one symlink and leaves a correct one alone: rewriting a
+# link under a running instance would make Quickshell reload it.
+link() {
+  [[ $(readlink "$2" 2>/dev/null) == "$1" ]] || ln -sfn "$1" "$2"
+}
+
+prepare_config() {
+  if [[ ! -d $omarchy_shell/Commons || ! -d $omarchy_shell/Ui ]]; then
+    echo "more-time: Omarchy shell not found at $omarchy_shell" >&2
+    exit 1
+  fi
+  mkdir -p "$config_dir"
+  chmod 700 "$config_dir"
+  link "$omarchy_shell/Commons" "$config_dir/Commons"
+  link "$omarchy_shell/Ui" "$config_dir/Ui"
+  link "$plugin_dir" "$config_dir/Time"
+  link "$plugin_dir/app/shell.qml" "$config_dir/shell.qml"
+}
+
+theme_color() {
+  local value
+  value=$(grep -m1 -E "^[[:space:]]*$1[[:space:]]*=" "$theme_colors" 2>/dev/null |
+    sed -E 's/^[^=]*=[[:space:]]*"?(#[0-9A-Fa-f]{6,8})"?.*/\1/')
+  if [[ $value =~ ^#[0-9A-Fa-f]{6,8}$ ]]; then echo "$value"; else echo "$2"; fi
+}
+
+# The launcher icon is drawn in the current theme's colors.
+write_icon() {
+  local tile edge face hand tmp
+  tile=$(theme_color background "#2c2525")
+  edge=$(theme_color lighter_background "#3d2f2a")
+  face=$(theme_color foreground "#e6d9db")
+  hand=$(theme_color accent "#f38d70")
+  mkdir -p "$icon_dir"
+  tmp=$(mktemp "$icon_dir/.more-time.XXXXXX")
+  cat >"$tmp" <<SVG
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 114 114">
+  <rect x="2" y="2" width="110" height="110" rx="26" fill="$tile" stroke="$edge" stroke-width="3"/>
+  <circle cx="57" cy="57" r="36" fill="none" stroke="$face" stroke-width="5"/>
+  <g stroke="$face" stroke-width="4" stroke-linecap="round">
+    <line x1="57" y1="27" x2="57" y2="33"/><line x1="87" y1="57" x2="81" y2="57"/>
+    <line x1="57" y1="87" x2="57" y2="81"/><line x1="27" y1="57" x2="33" y2="57"/>
+  </g>
+  <g stroke-linecap="round">
+    <line x1="57" y1="57" x2="57" y2="36" stroke="$face" stroke-width="5"/>
+    <line x1="57" y1="57" x2="73" y2="66" stroke="$hand" stroke-width="5"/>
+  </g>
+  <circle cx="57" cy="57" r="4.5" fill="$hand"/>
+</svg>
+SVG
+  chmod 644 "$tmp"
+  if cmp -s "$tmp" "$icon_file"; then
+    rm -f "$tmp"
+  else
+    mv -f "$tmp" "$icon_file"
+    if command -v gtk-update-icon-cache >/dev/null; then
+      gtk-update-icon-cache -q -f "$data_home/icons/hicolor" 2>/dev/null || true
+    fi
+  fi
+}
+
+# The entry outlives the plugin: `omarchy plugin remove` only deletes the
+# plugin folder, and Quickshell's app list ignores TryExec. The entry therefore
+# starts a small script next to it that opens the app while the plugin is
+# installed and otherwise removes the entry, the icon and itself.
+install_desktop_entry() {
+  local launcher="$plugin_dir/app/more-time"
+  if [[ $launcher$entry_script == *[[:space:]\"\'\$\\\`]* ]]; then
+    echo "more-time: unsupported characters in the install path" >&2
+    exit 1
+  fi
+  mkdir -p "$(dirname "$desktop_file")" "$(dirname "$entry_script")"
+  write_icon
+  cat >"$entry_script" <<SCRIPT
+#!/bin/sh
+# Written by More Time's --install-desktop-entry.
+if [ -x "$launcher" ]; then
+  exec "$launcher"
+fi
+rm -f "$desktop_file" "$icon_file" "$entry_script"
+rmdir "$(dirname "$entry_script")" 2>/dev/null
+notify-send "More Time" "The plugin is no longer installed, so its app launcher entry was removed."
+SCRIPT
+  chmod 755 "$entry_script"
+  cat >"$desktop_file" <<DESKTOP
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=More Time
+Comment=Clock, world clock, alarms, timers, stopwatches and pomodoros
+TryExec=$launcher
+Exec=$entry_script
+Icon=more-time
+StartupWMClass=more-time
+Terminal=false
+Categories=Utility;
+Keywords=Clock;Time;World;Alarm;Timer;Stopwatch;Pomodoro;
+StartupNotify=true
+DESKTOP
+  echo "Added More Time to the app launcher: $desktop_file"
+}
+
+remove_desktop_entry() {
+  rm -f "$desktop_file" "$icon_file" "$entry_script"
+  rmdir "$(dirname "$entry_script")" 2>/dev/null
+  echo "Removed More Time from the app launcher."
+}
+
+case "${1:-}" in
+--install-desktop-entry)
+  install_desktop_entry
+  exit 0
+  ;;
+--remove-desktop-entry)
+  remove_desktop_entry
+  exit 0
+  ;;
+-h | --help)
+  sed -n '4,6p' "$0" | sed 's/^#   /  /'
+  exit 0
+  ;;
+"") ;;
+*)
+  echo "more-time: unknown option: $1" >&2
+  exit 1
+  ;;
+esac
+
+prepare_config
+# Keeps an installed launcher icon in step with theme changes.
+[[ -f $desktop_file ]] && write_icon
+
+export QS_APP_ID="more-time"
+if timeout 2s qs ipc -n -p "$config_dir" call -- more-time open >/dev/null 2>&1; then
+  exit 0
+fi
+exec qs -n -d -p "$config_dir"

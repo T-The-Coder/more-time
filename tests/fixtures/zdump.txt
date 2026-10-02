@@ -1,0 +1,79 @@
+== Europe/Berlin +0200 CEST
+Europe/Berlin  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Europe/Berlin  -67768040609744009 (gmtime failed) = -67768040609744009 (localtime failed)
+Europe/Berlin  -67768040609744008 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=3208
+Europe/Berlin  -67768040609740801 (gmtime failed) = Thu Jan  1 00:53:27 -2147481748 LMT isdst=0 gmtoff=3208
+Europe/Berlin  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 00:53:28 -2147481748 LMT isdst=0 gmtoff=3208
+Europe/Berlin  Sun Mar 29 00:59:59 2026 UT = Sun Mar 29 01:59:59 2026 CET isdst=0 gmtoff=3600
+Europe/Berlin  Sun Mar 29 01:00:00 2026 UT = Sun Mar 29 03:00:00 2026 CEST isdst=1 gmtoff=7200
+Europe/Berlin  Sun Oct 25 00:59:59 2026 UT = Sun Oct 25 02:59:59 2026 CEST isdst=1 gmtoff=7200
+Europe/Berlin  Sun Oct 25 01:00:00 2026 UT = Sun Oct 25 02:00:00 2026 CET isdst=0 gmtoff=3600
+Europe/Berlin  Sun Mar 28 00:59:59 2027 UT = Sun Mar 28 01:59:59 2027 CET isdst=0 gmtoff=3600
+Europe/Berlin  Sun Mar 28 01:00:00 2027 UT = Sun Mar 28 03:00:00 2027 CEST isdst=1 gmtoff=7200
+Europe/Berlin  Sun Oct 31 00:59:59 2027 UT = Sun Oct 31 02:59:59 2027 CEST isdst=1 gmtoff=7200
+Europe/Berlin  Sun Oct 31 01:00:00 2027 UT = Sun Oct 31 02:00:00 2027 CET isdst=0 gmtoff=3600
+Europe/Berlin  Wed Dec 31 22:59:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 CET isdst=0 gmtoff=3600
+Europe/Berlin  Wed Dec 31 23:00:00 2147485547 UT = 67768036191673200 (localtime failed)
+Europe/Berlin  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Europe/Berlin  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Europe/Berlin  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+== America/New_York -0400 EDT
+America/New_York  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+America/New_York  -67768040609740801 (gmtime failed) = -67768040609740801 (localtime failed)
+America/New_York  Thu Jan  1 00:00:00 -2147481748 UT = -67768040609740800 (localtime failed)
+America/New_York  Thu Jan  1 04:56:01 -2147481748 UT = -67768040609723039 (localtime failed)
+America/New_York  Thu Jan  1 04:56:02 -2147481748 UT = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=-17762
+America/New_York  Sun Mar  8 06:59:59 2026 UT = Sun Mar  8 01:59:59 2026 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar  8 07:00:00 2026 UT = Sun Mar  8 03:00:00 2026 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  1 05:59:59 2026 UT = Sun Nov  1 01:59:59 2026 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  1 06:00:00 2026 UT = Sun Nov  1 01:00:00 2026 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar 14 06:59:59 2027 UT = Sun Mar 14 01:59:59 2027 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar 14 07:00:00 2027 UT = Sun Mar 14 03:00:00 2027 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  7 05:59:59 2027 UT = Sun Nov  7 01:59:59 2027 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  7 06:00:00 2027 UT = Sun Nov  7 01:00:00 2027 EST isdst=0 gmtoff=-18000
+America/New_York  Wed Dec 31 23:59:59 2147485547 UT = Wed Dec 31 18:59:59 2147485547 EST isdst=0 gmtoff=-18000
+America/New_York  67768036191676800 (gmtime failed) = Wed Dec 31 19:00:00 2147485547 EST isdst=0 gmtoff=-18000
+America/New_York  67768036191694799 (gmtime failed) = Wed Dec 31 23:59:59 2147485547 EST isdst=0 gmtoff=-18000
+America/New_York  67768036191694800 (gmtime failed) = 67768036191694800 (localtime failed)
+America/New_York  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+== Asia/Kathmandu +0545 +0545
+Asia/Kathmandu  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Asia/Kathmandu  -67768040609761277 (gmtime failed) = -67768040609761277 (localtime failed)
+Asia/Kathmandu  -67768040609761276 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=20476
+Asia/Kathmandu  -67768040609740801 (gmtime failed) = Thu Jan  1 05:41:15 -2147481748 LMT isdst=0 gmtoff=20476
+Asia/Kathmandu  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 05:41:16 -2147481748 LMT isdst=0 gmtoff=20476
+Asia/Kathmandu  Wed Dec 31 18:14:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0545 isdst=0 gmtoff=20700
+Asia/Kathmandu  Wed Dec 31 18:15:00 2147485547 UT = 67768036191656100 (localtime failed)
+Asia/Kathmandu  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Asia/Kathmandu  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Asia/Kathmandu  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+== Australia/Lord_Howe +1030 +1030
+Australia/Lord_Howe  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Australia/Lord_Howe  -67768040609778981 (gmtime failed) = -67768040609778981 (localtime failed)
+Australia/Lord_Howe  -67768040609778980 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=38180
+Australia/Lord_Howe  -67768040609740801 (gmtime failed) = Thu Jan  1 10:36:19 -2147481748 LMT isdst=0 gmtoff=38180
+Australia/Lord_Howe  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 10:36:20 -2147481748 LMT isdst=0 gmtoff=38180
+Australia/Lord_Howe  Sat Apr  4 14:59:59 2026 UT = Sun Apr  5 01:59:59 2026 +11 isdst=1 gmtoff=39600
+Australia/Lord_Howe  Sat Apr  4 15:00:00 2026 UT = Sun Apr  5 01:30:00 2026 +1030 isdst=0 gmtoff=37800
+Australia/Lord_Howe  Sat Oct  3 15:29:59 2026 UT = Sun Oct  4 01:59:59 2026 +1030 isdst=0 gmtoff=37800
+Australia/Lord_Howe  Sat Oct  3 15:30:00 2026 UT = Sun Oct  4 02:30:00 2026 +11 isdst=1 gmtoff=39600
+Australia/Lord_Howe  Sat Apr  3 14:59:59 2027 UT = Sun Apr  4 01:59:59 2027 +11 isdst=1 gmtoff=39600
+Australia/Lord_Howe  Sat Apr  3 15:00:00 2027 UT = Sun Apr  4 01:30:00 2027 +1030 isdst=0 gmtoff=37800
+Australia/Lord_Howe  Sat Oct  2 15:29:59 2027 UT = Sun Oct  3 01:59:59 2027 +1030 isdst=0 gmtoff=37800
+Australia/Lord_Howe  Sat Oct  2 15:30:00 2027 UT = Sun Oct  3 02:30:00 2027 +11 isdst=1 gmtoff=39600
+Australia/Lord_Howe  Wed Dec 31 12:59:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +11 isdst=1 gmtoff=39600
+Australia/Lord_Howe  Wed Dec 31 13:00:00 2147485547 UT = 67768036191637200 (localtime failed)
+Australia/Lord_Howe  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Australia/Lord_Howe  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Australia/Lord_Howe  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+== Asia/Tokyo +0900 JST
+Asia/Tokyo  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Asia/Tokyo  -67768040609774340 (gmtime failed) = -67768040609774340 (localtime failed)
+Asia/Tokyo  -67768040609774339 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=33539
+Asia/Tokyo  -67768040609740801 (gmtime failed) = Thu Jan  1 09:18:58 -2147481748 LMT isdst=0 gmtoff=33539
+Asia/Tokyo  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 09:18:59 -2147481748 LMT isdst=0 gmtoff=33539
+Asia/Tokyo  Wed Dec 31 14:59:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 JST isdst=0 gmtoff=32400
+Asia/Tokyo  Wed Dec 31 15:00:00 2147485547 UT = 67768036191644400 (localtime failed)
+Asia/Tokyo  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Asia/Tokyo  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Asia/Tokyo  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
