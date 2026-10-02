@@ -431,6 +431,10 @@ tests/ui-shots.sh      # screenshots of every view, offscreen, with a throwaway 
 tests/ui-showcase.sh   # the README pictures: cities, alarms, timers, pomodoros, Berlin as here
 ```
 
+The texts of the 30 languages live in `i18n/<language>.js`, one file each
+(`en.js`, `de.js`, … `zh_TW.js`); `I18n.js` imports them and holds the
+lookup. `tests/load.mjs` resolves those imports for the Node tests.
+
 `tools/build-preview.sh <its output directory>` puts `screenshots/` and
 `preview.png` together from a showcase run, in the colours of the current
 Omarchy theme.
