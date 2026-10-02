@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "Model.js" as Model
+import "PlaceSearch.js" as PlaceSearch
 
 // Settings → General → Places: More Weather's saved places taken over as
 // world clock cities. Only reads its file; the button waits for it to exist.
@@ -23,6 +24,7 @@ Item {
   property var resolved: []
   property int existing: 0
   property var current: null
+  property bool asking: false
 
   function run() {
     if (!available || busy) return
@@ -31,7 +33,8 @@ Item {
     var known = 0
     for (var i = 0; i < places.length; i++) {
       // Known by coordinates already: no lookup needed.
-      if (Model.knownCity(panel.cityList, { name: places[i].name, lat: places[i].lat, lon: places[i].lon, tz: "" })) known++
+      if (Model.knownCity(panel.cityList, { name: places[i].name, lat: places[i].lat, lon: places[i].lon, tz: "" },
+        PlaceSearch.samePlace)) known++
       else fresh.push(places[i])
     }
     existing = known
@@ -54,10 +57,18 @@ Item {
       finish()
       return
     }
-    current = queue[0]
+    var place = queue[0]
     queue = queue.slice(1)
+    // The query is set in steps (TimePlaceSearch's onQueryChanged reads
+    // `trimmed` before that binding has caught up, so a jump from "" to a
+    // name would be taken for a too short one); the lookup's busy changes
+    // meanwhile are not its answer.
+    asking = true
     lookup.query = ""
-    lookup.query = current.name
+    lookup.query = place.name + " "
+    lookup.query = place.name
+    asking = false
+    current = place
     timeout.restart()
   }
 
@@ -72,7 +83,7 @@ Item {
   }
 
   function finish() {
-    var merged = Model.mergeImportedPlaces(panel.cityList, resolved)
+    var merged = Model.mergeImportedPlaces(panel.cityList, resolved, PlaceSearch.samePlace)
     if (merged.added > 0) panel.citiesStore.replaceAll(merged.list)
     status = { added: merged.added, existing: existing + merged.existing }
     busy = false
@@ -81,7 +92,7 @@ Item {
   // Asked for one name at a time; it answers when it is no longer busy.
   property TimePlaceSearch lookup: TimePlaceSearch {
     panel: placesImport.panel
-    onBusyChanged: if (!busy && placesImport.current) placesImport.resolve(results)
+    onBusyChanged: if (!busy && placesImport.current && !placesImport.asking) placesImport.resolve(results)
   }
 
   // A lookup that never answers falls back to the nearest zone.

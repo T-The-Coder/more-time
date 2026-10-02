@@ -2,7 +2,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
-import "Model.js" as Model
 import "WorldMap.js" as WorldMap
 import "Globe.js" as Globe
 
@@ -29,9 +28,12 @@ Item {
   onShowMoonChanged: canvas.requestPaint()
   // Where the Moon was drawn on the front side, for the hover, or null.
   property var moonHit: null
+  readonly property real moonRadius: Style.space(6)
+  // The pointer resting over the globe, for the hover, or null.
+  property var pointer: null
   readonly property bool showLabels: panel.displaySetting("worldMapLabels", true)
-  readonly property bool showGolden: panel.displaySetting("heroGoldenHour", true)
-  readonly property bool showBlue: panel.displaySetting("heroBlueHour", true)
+  readonly property bool showGolden: panel.displaySetting("heroGoldenHour", false)
+  readonly property bool showBlue: panel.displaySetting("heroBlueHour", false)
   readonly property bool autoRotate: panel.displaySetting("globeAutoRotate", false)
   readonly property real diameter: Math.min(width, Style.space(380))
   readonly property real radius: diameter / 2
@@ -108,17 +110,17 @@ Item {
   })() : 99999
   // The twilight areas change with the minute; kept in lat/lon, clipped
   // per frame.
+  // The twilight layers (WorldMap.twilightLayers) and their caps as lat/lon
+  // rings, once a minute; clipped to the front side per frame.
   readonly property var twilight: {
     var ms = minuteMs
-    function rings(e) { return WorldMap.twilightRings(ms, e).map(function(r) { return Globe.prepareLatLon(r) }) }
-    return {
-      night: showNight ? rings(0) : [],
-      // Gold on the day side of the day/night line (+6° … 0°), blue on the
-      // night side (0° … −8°): the line stays a crisp edge between them.
-      golden: showGolden ? rings(6).concat(rings(0)) : [],
-      blue: showBlue ? rings(0).concat(rings(-8)) : [],
-      sun: WorldMap.subsolarPoint(ms)
-    }
+    var layers = WorldMap.twilightLayers({ golden: showGolden, blue: showBlue, night: showNight },
+      panel.rgbOf(Color.popups.background))
+    var shapes = {}
+    var elevations = WorldMap.twilightElevations(layers)
+    for (var i = 0; i < elevations.length; i++)
+      shapes[elevations[i]] = WorldMap.twilightRings(ms, elevations[i]).map(function(r) { return Globe.prepareLatLon(r) })
+    return { layers: layers, shapes: shapes, sun: WorldMap.subsolarPoint(ms) }
   }
   property var hover: null
 
@@ -139,9 +141,9 @@ Item {
 
   // ---- Turning by itself ----
   // After the set delay (globeRotateDelay) it turns east, one turn in the set
-  // minutes (globeRotateSpeed),
-  // only while it can be seen (popup open, World tab); a press, drag, wheel or
-  // selection change stops it and restarts the wait, hovering does not.
+  // minutes (globeRotateSpeed), only while it can be seen (popup open, World
+  // tab). A press, drag, wheel or selection change stops it and restarts the
+  // wait; a pointer resting on it does not, and the tooltip follows the turn.
   property bool rotating: false
   readonly property bool canRotate: autoRotate && panel.opened && panel.currentTab === "world"
     && visible && !mouse.pressed
@@ -155,7 +157,7 @@ Item {
   // Settings → Display → World: after how many idle seconds it starts, and
   // in how many minutes it makes one turn.
   readonly property int rotateDelaySeconds: Number(panel.displaySetting("globeRotateDelay", "10")) || 10
-  readonly property int rotateTurnMinutes: Number(panel.displaySetting("globeRotateSpeed", "1")) || 1
+  readonly property int rotateTurnMinutes: Number(panel.displaySetting("globeRotateSpeed", "4")) || 4
 
   Timer {
     id: idleTimer
@@ -267,45 +269,48 @@ Item {
       ctx.lineWidth = 0.8
       ctx.stroke()
 
-      // The golden and the blue hour as bands along the terminator, then
-      // the night side and the sun.
+      // The twilight layers: the golden and the blue band with soft edges,
+      // the night in three steps (WorldMap.twilightLayers); then the Sun at
+      // its zenith point.
+      // Each cap is clipped to the front side once per frame, however many
+      // layers share it.
       var tw = globe.twilight
-      fillRings(ctx, tw.golden, lon, Qt.rgba(0xE3 / 255, 0xA4 / 255, 0x47 / 255, 0.28))
-      fillRings(ctx, tw.blue, lon, Qt.rgba(0x3B / 255, 0x5B / 255, 0xD6 / 255, 0.28))
+      var front = {}
+      for (var e in tw.shapes) {
+        front[e] = []
+        for (var c = 0; c < tw.shapes[e].length; c++) front[e] = front[e].concat(Globe.frontPolygons(tw.shapes[e][c], lon, R))
+      }
+      ctx.fillRule = Qt.OddEvenFill
+      for (var t = 0; t < tw.layers.length; t++) {
+        var layer = tw.layers[t]
+        var polys = front[layer.high].concat(layer.low !== null ? front[layer.low] : [])
+        if (!polys.length) continue
+        ctx.beginPath()
+        for (var q = 0; q < polys.length; q++) trace(ctx, polys[q], true)
+        ctx.fillStyle = Qt.rgba(layer.fill.r, layer.fill.g, layer.fill.b, layer.fill.a)
+        ctx.fill()
+      }
       if (globe.showNight) {
-        var nf = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
-        fillRings(ctx, tw.night, lon, Qt.rgba(nf.r, nf.g, nf.b, nf.a))
-        var sun = Globe.projectOrtho(tw.sun.lat, tw.sun.lon, lon, R)
-        if (sun.visible) {
-          var sx = globe.centerX + sun.x
-          var sy = globe.centerY - sun.y
-          ctx.fillStyle = rgba(accent, 0.9)
-          ctx.beginPath()
-          ctx.arc(sx, sy, 3.5, 0, Math.PI * 2)
-          ctx.fill()
-          ctx.strokeStyle = rgba(accent, 0.5)
-          ctx.lineWidth = 1
-          ctx.beginPath()
-          ctx.arc(sx, sy, 7, 0, Math.PI * 2)
-          ctx.stroke()
-        }
+        var sun = screenPoint(tw.sun.lat, tw.sun.lon, lon)
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, rgba(accent, 0.95))
       }
-      // The Moon at its sub-lunar point, lit towards the Sun; hidden on the
-      // back side.
-      globe.moonHit = null
-      if (globe.showMoon) {
-        var moon = WorldMap.moonPosition(globe.minuteMs)
-        var mp = screenPoint(moon.lat, moon.lon, lon)
-        if (mp.visible) {
-          var toward = WorldMap.towards(moon.lat, moon.lon, tw.sun.lat, tw.sun.lon, 4)
-          var tp = screenPoint(toward.lat, toward.lon, lon)
-          var nfm = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
-          WorldMap.paintMoon(ctx, mp.x, mp.y, Style.space(5), Math.atan2(tp.y - mp.y, tp.x - mp.x), moon.illuminated,
-            rgba(globe.panel.mutedText, 0.9), Qt.rgba(nfm.r, nfm.g, nfm.b, 0.9), rgba(ink, 0.6))
-          globe.moonHit = { x: mp.x, y: mp.y, moon: moon }
-        }
-      }
+      // The Moon floats above its sub-lunar point, lifted along the view
+      // direction (1.15 of its distance from the centre), its shadow on the
+      // surface; hidden on the back side, drawn after the clip.
+      var moon = globe.showMoon ? WorldMap.moonPosition(globe.minuteMs) : null
+      var moonAt = moon ? screenPoint(moon.lat, moon.lon, lon) : null
+      if (moon && moonAt.visible) WorldMap.paintMoonShadow(ctx, moonAt.x, moonAt.y, globe.moonRadius)
       ctx.restore()
+
+      globe.moonHit = null
+      if (moon && moonAt.visible) {
+        var mx = globe.centerX + (moonAt.x - globe.centerX) * 1.15
+        var my = globe.centerY + (moonAt.y - globe.centerY) * 1.15
+        var angle = WorldMap.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) })
+        WorldMap.paintMoon(ctx, mx, my, globe.moonRadius, angle, moon.illuminated, "238,236,226",
+          WorldMap.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), WorldMap.rgbText(ink))
+        globe.moonHit = { x: mx, y: my, moon: moon }
+      }
 
       ctx.strokeStyle = rgba(ink, 0.35)
       ctx.lineWidth = 1
@@ -313,6 +318,7 @@ Item {
       ctx.stroke()
 
       paintPlaces(ctx, lon)
+      mouse.updateHover()
     }
 
     function screenPoint(lat, lon, centerLon) {
@@ -423,18 +429,27 @@ Item {
         globe.hover = null
         return
       }
-      if (globe.moonHit && Math.hypot(globe.moonHit.x - event.x, globe.moonHit.y - event.y) <= Style.space(8)) {
-        globe.hover = { moon: globe.moonHit.moon, x: event.x, y: event.y }
-        return
-      }
-      var minutes = zoneUnder(event.x, event.y)
-      globe.hover = minutes === null ? null : { minutes: minutes, x: event.x, y: event.y }
+      globe.pointer = { x: event.x, y: event.y }
+      updateHover()
     }
-    onExited: globe.hover = null
+    onExited: {
+      globe.pointer = null
+      globe.hover = null
+    }
+
+    // The zone or the Moon under the resting pointer; again after every
+    // frame, since the globe may turn under it.
+    function updateHover() {
+      var p = globe.pointer
+      if (!p || pressed) return
+      globe.hover = globe.panel.mapHoverAt(globe.moonHit, p.x, p.y, zoneUnder)
+    }
     // Only a sideways wheel (or Shift + wheel) turns the globe; the plain
     // wheel goes on scrolling the tab (the page's wheel area leaves it the
     // sideways ones: wantsWheel, Panel.wheelTakenBelow).
     function wantsWheel(wheel) { return globe.panel.wheelIsSideways(wheel) }
+    // Any wheel over it stops the turning, also one that scrolls the page.
+    function noticeWheel(wheel) { globe.touched() }
     Component.onCompleted: globe.panel.registerWheelArea(this)
     Component.onDestruction: globe.panel.unregisterWheelArea(this)
     onWheel: function(event) {
@@ -466,28 +481,9 @@ Item {
     }
   }
 
-  Rectangle {
-    visible: globe.hover !== null
-    x: globe.hover ? Math.min(globe.width - width, globe.hover.x + Style.space(12)) : 0
-    y: globe.hover ? Math.max(0, globe.hover.y - height - Style.space(6)) : 0
-    width: hoverLabel.implicitWidth + Style.space(12)
-    height: hoverLabel.implicitHeight + Style.space(6)
-    radius: Style.cornerRadius
-    color: Color.popups.background
-    border.color: globe.panel.subtleText
-    border.width: Style.spacing.hairline
-
-    Text {
-      id: hoverLabel
-      anchors.centerIn: parent
-      // The zones are standard time, as on the flat map.
-      text: globe.hover && globe.hover.moon ? globe.panel.moonText(globe.hover.moon)
-        : globe.hover ? Model.utcOffsetLabel(globe.hover.minutes * 60) + "  ·  "
-        + globe.panel.clockFor(globe.panel.nowMs, globe.hover.minutes * 60, false)
-        + "  " + globe.panel.i18n("standardTime") : ""
-      color: globe.panel.foreground
-      font.family: globe.panel.fontFamily
-      font.pixelSize: Style.font.caption
-    }
+  TimeMapHoverLabel {
+    panel: globe.panel
+    hover: globe.hover
+    boundsWidth: globe.width
   }
 }

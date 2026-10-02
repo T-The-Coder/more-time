@@ -8,6 +8,12 @@ const W = load("WorldMap.js")
 const file = join(root, "data/worldmap.json")
 const data = JSON.parse(readFileSync(file, "utf8"))
 const near = (a, b, eps = 1e-9) => assert.ok(Math.abs(a - b) < eps, `${a} != ${b}`)
+// Whether a point (lat, lon) lies in a flat-map polygon (projected points),
+// by the even-odd rule the map fills with.
+const insideFlat = (polygon, lat, lon) => {
+  const p = W.project(lat, lon)
+  return W.ringContains(polygon.flatMap((q) => [q.x, q.y]), p.x, p.y, 1)
+}
 
 test("projection matches tools/build-worldmap.py", () => {
   // Values printed by the Python build's project().
@@ -169,26 +175,22 @@ test("sun times: polar night and midnight sun", () => {
 })
 
 test("twilight bands: nested caps around the point opposite the sun", () => {
-  const inside = (polygon, lat, lon) => {
-    const p = W.project(lat, lon)
-    return W.ringContains(polygon.flatMap((q) => [q.x, q.y]), p.x, p.y, 1)
-  }
   // An equinox (both poles in the +6° cap), a solstice and today.
   for (const ms of [Date.UTC(2026, 2, 20, 9, 30), Date.UTC(2026, 5, 21, 18), Date.UTC(2026, 9, 2, 15, 44)]) {
     const golden = W.twilightPolygon(ms, 6)
     const blue = W.twilightPolygon(ms, -4)
     const deep = W.twilightPolygon(ms, -8)
     const sun = W.subsolarPoint(ms)
-    for (const poly of [golden, blue, deep, W.nightPolygon(ms)]) assert.ok(!inside(poly, sun.lat, sun.lon), "sun outside")
+    for (const poly of [golden, blue, deep, W.nightPolygon(ms)]) assert.ok(!insideFlat(poly, sun.lat, sun.lon), "sun outside")
     const anti = { lat: -sun.lat, lon: sun.lon > 0 ? sun.lon - 180 : sun.lon + 180 }
-    for (const poly of [golden, blue, deep]) assert.ok(inside(poly, anti.lat, anti.lon), "antipode inside")
+    for (const poly of [golden, blue, deep]) assert.ok(insideFlat(poly, anti.lat, anti.lon), "antipode inside")
     // Every point agrees with the sun's elevation there, and the caps nest.
     for (let lat = -84; lat <= 84; lat += 6) {
       for (let lon = -177; lon <= 177; lon += 6) {
         const e = W.sunElevation(lat, lon, ms)
-        const inGolden = inside(golden, lat, lon)
-        const inBlue = inside(blue, lat, lon)
-        const inDeep = inside(deep, lat, lon)
+        const inGolden = insideFlat(golden, lat, lon)
+        const inBlue = insideFlat(blue, lat, lon)
+        const inDeep = insideFlat(deep, lat, lon)
         if (Math.abs(e - 6) > 0.5) assert.equal(inGolden, e < 6, `+6° at ${lat},${lon} (${e.toFixed(1)}°)`)
         if (Math.abs(e + 4) > 0.5) assert.equal(inBlue, e < -4, `−4° at ${lat},${lon}`)
         if (Math.abs(e + 8) > 0.5) assert.equal(inDeep, e < -8, `−8° at ${lat},${lon}`)
@@ -204,10 +206,6 @@ test("twilight: the flat map's polygon and the globe's rings cover the same area
   // The flat polygon is traced differently (copies and bridges), so the
   // areas are compared point by point, away from the edge: the rings take a
   // point every 2° of longitude, coarse where the edge runs nearly north–south.
-  const flat = (poly, lat, lon) => {
-    const p = W.project(lat, lon)
-    return W.ringContains(poly.flatMap((q) => [q.x, q.y]), p.x, p.y, 1)
-  }
   const cases = [[Date.UTC(2026, 9, 2, 15, 44), 0], [Date.UTC(2026, 5, 21, 18), 0],
     [Date.UTC(2026, 5, 21, 18), 6], [Date.UTC(2026, 5, 21, 18), -4], [Date.UTC(2026, 11, 21, 6), -8]]
   for (const [ms, e] of cases) {
@@ -218,7 +216,7 @@ test("twilight: the flat map's polygon and the globe's rings cover the same area
     for (let lat = -84; lat <= 84; lat += 6) {
       for (let lon = -177; lon <= 177; lon += 6) {
         if (Math.abs(W.sunElevation(lat, lon, ms) - e) < 3) continue
-        assert.equal(flat(polygon, lat, lon), flat(ring, lat, lon), `${e}° at ${lat},${lon}`)
+        assert.equal(insideFlat(polygon, lat, lon), insideFlat(ring, lat, lon), `${e}° at ${lat},${lon}`)
       }
     }
   }
@@ -240,10 +238,6 @@ test("twilight bands along the map's outline: only where the sun is in range", (
   // 17:17 UTC on 2 October the morning line runs at about −172°, nearly
   // parallel to the western outline: the gold rim seen there is real, and
   // so are the gold south and blue north pole regions near the equinoxes.
-  const inside = (poly, lat, lon) => {
-    const p = W.project(lat, lon)
-    return W.ringContains(poly.flatMap((q) => [q.x, q.y]), p.x, p.y, 1)
-  }
   const bands = [[6, 0], [0, -8]]
   for (const ms of [Date.UTC(2026, 5, 21, 17, 17), Date.UTC(2026, 2, 20, 17, 17), Date.UTC(2026, 9, 2, 17, 17)]) {
     for (const [high, low] of bands) {
@@ -255,7 +249,7 @@ test("twilight bands along the map's outline: only where the sun is in range", (
           // The edges are traced every 2° of bearing: half a degree of
           // elevation off them (more right at the poles) is left out.
           if (Math.abs(e - high) < 0.6 || Math.abs(e - low) < 0.6 || Math.abs(lat) > 88) continue
-          const inBand = inside(upper, lat, lon) !== inside(lower, lat, lon)
+          const inBand = insideFlat(upper, lat, lon) !== insideFlat(lower, lat, lon)
           assert.equal(inBand, e < high && e >= low,
             `${new Date(ms).toISOString().slice(0, 10)} band ${high}…${low} at ${lat},${lon}: ${e.toFixed(2)}°`)
         }
@@ -289,4 +283,32 @@ test("the Moon: phase as in More Weather, position on the sky", () => {
   assert.equal(W.moonPosition(Date.UTC(2025, 9, 1)).waxing, true)
   // Halfway towards a point 90° east on the equator.
   near(W.towards(0, 0, 0, 90, 45).lon, 45, 1e-9)
+})
+
+test("twilight layers: soft bands, then the night in three steps", () => {
+  const bg = W.hexRgb("#eff1f5")
+  const all = W.twilightLayers({ golden: true, blue: true, night: true }, bg)
+  assert.deepEqual(all.map((l) => [l.high, l.low, l.fill.a]), [
+    [6, 4, 0.10], [4, 2, 0.20], [2, 0, 0.28],
+    [0, -3, 0.28], [-3, -6, 0.20], [-6, -8, 0.10],
+    [0, -6, 0.12], [-6, -12, 0.24], [-12, null, 0.30]])
+  // The night steps in the night colour, darker with every step; dark themes
+  // take the stronger full night.
+  near(all[6].fill.r, W.nightFill(bg).r, 1e-12)
+  assert.equal(W.twilightLayers({ night: true }, W.hexRgb("#1e1e2e"))[2].fill.a, 0.38)
+  assert.deepEqual([...W.twilightElevations(all)], [6, 4, 2, 0, -3, -6, -8, -12])
+  assert.equal(W.twilightLayers({}, bg).length, 0)
+  // Every cap they use matches the sun's elevation, on the map and as rings.
+  for (const ms of [Date.UTC(2026, 5, 21, 18), Date.UTC(2026, 2, 20, 9, 30)]) {
+    for (const e of [4, 2, -3, -6, -12]) {
+      const polygon = W.twilightPolygon(ms, e)
+      for (let lat = -84; lat <= 84; lat += 12) {
+        for (let lon = -177; lon <= 177; lon += 12) {
+          const elevation = W.sunElevation(lat, lon, ms)
+          if (Math.abs(elevation - e) < 0.6) continue
+          assert.equal(insideFlat(polygon, lat, lon), elevation < e, `${e}° at ${lat},${lon}`)
+        }
+      }
+    }
+  }
 })

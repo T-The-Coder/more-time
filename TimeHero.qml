@@ -198,8 +198,8 @@ Item {
     // Sunrise and sunset, the golden and the blue hour, at the current place.
     Text {
       readonly property string line: hero.panel.sunLine(hero.panel.currentCoordinates, hero.panel.currentOffset,
-        hero.panel.displaySetting("heroSun", true), hero.panel.displaySetting("heroGoldenHour", true),
-        hero.panel.displaySetting("heroBlueHour", true), hero.panel.displaySetting("heroSunNext", false))
+        hero.panel.displaySetting("heroSun", true), hero.panel.displaySetting("heroGoldenHour", false),
+        hero.panel.displaySetting("heroBlueHour", false), hero.panel.displaySetting("heroSunNext", false))
       visible: line !== ""
       width: parent.width
       text: line

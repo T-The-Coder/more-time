@@ -446,41 +446,147 @@ function towards(lat1, lon1, lat2, lon2, deg) {
   return { lat: lat / RAD, lon: lon / RAD }
 }
 
-// Draws the Moon's disc at (x, y), radius r, its lit side towards `angle`
-// (radians, canvas: 0 to the right, clockwise), `illuminated` 0–1 of it lit.
-// lit, dark, outline: colours.
+// ---- Drawing shared by the flat map (TimeWorldMap.qml) and the globe
+//      (TimeGlobe.qml). Colours are { r, g, b, a } in 0–1 or Qt colours.
+
+// The twilight bands' fills: gold and blue of the sky colours, translucent.
+function bandFill(name) {
+  var c = hexRgb(name === "golden" ? SKY_COLORS.golden : SKY_COLORS.blue)
+  return { r: c[0], g: c[1], b: c[2], a: 0.28 }
+}
+
+// The layers the flat map and the globe fill along the day/night line, in
+// drawing order: { high, low, fill } is the area where the sun stands below
+// `high` and not below `low` (low null: below `high`), each the even-odd fill
+// of twilightPolygon/twilightRings at those elevations.
+//  - The golden band (+6° … 0°) and the blue band (0° … −8°), each in three
+//    steps whose alpha grows towards the day/night line, so their outer
+//    edges fade.
+//  - The night after them, darkening the blue band too: civil twilight
+//    (0° … −6°), nautical (−6° … −12°), then full night below −12°, in the
+//    night colour at growing alpha (nightFill).
+// options: { golden, blue, night } switches; background: [r, g, b].
+var GOLDEN_STEPS = [[6, 4, 0.10], [4, 2, 0.20], [2, 0, 0.28]]
+var BLUE_STEPS = [[0, -3, 0.28], [-3, -6, 0.20], [-6, -8, 0.10]]
+var NIGHT_STEPS = [[0, -6, 0.12], [-6, -12, 0.24], [-12, null, 0]]
+
+function twilightLayers(options, background) {
+  var layers = []
+  function add(steps, color, last) {
+    for (var i = 0; i < steps.length; i++) {
+      var alpha = steps[i][2] || last
+      layers.push({ high: steps[i][0], low: steps[i][1], fill: { r: color.r, g: color.g, b: color.b, a: alpha } })
+    }
+  }
+  if (options.golden) add(GOLDEN_STEPS, bandFill("golden"))
+  if (options.blue) add(BLUE_STEPS, bandFill("blue"))
+  if (options.night) {
+    var night = nightFill(background)
+    add(NIGHT_STEPS, night, night.a)
+  }
+  return layers
+}
+
+// The elevations the layers need, each once.
+function twilightElevations(layers) {
+  var seen = []
+  for (var i = 0; i < layers.length; i++) {
+    if (seen.indexOf(layers[i].high) < 0) seen.push(layers[i].high)
+    if (layers[i].low !== null && seen.indexOf(layers[i].low) < 0) seen.push(layers[i].low)
+  }
+  return seen
+}
+
+// The Sun at its zenith point: a disc with eight short rays, a little larger
+// than a city's dot, so it is not taken for one.
+function paintSun(ctx, x, y, color) {
+  ctx.save()
+  ctx.fillStyle = color
+  ctx.strokeStyle = color
+  ctx.lineWidth = 1.4
+  ctx.lineCap = "round"
+  ctx.beginPath()
+  ctx.arc(x, y, 3.6, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.beginPath()
+  for (var i = 0; i < 8; i++) {
+    var a = i * Math.PI / 4
+    ctx.moveTo(x + Math.cos(a) * 5.4, y + Math.sin(a) * 5.4)
+    ctx.lineTo(x + Math.cos(a) * 8, y + Math.sin(a) * 8)
+  }
+  ctx.stroke()
+  ctx.restore()
+}
+
+// Which way the Sun lies from the Moon on screen (radians, canvas: 0 to the
+// right, clockwise); toScreen(lat, lon) → { x, y }. The longitude is kept
+// next to the Moon's, so the flat map does not look across ±180°.
+function moonLitAngle(moon, sun, toScreen) {
+  var toward = towards(moon.lat, moon.lon, sun.lat, sun.lon, 4)
+  var dl = toward.lon - moon.lon
+  while (dl > 180) dl -= 360
+  while (dl < -180) dl += 360
+  var p = toScreen(moon.lat, moon.lon)
+  var q = toScreen(toward.lat, moon.lon + dl)
+  return Math.atan2(q.y - p.y, q.x - p.x)
+}
+
+// The soft shadow the floating Moon casts at its sub-lunar point.
+function paintMoonShadow(ctx, x, y, r) {
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.scale(1, 0.45)
+  ctx.fillStyle = "rgba(0, 0, 0, 0.22)"
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 0.9, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+}
+
+// The Moon as a small sphere at (x, y), radius r, its lit side towards
+// `angle`, `illuminated` 0–1 of the disc lit: the dark part faint, the lit
+// part shaded brighter towards the Sun (a radial gradient), the terminator
+// an ellipse of half-width r·|1 − 2k| bulging towards the light (crescent)
+// or away from it (gibbous), and a thin soft outline. lit, dark, outline:
+// "r,g,b" strings in 0–255 for the gradient's stops.
 function paintMoon(ctx, x, y, r, angle, illuminated, lit, dark, outline) {
   ctx.save()
   ctx.translate(x, y)
   ctx.rotate(angle)
-  ctx.fillStyle = dark
+  ctx.fillStyle = "rgba(" + dark + ", 0.55)"
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   ctx.fill()
-  // The lit half towards +x, and the terminator, an ellipse of half-width
-  // r·|1 − 2k|, bulging towards the light (crescent) or away (gibbous).
   var k = Math.max(0, Math.min(1, illuminated))
   var e = r * Math.abs(1 - 2 * k)
   var side = k < 0.5 ? 1 : -1
-  ctx.fillStyle = lit
+  var shade = ctx.createRadialGradient(r * 0.45, -r * 0.2, r * 0.1, 0, 0, r * 1.05)
+  shade.addColorStop(0, "rgba(" + lit + ", 1)")
+  shade.addColorStop(1, "rgba(" + lit + ", 0.62)")
+  ctx.fillStyle = shade
   ctx.beginPath()
   ctx.moveTo(0, -r)
-  for (var i = 0; i <= 24; i++) {
+  for (var i = 1; i <= 24; i++) {
     var t = -Math.PI / 2 + i * Math.PI / 24
     ctx.lineTo(Math.cos(t) * r, Math.sin(t) * r)
   }
-  for (var j = 0; j <= 24; j++) {
+  for (var j = 1; j < 24; j++) {
     var u = Math.PI / 2 - j * Math.PI / 24
     ctx.lineTo(side * Math.cos(u) * e, Math.sin(u) * r)
   }
   ctx.closePath()
   ctx.fill()
-  ctx.strokeStyle = outline
-  ctx.lineWidth = 1
+  ctx.strokeStyle = "rgba(" + outline + ", 0.45)"
+  ctx.lineWidth = 0.8
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   ctx.stroke()
   ctx.restore()
+}
+
+// "r,g,b" in 0–255 of a colour given in 0–1, for paintMoon.
+function rgbText(c) {
+  return Math.round(c.r * 255) + "," + Math.round(c.g * 255) + "," + Math.round(c.b * 255)
 }
 
 // The night side's fill: 70 % black and 30 % of the night sky (#4a3c9a),
@@ -546,6 +652,6 @@ if (typeof module !== "undefined") module.exports = {
   project: project, unproject: unproject, outline: outline, graticule: graticule,
   subsolarPoint: subsolarPoint, nightPolygon: nightPolygon, twilightPolygon: twilightPolygon, twilightRings: twilightRings, ringContains: ringContains,
   zoneAt: zoneAt, zebraBand: zebraBand, X_MAX: X_MAX, Y_MAX: Y_MAX,
-  sunElevation: sunElevation, sunTimes: sunTimes, nightFill: nightFill, moonPhaseFraction: moonPhaseFraction, moonPosition: moonPosition, towards: towards, skyMix: skyMix, skyColor: skyColor, contrast: contrast,
+  sunElevation: sunElevation, sunTimes: sunTimes, nightFill: nightFill, moonPhaseFraction: moonPhaseFraction, moonPosition: moonPosition, towards: towards, bandFill: bandFill, twilightLayers: twilightLayers, twilightElevations: twilightElevations, moonLitAngle: moonLitAngle, rgbText: rgbText, skyMix: skyMix, skyColor: skyColor, contrast: contrast,
   hexRgb: hexRgb, rgbHex: rgbHex
 }

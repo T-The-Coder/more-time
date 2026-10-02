@@ -1,12 +1,14 @@
 import QtQuick
 import Quickshell
 import "Model.js" as Model
+import "PlaceSearch.js" as PlaceSearch
 
 // Finding a city for the world clock: the system's zone list answers at
 // once and offline (zone1970.tab, one city per zone); the shared place
-// search (TimePlaceSearch: Open-Meteo, else Nominatim) adds any other place
-// a moment later. Nominatim names no time zone: such a place takes the
-// nearest zone1970 city's, marked as a guess (tzGuessed).
+// search (TimePlaceSearch) adds Open-Meteo's places a moment later. Enter
+// with nothing found asks Nominatim once (submit()); the next Enter adds what
+// it found. Nominatim names no time zone: such a place takes the nearest
+// zone1970 city's, marked as a guess (tzGuessed).
 //
 // While searching, the keys work in two sections, as in More Weather:
 // "results" (the matches) and "saved" (the cities below); Tab switches.
@@ -21,16 +23,17 @@ Item {
   property string section: "results"
   property int savedIndex: 0
   readonly property bool busy: online.busy
+  // The zone list's matches, then the online ones for the current query;
+  // a place already listed (PlaceSearch.samePlace, or the same name in the
+  // same zone) only once.
   readonly property var results: {
-    var seen = {}
     var list = []
     var index = panel.zoneTable.index
-    var all = offline.concat(online.results.map(function(place) { return Model.cityFromPlace(place, index) }))
+    var online = search.online.resultsCurrent ? search.online.results : []
+    var all = offline.concat(online.map(function(place) { return Model.cityFromPlace(place, index) }))
     for (var i = 0; i < all.length && list.length < 10; i++) {
       if (!all[i]) continue
-      var key = all[i].tz + "|" + Model.foldText(all[i].name)
-      if (seen[key]) continue
-      seen[key] = true
+      if (Model.knownCity(list, all[i], PlaceSearch.samePlace)) continue
       list.push(all[i])
     }
     return list
@@ -75,12 +78,17 @@ Item {
     }
   }
 
-  // Enter: add the result, or make the saved city the current place.
+  // Enter: add the result, or make the saved city the current place; with
+  // nothing found, ask Nominatim (once a second at most).
   function pick(i) {
     if (i === undefined && section === "saved") {
       panel.setCurrentPlace(savedIndex)
       panel.searchOpen = false
       panel.restoreKeyFocus()
+      return
+    }
+    if (i === undefined && !results.length) {
+      online.submit()
       return
     }
     var city = results[i === undefined ? index : i]

@@ -395,8 +395,8 @@ Panel {
       heroNextAlarm: true,
       heroSun: true,
       heroSunNext: false,
-      heroGoldenHour: true,
-      heroBlueHour: true,
+      heroGoldenHour: false,
+      heroBlueHour: false,
       showWorld: true,
       worldMap: true,
       worldStyle: "map",
@@ -406,7 +406,7 @@ Panel {
       globeAutoRotate: false,
       worldMoon: false,
       globeRotateDelay: "10",
-      globeRotateSpeed: "1",
+      globeRotateSpeed: "4",
       worldList: true,
       worldDifference: true,
       worldDials: true,
@@ -561,17 +561,16 @@ Panel {
   readonly property bool menubarAccentsOn: menubarAccents === "always"
     || (menubarAccents === "hover" && menubarAccentHover)
 
-  // The time in the colour of the sky here (WorldMap.skyColor): day, golden
-  // hour, blue hour, night, at the place TimeHere finds; without one, no
-  // colour.
-  readonly property var skyPlace: here.place
-
+  // [r, g, b] in 0–1 of a colour, for WorldMap's colour helpers.
   function rgbOf(c) { return [c.r, c.g, c.b] }
 
-  // "#rrggbb" for a moment, or "" without a place.
+  // The time in the colour of the sky here (WorldMap.skyColor): day, golden
+  // hour, blue hour, night, at the place TimeHere finds; "#rrggbb", or ""
+  // without a place.
   function skyColorAt(utcMs) {
-    if (!skyPlace) return ""
-    return WorldMap.skyColor(WorldMap.sunElevation(skyPlace.lat, skyPlace.lon, utcMs),
+    var place = here.place
+    if (!place) return ""
+    return WorldMap.skyColor(WorldMap.sunElevation(place.lat, place.lon, utcMs),
       rgbOf(foreground), rgbOf(Color.popups.background))
   }
   readonly property bool menubarOpenWidgetOnHover: !standaloneMode && menubarDisplaySetting("openWidgetOnHover", false)
@@ -1022,6 +1021,22 @@ Panel {
     return i18n(moon.waxing ? "moonWaxing" : "moonWaning", { percent: Math.round(moon.illuminated * 100) })
   }
 
+  // The label of the flat map and the globe (TimeMapHoverLabel.qml).
+  function mapHoverText(hover) {
+    if (!hover) return ""
+    if (hover.moon) return moonText(hover.moon)
+    return Model.utcOffsetLabel(hover.minutes * 60) + "  ·  " + clockFor(nowMs, hover.minutes * 60, false)
+      + "  " + i18n("standardTime")
+  }
+
+  // What the pointer at (x, y) rests on over a map: the Moon where it was
+  // drawn (moonHit), else the zone zoneAt(x, y) gives (minutes or null).
+  function mapHoverAt(moonHit, x, y, zoneAt) {
+    if (moonHit && Math.hypot(moonHit.x - x, moonHit.y - y) <= Style.space(8)) return { moon: moonHit.moon, x: x, y: y }
+    var minutes = zoneAt(x, y)
+    return minutes === null ? null : { minutes: minutes, x: x, y: y }
+  }
+
   // ---- Clock faces per place (TimeDial.qml) ----
   // -1 here (kept in more-time-place.json), 0… a city (in the cities file).
   function dialStyleFor(index) {
@@ -1366,12 +1381,16 @@ Panel {
   function unregisterWheelArea(item) {
     wheelAreas = wheelAreas.filter(function(area) { return area !== item })
   }
+  // An area under the wheel hears of it (noticeWheel, if it has one) and,
+  // when it wants it, takes it.
   function wheelTakenBelow(wheel, source) {
     for (var i = 0; i < wheelAreas.length; i++) {
       var area = wheelAreas[i]
-      if (!area || !area.visible || !area.wantsWheel(wheel)) continue
+      if (!area || !area.visible) continue
       var p = area.mapFromItem(source, wheel.x, wheel.y)
-      if (p.x >= 0 && p.y >= 0 && p.x < area.width && p.y < area.height) return true
+      if (p.x < 0 || p.y < 0 || p.x >= area.width || p.y >= area.height) continue
+      if (typeof area.noticeWheel === "function") area.noticeWheel(wheel)
+      if (area.wantsWheel(wheel)) return true
     }
     return false
   }

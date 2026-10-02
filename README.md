@@ -62,11 +62,12 @@ control.
   - The real time zone borders, drawn as zebra stripes, alternating light and
     dark by the hour. Half- and quarter-hour zones (India, Nepal, Newfoundland …)
     are hatched, and your own zone is in the accent colour.
-  - The night side and the sun, and, with the clock's golden and blue hour
-    options on, a gold band on the day side of the day/night line (sun +6° to
-    0°) and a blue one on the night side (0° to −8°), so the line itself stays
-    a crisp edge; the night side is a dark blue-black shade that also shows on
-    dark themes.
+  - The night side in three steps, each darker: civil twilight (sun 0° to
+    −6°), nautical (−6° to −12°), then astronomical twilight and night, in a
+    blue-black shade that also shows on dark themes. The Sun's zenith point
+    is a small rayed sun. With the clock's golden and blue hour options on, a
+    gold band on the day side of the day/night line (sun +6° to 0°) and a
+    blue one on the night side (0° to −8°), their outer edges fading.
   - A ruler with the hour in every zone above the map and the offsets below it.
   - Your cities as dots with their time.
   - Hovering a zone names its offset and time.
@@ -74,13 +75,13 @@ control.
     golden and blue hour and cities: picking a city (or here) turns it there
     the short way round, a drag or the sideways wheel (⇧ wheel) turns it by
     hand, the vertical wheel scrolls the tab, and if you like it turns by
-    itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4 or 8
-    minutes (only while you can see it; a click, drag or the wheel stops it,
+    itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4
+    (default) or 8 minutes (only while you can see it; a click, drag or the wheel stops it,
     the pointer merely resting on it does not, and the tooltips keep working).
   - Optionally the Moon on the map and the globe, where it stands at the
-    zenith right now, with its phase lit towards the Sun (the same phase
-    numbers as More Weather); hovering it names the phase ("Moon · 61 % ·
-    waxing").
+    zenith right now: a small shaded sphere floating above its shadow, its
+    phase lit towards the Sun (the same phase numbers as More Weather);
+    hovering it names the phase ("Moon · 61 % · waxing").
   - Below the map, your place (the location pin and its name, as in More
     Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
@@ -100,9 +101,11 @@ control.
     chooser under it (`← →` or a click picks, `Enter` / `Esc` close). The style
     is kept per city in the cities file and for here in `more-time-place.json`.
   - Cities can be found offline from the zone list, or anywhere through the
-    place search shared with More Weather (Open-Meteo's geocoder, else
-    Nominatim). Nominatim names no time zone: such a place takes the zone of
-    the nearest zone-list city, marked "≈".
+    place search shared with More Weather: Open-Meteo's geocoder while you
+    type; `Enter` on a place it does not know asks Nominatim (OpenStreetMap)
+    once, at most once a second, and the next `Enter` adds what it found.
+    Nominatim names no time zone: such a place takes the zone of the nearest
+    zone-list city, marked "≈".
   - The search works with the keys as in More Weather: `↑ ↓` within the
     results or the cities, `Tab` between them, `Enter` adds the result or
     makes the city current; in the cities (after `Tab`) `+` adds the marked
@@ -171,8 +174,8 @@ control.
   - **Display:** separately for the menu bar, the widget and the app.
     - Menu bar: which entries show, when, and in what order; bold while
       hovered; coloured values; open the widget on hover.
-    - Widget and app: what the clock shows (sunrise and sunset, golden and
-      blue hour on in the app, off in the widget), which tabs there are, their
+    - Widget and app: what the clock shows (sunrise and sunset on in the app,
+      off in the widget; golden and blue hour off), which tabs there are, their
       order and the tab on opening; for the World tab the map style (flat map
       or globe), the night side, the ruler (flat map), city names and whether
       the globe turns by itself.
@@ -273,9 +276,11 @@ too.
   [GeoJS](https://www.geojs.io/), which see your IP address; otherwise the city
   of your time zone from `zone1970.tab`. Sunrise, sunset and the twilight are
   computed locally.
-- **Place search:** [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api),
-  else [Nominatim](https://nominatim.org/) (OpenStreetMap), for places that are
-  not in the zone list. Only the typed text is sent.
+- **Place search:** [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api)
+  while typing, for places that are not in the zone list; on `Enter` for a
+  place it does not know, [Nominatim](https://nominatim.org/) (OpenStreetMap),
+  never from type-ahead and at most once a second, as its usage policy asks.
+  Only the typed text is sent.
 - **Map:** [Natural Earth](https://www.naturalearthdata.com/) coastlines (1:50m)
   and time zones (1:10m), public domain, projected with
   [Equal Earth](https://equal-earth.com/) and shipped with the plugin

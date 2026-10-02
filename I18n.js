@@ -248,7 +248,7 @@ var catalog = {
     sourceGroupZones: "Time zones",
     sourceGroupZonesDetails: "Offsets, summer time and the offline city list come from this computer's tz database (zdump, zone1970.tab). Nothing is fetched.",
     sourceGroupGeocoding: "Place search",
-    sourceGroupGeocodingDetails: "Places that are not in the zone list are found with Open-Meteo's geocoder, which also names their time zone, or else with Nominatim (OpenStreetMap); its places take the zone of the nearest zone city (marked ≈). Only the typed text is sent.",
+    sourceGroupGeocodingDetails: "Places that are not in the zone list are found with Open-Meteo's geocoder, which also names their time zone, while you type. Enter on a place it does not know asks Nominatim (OpenStreetMap), at most once a second; its places take the zone of the nearest zone city (marked ≈). Only the typed text is sent.",
     sourceGroupMap: "World map",
     sourceGroupMapDetails: "Coastlines and time zones from Natural Earth (public domain), in the Equal Earth projection. The zones are standard time; summer time is not drawn.",
     sourceGroupSounds: "Sounds",
@@ -324,7 +324,7 @@ var catalog = {
     mapStyleFlat: "Flat map",
     mapStyleGlobe: "Globe",
     optionGlobeAutoRotate: "Globe turns by itself",
-    optionGlobeAutoRotateHint: "After the chosen delay without a click it turns slowly; a click, drag or wheel stops it.",
+    optionGlobeAutoRotateHint: "After the delay set below without a click it turns, one turn in the minutes set below; a click, drag or wheel stops it.",
     dial_classic: "Classic",
     dial_minimal: "Minimal",
     dial_roman: "Roman",
@@ -342,7 +342,9 @@ var catalog = {
     secondsShort: "{seconds} s",
     moon: "Moon",
     moonWaxing: "Moon · {percent} % · waxing",
-    moonWaning: "Moon · {percent} % · waning"
+    moonWaning: "Moon · {percent} % · waning",
+    optionNightHint: "In three steps, each darker: civil twilight (sun 0° to −6°), nautical twilight (−6° to −12°), then astronomical twilight and night.",
+    searchEnterNominatim: "Not found yet. Enter also asks OpenStreetMap (Nominatim)."
   },
   de: {
     appTitle: "More Time",
@@ -587,7 +589,7 @@ var catalog = {
     sourceGroupZones: "Zeitzonen",
     sourceGroupZonesDetails: "Abstände, Sommerzeit und die Offline-Städteliste stammen aus der tz-Datenbank dieses Rechners (zdump, zone1970.tab). Nichts wird abgerufen.",
     sourceGroupGeocoding: "Ortssuche",
-    sourceGroupGeocodingDetails: "Orte, die nicht in der Zonenliste stehen, findet der Geocoder von Open-Meteo, der auch ihre Zeitzone nennt, sonst Nominatim (OpenStreetMap); dessen Orte bekommen die Zone der nächsten Zonenstadt (mit ≈ markiert). Gesendet wird nur der getippte Text.",
+    sourceGroupGeocodingDetails: "Orte, die nicht in der Zonenliste stehen, findet schon beim Tippen der Geocoder von Open-Meteo, der auch ihre Zeitzone nennt. Enter bei einem Ort, den er nicht kennt, fragt Nominatim (OpenStreetMap), höchstens einmal pro Sekunde; dessen Orte bekommen die Zone der nächsten Zonenstadt (mit ≈ markiert). Gesendet wird nur der getippte Text.",
     sourceGroupMap: "Weltkarte",
     sourceGroupMapDetails: "Küsten und Zeitzonen von Natural Earth (gemeinfrei), in der Equal-Earth-Projektion. Die Zonen zeigen Normalzeit; Sommerzeit ist nicht eingezeichnet.",
     sourceGroupSounds: "Töne",
@@ -663,7 +665,7 @@ var catalog = {
     mapStyleFlat: "Flache Karte",
     mapStyleGlobe: "Globus",
     optionGlobeAutoRotate: "Globus dreht sich von selbst",
-    optionGlobeAutoRotateHint: "Nach der gewählten Wartezeit ohne Klick dreht er sich langsam; ein Klick, Zug oder das Mausrad hält ihn an.",
+    optionGlobeAutoRotateHint: "Nach der unten eingestellten Wartezeit ohne Klick dreht er sich, eine Umdrehung in den unten eingestellten Minuten; ein Klick, Zug oder das Mausrad hält ihn an.",
     dial_classic: "Klassisch",
     dial_minimal: "Schlicht",
     dial_roman: "Römisch",
@@ -681,7 +683,9 @@ var catalog = {
     secondsShort: "{seconds} s",
     moon: "Mond",
     moonWaxing: "Mond · {percent} % · zunehmend",
-    moonWaning: "Mond · {percent} % · abnehmend"
+    moonWaning: "Mond · {percent} % · abnehmend",
+    optionNightHint: "In drei Stufen, jede dunkler: bürgerliche Dämmerung (Sonne 0° bis −6°), nautische Dämmerung (−6° bis −12°), dann astronomische Dämmerung und Nacht.",
+    searchEnterNominatim: "Noch nichts gefunden. Enter fragt auch OpenStreetMap (Nominatim)."
   }
 }
 
@@ -893,7 +897,7 @@ addCatalog("es", {
   shortcutStatus: "Lo que viene, como notificación", sourceInUse: "En uso", sourceNotInUse: "Sin uso", sourceGroupZones: "Husos horarios",
   sourceGroupZonesDetails: "Desfases, horario de verano y la lista de ciudades sin conexión vienen de la base tz de este equipo (zdump, zone1970.tab). No se descarga nada.",
   sourceGroupGeocoding: "Búsqueda de lugares",
-  sourceGroupGeocodingDetails: "Los lugares que no están en la lista de husos los encuentra el geocodificador de Open-Meteo, que también da su huso, o si no Nominatim (OpenStreetMap); sus lugares toman el huso de la ciudad de huso más cercana (marcado con ≈). Solo se envía el texto escrito.",
+  sourceGroupGeocodingDetails: "Los lugares que no están en la lista de husos los encuentra mientras escribes el geocodificador de Open-Meteo, que también da su huso. Enter sobre un lugar que no conoce consulta Nominatim (OpenStreetMap), como mucho una vez por segundo; sus lugares toman el huso de la ciudad de huso más cercana (marcado con ≈). Solo se envía el texto escrito.",
   sourceGroupMap: "Mapa del mundo",
   sourceGroupMapDetails: "Costas y husos horarios de Natural Earth (dominio público), en la proyección Equal Earth. Los husos son hora estándar; el horario de verano no se dibuja.",
   sourceGroupSounds: "Sonidos", sourceGroupSoundsDetails: "El tema de sonido freedesktop, reproducido con pw-play. Las señales horarias tienen cinco tonos (pitido, campana, madera, gorjeo, cristal), sintetizados en este equipo (~/.cache/more-time).",
@@ -968,7 +972,7 @@ addCatalog("es", {
   mapStyleFlat: "Mapa plano",
   mapStyleGlobe: "Globo",
   optionGlobeAutoRotate: "El globo gira solo",
-  optionGlobeAutoRotateHint: "Tras la espera elegida sin un clic gira despacio; un clic, un arrastre o la rueda lo detienen.",
+  optionGlobeAutoRotateHint: "Tras la espera elegida abajo sin un clic gira, una vuelta en los minutos elegidos abajo; un clic, un arrastre o la rueda lo detienen.",
   dial_classic: "Clásica",
   dial_minimal: "Mínima",
   dial_roman: "Romana",
@@ -986,7 +990,9 @@ addCatalog("es", {
   secondsShort: "{seconds} s",
   moon: "Luna",
   moonWaxing: "Luna · {percent} % · creciente",
-  moonWaning: "Luna · {percent} % · menguante"
+  moonWaning: "Luna · {percent} % · menguante",
+  optionNightHint: "En tres pasos, cada uno más oscuro: crepúsculo civil (sol de 0° a −6°), náutico (−6° a −12°) y luego astronómico y noche.",
+  searchEnterNominatim: "Aún no se encontró nada. Enter también consulta OpenStreetMap (Nominatim)."
 })
 
 addCatalog("fr", {
@@ -1092,7 +1098,7 @@ addCatalog("fr", {
   shortcutStatus: "Ce qui arrive, en notification", sourceInUse: "Utilisé", sourceNotInUse: "Non utilisé", sourceGroupZones: "Fuseaux horaires",
   sourceGroupZonesDetails: "Décalages, heure d’été et liste de villes hors ligne viennent de la base tz de cet ordinateur (zdump, zone1970.tab). Rien n’est téléchargé.",
   sourceGroupGeocoding: "Recherche de lieux",
-  sourceGroupGeocodingDetails: "Les lieux absents de la liste des fuseaux sont trouvés par le géocodeur d’Open-Meteo, qui donne aussi leur fuseau, sinon par Nominatim (OpenStreetMap) ; ses lieux prennent le fuseau de la ville de fuseau la plus proche (marqué ≈). Seul le texte saisi est envoyé.",
+  sourceGroupGeocodingDetails: "Les lieux absents de la liste des fuseaux sont trouvés pendant la saisie par le géocodeur d’Open-Meteo, qui donne aussi leur fuseau. Entrée sur un lieu qu’il ne connaît pas interroge Nominatim (OpenStreetMap), au plus une fois par seconde ; ses lieux prennent le fuseau de la ville de fuseau la plus proche (marqué ≈). Seul le texte saisi est envoyé.",
   sourceGroupMap: "Carte du monde",
   sourceGroupMapDetails: "Côtes et fuseaux horaires de Natural Earth (domaine public), en projection Equal Earth. Les fuseaux sont en heure normale ; l’heure d’été n’est pas dessinée.",
   sourceGroupSounds: "Sons", sourceGroupSoundsDetails: "Le thème sonore freedesktop, joué avec pw-play. Les bips horaires existent en cinq timbres (bip, cloche, bois, gazouillis, verre), synthétisés sur cet ordinateur (~/.cache/more-time).",
@@ -1167,7 +1173,7 @@ addCatalog("fr", {
   mapStyleFlat: "Carte plane",
   mapStyleGlobe: "Globe",
   optionGlobeAutoRotate: "Le globe tourne tout seul",
-  optionGlobeAutoRotateHint: "Après le délai choisi sans clic, il tourne lentement ; un clic, un glissement ou la molette l’arrête.",
+  optionGlobeAutoRotateHint: "Après le délai choisi ci-dessous sans clic, il tourne, un tour en autant de minutes que choisi ci-dessous ; un clic, un glissement ou la molette l’arrête.",
   dial_classic: "Classique",
   dial_minimal: "Épuré",
   dial_roman: "Romain",
@@ -1185,7 +1191,9 @@ addCatalog("fr", {
   secondsShort: "{seconds} s",
   moon: "Lune",
   moonWaxing: "Lune · {percent} % · croissante",
-  moonWaning: "Lune · {percent} % · décroissante"
+  moonWaning: "Lune · {percent} % · décroissante",
+  optionNightHint: "En trois paliers, chacun plus sombre : crépuscule civil (soleil de 0° à −6°), nautique (−6° à −12°), puis astronomique et nuit.",
+  searchEnterNominatim: "Rien trouvé pour l’instant. Entrée interroge aussi OpenStreetMap (Nominatim)."
 })
 
 addCatalog("pt", {
@@ -1291,7 +1299,7 @@ addCatalog("pt", {
   shortcutStatus: "O que vem a seguir, como notificação", sourceInUse: "Em uso", sourceNotInUse: "Fora de uso", sourceGroupZones: "Fusos horários",
   sourceGroupZonesDetails: "Diferenças, horário de verão e a lista offline de cidades vêm da base tz deste computador (zdump, zone1970.tab). Nada é baixado.",
   sourceGroupGeocoding: "Busca de lugares",
-  sourceGroupGeocodingDetails: "Locais que não estão na lista de fusos são encontrados pelo geocodificador do Open-Meteo, que também informa o fuso, ou então pelo Nominatim (OpenStreetMap); os locais dele recebem o fuso da cidade de fuso mais próxima (marcado com ≈). Só o texto digitado é enviado.",
+  sourceGroupGeocodingDetails: "Locais que não estão na lista de fusos são encontrados enquanto você digita pelo geocodificador do Open-Meteo, que também informa o fuso. Enter num local que ele não conhece consulta o Nominatim (OpenStreetMap), no máximo uma vez por segundo; os locais dele recebem o fuso da cidade de fuso mais próxima (marcado com ≈). Só o texto digitado é enviado.",
   sourceGroupMap: "Mapa-múndi",
   sourceGroupMapDetails: "Costas e fusos horários do Natural Earth (domínio público), na projeção Equal Earth. Os fusos são hora padrão; o horário de verão não é desenhado.",
   sourceGroupSounds: "Sons", sourceGroupSoundsDetails: "O tema de sons freedesktop, tocado com pw-play. Os sinais horários têm cinco timbres (bipe, sino, madeira, gorjeio, vidro), sintetizados neste computador (~/.cache/more-time).",
@@ -1366,7 +1374,7 @@ addCatalog("pt", {
   mapStyleFlat: "Mapa plano",
   mapStyleGlobe: "Globo",
   optionGlobeAutoRotate: "O globo gira sozinho",
-  optionGlobeAutoRotateHint: "Após a espera escolhida sem clique, gira devagar; um clique, arrasto ou a roda o param.",
+  optionGlobeAutoRotateHint: "Após a espera escolhida abaixo sem clique, gira, uma volta nos minutos escolhidos abaixo; um clique, arrasto ou a roda o param.",
   dial_classic: "Clássico",
   dial_minimal: "Mínimo",
   dial_roman: "Romano",
@@ -1384,7 +1392,9 @@ addCatalog("pt", {
   secondsShort: "{seconds} s",
   moon: "Lua",
   moonWaxing: "Lua · {percent} % · crescente",
-  moonWaning: "Lua · {percent} % · minguante"
+  moonWaning: "Lua · {percent} % · minguante",
+  optionNightHint: "Em três passos, cada um mais escuro: crepúsculo civil (sol de 0° a −6°), náutico (−6° a −12°) e depois astronômico e noite.",
+  searchEnterNominatim: "Nada encontrado ainda. Enter também consulta o OpenStreetMap (Nominatim)."
 })
 
 addCatalog("it", {
@@ -1490,7 +1500,7 @@ addCatalog("it", {
   shortcutStatus: "Cosa arriva, come notifica", sourceInUse: "In uso", sourceNotInUse: "Non in uso", sourceGroupZones: "Fusi orari",
   sourceGroupZonesDetails: "Scarti, ora legale e l’elenco offline delle città vengono dal database tz di questo computer (zdump, zone1970.tab). Nulla viene scaricato.",
   sourceGroupGeocoding: "Ricerca luoghi",
-  sourceGroupGeocodingDetails: "I luoghi che non sono nell’elenco dei fusi li trova il geocoder di Open-Meteo, che indica anche il fuso orario, altrimenti Nominatim (OpenStreetMap); i suoi luoghi prendono il fuso della città di fuso più vicina (segnato con ≈). Si invia solo il testo digitato.",
+  sourceGroupGeocodingDetails: "I luoghi che non sono nell’elenco dei fusi li trova già durante la digitazione il geocoder di Open-Meteo, che indica anche il fuso orario. Invio su un luogo che non conosce chiede a Nominatim (OpenStreetMap), al massimo una volta al secondo; i suoi luoghi prendono il fuso della città di fuso più vicina (segnato con ≈). Si invia solo il testo digitato.",
   sourceGroupMap: "Mappa del mondo",
   sourceGroupMapDetails: "Coste e fusi orari da Natural Earth (pubblico dominio), in proiezione Equal Earth. I fusi sono ora solare; l’ora legale non è disegnata.",
   sourceGroupSounds: "Suoni", sourceGroupSoundsDetails: "Il tema sonoro freedesktop, riprodotto con pw-play. I segnali orari hanno cinque timbri (bip, campana, legno, cinguettio, vetro), sintetizzati su questo computer (~/.cache/more-time).",
@@ -1565,7 +1575,7 @@ addCatalog("it", {
   mapStyleFlat: "Mappa piana",
   mapStyleGlobe: "Globo",
   optionGlobeAutoRotate: "Il globo gira da solo",
-  optionGlobeAutoRotateHint: "Dopo l’attesa scelta senza clic gira lentamente; un clic, un trascinamento o la rotella lo fermano.",
+  optionGlobeAutoRotateHint: "Dopo l’attesa scelta qui sotto senza clic gira, un giro nei minuti scelti qui sotto; un clic, un trascinamento o la rotella lo fermano.",
   dial_classic: "Classico",
   dial_minimal: "Minimale",
   dial_roman: "Romano",
@@ -1583,7 +1593,9 @@ addCatalog("it", {
   secondsShort: "{seconds} s",
   moon: "Luna",
   moonWaxing: "Luna · {percent} % · crescente",
-  moonWaning: "Luna · {percent} % · calante"
+  moonWaning: "Luna · {percent} % · calante",
+  optionNightHint: "In tre gradi, ciascuno più scuro: crepuscolo civile (sole da 0° a −6°), nautico (−6° a −12°), poi astronomico e notte.",
+  searchEnterNominatim: "Ancora niente. Invio chiede anche a OpenStreetMap (Nominatim)."
 })
 
 addCatalog("nl", {
@@ -1689,7 +1701,7 @@ addCatalog("nl", {
   shortcutStatus: "Wat er komt, als melding", sourceInUse: "In gebruik", sourceNotInUse: "Niet in gebruik", sourceGroupZones: "Tijdzones",
   sourceGroupZonesDetails: "Verschuivingen, zomertijd en de offline stedenlijst komen uit de tz-database van deze computer (zdump, zone1970.tab). Er wordt niets opgehaald.",
   sourceGroupGeocoding: "Plaatsen zoeken",
-  sourceGroupGeocodingDetails: "Plaatsen die niet in de zonelijst staan, vindt de geocoder van Open-Meteo, die ook hun tijdzone noemt, anders Nominatim (OpenStreetMap); diens plaatsen krijgen de zone van de dichtstbijzijnde zonestad (gemarkeerd met ≈). Alleen de getypte tekst wordt verstuurd.",
+  sourceGroupGeocodingDetails: "Plaatsen die niet in de zonelijst staan, vindt de geocoder van Open-Meteo al tijdens het typen, inclusief hun tijdzone. Enter bij een plaats die hij niet kent, vraagt Nominatim (OpenStreetMap), hooguit eens per seconde; diens plaatsen krijgen de zone van de dichtstbijzijnde zonestad (gemarkeerd met ≈). Alleen de getypte tekst wordt verstuurd.",
   sourceGroupMap: "Wereldkaart",
   sourceGroupMapDetails: "Kusten en tijdzones van Natural Earth (publiek domein), in de Equal Earth-projectie. De zones tonen standaardtijd; zomertijd is niet getekend.",
   sourceGroupSounds: "Geluiden", sourceGroupSoundsDetails: "Het freedesktop-geluidsthema, afgespeeld met pw-play. De tijdsignalen zijn er in vijf klanken (piep, bel, hout, tjirp, glas), op deze computer gemaakt (~/.cache/more-time).",
@@ -1764,7 +1776,7 @@ addCatalog("nl", {
   mapStyleFlat: "Platte kaart",
   mapStyleGlobe: "Globe",
   optionGlobeAutoRotate: "Globe draait vanzelf",
-  optionGlobeAutoRotateHint: "Na de gekozen wachttijd zonder klik draait hij langzaam; een klik, sleepbeweging of het scrollwiel stopt hem.",
+  optionGlobeAutoRotateHint: "Na de hieronder gekozen wachttijd zonder klik draait hij, één omwenteling in de hieronder gekozen minuten; een klik, sleepbeweging of het scrollwiel stopt hem.",
   dial_classic: "Klassiek",
   dial_minimal: "Minimaal",
   dial_roman: "Romeins",
@@ -1782,7 +1794,9 @@ addCatalog("nl", {
   secondsShort: "{seconds} s",
   moon: "Maan",
   moonWaxing: "Maan · {percent} % · wassend",
-  moonWaning: "Maan · {percent} % · afnemend"
+  moonWaning: "Maan · {percent} % · afnemend",
+  optionNightHint: "In drie stappen, elk donkerder: burgerlijke schemering (zon 0° tot −6°), nautische (−6° tot −12°), dan astronomische schemering en nacht.",
+  searchEnterNominatim: "Nog niets gevonden. Enter vraagt ook OpenStreetMap (Nominatim)."
 })
 
 addCatalog("pl", {
@@ -1888,7 +1902,7 @@ addCatalog("pl", {
   shortcutStatus: "Co nadchodzi, jako powiadomienie", sourceInUse: "W użyciu", sourceNotInUse: "Nieużywane", sourceGroupZones: "Strefy czasowe",
   sourceGroupZonesDetails: "Przesunięcia, czas letni i lista miast offline pochodzą z bazy tz tego komputera (zdump, zone1970.tab). Nic nie jest pobierane.",
   sourceGroupGeocoding: "Wyszukiwanie miejsc",
-  sourceGroupGeocodingDetails: "Miejsca spoza listy stref znajduje geokoder Open-Meteo, który podaje też ich strefę czasową, a w razie potrzeby Nominatim (OpenStreetMap); jego miejsca dostają strefę najbliższego miasta strefy (oznaczone ≈). Wysyłany jest tylko wpisany tekst.",
+  sourceGroupGeocodingDetails: "Miejsca spoza listy stref znajduje już podczas pisania geokoder Open-Meteo, który podaje też ich strefę czasową. Enter przy miejscu, którego nie zna, pyta Nominatim (OpenStreetMap), najwyżej raz na sekundę; jego miejsca dostają strefę najbliższego miasta strefy (oznaczone ≈). Wysyłany jest tylko wpisany tekst.",
   sourceGroupMap: "Mapa świata",
   sourceGroupMapDetails: "Wybrzeża i strefy czasowe z Natural Earth (domena publiczna), w odwzorowaniu Equal Earth. Strefy pokazują czas standardowy; czasu letniego nie rysuje się.",
   sourceGroupSounds: "Dźwięki", sourceGroupSoundsDetails: "Motyw dźwiękowy freedesktop, odtwarzany przez pw-play. Sygnały czasu mają pięć brzmień (pisk, dzwon, drewno, ćwierk, szkło), syntezowanych na tym komputerze (~/.cache/more-time).",
@@ -1963,7 +1977,7 @@ addCatalog("pl", {
   mapStyleFlat: "Płaska mapa",
   mapStyleGlobe: "Globus",
   optionGlobeAutoRotate: "Globus obraca się sam",
-  optionGlobeAutoRotateHint: "Po wybranym czasie bez kliknięcia obraca się powoli; kliknięcie, przeciągnięcie lub kółko go zatrzymuje.",
+  optionGlobeAutoRotateHint: "Po wybranym niżej czasie bez kliknięcia obraca się, jeden obrót w wybranych niżej minutach; kliknięcie, przeciągnięcie lub kółko go zatrzymuje.",
   dial_classic: "Klasyczna",
   dial_minimal: "Minimalna",
   dial_roman: "Rzymska",
@@ -1981,7 +1995,9 @@ addCatalog("pl", {
   secondsShort: "{seconds} s",
   moon: "Księżyc",
   moonWaxing: "Księżyc · {percent} % · przybywa",
-  moonWaning: "Księżyc · {percent} % · ubywa"
+  moonWaning: "Księżyc · {percent} % · ubywa",
+  optionNightHint: "W trzech stopniach, każdy ciemniejszy: zmierzch cywilny (słońce od 0° do −6°), żeglarski (−6° do −12°), potem astronomiczny i noc.",
+  searchEnterNominatim: "Na razie nic nie znaleziono. Enter zapyta też OpenStreetMap (Nominatim)."
 })
 
 addCatalog("ru", {
@@ -2087,7 +2103,7 @@ addCatalog("ru", {
   shortcutStatus: "Что впереди, уведомлением", sourceInUse: "Используется", sourceNotInUse: "Не используется", sourceGroupZones: "Часовые пояса",
   sourceGroupZonesDetails: "Смещения, летнее время и офлайн-список городов берутся из базы tz этого компьютера (zdump, zone1970.tab). Ничего не загружается.",
   sourceGroupGeocoding: "Поиск мест",
-  sourceGroupGeocodingDetails: "Места, которых нет в списке поясов, находит геокодер Open-Meteo, который также называет их часовой пояс, иначе Nominatim (OpenStreetMap); его места получают пояс ближайшего города поясов (отмечено ≈). Отправляется только введённый текст.",
+  sourceGroupGeocodingDetails: "Места, которых нет в списке поясов, уже при вводе находит геокодер Open-Meteo, который также называет их часовой пояс. Enter на месте, которого он не знает, спрашивает Nominatim (OpenStreetMap), не чаще раза в секунду; его места получают пояс ближайшего города поясов (отмечено ≈). Отправляется только введённый текст.",
   sourceGroupMap: "Карта мира",
   sourceGroupMapDetails: "Побережья и часовые пояса из Natural Earth (общественное достояние) в проекции Equal Earth. Пояса показывают стандартное время; летнее время не рисуется.",
   sourceGroupSounds: "Звуки", sourceGroupSoundsDetails: "Звуковая тема freedesktop, воспроизводится через pw-play. Сигналы времени бывают пяти тембров (писк, колокол, дерево, щебет, стекло) и синтезируются на этом компьютере (~/.cache/more-time).",
@@ -2162,7 +2178,7 @@ addCatalog("ru", {
   mapStyleFlat: "Плоская карта",
   mapStyleGlobe: "Глобус",
   optionGlobeAutoRotate: "Глобус вращается сам",
-  optionGlobeAutoRotateHint: "После выбранной паузы без щелчка он медленно вращается; щелчок, перетаскивание или колесо останавливают его.",
+  optionGlobeAutoRotateHint: "После выбранной ниже паузы без щелчка он вращается, один оборот за выбранные ниже минуты; щелчок, перетаскивание или колесо останавливают его.",
   dial_classic: "Классический",
   dial_minimal: "Минимальный",
   dial_roman: "Римский",
@@ -2180,7 +2196,9 @@ addCatalog("ru", {
   secondsShort: "{seconds} с",
   moon: "Луна",
   moonWaxing: "Луна · {percent} % · растущая",
-  moonWaning: "Луна · {percent} % · убывающая"
+  moonWaning: "Луна · {percent} % · убывающая",
+  optionNightHint: "В три ступени, каждая темнее: гражданские сумерки (солнце от 0° до −6°), навигационные (−6°…−12°), затем астрономические сумерки и ночь.",
+  searchEnterNominatim: "Пока ничего не найдено. Enter спросит и OpenStreetMap (Nominatim)."
 })
 
 addCatalog("uk", {
@@ -2286,7 +2304,7 @@ addCatalog("uk", {
   shortcutStatus: "Що попереду, сповіщенням", sourceInUse: "Використовується", sourceNotInUse: "Не використовується", sourceGroupZones: "Часові пояси",
   sourceGroupZonesDetails: "Зсуви, літній час і офлайн-список міст беруться з бази tz цього комп’ютера (zdump, zone1970.tab). Нічого не завантажується.",
   sourceGroupGeocoding: "Пошук місць",
-  sourceGroupGeocodingDetails: "Місця, яких немає в списку поясів, знаходить геокодер Open-Meteo, який також називає їхній часовий пояс, інакше Nominatim (OpenStreetMap); його місця отримують пояс найближчого міста поясів (позначено ≈). Надсилається лише введений текст.",
+  sourceGroupGeocodingDetails: "Місця, яких немає в списку поясів, уже під час введення знаходить геокодер Open-Meteo, який також називає їхній часовий пояс. Enter на місці, якого він не знає, запитує Nominatim (OpenStreetMap), не частіше ніж раз на секунду; його місця отримують пояс найближчого міста поясів (позначено ≈). Надсилається лише введений текст.",
   sourceGroupMap: "Мапа світу",
   sourceGroupMapDetails: "Узбережжя й часові пояси з Natural Earth (суспільне надбання) у проєкції Equal Earth. Пояси показують стандартний час; літній час не малюється.",
   sourceGroupSounds: "Звуки", sourceGroupSoundsDetails: "Звукова тема freedesktop, відтворюється через pw-play. Сигнали часу мають п’ять тембрів (писк, дзвін, дерево, щебет, скло) і синтезуються на цьому комп’ютері (~/.cache/more-time).",
@@ -2361,7 +2379,7 @@ addCatalog("uk", {
   mapStyleFlat: "Пласка мапа",
   mapStyleGlobe: "Глобус",
   optionGlobeAutoRotate: "Глобус обертається сам",
-  optionGlobeAutoRotateHint: "Після вибраної паузи без клацання він повільно обертається; клацання, перетягування або коліщатко зупиняють його.",
+  optionGlobeAutoRotateHint: "Після вибраної нижче паузи без клацання він обертається, один оберт за вибрані нижче хвилини; клацання, перетягування або коліщатко зупиняють його.",
   dial_classic: "Класичний",
   dial_minimal: "Мінімальний",
   dial_roman: "Римський",
@@ -2379,7 +2397,9 @@ addCatalog("uk", {
   secondsShort: "{seconds} с",
   moon: "Місяць",
   moonWaxing: "Місяць · {percent} % · молодий",
-  moonWaning: "Місяць · {percent} % · старий"
+  moonWaning: "Місяць · {percent} % · старий",
+  optionNightHint: "У три ступені, кожна темніша: громадянські сутінки (сонце від 0° до −6°), навігаційні (−6°…−12°), далі астрономічні сутінки й ніч.",
+  searchEnterNominatim: "Поки нічого не знайдено. Enter запитає й OpenStreetMap (Nominatim)."
 })
 
 addCatalog("tr", {
@@ -2485,7 +2505,7 @@ addCatalog("tr", {
   shortcutStatus: "Yaklaşanlar, bildirim olarak", sourceInUse: "Kullanımda", sourceNotInUse: "Kullanılmıyor", sourceGroupZones: "Saat dilimleri",
   sourceGroupZonesDetails: "Farklar, yaz saati ve çevrimdışı şehir listesi bu bilgisayarın tz veritabanından gelir (zdump, zone1970.tab). Hiçbir şey indirilmez.",
   sourceGroupGeocoding: "Yer arama",
-  sourceGroupGeocodingDetails: "Dilim listesinde olmayan yerleri Open-Meteo’nun konum bulucusu bulur ve saat dilimlerini de bildirir; yoksa Nominatim (OpenStreetMap); onun yerleri en yakın dilim şehrinin saat dilimini alır (≈ ile işaretli). Yalnızca yazılan metin gönderilir.",
+  sourceGroupGeocodingDetails: "Dilim listesinde olmayan yerleri Open-Meteo’nun konum bulucusu siz yazarken bulur ve saat dilimlerini de bildirir. Tanımadığı bir yerde Enter, Nominatim’e (OpenStreetMap) saniyede en fazla bir kez sorar; onun yerleri en yakın dilim şehrinin saat dilimini alır (≈ ile işaretli). Yalnızca yazılan metin gönderilir.",
   sourceGroupMap: "Dünya haritası",
   sourceGroupMapDetails: "Natural Earth’ten (kamu malı) kıyılar ve saat dilimleri, Equal Earth projeksiyonunda. Dilimler standart saattir; yaz saati çizilmez.",
   sourceGroupSounds: "Sesler", sourceGroupSoundsDetails: "freedesktop ses teması, pw-play ile çalınır. Saat sinyallerinin beş tınısı (bip, çan, tahta, cıvıltı, cam) bu bilgisayarda üretilir (~/.cache/more-time).",
@@ -2560,7 +2580,7 @@ addCatalog("tr", {
   mapStyleFlat: "Düz harita",
   mapStyleGlobe: "Küre",
   optionGlobeAutoRotate: "Küre kendiliğinden döner",
-  optionGlobeAutoRotateHint: "Seçilen süre boyunca tıklanmazsa yavaşça döner; bir tıklama, sürükleme ya da tekerlek onu durdurur.",
+  optionGlobeAutoRotateHint: "Aşağıda seçilen süre boyunca tıklanmazsa döner, bir turu aşağıda seçilen dakikalarda atar; bir tıklama, sürükleme ya da tekerlek onu durdurur.",
   dial_classic: "Klasik",
   dial_minimal: "Sade",
   dial_roman: "Roma",
@@ -2578,7 +2598,9 @@ addCatalog("tr", {
   secondsShort: "{seconds} sn",
   moon: "Ay",
   moonWaxing: "Ay · {percent} % · büyüyen",
-  moonWaning: "Ay · {percent} % · küçülen"
+  moonWaning: "Ay · {percent} % · küçülen",
+  optionNightHint: "Her biri daha koyu üç adımda: sivil alacakaranlık (güneş 0° ile −6°), denizcilik (−6° ile −12°), ardından astronomik alacakaranlık ve gece.",
+  searchEnterNominatim: "Henüz bir şey bulunamadı. Enter OpenStreetMap’e (Nominatim) de sorar."
 })
 
 addCatalog("cs", {
@@ -2684,7 +2706,7 @@ addCatalog("cs", {
   shortcutStatus: "Co přijde, jako oznámení", sourceInUse: "Používá se", sourceNotInUse: "Nepoužívá se", sourceGroupZones: "Časová pásma",
   sourceGroupZonesDetails: "Posuny, letní čas a offline seznam měst pocházejí z databáze tz tohoto počítače (zdump, zone1970.tab). Nic se nestahuje.",
   sourceGroupGeocoding: "Hledání míst",
-  sourceGroupGeocodingDetails: "Místa, která nejsou v seznamu pásem, najde geokodér Open-Meteo, který uvede i jejich časové pásmo, jinak Nominatim (OpenStreetMap); jeho místa dostanou pásmo nejbližšího města pásma (označeno ≈). Odesílá se jen napsaný text.",
+  sourceGroupGeocodingDetails: "Místa, která nejsou v seznamu pásem, najde už při psaní geokodér Open-Meteo, který uvede i jejich časové pásmo. Enter u místa, které nezná, se zeptá Nominatim (OpenStreetMap), nejvýš jednou za sekundu; jeho místa dostanou pásmo nejbližšího města pásma (označeno ≈). Odesílá se jen napsaný text.",
   sourceGroupMap: "Mapa světa",
   sourceGroupMapDetails: "Pobřeží a časová pásma z Natural Earth (volné dílo) v projekci Equal Earth. Pásma ukazují standardní čas; letní čas se nekreslí.",
   sourceGroupSounds: "Zvuky", sourceGroupSoundsDetails: "Zvukový motiv freedesktop, přehrávaný přes pw-play. Časové signály mají pět zvuků (pípnutí, zvon, dřevo, cvrlikání, sklo), syntetizovaných na tomto počítači (~/.cache/more-time).",
@@ -2759,7 +2781,7 @@ addCatalog("cs", {
   mapStyleFlat: "Plochá mapa",
   mapStyleGlobe: "Glóbus",
   optionGlobeAutoRotate: "Glóbus se otáčí sám",
-  optionGlobeAutoRotateHint: "Po zvolené prodlevě bez kliknutí se pomalu otáčí; kliknutí, tažení nebo kolečko ho zastaví.",
+  optionGlobeAutoRotateHint: "Po níže zvolené prodlevě bez kliknutí se otáčí, jedna otáčka za níže zvolené minuty; kliknutí, tažení nebo kolečko ho zastaví.",
   dial_classic: "Klasický",
   dial_minimal: "Minimální",
   dial_roman: "Římský",
@@ -2777,7 +2799,9 @@ addCatalog("cs", {
   secondsShort: "{seconds} s",
   moon: "Měsíc",
   moonWaxing: "Měsíc · {percent} % · dorůstá",
-  moonWaning: "Měsíc · {percent} % · couvá"
+  moonWaning: "Měsíc · {percent} % · couvá",
+  optionNightHint: "Ve třech stupních, každý tmavší: občanský soumrak (slunce 0° až −6°), nautický (−6° až −12°), pak astronomický soumrak a noc.",
+  searchEnterNominatim: "Zatím nic nenalezeno. Enter se zeptá i OpenStreetMap (Nominatim)."
 })
 
 addCatalog("sv", {
@@ -2883,7 +2907,7 @@ addCatalog("sv", {
   shortcutStatus: "Vad som väntar, som avisering", sourceInUse: "Används", sourceNotInUse: "Används inte", sourceGroupZones: "Tidszoner",
   sourceGroupZonesDetails: "Förskjutningar, sommartid och den offline stadslistan kommer från datorns tz-databas (zdump, zone1970.tab). Inget hämtas.",
   sourceGroupGeocoding: "Platssökning",
-  sourceGroupGeocodingDetails: "Platser som inte finns i zonlistan hittas med Open-Meteos geokodare, som också anger tidszonen, annars med Nominatim (OpenStreetMap); dess platser får den närmaste zonstadens zon (märkt ≈). Bara den inskrivna texten skickas.",
+  sourceGroupGeocodingDetails: "Platser som inte finns i zonlistan hittas redan medan du skriver av Open-Meteos geokodare, som också anger tidszonen. Enter på en plats den inte känner frågar Nominatim (OpenStreetMap), högst en gång per sekund; dess platser får den närmaste zonstadens zon (märkt ≈). Bara den inskrivna texten skickas.",
   sourceGroupMap: "Världskarta",
   sourceGroupMapDetails: "Kuster och tidszoner från Natural Earth (allmän egendom), i Equal Earth-projektionen. Zonerna visar normaltid; sommartid ritas inte.",
   sourceGroupSounds: "Ljud", sourceGroupSoundsDetails: "Ljudtemat från freedesktop, spelat med pw-play. Tidssignalerna finns i fem klanger (pip, klocka, trä, kvitter, glas), skapade på den här datorn (~/.cache/more-time).",
@@ -2958,7 +2982,7 @@ addCatalog("sv", {
   mapStyleFlat: "Platt karta",
   mapStyleGlobe: "Jordglob",
   optionGlobeAutoRotate: "Jordgloben snurrar av sig själv",
-  optionGlobeAutoRotateHint: "Efter vald fördröjning utan klick snurrar den långsamt; ett klick, drag eller hjulet stoppar den.",
+  optionGlobeAutoRotateHint: "Efter fördröjningen som väljs nedan utan klick snurrar den, ett varv på minuterna som väljs nedan; ett klick, drag eller hjulet stoppar den.",
   dial_classic: "Klassisk",
   dial_minimal: "Minimal",
   dial_roman: "Romersk",
@@ -2976,7 +3000,9 @@ addCatalog("sv", {
   secondsShort: "{seconds} s",
   moon: "Måne",
   moonWaxing: "Måne · {percent} % · tilltagande",
-  moonWaning: "Måne · {percent} % · avtagande"
+  moonWaning: "Måne · {percent} % · avtagande",
+  optionNightHint: "I tre steg, vart och ett mörkare: borgerlig skymning (solen 0° till −6°), nautisk (−6° till −12°), sedan astronomisk skymning och natt.",
+  searchEnterNominatim: "Inget hittat än. Enter frågar också OpenStreetMap (Nominatim)."
 })
 
 addCatalog("fi", {
@@ -3082,7 +3108,7 @@ addCatalog("fi", {
   shortcutStatus: "Mitä on tulossa, ilmoituksena", sourceInUse: "Käytössä", sourceNotInUse: "Ei käytössä", sourceGroupZones: "Aikavyöhykkeet",
   sourceGroupZonesDetails: "Erot, kesäaika ja offline-kaupunkiluettelo tulevat tämän tietokoneen tz-tietokannasta (zdump, zone1970.tab). Mitään ei ladata.",
   sourceGroupGeocoding: "Paikkahaku",
-  sourceGroupGeocodingDetails: "Vyöhykeluettelosta puuttuvat paikat löytää Open-Meteon geokoodaaja, joka kertoo myös niiden aikavyöhykkeen, muuten Nominatim (OpenStreetMap); sen paikat saavat lähimmän vyöhykekaupungin vyöhykkeen (merkitty ≈). Vain kirjoitettu teksti lähetetään.",
+  sourceGroupGeocodingDetails: "Vyöhykeluettelosta puuttuvat paikat löytää jo kirjoittaessa Open-Meteon geokoodaaja, joka kertoo myös niiden aikavyöhykkeen. Enter paikassa, jota se ei tunne, kysyy Nominatimilta (OpenStreetMap) enintään kerran sekunnissa; sen paikat saavat lähimmän vyöhykekaupungin vyöhykkeen (merkitty ≈). Vain kirjoitettu teksti lähetetään.",
   sourceGroupMap: "Maailmankartta",
   sourceGroupMapDetails: "Rannikot ja aikavyöhykkeet Natural Earthista (vapaa käyttö), Equal Earth -projektiossa. Vyöhykkeet näyttävät normaaliajan; kesäaikaa ei piirretä.",
   sourceGroupSounds: "Äänet", sourceGroupSoundsDetails: "freedesktop-ääniteema, toistetaan pw-playlla. Aikamerkeille on viisi sointia (piippaus, kello, puu, sirkutus, lasi), jotka tehdään tällä tietokoneella (~/.cache/more-time).",
@@ -3157,7 +3183,7 @@ addCatalog("fi", {
   mapStyleFlat: "Tasokartta",
   mapStyleGlobe: "Karttapallo",
   optionGlobeAutoRotate: "Karttapallo pyörii itsestään",
-  optionGlobeAutoRotateHint: "Valitun viiveen jälkeen ilman napsautusta se pyörii hitaasti; napsautus, vetäminen tai rulla pysäyttää sen.",
+  optionGlobeAutoRotateHint: "Alla valitun viiveen jälkeen ilman napsautusta se pyörii, kierroksen alla valituissa minuuteissa; napsautus, vetäminen tai rulla pysäyttää sen.",
   dial_classic: "Klassinen",
   dial_minimal: "Pelkistetty",
   dial_roman: "Roomalainen",
@@ -3175,7 +3201,9 @@ addCatalog("fi", {
   secondsShort: "{seconds} s",
   moon: "Kuu",
   moonWaxing: "Kuu · {percent} % · kasvava",
-  moonWaning: "Kuu · {percent} % · vähenevä"
+  moonWaning: "Kuu · {percent} % · vähenevä",
+  optionNightHint: "Kolmessa portaassa, kukin tummempi: porvarillinen hämärä (aurinko 0°…−6°), nauttinen (−6°…−12°), sitten tähtitieteellinen hämärä ja yö.",
+  searchEnterNominatim: "Mitään ei vielä löytynyt. Enter kysyy myös OpenStreetMapilta (Nominatim)."
 })
 
 addCatalog("nb", {
@@ -3281,7 +3309,7 @@ addCatalog("nb", {
   shortcutStatus: "Hva som kommer, som varsel", sourceInUse: "I bruk", sourceNotInUse: "Ikke i bruk", sourceGroupZones: "Tidssoner",
   sourceGroupZonesDetails: "Forskyvninger, sommertid og den frakoblede bylisten kommer fra tz-databasen på denne maskinen (zdump, zone1970.tab). Ingenting hentes.",
   sourceGroupGeocoding: "Stedssøk",
-  sourceGroupGeocodingDetails: "Steder som ikke står i sonelisten, finnes med Open-Meteos geokoder, som også oppgir tidssonen, ellers med Nominatim (OpenStreetMap); stedene derfra får sonen til nærmeste sonesby (merket ≈). Bare den innskrevne teksten sendes.",
+  sourceGroupGeocodingDetails: "Steder som ikke står i sonelisten, finner Open-Meteos geokoder allerede mens du skriver, med tidssonen. Enter på et sted den ikke kjenner, spør Nominatim (OpenStreetMap), høyst én gang i sekundet; stedene derfra får sonen til nærmeste sonesby (merket ≈). Bare den innskrevne teksten sendes.",
   sourceGroupMap: "Verdenskart",
   sourceGroupMapDetails: "Kyster og tidssoner fra Natural Earth (fritt tilgjengelig), i Equal Earth-projeksjonen. Sonene viser normaltid; sommertid tegnes ikke.",
   sourceGroupSounds: "Lyder", sourceGroupSoundsDetails: "Lydtemaet fra freedesktop, spilt med pw-play. Tidssignalene finnes i fem klanger (pip, bjelle, tre, kvitter, glass), laget på denne datamaskinen (~/.cache/more-time).",
@@ -3356,7 +3384,7 @@ addCatalog("nb", {
   mapStyleFlat: "Flatt kart",
   mapStyleGlobe: "Globus",
   optionGlobeAutoRotate: "Globusen snurrer av seg selv",
-  optionGlobeAutoRotateHint: "Etter valgt ventetid uten klikk snurrer den sakte; et klikk, dra eller hjulet stopper den.",
+  optionGlobeAutoRotateHint: "Etter ventetiden valgt nedenfor uten klikk snurrer den, én runde på minuttene valgt nedenfor; et klikk, dra eller hjulet stopper den.",
   dial_classic: "Klassisk",
   dial_minimal: "Minimal",
   dial_roman: "Romersk",
@@ -3374,7 +3402,9 @@ addCatalog("nb", {
   secondsShort: "{seconds} s",
   moon: "Måne",
   moonWaxing: "Måne · {percent} % · voksende",
-  moonWaning: "Måne · {percent} % · avtagende"
+  moonWaning: "Måne · {percent} % · avtagende",
+  optionNightHint: "I tre trinn, hvert mørkere: borgerlig skumring (solen 0° til −6°), nautisk (−6° til −12°), så astronomisk skumring og natt.",
+  searchEnterNominatim: "Ingenting funnet ennå. Enter spør også OpenStreetMap (Nominatim)."
 })
 
 addCatalog("da", {
@@ -3480,7 +3510,7 @@ addCatalog("da", {
   shortcutStatus: "Hvad der kommer, som notifikation", sourceInUse: "I brug", sourceNotInUse: "Ikke i brug", sourceGroupZones: "Tidszoner",
   sourceGroupZonesDetails: "Forskydninger, sommertid og den offline byliste kommer fra denne computers tz-database (zdump, zone1970.tab). Intet hentes.",
   sourceGroupGeocoding: "Stedsøgning",
-  sourceGroupGeocodingDetails: "Steder, der ikke står i zonelisten, findes med Open-Meteos geokoder, som også angiver tidszonen, ellers med Nominatim (OpenStreetMap); dens steder får den nærmeste zonebys zone (markeret ≈). Kun den indtastede tekst sendes.",
+  sourceGroupGeocodingDetails: "Steder, der ikke står i zonelisten, finder Open-Meteos geokoder allerede, mens du skriver, med tidszonen. Enter på et sted, den ikke kender, spørger Nominatim (OpenStreetMap), højst én gang i sekundet; dens steder får den nærmeste zonebys zone (markeret ≈). Kun den indtastede tekst sendes.",
   sourceGroupMap: "Verdenskort",
   sourceGroupMapDetails: "Kyster og tidszoner fra Natural Earth (offentligt domæne), i Equal Earth-projektionen. Zonerne viser normaltid; sommertid tegnes ikke.",
   sourceGroupSounds: "Lyde", sourceGroupSoundsDetails: "Lydtemaet fra freedesktop, afspillet med pw-play. Tidssignalerne findes i fem klange (bip, klokke, træ, kvidder, glas), lavet på denne computer (~/.cache/more-time).",
@@ -3555,7 +3585,7 @@ addCatalog("da", {
   mapStyleFlat: "Fladt kort",
   mapStyleGlobe: "Globus",
   optionGlobeAutoRotate: "Globussen drejer af sig selv",
-  optionGlobeAutoRotateHint: "Efter den valgte ventetid uden klik drejer den langsomt; et klik, træk eller hjulet stopper den.",
+  optionGlobeAutoRotateHint: "Efter ventetiden valgt nedenfor uden klik drejer den, én omgang på minutterne valgt nedenfor; et klik, træk eller hjulet stopper den.",
   dial_classic: "Klassisk",
   dial_minimal: "Minimal",
   dial_roman: "Romersk",
@@ -3573,7 +3603,9 @@ addCatalog("da", {
   secondsShort: "{seconds} s",
   moon: "Måne",
   moonWaxing: "Måne · {percent} % · tiltagende",
-  moonWaning: "Måne · {percent} % · aftagende"
+  moonWaning: "Måne · {percent} % · aftagende",
+  optionNightHint: "I tre trin, hvert mørkere: borgerligt tusmørke (solen 0° til −6°), nautisk (−6° til −12°), derefter astronomisk tusmørke og nat.",
+  searchEnterNominatim: "Intet fundet endnu. Enter spørger også OpenStreetMap (Nominatim)."
 })
 
 addCatalog("ro", {
@@ -3679,7 +3711,7 @@ addCatalog("ro", {
   shortcutStatus: "Ce urmează, ca notificare", sourceInUse: "În uz", sourceNotInUse: "Nefolosit", sourceGroupZones: "Fusuri orare",
   sourceGroupZonesDetails: "Decalajele, ora de vară și lista offline de orașe vin din baza tz a acestui calculator (zdump, zone1970.tab). Nu se descarcă nimic.",
   sourceGroupGeocoding: "Căutare de locuri",
-  sourceGroupGeocodingDetails: "Locurile care nu sunt în lista de fusuri le găsește geocodorul Open-Meteo, care spune și fusul orar, altfel Nominatim (OpenStreetMap); locurile lui primesc fusul celui mai apropiat oraș de fus (marcat cu ≈). Se trimite doar textul tastat.",
+  sourceGroupGeocodingDetails: "Locurile care nu sunt în lista de fusuri le găsește încă din timpul tastării geocodorul Open-Meteo, care spune și fusul orar. Enter pe un loc pe care nu-l cunoaște întreabă Nominatim (OpenStreetMap), cel mult o dată pe secundă; locurile lui primesc fusul celui mai apropiat oraș de fus (marcat cu ≈). Se trimite doar textul tastat.",
   sourceGroupMap: "Harta lumii",
   sourceGroupMapDetails: "Țărmuri și fusuri orare din Natural Earth (domeniu public), în proiecția Equal Earth. Fusurile arată ora standard; ora de vară nu e desenată.",
   sourceGroupSounds: "Sunete", sourceGroupSoundsDetails: "Tema de sunete freedesktop, redată cu pw-play. Semnalele orare au cinci timbruri (bip, clopot, lemn, ciripit, sticlă), sintetizate pe acest computer (~/.cache/more-time).",
@@ -3754,7 +3786,7 @@ addCatalog("ro", {
   mapStyleFlat: "Hartă plană",
   mapStyleGlobe: "Glob",
   optionGlobeAutoRotate: "Globul se rotește singur",
-  optionGlobeAutoRotateHint: "După întârzierea aleasă fără clic se rotește încet; un clic, o tragere sau rotița îl opresc.",
+  optionGlobeAutoRotateHint: "După întârzierea aleasă mai jos fără clic se rotește, o rotație în minutele alese mai jos; un clic, o tragere sau rotița îl opresc.",
   dial_classic: "Clasic",
   dial_minimal: "Minimal",
   dial_roman: "Roman",
@@ -3772,7 +3804,9 @@ addCatalog("ro", {
   secondsShort: "{seconds} s",
   moon: "Luna",
   moonWaxing: "Luna · {percent} % · în creștere",
-  moonWaning: "Luna · {percent} % · în descreștere"
+  moonWaning: "Luna · {percent} % · în descreștere",
+  optionNightHint: "În trei trepte, fiecare mai întunecată: crepuscul civil (soare de la 0° la −6°), nautic (−6° la −12°), apoi astronomic și noapte.",
+  searchEnterNominatim: "Nimic găsit încă. Enter întreabă și OpenStreetMap (Nominatim)."
 })
 
 addCatalog("hu", {
@@ -3878,7 +3912,7 @@ addCatalog("hu", {
   shortcutStatus: "Ami következik, értesítésként", sourceInUse: "Használatban", sourceNotInUse: "Nincs használatban", sourceGroupZones: "Időzónák",
   sourceGroupZonesDetails: "Eltérések, nyári idő és az offline városlista ennek a gépnek a tz-adatbázisából jönnek (zdump, zone1970.tab). Semmi sem töltődik le.",
   sourceGroupGeocoding: "Helykeresés",
-  sourceGroupGeocodingDetails: "A zónalistában nem szereplő helyeket az Open-Meteo geokódolója találja meg, amely az időzónájukat is megadja, különben a Nominatim (OpenStreetMap); az ő helyei a legközelebbi zónaváros időzónáját kapják (≈ jellel). Csak a beírt szöveg kerül elküldésre.",
+  sourceGroupGeocodingDetails: "A zónalistában nem szereplő helyeket már gépelés közben megtalálja az Open-Meteo geokódolója, amely az időzónájukat is megadja. Az Enter egy általa nem ismert helynél a Nominatimot (OpenStreetMap) kérdezi, legfeljebb másodpercenként egyszer; az ő helyei a legközelebbi zónaváros időzónáját kapják (≈ jellel). Csak a beírt szöveg kerül elküldésre.",
   sourceGroupMap: "Világtérkép",
   sourceGroupMapDetails: "Partvonalak és időzónák a Natural Earthből (közkincs), Equal Earth vetületben. A zónák téli időt mutatnak; a nyári idő nincs berajzolva.",
   sourceGroupSounds: "Hangok", sourceGroupSoundsDetails: "A freedesktop hangtéma, pw-play lejátszással. Az időjelzéseknek öt hangszíne van (sípszó, harang, fa, csiripelés, üveg), ezen a gépen előállítva (~/.cache/more-time).",
@@ -3953,7 +3987,7 @@ addCatalog("hu", {
   mapStyleFlat: "Síktérkép",
   mapStyleGlobe: "Földgömb",
   optionGlobeAutoRotate: "A földgömb magától forog",
-  optionGlobeAutoRotateHint: "A választott várakozás után, ha nincs kattintás, lassan forog; egy kattintás, húzás vagy a görgő megállítja.",
+  optionGlobeAutoRotateHint: "Az alább választott várakozás után, ha nincs kattintás, forog, egy fordulat az alább választott percek alatt; egy kattintás, húzás vagy a görgő megállítja.",
   dial_classic: "Klasszikus",
   dial_minimal: "Minimalista",
   dial_roman: "Római",
@@ -3971,7 +4005,9 @@ addCatalog("hu", {
   secondsShort: "{seconds} mp",
   moon: "Hold",
   moonWaxing: "Hold · {percent} % · növő",
-  moonWaning: "Hold · {percent} % · fogyó"
+  moonWaning: "Hold · {percent} % · fogyó",
+  optionNightHint: "Három, egyre sötétebb fokozatban: polgári szürkület (nap 0° és −6° között), navigációs (−6° és −12°), aztán csillagászati szürkület és éjszaka.",
+  searchEnterNominatim: "Még nincs találat. Az Enter az OpenStreetMapet (Nominatim) is megkérdezi."
 })
 
 addCatalog("el", {
@@ -4077,7 +4113,7 @@ addCatalog("el", {
   shortcutStatus: "Τι έρχεται, ως ειδοποίηση", sourceInUse: "Σε χρήση", sourceNotInUse: "Εκτός χρήσης", sourceGroupZones: "Ζώνες ώρας",
   sourceGroupZonesDetails: "Οι διαφορές, η θερινή ώρα και η λίστα πόλεων εκτός σύνδεσης προέρχονται από τη βάση tz αυτού του υπολογιστή (zdump, zone1970.tab). Δεν κατεβαίνει τίποτα.",
   sourceGroupGeocoding: "Αναζήτηση τόπων",
-  sourceGroupGeocodingDetails: "Τόπους που δεν είναι στη λίστα ζωνών τούς βρίσκει ο γεωκωδικοποιητής του Open-Meteo, που δίνει και τη ζώνη ώρας τους, αλλιώς το Nominatim (OpenStreetMap)· οι τόποι του παίρνουν τη ζώνη της πλησιέστερης πόλης ζώνης (σημειωμένοι με ≈). Στέλνεται μόνο το κείμενο που πληκτρολογείται.",
+  sourceGroupGeocodingDetails: "Τόπους που δεν είναι στη λίστα ζωνών τούς βρίσκει ήδη καθώς πληκτρολογείς ο γεωκωδικοποιητής του Open-Meteo, που δίνει και τη ζώνη ώρας τους. Το Enter σε τόπο που δεν γνωρίζει ρωτά το Nominatim (OpenStreetMap), το πολύ μία φορά το δευτερόλεπτο· οι τόποι του παίρνουν τη ζώνη της πλησιέστερης πόλης ζώνης (σημειωμένοι με ≈). Στέλνεται μόνο το κείμενο που πληκτρολογείται.",
   sourceGroupMap: "Παγκόσμιος χάρτης",
   sourceGroupMapDetails: "Ακτογραμμές και ζώνες ώρας από το Natural Earth (κοινό κτήμα), σε προβολή Equal Earth. Οι ζώνες δείχνουν χειμερινή ώρα· η θερινή δεν σχεδιάζεται.",
   sourceGroupSounds: "Ήχοι", sourceGroupSoundsDetails: "Το θέμα ήχων freedesktop, με αναπαραγωγή μέσω pw-play. Τα σήματα ώρας έχουν πέντε ηχοχρώματα (μπιπ, καμπάνα, ξύλο, τιτίβισμα, γυαλί), που συντίθενται σε αυτόν τον υπολογιστή (~/.cache/more-time).",
@@ -4152,7 +4188,7 @@ addCatalog("el", {
   mapStyleFlat: "Επίπεδος χάρτης",
   mapStyleGlobe: "Υδρόγειος",
   optionGlobeAutoRotate: "Η υδρόγειος γυρίζει μόνη της",
-  optionGlobeAutoRotateHint: "Μετά την επιλεγμένη αναμονή χωρίς κλικ γυρίζει αργά· ένα κλικ, σύρσιμο ή η ροδέλα τη σταματά.",
+  optionGlobeAutoRotateHint: "Μετά την αναμονή που ορίζεται παρακάτω χωρίς κλικ γυρίζει, μία στροφή στα λεπτά που ορίζονται παρακάτω· ένα κλικ, σύρσιμο ή η ροδέλα τη σταματά.",
   dial_classic: "Κλασικό",
   dial_minimal: "Λιτό",
   dial_roman: "Ρωμαϊκό",
@@ -4170,7 +4206,9 @@ addCatalog("el", {
   secondsShort: "{seconds} δ",
   moon: "Σελήνη",
   moonWaxing: "Σελήνη · {percent} % · αύξουσα",
-  moonWaning: "Σελήνη · {percent} % · φθίνουσα"
+  moonWaning: "Σελήνη · {percent} % · φθίνουσα",
+  optionNightHint: "Σε τρία στάδια, το καθένα πιο σκούρο: πολιτικό λυκόφως (ήλιος 0° έως −6°), ναυτικό (−6° έως −12°), μετά αστρονομικό λυκόφως και νύχτα.",
+  searchEnterNominatim: "Τίποτα ακόμη. Το Enter ρωτά και το OpenStreetMap (Nominatim)."
 })
 
 addCatalog("hi", {
@@ -4276,7 +4314,7 @@ addCatalog("hi", {
   shortcutStatus: "आगे क्या है, सूचना के रूप में", sourceInUse: "उपयोग में", sourceNotInUse: "उपयोग में नहीं", sourceGroupZones: "समय क्षेत्र",
   sourceGroupZonesDetails: "अंतर, डेलाइट सेविंग और ऑफ़लाइन शहर सूची इस कंप्यूटर के tz डेटाबेस से आती है (zdump, zone1970.tab)। कुछ भी डाउनलोड नहीं होता।",
   sourceGroupGeocoding: "जगह खोज",
-  sourceGroupGeocodingDetails: "जो जगहें क्षेत्र सूची में नहीं हैं, उन्हें Open-Meteo का जियोकोडर ढूँढता है, जो उनका समय क्षेत्र भी बताता है, नहीं तो Nominatim (OpenStreetMap); उसकी जगहों को निकटतम क्षेत्र शहर का समय क्षेत्र मिलता है (≈ से चिह्नित)। केवल टाइप किया गया पाठ भेजा जाता है।",
+  sourceGroupGeocodingDetails: "जो जगहें क्षेत्र सूची में नहीं हैं, उन्हें टाइप करते समय Open-Meteo का जियोकोडर ढूँढता है, जो उनका समय क्षेत्र भी बताता है। जिस जगह को वह नहीं जानता, उस पर Enter दबाने से Nominatim (OpenStreetMap) से प्रति सेकंड अधिकतम एक बार पूछा जाता है; उसकी जगहों को निकटतम क्षेत्र शहर का समय क्षेत्र मिलता है (≈ से चिह्नित)। केवल टाइप किया गया पाठ भेजा जाता है।",
   sourceGroupMap: "विश्व नक़्शा",
   sourceGroupMapDetails: "Natural Earth (सार्वजनिक डोमेन) से तटरेखाएँ और समय क्षेत्र, Equal Earth प्रक्षेपण में। क्षेत्र मानक समय दिखाते हैं; डेलाइट सेविंग नहीं बनाई जाती।",
   sourceGroupSounds: "ध्वनियाँ", sourceGroupSoundsDetails: "freedesktop ध्वनि थीम, pw-play से बजाई जाती है। समय संकेतों की पाँच ध्वनियाँ (बीप, घंटा, लकड़ी, चहचहाहट, काँच) इसी कंप्यूटर पर बनती हैं (~/.cache/more-time)।",
@@ -4351,7 +4389,7 @@ addCatalog("hi", {
   mapStyleFlat: "सपाट नक़्शा",
   mapStyleGlobe: "ग्लोब",
   optionGlobeAutoRotate: "ग्लोब अपने आप घूमे",
-  optionGlobeAutoRotateHint: "चुने गए इंतज़ार तक कोई क्लिक न हो तो यह धीरे-धीरे घूमता है; क्लिक, खिंचाव या व्हील इसे रोक देता है।",
+  optionGlobeAutoRotateHint: "नीचे तय इंतज़ार तक कोई क्लिक न हो तो यह घूमता है, नीचे तय मिनटों में एक चक्कर; क्लिक, खिंचाव या व्हील इसे रोक देता है।",
   dial_classic: "क्लासिक",
   dial_minimal: "सरल",
   dial_roman: "रोमन",
@@ -4369,7 +4407,9 @@ addCatalog("hi", {
   secondsShort: "{seconds} से.",
   moon: "चंद्रमा",
   moonWaxing: "चंद्रमा · {percent} % · बढ़ता",
-  moonWaning: "चंद्रमा · {percent} % · घटता"
+  moonWaning: "चंद्रमा · {percent} % · घटता",
+  optionNightHint: "तीन चरणों में, हर एक गहरा: नागरिक संधिप्रकाश (सूर्य 0° से −6°), नौवहन (−6° से −12°), फिर खगोलीय संधिप्रकाश और रात।",
+  searchEnterNominatim: "अभी कुछ नहीं मिला। Enter OpenStreetMap (Nominatim) से भी पूछता है।"
 })
 
 addCatalog("id", {
@@ -4475,7 +4515,7 @@ addCatalog("id", {
   shortcutStatus: "Yang akan datang, sebagai notifikasi", sourceInUse: "Dipakai", sourceNotInUse: "Tidak dipakai", sourceGroupZones: "Zona waktu",
   sourceGroupZonesDetails: "Selisih, waktu musim panas, dan daftar kota luring berasal dari basis data tz komputer ini (zdump, zone1970.tab). Tidak ada yang diunduh.",
   sourceGroupGeocoding: "Pencarian tempat",
-  sourceGroupGeocodingDetails: "Tempat yang tidak ada di daftar zona dicari dengan geocoder Open-Meteo, yang juga menyebut zona waktunya, atau dengan Nominatim (OpenStreetMap); tempat dari sana mendapat zona kota zona terdekat (ditandai ≈). Hanya teks yang diketik yang dikirim.",
+  sourceGroupGeocodingDetails: "Tempat yang tidak ada di daftar zona dicari saat Anda mengetik dengan geocoder Open-Meteo, yang juga menyebut zona waktunya. Enter pada tempat yang tidak dikenalnya bertanya ke Nominatim (OpenStreetMap), paling sering sekali per detik; tempat dari sana mendapat zona kota zona terdekat (ditandai ≈). Hanya teks yang diketik yang dikirim.",
   sourceGroupMap: "Peta dunia",
   sourceGroupMapDetails: "Garis pantai dan zona waktu dari Natural Earth (domain publik), dalam proyeksi Equal Earth. Zona menunjukkan waktu standar; waktu musim panas tidak digambar.",
   sourceGroupSounds: "Suara", sourceGroupSoundsDetails: "Tema suara freedesktop, diputar dengan pw-play. Tanda waktu punya lima nada (bip, lonceng, kayu, cicit, kaca) yang disintesis di komputer ini (~/.cache/more-time).",
@@ -4550,7 +4590,7 @@ addCatalog("id", {
   mapStyleFlat: "Peta datar",
   mapStyleGlobe: "Bola dunia",
   optionGlobeAutoRotate: "Bola dunia berputar sendiri",
-  optionGlobeAutoRotateHint: "Setelah jeda yang dipilih tanpa klik, ia berputar pelan; klik, seretan, atau roda menghentikannya.",
+  optionGlobeAutoRotateHint: "Setelah jeda yang diatur di bawah tanpa klik, ia berputar, satu putaran dalam menit yang diatur di bawah; klik, seretan, atau roda menghentikannya.",
   dial_classic: "Klasik",
   dial_minimal: "Minimal",
   dial_roman: "Romawi",
@@ -4568,7 +4608,9 @@ addCatalog("id", {
   secondsShort: "{seconds} dtk",
   moon: "Bulan",
   moonWaxing: "Bulan · {percent} % · membesar",
-  moonWaning: "Bulan · {percent} % · mengecil"
+  moonWaning: "Bulan · {percent} % · mengecil",
+  optionNightHint: "Dalam tiga tahap, masing-masing lebih gelap: senja sipil (matahari 0° sampai −6°), nautika (−6° sampai −12°), lalu senja astronomi dan malam.",
+  searchEnterNominatim: "Belum ada yang ditemukan. Enter juga bertanya ke OpenStreetMap (Nominatim)."
 })
 
 addCatalog("vi", {
@@ -4674,7 +4716,7 @@ addCatalog("vi", {
   shortcutStatus: "Sắp tới có gì, dưới dạng thông báo", sourceInUse: "Đang dùng", sourceNotInUse: "Không dùng", sourceGroupZones: "Múi giờ",
   sourceGroupZonesDetails: "Chênh lệch giờ, giờ mùa hè và danh sách thành phố ngoại tuyến lấy từ cơ sở dữ liệu tz của máy này (zdump, zone1970.tab). Không tải gì cả.",
   sourceGroupGeocoding: "Tìm địa điểm",
-  sourceGroupGeocodingDetails: "Những nơi không có trong danh sách múi giờ được tìm bằng bộ mã hóa địa lý của Open-Meteo, vốn cũng cho biết múi giờ, nếu không thì bằng Nominatim (OpenStreetMap); các nơi từ đó nhận múi giờ của thành phố múi giờ gần nhất (đánh dấu ≈). Chỉ văn bản đã gõ được gửi đi.",
+  sourceGroupGeocodingDetails: "Những nơi không có trong danh sách múi giờ được bộ mã hóa địa lý của Open-Meteo tìm ngay khi bạn gõ, kèm múi giờ. Enter ở nơi nó không biết sẽ hỏi Nominatim (OpenStreetMap), tối đa mỗi giây một lần; các nơi từ đó nhận múi giờ của thành phố múi giờ gần nhất (đánh dấu ≈). Chỉ văn bản đã gõ được gửi đi.",
   sourceGroupMap: "Bản đồ thế giới",
   sourceGroupMapDetails: "Đường bờ biển và múi giờ từ Natural Earth (phạm vi công cộng), theo phép chiếu Equal Earth. Các múi hiển thị giờ chuẩn; giờ mùa hè không được vẽ.",
   sourceGroupSounds: "Âm thanh", sourceGroupSoundsDetails: "Chủ đề âm thanh freedesktop, phát bằng pw-play. Báo giờ có năm âm sắc (bíp, chuông, gỗ, líu lo, thủy tinh), được tổng hợp trên máy tính này (~/.cache/more-time).",
@@ -4749,7 +4791,7 @@ addCatalog("vi", {
   mapStyleFlat: "Bản đồ phẳng",
   mapStyleGlobe: "Quả địa cầu",
   optionGlobeAutoRotate: "Quả địa cầu tự xoay",
-  optionGlobeAutoRotateHint: "Sau khoảng chờ đã chọn mà không có cú nhấp, nó xoay chậm; một cú nhấp, kéo hoặc con lăn sẽ dừng nó.",
+  optionGlobeAutoRotateHint: "Sau khoảng chờ đặt bên dưới mà không có cú nhấp, nó xoay, một vòng trong số phút đặt bên dưới; một cú nhấp, kéo hoặc con lăn sẽ dừng nó.",
   dial_classic: "Cổ điển",
   dial_minimal: "Tối giản",
   dial_roman: "La Mã",
@@ -4767,7 +4809,9 @@ addCatalog("vi", {
   secondsShort: "{seconds} giây",
   moon: "Trăng",
   moonWaxing: "Trăng · {percent} % · đang tròn",
-  moonWaning: "Trăng · {percent} % · đang khuyết"
+  moonWaning: "Trăng · {percent} % · đang khuyết",
+  optionNightHint: "Ba bậc, mỗi bậc tối hơn: chạng vạng dân dụng (mặt trời 0° đến −6°), hàng hải (−6° đến −12°), rồi chạng vạng thiên văn và đêm.",
+  searchEnterNominatim: "Chưa tìm thấy. Enter cũng hỏi OpenStreetMap (Nominatim)."
 })
 
 addCatalog("th", {
@@ -4873,7 +4917,7 @@ addCatalog("th", {
   shortcutStatus: "สิ่งที่กำลังจะมา เป็นการแจ้งเตือน", sourceInUse: "ใช้งานอยู่", sourceNotInUse: "ไม่ได้ใช้", sourceGroupZones: "เขตเวลา",
   sourceGroupZonesDetails: "ค่าชดเชย เวลาออมแสง และรายการเมืองออฟไลน์มาจากฐานข้อมูล tz ของเครื่องนี้ (zdump, zone1970.tab) ไม่มีการดาวน์โหลด",
   sourceGroupGeocoding: "ค้นหาสถานที่",
-  sourceGroupGeocodingDetails: "สถานที่ที่ไม่อยู่ในรายการเขตเวลาจะค้นด้วยตัวแปลงพิกัดของ Open-Meteo ซึ่งบอกเขตเวลาด้วย หรือไม่ก็ Nominatim (OpenStreetMap) สถานที่จากที่นั่นจะได้เขตเวลาของเมืองเขตเวลาที่ใกล้ที่สุด (มีเครื่องหมาย ≈) ส่งไปเฉพาะข้อความที่พิมพ์",
+  sourceGroupGeocodingDetails: "สถานที่ที่ไม่อยู่ในรายการเขตเวลาจะค้นด้วยตัวแปลงพิกัดของ Open-Meteo ระหว่างพิมพ์ ซึ่งบอกเขตเวลาด้วย กด Enter ที่สถานที่ที่มันไม่รู้จักจะถาม Nominatim (OpenStreetMap) ไม่เกินวินาทีละครั้ง สถานที่จากที่นั่นจะได้เขตเวลาของเมืองเขตเวลาที่ใกล้ที่สุด (มีเครื่องหมาย ≈) ส่งไปเฉพาะข้อความที่พิมพ์",
   sourceGroupMap: "แผนที่โลก",
   sourceGroupMapDetails: "แนวชายฝั่งและเขตเวลาจาก Natural Earth (สาธารณสมบัติ) ในเส้นโครงแผนที่ Equal Earth เขตแสดงเวลามาตรฐาน ไม่ได้วาดเวลาออมแสง",
   sourceGroupSounds: "เสียง", sourceGroupSoundsDetails: "ธีมเสียง freedesktop เล่นด้วย pw-play สัญญาณเวลามีห้าโทนเสียง (บี๊ป ระฆัง ไม้ จิ๊บ แก้ว) สังเคราะห์บนคอมพิวเตอร์เครื่องนี้ (~/.cache/more-time)",
@@ -4948,7 +4992,7 @@ addCatalog("th", {
   mapStyleFlat: "แผนที่แบน",
   mapStyleGlobe: "ลูกโลก",
   optionGlobeAutoRotate: "ลูกโลกหมุนเอง",
-  optionGlobeAutoRotateHint: "เมื่อไม่มีการคลิกตามเวลาที่เลือก ลูกโลกจะหมุนช้า ๆ คลิก ลาก หรือล้อเลื่อนจะหยุดหมุน",
+  optionGlobeAutoRotateHint: "เมื่อไม่มีการคลิกตามเวลาที่ตั้งด้านล่าง ลูกโลกจะหมุน หนึ่งรอบตามจำนวนนาทีที่ตั้งด้านล่าง คลิก ลาก หรือล้อเลื่อนจะหยุดหมุน",
   dial_classic: "คลาสสิก",
   dial_minimal: "มินิมอล",
   dial_roman: "โรมัน",
@@ -4966,7 +5010,9 @@ addCatalog("th", {
   secondsShort: "{seconds} วิ",
   moon: "ดวงจันทร์",
   moonWaxing: "ดวงจันทร์ · {percent} % · ข้างขึ้น",
-  moonWaning: "ดวงจันทร์ · {percent} % · ข้างแรม"
+  moonWaning: "ดวงจันทร์ · {percent} % · ข้างแรม",
+  optionNightHint: "สามขั้น แต่ละขั้นมืดขึ้น: แสงสนธยาทางพลเรือน (ดวงอาทิตย์ 0° ถึง −6°) ทางทะเล (−6° ถึง −12°) แล้วจึงทางดาราศาสตร์และกลางคืน",
+  searchEnterNominatim: "ยังไม่พบ Enter จะถาม OpenStreetMap (Nominatim) ด้วย"
 })
 
 addCatalog("ja", {
@@ -5072,7 +5118,7 @@ addCatalog("ja", {
   shortcutStatus: "これからの予定を通知で表示", sourceInUse: "使用中", sourceNotInUse: "未使用", sourceGroupZones: "タイムゾーン",
   sourceGroupZonesDetails: "時差、夏時間、オフラインの都市リストはこのコンピューターの tz データベース（zdump、zone1970.tab）から取得します。ダウンロードはありません。",
   sourceGroupGeocoding: "場所の検索",
-  sourceGroupGeocodingDetails: "タイムゾーン一覧にない場所は Open-Meteo のジオコーダーで探し、タイムゾーンも取得します。見つからなければ Nominatim（OpenStreetMap）を使い、その場所には最寄りのタイムゾーン都市のゾーンを当てます（≈ 付き）。送信するのは入力した文字だけです。",
+  sourceGroupGeocodingDetails: "タイムゾーン一覧にない場所は、入力中に Open-Meteo のジオコーダーで探し、タイムゾーンも取得します。知らない場所で Enter を押すと Nominatim（OpenStreetMap）に問い合わせます（最大 1 秒に 1 回）。その場所には最寄りのタイムゾーン都市のゾーンを当てます（≈ 付き）。送信するのは入力した文字だけです。",
   sourceGroupMap: "世界地図",
   sourceGroupMapDetails: "Natural Earth（パブリックドメイン）の海岸線とタイムゾーンを Equal Earth 図法で表示。ゾーンは標準時で、夏時間は描かれません。",
   sourceGroupSounds: "サウンド", sourceGroupSoundsDetails: "freedesktop のサウンドテーマを pw-play で再生します。時報には 5 つの音色（ビープ、ベル、ウッド、チャープ、グラス）があり、このコンピューターで合成します（~/.cache/more-time）。",
@@ -5147,7 +5193,7 @@ addCatalog("ja", {
   mapStyleFlat: "平面地図",
   mapStyleGlobe: "地球儀",
   optionGlobeAutoRotate: "地球儀を自動で回す",
-  optionGlobeAutoRotateHint: "選んだ時間クリックがないとゆっくり回ります。クリック、ドラッグ、ホイールで止まります。",
+  optionGlobeAutoRotateHint: "下で設定した時間クリックがないと回り始め、下で設定した分数で 1 回転します。クリック、ドラッグ、ホイールで止まります。",
   dial_classic: "クラシック",
   dial_minimal: "ミニマル",
   dial_roman: "ローマ数字",
@@ -5165,7 +5211,9 @@ addCatalog("ja", {
   secondsShort: "{seconds}秒",
   moon: "月",
   moonWaxing: "月 · {percent} % · 満ちていく",
-  moonWaning: "月 · {percent} % · 欠けていく"
+  moonWaning: "月 · {percent} % · 欠けていく",
+  optionNightHint: "3 段階で順に暗く: 市民薄明（太陽 0°〜−6°）、航海薄明（−6°〜−12°）、そして天文薄明と夜。",
+  searchEnterNominatim: "まだ見つかりません。Enter で OpenStreetMap（Nominatim）にも問い合わせます。"
 })
 
 addCatalog("ko", {
@@ -5271,7 +5319,7 @@ addCatalog("ko", {
   shortcutStatus: "다가오는 일정을 알림으로", sourceInUse: "사용 중", sourceNotInUse: "사용 안 함", sourceGroupZones: "시간대",
   sourceGroupZonesDetails: "시차, 서머타임, 오프라인 도시 목록은 이 컴퓨터의 tz 데이터베이스(zdump, zone1970.tab)에서 가져옵니다. 아무것도 내려받지 않습니다.",
   sourceGroupGeocoding: "장소 검색",
-  sourceGroupGeocodingDetails: "시간대 목록에 없는 장소는 시간대도 알려 주는 Open-Meteo 지오코더로 찾고, 안 되면 Nominatim(OpenStreetMap)으로 찾습니다. 그 장소는 가장 가까운 시간대 도시의 시간대를 받습니다(≈ 표시). 입력한 텍스트만 보냅니다.",
+  sourceGroupGeocodingDetails: "시간대 목록에 없는 장소는 입력하는 동안 시간대도 알려 주는 Open-Meteo 지오코더로 찾습니다. 모르는 장소에서 Enter를 누르면 Nominatim(OpenStreetMap)에 초당 최대 한 번 묻고, 그 장소는 가장 가까운 시간대 도시의 시간대를 받습니다(≈ 표시). 입력한 텍스트만 보냅니다.",
   sourceGroupMap: "세계 지도",
   sourceGroupMapDetails: "Natural Earth(퍼블릭 도메인)의 해안선과 시간대를 Equal Earth 도법으로 표시합니다. 시간대는 표준시이며 서머타임은 그리지 않습니다.",
   sourceGroupSounds: "소리", sourceGroupSoundsDetails: "freedesktop 사운드 테마를 pw-play로 재생합니다. 시보에는 다섯 가지 음색(삐, 종, 나무, 지저귐, 유리)이 있으며 이 컴퓨터에서 합성합니다(~/.cache/more-time).",
@@ -5346,7 +5394,7 @@ addCatalog("ko", {
   mapStyleFlat: "평면 지도",
   mapStyleGlobe: "지구본",
   optionGlobeAutoRotate: "지구본 자동 회전",
-  optionGlobeAutoRotateHint: "정한 시간 동안 클릭이 없으면 천천히 돕니다. 클릭, 끌기 또는 휠로 멈춥니다.",
+  optionGlobeAutoRotateHint: "아래에서 정한 시간 동안 클릭이 없으면 돌기 시작해 아래에서 정한 분 동안 한 바퀴 돕니다. 클릭, 끌기 또는 휠로 멈춥니다.",
   dial_classic: "클래식",
   dial_minimal: "미니멀",
   dial_roman: "로마 숫자",
@@ -5364,7 +5412,9 @@ addCatalog("ko", {
   secondsShort: "{seconds}초",
   moon: "달",
   moonWaxing: "달 · {percent} % · 차는 중",
-  moonWaning: "달 · {percent} % · 기우는 중"
+  moonWaning: "달 · {percent} % · 기우는 중",
+  optionNightHint: "세 단계로 점점 어둡게: 시민 박명(태양 0°~−6°), 항해 박명(−6°~−12°), 그다음 천문 박명과 밤.",
+  searchEnterNominatim: "아직 찾지 못했습니다. Enter를 누르면 OpenStreetMap(Nominatim)에도 묻습니다."
 })
 
 addCatalog("zh_CN", {
@@ -5470,7 +5520,7 @@ addCatalog("zh_CN", {
   shortcutStatus: "以通知显示接下来的安排", sourceInUse: "使用中", sourceNotInUse: "未使用", sourceGroupZones: "时区",
   sourceGroupZonesDetails: "时差、夏令时和离线城市列表来自本机的 tz 数据库（zdump、zone1970.tab），不会下载任何内容。",
   sourceGroupGeocoding: "地点搜索",
-  sourceGroupGeocodingDetails: "不在时区列表中的地点由 Open-Meteo 地理编码器查找，它也会给出时区；否则使用 Nominatim（OpenStreetMap），其地点采用最近的时区城市的时区（标有 ≈）。只发送输入的文字。",
+  sourceGroupGeocodingDetails: "不在时区列表中的地点会在输入时由 Open-Meteo 地理编码器查找，它也会给出时区。对它不认识的地点按 Enter 会查询 Nominatim（OpenStreetMap），每秒最多一次；其地点采用最近的时区城市的时区（标有 ≈）。只发送输入的文字。",
   sourceGroupMap: "世界地图",
   sourceGroupMapDetails: "海岸线和时区来自 Natural Earth（公有领域），采用 Equal Earth 投影。时区为标准时间，未绘制夏令时。",
   sourceGroupSounds: "声音", sourceGroupSoundsDetails: "freedesktop 声音主题，用 pw-play 播放。报时有五种音色（哔声、钟声、木琴、啾鸣、玻璃），在本机合成（~/.cache/more-time）。",
@@ -5545,7 +5595,7 @@ addCatalog("zh_CN", {
   mapStyleFlat: "平面地图",
   mapStyleGlobe: "地球仪",
   optionGlobeAutoRotate: "地球仪自动旋转",
-  optionGlobeAutoRotateHint: "在所选的等待时间内没有点击时会缓慢旋转；点击、拖动或滚轮会让它停下。",
+  optionGlobeAutoRotateHint: "在下方设定的等待时间内没有点击时开始旋转，按下方设定的分钟数转一圈；点击、拖动或滚轮会让它停下。",
   dial_classic: "经典",
   dial_minimal: "极简",
   dial_roman: "罗马数字",
@@ -5563,7 +5613,9 @@ addCatalog("zh_CN", {
   secondsShort: "{seconds} 秒",
   moon: "月亮",
   moonWaxing: "月亮 · {percent} % · 盈",
-  moonWaning: "月亮 · {percent} % · 亏"
+  moonWaning: "月亮 · {percent} % · 亏",
+  optionNightHint: "分三级，一级比一级暗：民用晨昏蒙影（太阳 0° 到 −6°）、航海晨昏蒙影（−6° 到 −12°），然后是天文晨昏蒙影和黑夜。",
+  searchEnterNominatim: "暂未找到。按 Enter 还会查询 OpenStreetMap（Nominatim）。"
 })
 
 addCatalog("zh_TW", {
@@ -5669,7 +5721,7 @@ addCatalog("zh_TW", {
   shortcutStatus: "以通知顯示接下來的安排", sourceInUse: "使用中", sourceNotInUse: "未使用", sourceGroupZones: "時區",
   sourceGroupZonesDetails: "時差、日光節約時間和離線城市清單來自本機的 tz 資料庫（zdump、zone1970.tab），不會下載任何內容。",
   sourceGroupGeocoding: "地點搜尋",
-  sourceGroupGeocodingDetails: "不在時區清單中的地點由 Open-Meteo 地理編碼器尋找，它也會提供時區；否則使用 Nominatim（OpenStreetMap），其地點採用最近的時區城市的時區（標有 ≈）。只會傳送輸入的文字。",
+  sourceGroupGeocodingDetails: "不在時區清單中的地點會在輸入時由 Open-Meteo 地理編碼器尋找，它也會提供時區。對它不認識的地點按 Enter 會查詢 Nominatim（OpenStreetMap），每秒最多一次；其地點採用最近的時區城市的時區（標有 ≈）。只會傳送輸入的文字。",
   sourceGroupMap: "世界地圖",
   sourceGroupMapDetails: "海岸線和時區來自 Natural Earth（公有領域），採用 Equal Earth 投影。時區為標準時間，未繪製日光節約時間。",
   sourceGroupSounds: "聲音", sourceGroupSoundsDetails: "freedesktop 聲音主題，以 pw-play 播放。報時有五種音色（嗶聲、鐘聲、木琴、啾鳴、玻璃），在本機合成（~/.cache/more-time）。",
@@ -5744,7 +5796,7 @@ addCatalog("zh_TW", {
   mapStyleFlat: "平面地圖",
   mapStyleGlobe: "地球儀",
   optionGlobeAutoRotate: "地球儀自動旋轉",
-  optionGlobeAutoRotateHint: "在所選的等待時間內沒有點擊時會緩慢旋轉；點擊、拖曳或滾輪會讓它停下。",
+  optionGlobeAutoRotateHint: "在下方設定的等待時間內沒有點擊時開始旋轉，依下方設定的分鐘數轉一圈；點擊、拖曳或滾輪會讓它停下。",
   dial_classic: "經典",
   dial_minimal: "極簡",
   dial_roman: "羅馬數字",
@@ -5762,7 +5814,9 @@ addCatalog("zh_TW", {
   secondsShort: "{seconds} 秒",
   moon: "月亮",
   moonWaxing: "月亮 · {percent} % · 盈",
-  moonWaning: "月亮 · {percent} % · 虧"
+  moonWaning: "月亮 · {percent} % · 虧",
+  optionNightHint: "分三級，一級比一級暗：民用曙暮光（太陽 0° 到 −6°）、航海曙暮光（−6° 到 −12°），然後是天文曙暮光和黑夜。",
+  searchEnterNominatim: "暫未找到。按 Enter 也會查詢 OpenStreetMap（Nominatim）。"
 })
 
 addCatalog("ar", {
@@ -5868,7 +5922,7 @@ addCatalog("ar", {
   shortcutStatus: "ما هو قادم، كإشعار", sourceInUse: "قيد الاستخدام", sourceNotInUse: "غير مستخدم", sourceGroupZones: "المناطق الزمنية",
   sourceGroupZonesDetails: "الفروق والتوقيت الصيفي وقائمة المدن دون اتصال تأتي من قاعدة بيانات tz على هذا الحاسوب (zdump، zone1970.tab). لا يُنزَّل شيء.",
   sourceGroupGeocoding: "البحث عن الأماكن",
-  sourceGroupGeocodingDetails: "الأماكن غير الموجودة في قائمة المناطق يجدها مُرمِّز Open-Meteo الجغرافي الذي يذكر منطقتها الزمنية أيضًا، وإلا Nominatim (OpenStreetMap)؛ وتأخذ أماكنه منطقة أقرب مدينة منطقة زمنية (مع العلامة ≈). لا يُرسل سوى النص المكتوب.",
+  sourceGroupGeocodingDetails: "الأماكن غير الموجودة في قائمة المناطق يجدها أثناء الكتابة مُرمِّز Open-Meteo الجغرافي الذي يذكر منطقتها الزمنية أيضًا. ضغط Enter على مكان لا يعرفه يسأل Nominatim (OpenStreetMap) مرة في الثانية على الأكثر؛ وتأخذ أماكنه منطقة أقرب مدينة منطقة زمنية (مع العلامة ≈). لا يُرسل سوى النص المكتوب.",
   sourceGroupMap: "خريطة العالم",
   sourceGroupMapDetails: "السواحل والمناطق الزمنية من Natural Earth (ملكية عامة) بإسقاط Equal Earth. تُظهر المناطق التوقيت القياسي؛ لا يُرسم التوقيت الصيفي.",
   sourceGroupSounds: "الأصوات", sourceGroupSoundsDetails: "سمة أصوات freedesktop، تُشغَّل عبر pw-play. لإشارات الوقت خمس نغمات (صفّارة، جرس، خشب، زقزقة، زجاج) تُركَّب على هذا الحاسوب (~/.cache/more-time).",
@@ -5943,7 +5997,7 @@ addCatalog("ar", {
   mapStyleFlat: "خريطة مسطحة",
   mapStyleGlobe: "كرة أرضية",
   optionGlobeAutoRotate: "الكرة الأرضية تدور وحدها",
-  optionGlobeAutoRotateHint: "بعد مهلة الانتظار المختارة بلا نقرة تدور ببطء؛ النقر أو السحب أو العجلة يوقفها.",
+  optionGlobeAutoRotateHint: "بعد مهلة الانتظار المحددة أدناه بلا نقرة تدور، دورة واحدة في الدقائق المحددة أدناه؛ النقر أو السحب أو العجلة يوقفها.",
   dial_classic: "كلاسيكي",
   dial_minimal: "بسيط",
   dial_roman: "روماني",
@@ -5961,7 +6015,9 @@ addCatalog("ar", {
   secondsShort: "{seconds} ث",
   moon: "القمر",
   moonWaxing: "القمر · {percent} % · متزايد",
-  moonWaning: "القمر · {percent} % · متناقص"
+  moonWaning: "القمر · {percent} % · متناقص",
+  optionNightHint: "على ثلاث درجات، كل منها أغمق: الشفق المدني (الشمس من 0° إلى −6°)، والبحري (−6° إلى −12°)، ثم الفلكي والليل.",
+  searchEnterNominatim: "لم يُعثر على شيء بعد. يسأل Enter أيضًا OpenStreetMap (Nominatim)."
 })
 
 addCatalog("he", {
@@ -6067,7 +6123,7 @@ addCatalog("he", {
   shortcutStatus: "מה מתקרב, כהתראה", sourceInUse: "בשימוש", sourceNotInUse: "לא בשימוש", sourceGroupZones: "אזורי זמן",
   sourceGroupZonesDetails: "ההפרשים, שעון הקיץ ורשימת הערים הלא־מקוונת מגיעים ממסד הנתונים tz של המחשב הזה (zdump, zone1970.tab). שום דבר לא מורד.",
   sourceGroupGeocoding: "חיפוש מקומות",
-  sourceGroupGeocodingDetails: "מקומות שאינם ברשימת האזורים נמצאים בעזרת המקודד הגאוגרפי של Open-Meteo, שמציין גם את אזור הזמן שלהם, ואחרת בעזרת Nominatim (OpenStreetMap); המקומות שלו מקבלים את אזור הזמן של עיר האזור הקרובה ביותר (מסומן ≈). נשלח רק הטקסט שהוקלד.",
+  sourceGroupGeocodingDetails: "מקומות שאינם ברשימת האזורים נמצאים כבר בזמן ההקלדה בעזרת המקודד הגאוגרפי של Open-Meteo, שמציין גם את אזור הזמן שלהם. Enter על מקום שהוא לא מכיר שואל את Nominatim ‏(OpenStreetMap), לכל היותר פעם בשנייה; המקומות שלו מקבלים את אזור הזמן של עיר האזור הקרובה ביותר (מסומן ≈). נשלח רק הטקסט שהוקלד.",
   sourceGroupMap: "מפת העולם",
   sourceGroupMapDetails: "קווי חוף ואזורי זמן מ־Natural Earth (נחלת הכלל), בהיטל Equal Earth. האזורים מציגים שעון חורף; שעון הקיץ אינו מצויר.",
   sourceGroupSounds: "צלילים", sourceGroupSoundsDetails: "ערכת הצלילים של freedesktop, מושמעת עם pw-play. לאותות הזמן חמישה גוונים (צפצוף, פעמון, עץ, ציוץ, זכוכית) שמסונתזים במחשב הזה (~/.cache/more-time).",
@@ -6142,7 +6198,7 @@ addCatalog("he", {
   mapStyleFlat: "מפה שטוחה",
   mapStyleGlobe: "גלובוס",
   optionGlobeAutoRotate: "הגלובוס מסתובב מעצמו",
-  optionGlobeAutoRotateHint: "אחרי ההמתנה שנבחרה בלי לחיצה הוא מסתובב לאט; לחיצה, גרירה או הגלגלת עוצרות אותו.",
+  optionGlobeAutoRotateHint: "אחרי ההמתנה שנקבעה למטה בלי לחיצה הוא מסתובב, סיבוב אחד בדקות שנקבעו למטה; לחיצה, גרירה או הגלגלת עוצרות אותו.",
   dial_classic: "קלאסי",
   dial_minimal: "מינימלי",
   dial_roman: "רומי",
@@ -6160,7 +6216,9 @@ addCatalog("he", {
   secondsShort: "{seconds} ש׳",
   moon: "ירח",
   moonWaxing: "ירח · {percent} % · מתמלא",
-  moonWaning: "ירח · {percent} % · מתמעט"
+  moonWaning: "ירח · {percent} % · מתמעט",
+  optionNightHint: "בשלוש מדרגות, כל אחת כהה יותר: דמדומים אזרחיים (השמש 0° עד −6°), ימיים (−6° עד −12°), ואז דמדומים אסטרונומיים ולילה.",
+  searchEnterNominatim: "עדיין לא נמצא דבר. Enter שואל גם את OpenStreetMap ‏(Nominatim)."
 })
 
 addCatalog("fa", {
@@ -6266,7 +6324,7 @@ addCatalog("fa", {
   shortcutStatus: "آنچه در پیش است، به صورت اعلان", sourceInUse: "در حال استفاده", sourceNotInUse: "بدون استفاده", sourceGroupZones: "منطقه‌های زمانی",
   sourceGroupZonesDetails: "اختلاف‌ها، ساعت تابستانی و فهرست آفلاین شهرها از پایگاه دادهٔ tz همین رایانه می‌آیند (zdump، zone1970.tab). چیزی دریافت نمی‌شود.",
   sourceGroupGeocoding: "جست‌وجوی مکان",
-  sourceGroupGeocodingDetails: "مکان‌هایی را که در فهرست مناطق نیستند، مکان‌یاب Open-Meteo پیدا می‌کند که منطقهٔ زمانی‌شان را هم می‌گوید، وگرنه Nominatim (OpenStreetMap)؛ مکان‌های آن منطقهٔ نزدیک‌ترین شهر منطقه را می‌گیرند (با نشان ≈). فقط متن تایپ‌شده فرستاده می‌شود.",
+  sourceGroupGeocodingDetails: "مکان‌هایی را که در فهرست مناطق نیستند، مکان‌یاب Open-Meteo هنگام تایپ پیدا می‌کند و منطقهٔ زمانی‌شان را هم می‌گوید. Enter روی مکانی که نمی‌شناسد از Nominatim ‏(OpenStreetMap) حداکثر ثانیه‌ای یک بار می‌پرسد؛ مکان‌های آن منطقهٔ نزدیک‌ترین شهر منطقه را می‌گیرند (با نشان ≈). فقط متن تایپ‌شده فرستاده می‌شود.",
   sourceGroupMap: "نقشهٔ جهان",
   sourceGroupMapDetails: "خط ساحلی و منطقه‌های زمانی از Natural Earth (مالکیت عمومی)، در تصویر Equal Earth. منطقه‌ها وقت استاندارد را نشان می‌دهند؛ ساعت تابستانی کشیده نمی‌شود.",
   sourceGroupSounds: "صداها", sourceGroupSoundsDetails: "پوستهٔ صدای freedesktop، پخش با pw-play. اعلام ساعت پنج نوا دارد (بوق، زنگ، چوب، جیک‌جیک، شیشه) که روی همین رایانه ساخته می‌شوند (~/.cache/more-time).",
@@ -6341,7 +6399,7 @@ addCatalog("fa", {
   mapStyleFlat: "نقشهٔ تخت",
   mapStyleGlobe: "کرهٔ زمین",
   optionGlobeAutoRotate: "کره خودش می‌چرخد",
-  optionGlobeAutoRotateHint: "پس از مکث انتخاب‌شده بدون کلیک آرام می‌چرخد؛ کلیک، کشیدن یا چرخ ماوس آن را متوقف می‌کند.",
+  optionGlobeAutoRotateHint: "پس از مکثی که پایین تعیین شده بدون کلیک می‌چرخد، یک دور در دقیقه‌هایی که پایین تعیین شده؛ کلیک، کشیدن یا چرخ ماوس آن را متوقف می‌کند.",
   dial_classic: "کلاسیک",
   dial_minimal: "ساده",
   dial_roman: "رومی",
@@ -6359,5 +6417,7 @@ addCatalog("fa", {
   secondsShort: "{seconds} ث",
   moon: "ماه",
   moonWaxing: "ماه · {percent} % · رو به افزایش",
-  moonWaning: "ماه · {percent} % · رو به کاهش"
+  moonWaning: "ماه · {percent} % · رو به کاهش",
+  optionNightHint: "در سه پله، هر کدام تیره‌تر: گرگ‌ومیش شهری (خورشید ۰° تا −۶°)، دریایی (−۶° تا −۱۲°)، سپس نجومی و شب.",
+  searchEnterNominatim: "هنوز چیزی پیدا نشد. Enter از OpenStreetMap ‏(Nominatim) هم می‌پرسد."
 })

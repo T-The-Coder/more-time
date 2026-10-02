@@ -827,25 +827,6 @@ function searchZoneIndex(index, query, limit) {
   return scored.slice(0, limit || 8).map(function(s) { return s.entry })
 }
 
-// Open-Meteo geocoding results, keeping the time zone this time.
-function parseGeocodingResults(raw) {
-  var parsed
-  try { parsed = JSON.parse(String(raw || "")) } catch (e) { return [] }
-  var list = parsed && parsed.results && parsed.results.length !== undefined ? parsed.results : []
-  var result = []
-  for (var i = 0; i < list.length; i++) {
-    var r = list[i]
-    if (!r || typeof r.timezone !== "string" || !/^[A-Za-z0-9_+\-\/]+$/.test(r.timezone)) continue
-    var lat = Number(r.latitude)
-    var lon = Number(r.longitude)
-    if (!isFinite(lat) || !isFinite(lon)) continue
-    var where = [r.admin1, r.country].filter(function(part) { return typeof part === "string" && part !== "" })
-    result.push({ name: String(r.name || zoneCityName(r.timezone)), country: where.join(", "), tz: r.timezone,
-      lat: Math.round(lat * 1000) / 1000, lon: Math.round(lon * 1000) / 1000 })
-  }
-  return result
-}
-
 // ---- Places without a zone: Nominatim results, More Weather's places ----
 
 // Great-circle distance in kilometres.
@@ -927,22 +908,23 @@ function parseWeatherPlaces(raw) {
   return out
 }
 
-// Whether a city is already in the list: the same coordinates to two
-// decimals, or the same name (without case and accents) in the same zone.
-function knownCity(cities, city) {
+// Whether a city is already in the list: the same place by samePlace
+// (PlaceSearch.samePlace, passed in: the same spot, or the same name close
+// by), or the same name (without case and accents) in the same zone.
+function knownCity(cities, city, samePlace) {
+  var located = city.lat !== null && city.lat !== undefined
   for (var i = 0; i < (cities || []).length; i++) {
     var c = cities[i]
-    if (c.lat !== null && c.lat !== undefined && city.lat !== null && city.lat !== undefined
-        && Number(c.lat).toFixed(2) === Number(city.lat).toFixed(2)
-        && Number(c.lon).toFixed(2) === Number(city.lon).toFixed(2)) return true
+    if (located && c.lat !== null && c.lat !== undefined && samePlace(c, city)) return true
     if (city.tz && c.tz === city.tz && foldText(c.name) === foldText(city.name)) return true
   }
   return false
 }
 
 // Imported places with their zones ([{ name, lat, lon, tz }]) added to the
-// cities in their order, skipping known ones: { list, added, existing }.
-function mergeImportedPlaces(cities, places) {
+// cities in their order, skipping known ones (knownCity): { list, added,
+// existing }.
+function mergeImportedPlaces(cities, places, samePlace) {
   var list = (cities || []).slice()
   var added = 0
   var existing = 0
@@ -951,7 +933,7 @@ function mergeImportedPlaces(cities, places) {
     if (!p || !p.tz) continue
     var city = { name: String(p.name).slice(0, 60), country: p.country || "", tz: p.tz,
       lat: Math.round(p.lat * 1000) / 1000, lon: Math.round(p.lon * 1000) / 1000 }
-    if (knownCity(list, city)) {
+    if (knownCity(list, city, samePlace)) {
       existing++
       continue
     }
@@ -1101,7 +1083,7 @@ if (typeof module !== "undefined") module.exports = {
   moveItem: moveItem, findItem: findItem,
   defaultCities: defaultCities, parseCities: parseCities, cityKey: cityKey, zoneCityName: zoneCityName,
   parseIso6709: parseIso6709, parseZoneIndex: parseZoneIndex, foldText: foldText,
-  searchZoneIndex: searchZoneIndex, parseGeocodingResults: parseGeocodingResults,
+  searchZoneIndex: searchZoneIndex,
   chimeMinutesValue: chimeMinutesValue, chimePlan: chimePlan, chimesActive: chimesActive,
   nextChimeAt: nextChimeAt, chimeMinuteFor: chimeMinuteFor,
   distanceKm: distanceKm, nearestZone: nearestZone, cityFromPlace: cityFromPlace, zoneForPlace: zoneForPlace,

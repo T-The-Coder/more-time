@@ -10,6 +10,7 @@ import { load, root } from "./load.mjs"
 // the DST cases below mean the same everywhere.
 process.env.TZ = "Europe/Berlin"
 const M = load("Model.js")
+const P = load("PlaceSearch.js")
 const dump = readFileSync(join(root, "tests/fixtures/zdump.txt"), "utf8")
 const zones = M.parseZoneDump(dump)
 const utc = (...args) => Date.UTC(...args)
@@ -284,15 +285,6 @@ test("zone index and search", () => {
   assert.equal(M.searchZoneIndex(index, "").length, 0)
 })
 
-test("geocoding keeps the time zone", () => {
-  const results = M.parseGeocodingResults(JSON.stringify({ results: [
-    { name: "Springfield", admin1: "Illinois", country: "United States", latitude: 39.8, longitude: -89.64, timezone: "America/Chicago" },
-    { name: "Nowhere", latitude: 1, longitude: 2 }
-  ] }))
-  assert.equal(results.length, 1)
-  assert.equal(results[0].tz, "America/Chicago")
-  assert.equal(results[0].country, "Illinois, United States")
-})
 
 test("calendar helpers", () => {
   assert.equal(M.isoWeek(2026, 0, 1), 1)
@@ -479,10 +471,15 @@ test("places: More Weather's list merged into the cities", () => {
   const merged = M.mergeImportedPlaces(cities, [
     { ...places[0], tz: "Europe/Berlin" }, { ...places[1], tz: "Europe/London" },
     { ...places[2], tz: "Atlantic/Reykjavik" }, { name: "Bobingen", lat: 48.2709, lon: 10.834, tz: "Europe/Berlin" },
-    { name: "Nozone", lat: 1, lon: 1, tz: "" }])
+    { name: "Nozone", lat: 1, lon: 1, tz: "" }], P.samePlace)
   assert.equal(merged.added, 1)
   // London by coordinates, Reykjavík by name and zone, Bobingen twice.
   assert.equal(merged.existing, 3)
   assert.deepEqual(merged.list.map((c) => c.name), ["London", "Reykjavik", "Bobingen"])
   assert.equal(merged.list[2].lat, 48.271)
+  // PlaceSearch.samePlace: the same name a few kilometres off is the same
+  // place, though its coordinates round differently.
+  const near = M.mergeImportedPlaces(merged.list, [{ name: "Bobingen", lat: 48.30, lon: 10.86, tz: "Europe/Zurich" }], P.samePlace)
+  assert.equal(near.added, 0)
+  assert.equal(near.existing, 1)
 })

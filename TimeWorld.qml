@@ -21,6 +21,15 @@ Column {
   readonly property bool sunset: panel.displaySetting("worldSunset", false)
   readonly property bool sunNext: panel.displaySetting("worldSunNext", true)
 
+  // The pencil on the selected row: opens and closes the clock face chooser
+  // (also e).
+  component DialButton: TimeIconButton {
+    panel: view.panel
+    glyph: "\u{f03eb}"
+    active: view.panel.dialChooserOpen
+    onActivated: view.panel.dialChooserOpen = !view.panel.dialChooserOpen
+  }
+
   // The five clock face styles as small dials under the selected row: a
   // click or ← → picks, Enter or Esc close (Panel.handlePanelKey).
   component DialChooser: Row {
@@ -195,7 +204,10 @@ Column {
 
     Text {
       visible: view.search.query.trim() !== "" && view.search.results.length === 0
-      text: view.search.busy ? view.panel.i18n("searching") : view.panel.i18n("noCityFound")
+      // Nothing in the zone list or from Open-Meteo: Enter also asks
+      // Nominatim, once; after that, nothing found.
+      text: view.search.busy ? view.panel.i18n("searching")
+        : view.panel.i18n(view.search.online.fallbackQuery === view.search.query.trim() ? "noCityFound" : "searchEnterNominatim")
       color: view.panel.mutedText
       font.family: view.panel.fontFamily
       font.pixelSize: Style.font.caption
@@ -341,16 +353,11 @@ Column {
         font.bold: true
       }
 
-      // Its clock face style (also e).
-      TimeIconButton {
+      DialButton {
         visible: hereRow.selected
         anchors.right: parent.right
         anchors.rightMargin: Style.space(6)
         anchors.verticalCenter: parent.verticalCenter
-        panel: view.panel
-        glyph: "\u{f03eb}"
-        active: view.panel.dialChooserOpen
-        onActivated: view.panel.dialChooserOpen = !view.panel.dialChooserOpen
       }
     }
 
@@ -494,16 +501,11 @@ Column {
           }
         }
 
-        // Its clock face style (also e).
-        TimeIconButton {
+        DialButton {
           id: dialButton
           visible: row.selected
           anchors.right: removeButton.left
           anchors.verticalCenter: parent.verticalCenter
-          panel: view.panel
-          glyph: "\u{f03eb}"
-          active: view.panel.dialChooserOpen
-          onActivated: view.panel.dialChooserOpen = !view.panel.dialChooserOpen
         }
 
         TimeIconButton {

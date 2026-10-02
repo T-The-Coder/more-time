@@ -21,14 +21,27 @@ Item {
   LayoutMirroring.childrenInherit: true
 
   readonly property bool showNight: panel.displaySetting("worldNight", true)
+  // The twilight layers and their caps (projected), once a minute.
+  readonly property var twilight: {
+    var layers = WorldMap.twilightLayers({ golden: showGolden, blue: showBlue, night: showNight },
+      panel.rgbOf(Color.popups.background))
+    var shapes = {}
+    var elevations = WorldMap.twilightElevations(layers)
+    for (var i = 0; i < elevations.length; i++) shapes[elevations[i]] = WorldMap.twilightPolygon(minuteMs, elevations[i])
+    return { layers: layers, shapes: shapes }
+  }
+  onTwilightChanged: canvas.requestPaint()
   readonly property bool showMoon: panel.displaySetting("worldMoon", false)
   onShowMoonChanged: canvas.requestPaint()
   // Where the Moon was drawn, for the hover: { x, y, moon } or null.
   property var moonHit: null
+  readonly property real moonRadius: Style.space(6)
+  // The Moon's lit colour, pale on any theme.
+  readonly property string moonLit: "238,236,226"
   // The golden and the blue hour as bands along the day/night line, with
   // the clock's options of the same name.
-  readonly property bool showGolden: panel.displaySetting("heroGoldenHour", true)
-  readonly property bool showBlue: panel.displaySetting("heroBlueHour", true)
+  readonly property bool showGolden: panel.displaySetting("heroGoldenHour", false)
+  readonly property bool showBlue: panel.displaySetting("heroBlueHour", false)
   readonly property bool showRuler: panel.displaySetting("worldRuler", true)
   readonly property bool showLabels: panel.displaySetting("worldMapLabels", true)
   readonly property real rulerHeight: showRuler ? Style.space(16) : 0
@@ -67,9 +80,6 @@ Item {
   onCitiesChanged: canvas.requestPaint()
   onSelectedIndexChanged: canvas.requestPaint()
   onWidthChanged: canvas.requestPaint()
-  onShowNightChanged: canvas.requestPaint()
-  onShowGoldenChanged: canvas.requestPaint()
-  onShowBlueChanged: canvas.requestPaint()
   onShowRulerChanged: canvas.requestPaint()
   onShowLabelsChanged: canvas.requestPaint()
   onHomeZoneChanged: canvas.requestPaint()
@@ -169,66 +179,41 @@ Item {
       ctx.lineWidth = 0.8
       ctx.stroke()
 
-      // The golden hour on the day side of the day/night line (sun +6° to
-      // 0°) and the blue hour on the night side (0° to −8°), so the line
-      // stays a crisp edge between them: each band the even-odd fill of its
-      // two caps (WorldMap.twilightPolygon). The night fill goes over them.
-      // Qt's Canvas takes the rule from fillRule, not from fill()'s argument.
+      // The twilight along the day/night line (WorldMap.twilightLayers): the
+      // golden and the blue band with soft edges, then the night in three
+      // steps; each layer the even-odd fill of two caps. Qt's Canvas takes
+      // the rule from fillRule, not from fill()'s argument.
       ctx.fillRule = Qt.OddEvenFill
-      if (map.showGolden || map.showBlue) {
-        var below0 = WorldMap.twilightPolygon(map.minuteMs, 0)
-        if (map.showGolden) {
-          ctx.beginPath()
-          tracePoints(ctx, WorldMap.twilightPolygon(map.minuteMs, 6))
-          tracePoints(ctx, below0)
-          ctx.fillStyle = Qt.rgba(0xe3 / 255, 0xa4 / 255, 0x47 / 255, 0.28)
-          ctx.fill("evenodd")
-        }
-        if (map.showBlue) {
-          ctx.beginPath()
-          tracePoints(ctx, below0)
-          tracePoints(ctx, WorldMap.twilightPolygon(map.minuteMs, -8))
-          ctx.fillStyle = Qt.rgba(0x3b / 255, 0x5b / 255, 0xd6 / 255, 0.28)
-          ctx.fill("evenodd")
-        }
-      }
-
-      // The night side, and the line between day and night.
-      if (map.showNight) {
-        var night = WorldMap.nightPolygon(map.minuteMs)
+      var tw = map.twilight
+      for (var t = 0; t < tw.layers.length; t++) {
+        var layer = tw.layers[t]
         ctx.beginPath()
-        tracePoints(ctx, night)
-        var nf = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
-        ctx.fillStyle = Qt.rgba(nf.r, nf.g, nf.b, nf.a)
-        ctx.fill("evenodd")
-        var sun = map.px(WorldMap.project(WorldMap.subsolarPoint(map.minuteMs).lat, WorldMap.subsolarPoint(map.minuteMs).lon))
-        ctx.fillStyle = rgba(accent, 0.9)
-        ctx.beginPath()
-        ctx.arc(sun.x, sun.y, 3.5, 0, Math.PI * 2)
+        tracePoints(ctx, tw.shapes[layer.high])
+        if (layer.low !== null) tracePoints(ctx, tw.shapes[layer.low])
+        ctx.fillStyle = Qt.rgba(layer.fill.r, layer.fill.g, layer.fill.b, layer.fill.a)
         ctx.fill()
-        ctx.strokeStyle = rgba(accent, 0.5)
-        ctx.lineWidth = 1
-        ctx.beginPath()
-        ctx.arc(sun.x, sun.y, 7, 0, Math.PI * 2)
-        ctx.stroke()
       }
-      // The Moon at its sub-lunar point, lit towards the Sun.
-      map.moonHit = null
-      if (map.showMoon) {
-        var moon = WorldMap.moonPosition(map.minuteMs)
-        var sunNow = WorldMap.subsolarPoint(map.minuteMs)
-        var mp = map.px(WorldMap.project(moon.lat, moon.lon))
-        var toward = WorldMap.towards(moon.lat, moon.lon, sunNow.lat, sunNow.lon, 4)
-        var dl = toward.lon - moon.lon
-        while (dl > 180) dl -= 360
-        while (dl < -180) dl += 360
-        var tp = map.px(WorldMap.project(toward.lat, moon.lon + dl))
-        var nfm = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
-        WorldMap.paintMoon(ctx, mp.x, mp.y, Style.space(5), Math.atan2(tp.y - mp.y, tp.x - mp.x), moon.illuminated,
-          rgba(map.panel.mutedText, 0.9), Qt.rgba(nfm.r, nfm.g, nfm.b, 0.9), rgba(ink, 0.6))
-        map.moonHit = { x: mp.x, y: mp.y, moon: moon }
+      // The Sun at its zenith point.
+      var sunNow = WorldMap.subsolarPoint(map.minuteMs)
+      if (map.showNight) {
+        var sun = map.px(WorldMap.project(sunNow.lat, sunNow.lon))
+        WorldMap.paintSun(ctx, sun.x, sun.y, rgba(accent, 0.95))
       }
+      // The Moon floats a little up-left of its sub-lunar point, where its
+      // shadow falls; drawn after the clip so it may stand out of the map.
+      var moon = map.showMoon ? WorldMap.moonPosition(map.minuteMs) : null
+      var moonAt = moon ? map.px(WorldMap.project(moon.lat, moon.lon)) : null
+      if (moon) WorldMap.paintMoonShadow(ctx, moonAt.x, moonAt.y, map.moonRadius)
       ctx.restore()
+
+      map.moonHit = null
+      if (moon) {
+        var lift = Style.space(4)
+        var angle = WorldMap.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) })
+        WorldMap.paintMoon(ctx, moonAt.x - lift, moonAt.y - lift, map.moonRadius, angle, moon.illuminated,
+          map.moonLit, WorldMap.rgbText(WorldMap.nightFill(map.panel.rgbOf(Color.popups.background))), WorldMap.rgbText(ink))
+        map.moonHit = { x: moonAt.x - lift, y: moonAt.y - lift, moon: moon }
+      }
 
       ctx.strokeStyle = rgba(ink, 0.35)
       ctx.lineWidth = 1
@@ -336,14 +321,11 @@ Item {
     hoverEnabled: true
     onPositionChanged: function(mouse) {
       if (!map.mapData) return
-      if (map.moonHit && Math.hypot(map.moonHit.x - mouse.x, map.moonHit.y - mouse.y) <= Style.space(8)) {
-        map.hover = { moon: map.moonHit.moon, x: mouse.x, y: mouse.y }
-        return
-      }
-      var x = mouse.x / map.unit - WorldMap.X_MAX
-      var y = WorldMap.Y_MAX - (mouse.y - map.rulerHeight) / map.unit
-      var minutes = WorldMap.unproject(x, y) ? WorldMap.zoneAt(map.mapData, x, y) : null
-      map.hover = minutes === null ? null : { minutes: minutes, x: mouse.x, y: mouse.y }
+      map.hover = map.panel.mapHoverAt(map.moonHit, mouse.x, mouse.y, function(px, py) {
+        var x = px / map.unit - WorldMap.X_MAX
+        var y = WorldMap.Y_MAX - (py - map.rulerHeight) / map.unit
+        return WorldMap.unproject(x, y) ? WorldMap.zoneAt(map.mapData, x, y) : null
+      })
     }
     onExited: map.hover = null
     onClicked: function(mouse) {
@@ -360,29 +342,9 @@ Item {
     }
   }
 
-  Rectangle {
-    visible: map.hover !== null
-    x: map.hover ? Math.min(map.width - width, map.hover.x + Style.space(12)) : 0
-    y: map.hover ? Math.max(0, map.hover.y - height - Style.space(6)) : 0
-    width: hoverLabel.implicitWidth + Style.space(12)
-    height: hoverLabel.implicitHeight + Style.space(6)
-    radius: Style.cornerRadius
-    color: Color.popups.background
-    border.color: map.panel.subtleText
-    border.width: Style.spacing.hairline
-
-    Text {
-      id: hoverLabel
-      anchors.centerIn: parent
-      // The map's zones are standard time: summer time is not drawn, so
-      // the label says so rather than show an hour that may be off.
-      text: map.hover && map.hover.moon ? map.panel.moonText(map.hover.moon)
-        : map.hover ? Model.utcOffsetLabel(map.hover.minutes * 60) + "  ·  "
-        + map.panel.clockFor(map.panel.nowMs, map.hover.minutes * 60, false)
-        + "  " + map.panel.i18n("standardTime") : ""
-      color: map.panel.foreground
-      font.family: map.panel.fontFamily
-      font.pixelSize: Style.font.caption
-    }
+  TimeMapHoverLabel {
+    panel: map.panel
+    hover: map.hover
+    boundsWidth: map.width
   }
 }

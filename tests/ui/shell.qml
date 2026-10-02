@@ -163,6 +163,8 @@ ShellRoot {
     // Online answers as the shared search gives them: one with a zone
     // (Open-Meteo), one without (Nominatim), which gets the nearest one.
     function() {
+      // As if they answered "ber" (resultsQuery: the results are current).
+      panel.citySearch.online.resultsQuery = "ber"
       panel.citySearch.online.results = [
         { name: "Bergamo", region: "Lombardy", country: "Italy", countryCode: "it", lat: 45.695, lon: 9.67, tz: "Europe/Rome" },
         { name: "Bernried", region: "Bavaria", country: "Germany", countryCode: "de", lat: 47.866, lon: 11.293, tz: "" }]

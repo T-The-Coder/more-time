@@ -23,11 +23,12 @@ First release.
   chimes and the bar stay on this computer's clock. Here is Omarchy's weather
   location, else (opt-in "Detect my location") IP geolocation cached for six
   hours, else the time zone's city.
-- **Sun:** sunrise and sunset, the golden and the blue hour in the clock (on
-  in the app, off in the widget) and per city the sunrise, the sunset and the
-  next of the two (with More Weather's arrow icon); the map and the globe
-  mark the twilight as a gold band on the day side of the day/night line and
-  a blue one on the night side, under a clearly darker night side.
+- **Sun:** sunrise and sunset (on in the app, off in the widget), the golden
+  and the blue hour (off by default) in the clock and per city the sunrise,
+  the sunset and the next of the two (with More Weather's arrow icon); the
+  map and the globe mark the twilight as a gold band on the day side of the
+  day/night line and a blue one on the night side, under a clearly darker
+  night side.
 - **World clock:**
   - A map of the real time zones in zebra stripes, in the Equal Earth
     projection, with the night side, the sun, an hour ruler and your cities.
@@ -35,17 +36,21 @@ First release.
     in an orthographic view, with the golden and blue hour as bands along the
     day/night line; it turns to the picked place, by drag or sideways wheel,
     and optionally by itself after 5, 10 or 30 idle seconds, one turn in 1, 2,
-    4 or 8 minutes; a click, drag or the wheel stops it, hovering does not.
+    4 (default) or 8 minutes; a click, drag or the wheel stops it, hovering does not.
   - Optionally the Moon at its sub-lunar point with its phase, on the map and
-    the globe, with More Weather's phase numbers.
+    the globe, with More Weather's phase numbers: a small shaded sphere
+    floating above its shadow. The Sun's zenith point is a rayed sun.
+  - The night side in three steps (civil, nautical, astronomical twilight);
+    the golden and blue bands fade at their outer edges.
   - Your own place is shown with More Weather's location pin, not a word.
   - A city list with the day and the difference to here.
   - Five clock face styles (classic, minimal, roman, 24 hours with the night
     shaded, dots), chosen per place with `e` or the pencil on any row; small
     faces in the list; one style for the clock on top if you like.
   - City search offline from the tz database and online through the place
-    search shared with More Weather (Open-Meteo, else Nominatim, with the
-    nearest zone for its places), with More Weather's keys.
+    search shared with More Weather (Open-Meteo while typing; Nominatim only
+    on Enter, at most once a second, with the nearest zone for its places),
+    with More Weather's keys.
   - Import of More Weather's saved places as cities (Settings → General →
     Places).
 - **Scrolling:** wheel and touchpad scroll as in More Weather (a fixed step

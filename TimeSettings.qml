@@ -137,24 +137,15 @@ Rectangle {
   }
 
   function dropdownSpec(id) {
-    if (id === "citiesCount") return {
-      options: ["1", "2", "3", "4"].map(function(n) { return { value: n, label: n } }),
-      value: String(panel.settingsDisplaySetting("citiesCount", "2")),
-      set: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting("citiesCount", value) }
-    }
-    if (id === "menubarAccents") return {
-      options: menubarAccentOptions,
-      value: String(panel.settingsDisplaySetting("menubarAccents", "hover")),
-      set: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting("menubarAccents", value) }
-    }
     if (id === "defaultTab") return {
       options: panel.settingsTabs.map(function(key) { return { value: key, label: panel.i18n(key + "Tab") } }),
       value: panel.settingsDefaultTab,
       set: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting("defaultTab", value) }
     }
-    var worldOption = tabOptions.world.concat(heroOptions).filter(function(o) { return o.key === id && o.choices })[0]
-    if (worldOption) return {
-      options: worldOption.choices,
+    // Display options with a few values (TimeOptionDropdown).
+    var choiceOption = tabOptions.world.concat(heroOptions, menubarChoices).filter(function(o) { return o.key === id && o.choices })[0]
+    if (choiceOption) return {
+      options: choiceOption.choices,
       value: String(panel.settingsDisplaySetting(id, "")),
       set: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting(id, value) }
     }
@@ -168,10 +159,14 @@ Rectangle {
 
   // ---- Display: cards per surface ----
 
-  readonly property var menubarAccentOptions: [
-    { value: "off", label: panel.i18n("menubarAccents_off") },
-    { value: "hover", label: panel.i18n("menubarAccents_hover") },
-    { value: "always", label: panel.i18n("menubarAccents_always") }
+  // The menu bar's options with a few values, drawn by TimeOptionDropdown.
+  readonly property var menubarChoices: [
+    { key: "menubarAccents", title: panel.i18n("menubarAccents"), choices: [
+      { value: "off", label: panel.i18n("menubarAccents_off") },
+      { value: "hover", label: panel.i18n("menubarAccents_hover") },
+      { value: "always", label: panel.i18n("menubarAccents_always") }] },
+    { key: "citiesCount", title: panel.i18n("citiesCount"),
+      choices: ["1", "2", "3", "4"].map(function(n) { return { value: n, label: n } }) }
   ]
 
   readonly property var heroOptions: [
@@ -196,7 +191,7 @@ Rectangle {
       { key: "worldMap", title: panel.i18n("optionMap") },
       { key: "worldStyle", title: panel.i18n("optionMapStyle"), dependsOn: "worldMap", choices: [
         { value: "map", label: panel.i18n("mapStyleFlat") }, { value: "globe", label: panel.i18n("mapStyleGlobe") }] },
-      { key: "worldNight", title: panel.i18n("optionNight"), dependsOn: "worldMap" },
+      { key: "worldNight", title: panel.i18n("optionNight"), dependsOn: "worldMap", hint: panel.i18n("optionNightHint") },
       { key: "worldRuler", title: panel.i18n("optionRuler"), dependsOn: "worldMap", style: "map" },
       { key: "worldMapLabels", title: panel.i18n("optionMapLabels"), dependsOn: "worldMap" },
       { key: "worldMoon", title: panel.i18n("moon"), dependsOn: "worldMap" },
@@ -1062,43 +1057,11 @@ Rectangle {
         }
 
         // Coloured values: off, while hovered, always.
-        Item {
-          width: parent.width
-          height: Style.space(40)
-          opacity: panel.settingsDisplaySetting("showClock", true) ? 1 : 0.42
-
-          Text {
-            anchors.left: parent.left
-            anchors.leftMargin: Style.space(12)
-            anchors.right: accentsDropdown.left
-            anchors.rightMargin: Style.space(8)
-            anchors.verticalCenter: parent.verticalCenter
-            text: panel.i18n("menubarAccents")
-            color: panel.foreground
-            font.family: panel.fontFamily
-            font.pixelSize: Style.font.bodySmall
-            elide: Text.ElideRight
-          }
-
-          Dropdown {
-            id: accentsDropdown
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            width: Style.space(180)
-            showLabel: false
-            fontFamily: panel.fontFamily
-            hasCursor: settingsView.focusId === "menubarAccents"
-            onHasCursorChanged: if (hasCursor) settingsView.ensureVisible(this)
-            onPopupOpenChanged: if (!popupOpen) panel.restoreKeyFocus()
-            value: String(panel.settingsDisplaySetting("menubarAccents", "hover"))
-            options: settingsView.menubarAccentOptions
-            onChanged: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting("menubarAccents", value) }
-            Component.onCompleted: {
-              var items = Object.assign({}, settingsView.dropdownItems)
-              items.menubarAccents = accentsDropdown
-              settingsView.dropdownItems = items
-            }
-          }
+        TimeOptionDropdown {
+          panel: settingsView.panel
+          settings: settingsView
+          option: settingsView.menubarChoices[0]
+          rowEnabled: panel.settingsDisplaySetting("showClock", true)
         }
 
         Hint {
@@ -1117,40 +1080,11 @@ Rectangle {
           rowEnabled: panel.settingsDisplaySetting("showClock", true)
         }
 
-        Item {
-          width: parent.width
-          height: Style.space(40)
-          opacity: panel.settingsDisplaySetting("showClock", true) ? 1 : 0.42
-
-          Text {
-            anchors.left: parent.left
-            anchors.leftMargin: Style.space(12)
-            anchors.verticalCenter: parent.verticalCenter
-            text: panel.i18n("citiesCount")
-            color: panel.foreground
-            font.family: panel.fontFamily
-            font.pixelSize: Style.font.bodySmall
-          }
-
-          Dropdown {
-            id: citiesCountDropdown
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            width: Style.space(90)
-            showLabel: false
-            fontFamily: panel.fontFamily
-            hasCursor: settingsView.focusId === "citiesCount"
-            onHasCursorChanged: if (hasCursor) settingsView.ensureVisible(this)
-            onPopupOpenChanged: if (!popupOpen) panel.restoreKeyFocus()
-            value: String(panel.settingsDisplaySetting("citiesCount", "2"))
-            options: ["1", "2", "3", "4"].map(function(n) { return { value: n, label: n } })
-            onChanged: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting("citiesCount", value) }
-            Component.onCompleted: {
-              var items = Object.assign({}, settingsView.dropdownItems)
-              items.citiesCount = citiesCountDropdown
-              settingsView.dropdownItems = items
-            }
-          }
+        TimeOptionDropdown {
+          panel: settingsView.panel
+          settings: settingsView
+          option: settingsView.menubarChoices[1]
+          rowEnabled: panel.settingsDisplaySetting("showClock", true)
         }
       }
 
