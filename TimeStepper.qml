@@ -31,9 +31,14 @@ Column {
     border.width: Style.spacing.hairline
 
     MouseArea {
+      id: valueArea
       anchors.fill: parent
       onClicked: stepper.focusRequested()
       onWheel: function(wheel) { stepper.step(wheel.angleDelta.y > 0 ? 1 : -1) }
+      // The page's wheel area (Panel.wheelTakenBelow) leaves it the wheel.
+      function wantsWheel(wheel) { return true }
+      Component.onCompleted: stepper.panel.registerWheelArea(valueArea)
+      Component.onDestruction: stepper.panel.unregisterWheelArea(valueArea)
     }
 
     TimeIconButton {

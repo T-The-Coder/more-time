@@ -159,7 +159,10 @@ Item {
   readonly property var choiceKeys: ({
     citiesCount: ["1", "2", "3", "4"],
     menubarAccents: ["off", "hover", "always"],
-    worldStyle: ["map", "globe"]
+    worldStyle: ["map", "globe"],
+    globeRotateDelay: ["5", "10", "30"],
+    globeRotateSpeed: ["1", "2", "4", "8"],
+    heroDial: ["place", "classic", "minimal", "roman", "twentyFour", "dots"]
   })
 
   function normalizedChoice(key, value, fallback) {

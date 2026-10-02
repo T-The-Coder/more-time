@@ -282,8 +282,9 @@ Column {
         anchors.left: hereDial.visible ? hereDial.right : parent.left
         anchors.leftMargin: Style.space(10)
         anchors.verticalCenter: parent.verticalCenter
-        text: "\u{f034e}"
-        color: Color.accent
+        // More Weather's location pin, in place of a word.
+        text: "\uf041"
+        color: view.panel.mutedText
         font.family: view.panel.fontFamily
         font.pixelSize: Style.font.title
       }
@@ -299,7 +300,7 @@ Column {
 
         Text {
           width: parent.width
-          text: view.panel.i18n("here") + "  ·  " + view.panel.here.name
+          text: view.panel.here.name
           color: view.panel.foreground
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.body

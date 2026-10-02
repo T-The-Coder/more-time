@@ -324,7 +324,7 @@ var catalog = {
     mapStyleFlat: "Flat map",
     mapStyleGlobe: "Globe",
     optionGlobeAutoRotate: "Globe turns by itself",
-    optionGlobeAutoRotateHint: "After ten seconds without a click it turns slowly; the pointer over it pauses it, a click or drag stops it.",
+    optionGlobeAutoRotateHint: "After the time set below without a click it turns, one turn in the time set below; the pointer over it pauses it, a click or drag stops it.",
     dial_classic: "Classic",
     dial_minimal: "Minimal",
     dial_roman: "Roman",
@@ -334,7 +334,15 @@ var catalog = {
     shortcutDialStyle: "Clock face style of the selected place",
     sunrise: "Sunrise",
     sunset: "Sunset",
-    sunNext: "Next sun event"
+    sunNext: "Next sun event",
+    optionHeroDial: "Clock face style",
+    heroDialPlace: "Same as the place",
+    optionGlobeRotateDelay: "Starts after",
+    optionGlobeRotateSpeed: "One turn in",
+    secondsShort: "{seconds} s",
+    moon: "Moon",
+    moonWaxing: "Moon · {percent} % · waxing",
+    moonWaning: "Moon · {percent} % · waning"
   },
   de: {
     appTitle: "More Time",
@@ -655,7 +663,7 @@ var catalog = {
     mapStyleFlat: "Flache Karte",
     mapStyleGlobe: "Globus",
     optionGlobeAutoRotate: "Globus dreht sich von selbst",
-    optionGlobeAutoRotateHint: "Nach zehn Sekunden ohne Klick dreht er sich langsam; der Zeiger darüber pausiert ihn, ein Klick oder Zug hält ihn an.",
+    optionGlobeAutoRotateHint: "Nach der unten eingestellten Zeit ohne Klick dreht er sich, eine Umdrehung in der unten eingestellten Zeit; der Zeiger darüber pausiert ihn, ein Klick oder Zug hält ihn an.",
     dial_classic: "Klassisch",
     dial_minimal: "Schlicht",
     dial_roman: "Römisch",
@@ -665,7 +673,15 @@ var catalog = {
     shortcutDialStyle: "Zifferblattstil des gewählten Orts",
     sunrise: "Sonnenaufgang",
     sunset: "Sonnenuntergang",
-    sunNext: "Sonnenauf- / -untergang als Nächstes"
+    sunNext: "Sonnenauf- / -untergang als Nächstes",
+    optionHeroDial: "Zifferblattstil",
+    heroDialPlace: "Wie beim Ort",
+    optionGlobeRotateDelay: "Beginnt nach",
+    optionGlobeRotateSpeed: "Eine Umdrehung in",
+    secondsShort: "{seconds} s",
+    moon: "Mond",
+    moonWaxing: "Mond · {percent} % · zunehmend",
+    moonWaning: "Mond · {percent} % · abnehmend"
   }
 }
 
@@ -952,7 +968,7 @@ addCatalog("es", {
   mapStyleFlat: "Mapa plano",
   mapStyleGlobe: "Globo",
   optionGlobeAutoRotate: "El globo gira solo",
-  optionGlobeAutoRotateHint: "Tras diez segundos sin un clic gira despacio; el puntero encima lo pausa, un clic o arrastre lo detiene.",
+  optionGlobeAutoRotateHint: "Tras el tiempo elegido abajo sin un clic gira, una vuelta en el tiempo elegido abajo; el puntero encima lo pausa, un clic o arrastre lo detiene.",
   dial_classic: "Clásica",
   dial_minimal: "Mínima",
   dial_roman: "Romana",
@@ -962,7 +978,15 @@ addCatalog("es", {
   shortcutDialStyle: "Estilo de esfera del lugar elegido",
   sunrise: "Amanecer",
   sunset: "Atardecer",
-  sunNext: "Próximo evento solar"
+  sunNext: "Próximo evento solar",
+  optionHeroDial: "Estilo de esfera",
+  heroDialPlace: "Igual que el lugar",
+  optionGlobeRotateDelay: "Empieza tras",
+  optionGlobeRotateSpeed: "Una vuelta en",
+  secondsShort: "{seconds} s",
+  moon: "Luna",
+  moonWaxing: "Luna · {percent} % · creciente",
+  moonWaning: "Luna · {percent} % · menguante"
 })
 
 addCatalog("fr", {
@@ -1143,7 +1167,7 @@ addCatalog("fr", {
   mapStyleFlat: "Carte plane",
   mapStyleGlobe: "Globe",
   optionGlobeAutoRotate: "Le globe tourne tout seul",
-  optionGlobeAutoRotateHint: "Après dix secondes sans clic, il tourne lentement ; le pointeur dessus le met en pause, un clic ou un glissement l’arrête.",
+  optionGlobeAutoRotateHint: "Après le délai choisi ci-dessous sans clic, il tourne, un tour dans la durée choisie ci-dessous ; le pointeur dessus le met en pause, un clic ou un glissement l’arrête.",
   dial_classic: "Classique",
   dial_minimal: "Épuré",
   dial_roman: "Romain",
@@ -1153,7 +1177,15 @@ addCatalog("fr", {
   shortcutDialStyle: "Style de cadran du lieu choisi",
   sunrise: "Lever du soleil",
   sunset: "Coucher du soleil",
-  sunNext: "Prochain événement solaire"
+  sunNext: "Prochain événement solaire",
+  optionHeroDial: "Style de cadran",
+  heroDialPlace: "Comme le lieu",
+  optionGlobeRotateDelay: "Démarre après",
+  optionGlobeRotateSpeed: "Un tour en",
+  secondsShort: "{seconds} s",
+  moon: "Lune",
+  moonWaxing: "Lune · {percent} % · croissante",
+  moonWaning: "Lune · {percent} % · décroissante"
 })
 
 addCatalog("pt", {
@@ -1334,7 +1366,7 @@ addCatalog("pt", {
   mapStyleFlat: "Mapa plano",
   mapStyleGlobe: "Globo",
   optionGlobeAutoRotate: "O globo gira sozinho",
-  optionGlobeAutoRotateHint: "Após dez segundos sem clique, gira devagar; o ponteiro sobre ele o pausa, um clique ou arrasto o para.",
+  optionGlobeAutoRotateHint: "Após o tempo escolhido abaixo sem clique, gira, uma volta no tempo escolhido abaixo; o ponteiro sobre ele o pausa, um clique ou arrasto o para.",
   dial_classic: "Clássico",
   dial_minimal: "Mínimo",
   dial_roman: "Romano",
@@ -1344,7 +1376,15 @@ addCatalog("pt", {
   shortcutDialStyle: "Estilo de mostrador do local escolhido",
   sunrise: "Nascer do sol",
   sunset: "Pôr do sol",
-  sunNext: "Próximo evento solar"
+  sunNext: "Próximo evento solar",
+  optionHeroDial: "Estilo de mostrador",
+  heroDialPlace: "Igual ao local",
+  optionGlobeRotateDelay: "Começa após",
+  optionGlobeRotateSpeed: "Uma volta em",
+  secondsShort: "{seconds} s",
+  moon: "Lua",
+  moonWaxing: "Lua · {percent} % · crescente",
+  moonWaning: "Lua · {percent} % · minguante"
 })
 
 addCatalog("it", {
@@ -1525,7 +1565,7 @@ addCatalog("it", {
   mapStyleFlat: "Mappa piana",
   mapStyleGlobe: "Globo",
   optionGlobeAutoRotate: "Il globo gira da solo",
-  optionGlobeAutoRotateHint: "Dopo dieci secondi senza clic gira lentamente; il puntatore sopra lo mette in pausa, un clic o un trascinamento lo ferma.",
+  optionGlobeAutoRotateHint: "Dopo il tempo scelto qui sotto senza clic gira, un giro nel tempo scelto qui sotto; il puntatore sopra lo mette in pausa, un clic o un trascinamento lo ferma.",
   dial_classic: "Classico",
   dial_minimal: "Minimale",
   dial_roman: "Romano",
@@ -1535,7 +1575,15 @@ addCatalog("it", {
   shortcutDialStyle: "Stile del quadrante del luogo scelto",
   sunrise: "Alba",
   sunset: "Tramonto",
-  sunNext: "Prossimo evento solare"
+  sunNext: "Prossimo evento solare",
+  optionHeroDial: "Stile del quadrante",
+  heroDialPlace: "Come il luogo",
+  optionGlobeRotateDelay: "Parte dopo",
+  optionGlobeRotateSpeed: "Un giro in",
+  secondsShort: "{seconds} s",
+  moon: "Luna",
+  moonWaxing: "Luna · {percent} % · crescente",
+  moonWaning: "Luna · {percent} % · calante"
 })
 
 addCatalog("nl", {
@@ -1716,7 +1764,7 @@ addCatalog("nl", {
   mapStyleFlat: "Platte kaart",
   mapStyleGlobe: "Globe",
   optionGlobeAutoRotate: "Globe draait vanzelf",
-  optionGlobeAutoRotateHint: "Na tien seconden zonder klik draait hij langzaam; de aanwijzer erboven pauzeert hem, een klik of sleepbeweging stopt hem.",
+  optionGlobeAutoRotateHint: "Na de hieronder gekozen tijd zonder klik draait hij, één omwenteling in de hieronder gekozen tijd; de aanwijzer erboven pauzeert hem, een klik of sleepbeweging stopt hem.",
   dial_classic: "Klassiek",
   dial_minimal: "Minimaal",
   dial_roman: "Romeins",
@@ -1726,7 +1774,15 @@ addCatalog("nl", {
   shortcutDialStyle: "Wijzerplaatstijl van de gekozen plaats",
   sunrise: "Zonsopkomst",
   sunset: "Zonsondergang",
-  sunNext: "Eerstvolgende zonnestand"
+  sunNext: "Eerstvolgende zonnestand",
+  optionHeroDial: "Wijzerplaatstijl",
+  heroDialPlace: "Zoals de plaats",
+  optionGlobeRotateDelay: "Begint na",
+  optionGlobeRotateSpeed: "Eén omwenteling in",
+  secondsShort: "{seconds} s",
+  moon: "Maan",
+  moonWaxing: "Maan · {percent} % · wassend",
+  moonWaning: "Maan · {percent} % · afnemend"
 })
 
 addCatalog("pl", {
@@ -1907,7 +1963,7 @@ addCatalog("pl", {
   mapStyleFlat: "Płaska mapa",
   mapStyleGlobe: "Globus",
   optionGlobeAutoRotate: "Globus obraca się sam",
-  optionGlobeAutoRotateHint: "Po dziesięciu sekundach bez kliknięcia obraca się powoli; wskaźnik nad nim go wstrzymuje, kliknięcie lub przeciągnięcie go zatrzymuje.",
+  optionGlobeAutoRotateHint: "Po wybranym niżej czasie bez kliknięcia obraca się, jeden obrót w wybranym niżej czasie; wskaźnik nad nim go wstrzymuje, kliknięcie lub przeciągnięcie go zatrzymuje.",
   dial_classic: "Klasyczna",
   dial_minimal: "Minimalna",
   dial_roman: "Rzymska",
@@ -1917,7 +1973,15 @@ addCatalog("pl", {
   shortcutDialStyle: "Styl tarczy wybranego miejsca",
   sunrise: "Wschód słońca",
   sunset: "Zachód słońca",
-  sunNext: "Najbliższe zdarzenie słońca"
+  sunNext: "Najbliższe zdarzenie słońca",
+  optionHeroDial: "Styl tarczy",
+  heroDialPlace: "Jak dla miejsca",
+  optionGlobeRotateDelay: "Zaczyna po",
+  optionGlobeRotateSpeed: "Jeden obrót w",
+  secondsShort: "{seconds} s",
+  moon: "Księżyc",
+  moonWaxing: "Księżyc · {percent} % · przybywa",
+  moonWaning: "Księżyc · {percent} % · ubywa"
 })
 
 addCatalog("ru", {
@@ -2098,7 +2162,7 @@ addCatalog("ru", {
   mapStyleFlat: "Плоская карта",
   mapStyleGlobe: "Глобус",
   optionGlobeAutoRotate: "Глобус вращается сам",
-  optionGlobeAutoRotateHint: "Через десять секунд без щелчка он медленно вращается; указатель над ним ставит паузу, щелчок или перетаскивание останавливает.",
+  optionGlobeAutoRotateHint: "После выбранного ниже времени без щелчка он вращается, один оборот за выбранное ниже время; указатель над ним ставит паузу, щелчок или перетаскивание останавливает.",
   dial_classic: "Классический",
   dial_minimal: "Минимальный",
   dial_roman: "Римский",
@@ -2108,7 +2172,15 @@ addCatalog("ru", {
   shortcutDialStyle: "Стиль циферблата выбранного места",
   sunrise: "Восход",
   sunset: "Закат",
-  sunNext: "Ближайшее событие солнца"
+  sunNext: "Ближайшее событие солнца",
+  optionHeroDial: "Стиль циферблата",
+  heroDialPlace: "Как у места",
+  optionGlobeRotateDelay: "Начинать через",
+  optionGlobeRotateSpeed: "Один оборот за",
+  secondsShort: "{seconds} с",
+  moon: "Луна",
+  moonWaxing: "Луна · {percent} % · растущая",
+  moonWaning: "Луна · {percent} % · убывающая"
 })
 
 addCatalog("uk", {
@@ -2289,7 +2361,7 @@ addCatalog("uk", {
   mapStyleFlat: "Пласка мапа",
   mapStyleGlobe: "Глобус",
   optionGlobeAutoRotate: "Глобус обертається сам",
-  optionGlobeAutoRotateHint: "Через десять секунд без клацання він повільно обертається; вказівник над ним ставить паузу, клацання чи перетягування зупиняє.",
+  optionGlobeAutoRotateHint: "Після вибраного нижче часу без клацання він обертається, один оберт за вибраний нижче час; вказівник над ним ставить паузу, клацання чи перетягування зупиняє.",
   dial_classic: "Класичний",
   dial_minimal: "Мінімальний",
   dial_roman: "Римський",
@@ -2299,7 +2371,15 @@ addCatalog("uk", {
   shortcutDialStyle: "Стиль циферблата вибраного місця",
   sunrise: "Схід сонця",
   sunset: "Захід сонця",
-  sunNext: "Найближча подія сонця"
+  sunNext: "Найближча подія сонця",
+  optionHeroDial: "Стиль циферблата",
+  heroDialPlace: "Як у місця",
+  optionGlobeRotateDelay: "Починати через",
+  optionGlobeRotateSpeed: "Один оберт за",
+  secondsShort: "{seconds} с",
+  moon: "Місяць",
+  moonWaxing: "Місяць · {percent} % · молодий",
+  moonWaning: "Місяць · {percent} % · старий"
 })
 
 addCatalog("tr", {
@@ -2480,7 +2560,7 @@ addCatalog("tr", {
   mapStyleFlat: "Düz harita",
   mapStyleGlobe: "Küre",
   optionGlobeAutoRotate: "Küre kendiliğinden döner",
-  optionGlobeAutoRotateHint: "Tıklanmadan geçen on saniyeden sonra yavaşça döner; işaretçi üzerindeyken duraklar, bir tıklama ya da sürükleme onu durdurur.",
+  optionGlobeAutoRotateHint: "Aşağıda seçilen süre boyunca tıklanmazsa döner, bir turu aşağıda seçilen sürede atar; işaretçi üzerindeyken duraklar, bir tıklama ya da sürükleme onu durdurur.",
   dial_classic: "Klasik",
   dial_minimal: "Sade",
   dial_roman: "Roma",
@@ -2490,7 +2570,15 @@ addCatalog("tr", {
   shortcutDialStyle: "Seçili yerin kadran stili",
   sunrise: "Gün doğumu",
   sunset: "Gün batımı",
-  sunNext: "Sıradaki güneş olayı"
+  sunNext: "Sıradaki güneş olayı",
+  optionHeroDial: "Kadran stili",
+  heroDialPlace: "Yerinkiyle aynı",
+  optionGlobeRotateDelay: "Başlama süresi",
+  optionGlobeRotateSpeed: "Bir tur",
+  secondsShort: "{seconds} sn",
+  moon: "Ay",
+  moonWaxing: "Ay · {percent} % · büyüyen",
+  moonWaning: "Ay · {percent} % · küçülen"
 })
 
 addCatalog("cs", {
@@ -2671,7 +2759,7 @@ addCatalog("cs", {
   mapStyleFlat: "Plochá mapa",
   mapStyleGlobe: "Glóbus",
   optionGlobeAutoRotate: "Glóbus se otáčí sám",
-  optionGlobeAutoRotateHint: "Po deseti sekundách bez kliknutí se pomalu otáčí; ukazatel nad ním ho pozastaví, kliknutí nebo tažení ho zastaví.",
+  optionGlobeAutoRotateHint: "Po níže zvolené době bez kliknutí se otáčí, jedna otáčka za níže zvolenou dobu; ukazatel nad ním ho pozastaví, kliknutí nebo tažení ho zastaví.",
   dial_classic: "Klasický",
   dial_minimal: "Minimální",
   dial_roman: "Římský",
@@ -2681,7 +2769,15 @@ addCatalog("cs", {
   shortcutDialStyle: "Styl ciferníku vybraného místa",
   sunrise: "Východ slunce",
   sunset: "Západ slunce",
-  sunNext: "Nejbližší událost slunce"
+  sunNext: "Nejbližší událost slunce",
+  optionHeroDial: "Styl ciferníku",
+  heroDialPlace: "Jako u místa",
+  optionGlobeRotateDelay: "Začne po",
+  optionGlobeRotateSpeed: "Jedna otáčka za",
+  secondsShort: "{seconds} s",
+  moon: "Měsíc",
+  moonWaxing: "Měsíc · {percent} % · dorůstá",
+  moonWaning: "Měsíc · {percent} % · couvá"
 })
 
 addCatalog("sv", {
@@ -2862,7 +2958,7 @@ addCatalog("sv", {
   mapStyleFlat: "Platt karta",
   mapStyleGlobe: "Jordglob",
   optionGlobeAutoRotate: "Jordgloben snurrar av sig själv",
-  optionGlobeAutoRotateHint: "Efter tio sekunder utan klick snurrar den långsamt; pekaren över den pausar den, ett klick eller drag stoppar den.",
+  optionGlobeAutoRotateHint: "Efter den tid som väljs nedan utan klick snurrar den, ett varv på den tid som väljs nedan; pekaren över den pausar den, ett klick eller drag stoppar den.",
   dial_classic: "Klassisk",
   dial_minimal: "Minimal",
   dial_roman: "Romersk",
@@ -2872,7 +2968,15 @@ addCatalog("sv", {
   shortcutDialStyle: "Urtavlestil för vald plats",
   sunrise: "Soluppgång",
   sunset: "Solnedgång",
-  sunNext: "Nästa solhändelse"
+  sunNext: "Nästa solhändelse",
+  optionHeroDial: "Urtavlestil",
+  heroDialPlace: "Som platsens",
+  optionGlobeRotateDelay: "Börjar efter",
+  optionGlobeRotateSpeed: "Ett varv på",
+  secondsShort: "{seconds} s",
+  moon: "Måne",
+  moonWaxing: "Måne · {percent} % · tilltagande",
+  moonWaning: "Måne · {percent} % · avtagande"
 })
 
 addCatalog("fi", {
@@ -3053,7 +3157,7 @@ addCatalog("fi", {
   mapStyleFlat: "Tasokartta",
   mapStyleGlobe: "Karttapallo",
   optionGlobeAutoRotate: "Karttapallo pyörii itsestään",
-  optionGlobeAutoRotateHint: "Kymmenen sekuntia ilman napsautusta, niin se pyörii hitaasti; osoitin sen päällä keskeyttää, napsautus tai vetäminen pysäyttää.",
+  optionGlobeAutoRotateHint: "Alla valitun ajan kuluttua ilman napsautusta se pyörii, kierroksen alla valitussa ajassa; osoitin sen päällä keskeyttää, napsautus tai vetäminen pysäyttää.",
   dial_classic: "Klassinen",
   dial_minimal: "Pelkistetty",
   dial_roman: "Roomalainen",
@@ -3063,7 +3167,15 @@ addCatalog("fi", {
   shortcutDialStyle: "Valitun paikan kellotaulun tyyli",
   sunrise: "Auringonnousu",
   sunset: "Auringonlasku",
-  sunNext: "Seuraava auringon tapahtuma"
+  sunNext: "Seuraava auringon tapahtuma",
+  optionHeroDial: "Kellotaulun tyyli",
+  heroDialPlace: "Paikan mukaan",
+  optionGlobeRotateDelay: "Alkaa",
+  optionGlobeRotateSpeed: "Kierros",
+  secondsShort: "{seconds} s",
+  moon: "Kuu",
+  moonWaxing: "Kuu · {percent} % · kasvava",
+  moonWaning: "Kuu · {percent} % · vähenevä"
 })
 
 addCatalog("nb", {
@@ -3244,7 +3356,7 @@ addCatalog("nb", {
   mapStyleFlat: "Flatt kart",
   mapStyleGlobe: "Globus",
   optionGlobeAutoRotate: "Globusen snurrer av seg selv",
-  optionGlobeAutoRotateHint: "Etter ti sekunder uten klikk snurrer den sakte; pekeren over den pauser den, et klikk eller dra stopper den.",
+  optionGlobeAutoRotateHint: "Etter tiden valgt nedenfor uten klikk snurrer den, én runde på tiden valgt nedenfor; pekeren over den pauser den, et klikk eller dra stopper den.",
   dial_classic: "Klassisk",
   dial_minimal: "Minimal",
   dial_roman: "Romersk",
@@ -3254,7 +3366,15 @@ addCatalog("nb", {
   shortcutDialStyle: "Urskivestil for valgt sted",
   sunrise: "Soloppgang",
   sunset: "Solnedgang",
-  sunNext: "Neste solhendelse"
+  sunNext: "Neste solhendelse",
+  optionHeroDial: "Urskivestil",
+  heroDialPlace: "Som stedets",
+  optionGlobeRotateDelay: "Starter etter",
+  optionGlobeRotateSpeed: "Én runde på",
+  secondsShort: "{seconds} s",
+  moon: "Måne",
+  moonWaxing: "Måne · {percent} % · voksende",
+  moonWaning: "Måne · {percent} % · avtagende"
 })
 
 addCatalog("da", {
@@ -3435,7 +3555,7 @@ addCatalog("da", {
   mapStyleFlat: "Fladt kort",
   mapStyleGlobe: "Globus",
   optionGlobeAutoRotate: "Globussen drejer af sig selv",
-  optionGlobeAutoRotateHint: "Efter ti sekunder uden klik drejer den langsomt; markøren over den sætter den på pause, et klik eller træk stopper den.",
+  optionGlobeAutoRotateHint: "Efter tiden valgt nedenfor uden klik drejer den, én omgang på tiden valgt nedenfor; markøren over den sætter den på pause, et klik eller træk stopper den.",
   dial_classic: "Klassisk",
   dial_minimal: "Minimal",
   dial_roman: "Romersk",
@@ -3445,7 +3565,15 @@ addCatalog("da", {
   shortcutDialStyle: "Urskivestil for valgt sted",
   sunrise: "Solopgang",
   sunset: "Solnedgang",
-  sunNext: "Næste solhændelse"
+  sunNext: "Næste solhændelse",
+  optionHeroDial: "Urskivestil",
+  heroDialPlace: "Som stedets",
+  optionGlobeRotateDelay: "Starter efter",
+  optionGlobeRotateSpeed: "Én omgang på",
+  secondsShort: "{seconds} s",
+  moon: "Måne",
+  moonWaxing: "Måne · {percent} % · tiltagende",
+  moonWaning: "Måne · {percent} % · aftagende"
 })
 
 addCatalog("ro", {
@@ -3626,7 +3754,7 @@ addCatalog("ro", {
   mapStyleFlat: "Hartă plană",
   mapStyleGlobe: "Glob",
   optionGlobeAutoRotate: "Globul se rotește singur",
-  optionGlobeAutoRotateHint: "După zece secunde fără clic se rotește încet; cursorul deasupra îl întrerupe, un clic sau o tragere îl oprește.",
+  optionGlobeAutoRotateHint: "După timpul ales mai jos fără clic se rotește, o rotație în timpul ales mai jos; cursorul deasupra îl întrerupe, un clic sau o tragere îl oprește.",
   dial_classic: "Clasic",
   dial_minimal: "Minimal",
   dial_roman: "Roman",
@@ -3636,7 +3764,15 @@ addCatalog("ro", {
   shortcutDialStyle: "Stilul cadranului locului ales",
   sunrise: "Răsărit",
   sunset: "Apus",
-  sunNext: "Următorul eveniment solar"
+  sunNext: "Următorul eveniment solar",
+  optionHeroDial: "Stilul cadranului",
+  heroDialPlace: "Ca la loc",
+  optionGlobeRotateDelay: "Pornește după",
+  optionGlobeRotateSpeed: "O rotație în",
+  secondsShort: "{seconds} s",
+  moon: "Luna",
+  moonWaxing: "Luna · {percent} % · în creștere",
+  moonWaning: "Luna · {percent} % · în descreștere"
 })
 
 addCatalog("hu", {
@@ -3817,7 +3953,7 @@ addCatalog("hu", {
   mapStyleFlat: "Síktérkép",
   mapStyleGlobe: "Földgömb",
   optionGlobeAutoRotate: "A földgömb magától forog",
-  optionGlobeAutoRotateHint: "Tíz kattintás nélküli másodperc után lassan forog; a fölötte lévő mutató szünetelteti, egy kattintás vagy húzás megállítja.",
+  optionGlobeAutoRotateHint: "Az alább választott idő után, ha nincs kattintás, forogni kezd, egy fordulat az alább választott idő alatt; a fölötte lévő mutató szünetelteti, egy kattintás vagy húzás megállítja.",
   dial_classic: "Klasszikus",
   dial_minimal: "Minimalista",
   dial_roman: "Római",
@@ -3827,7 +3963,15 @@ addCatalog("hu", {
   shortcutDialStyle: "A kijelölt hely számlapstílusa",
   sunrise: "Napkelte",
   sunset: "Napnyugta",
-  sunNext: "Következő napesemény"
+  sunNext: "Következő napesemény",
+  optionHeroDial: "Számlapstílus",
+  heroDialPlace: "Mint a helyé",
+  optionGlobeRotateDelay: "Indulás",
+  optionGlobeRotateSpeed: "Egy fordulat",
+  secondsShort: "{seconds} mp",
+  moon: "Hold",
+  moonWaxing: "Hold · {percent} % · növő",
+  moonWaning: "Hold · {percent} % · fogyó"
 })
 
 addCatalog("el", {
@@ -4008,7 +4152,7 @@ addCatalog("el", {
   mapStyleFlat: "Επίπεδος χάρτης",
   mapStyleGlobe: "Υδρόγειος",
   optionGlobeAutoRotate: "Η υδρόγειος γυρίζει μόνη της",
-  optionGlobeAutoRotateHint: "Μετά από δέκα δευτερόλεπτα χωρίς κλικ γυρίζει αργά· ο δείκτης από πάνω την παγώνει, ένα κλικ ή σύρσιμο τη σταματά.",
+  optionGlobeAutoRotateHint: "Μετά τον χρόνο που ορίζεται παρακάτω χωρίς κλικ γυρίζει, μία στροφή στον χρόνο που ορίζεται παρακάτω· ο δείκτης από πάνω την παγώνει, ένα κλικ ή σύρσιμο τη σταματά.",
   dial_classic: "Κλασικό",
   dial_minimal: "Λιτό",
   dial_roman: "Ρωμαϊκό",
@@ -4018,7 +4162,15 @@ addCatalog("el", {
   shortcutDialStyle: "Στυλ καντράν του επιλεγμένου τόπου",
   sunrise: "Ανατολή",
   sunset: "Δύση",
-  sunNext: "Επόμενο ηλιακό συμβάν"
+  sunNext: "Επόμενο ηλιακό συμβάν",
+  optionHeroDial: "Στυλ καντράν",
+  heroDialPlace: "Όπως ο τόπος",
+  optionGlobeRotateDelay: "Ξεκινά μετά από",
+  optionGlobeRotateSpeed: "Μία στροφή σε",
+  secondsShort: "{seconds} δ",
+  moon: "Σελήνη",
+  moonWaxing: "Σελήνη · {percent} % · αύξουσα",
+  moonWaning: "Σελήνη · {percent} % · φθίνουσα"
 })
 
 addCatalog("hi", {
@@ -4199,7 +4351,7 @@ addCatalog("hi", {
   mapStyleFlat: "सपाट नक़्शा",
   mapStyleGlobe: "ग्लोब",
   optionGlobeAutoRotate: "ग्लोब अपने आप घूमे",
-  optionGlobeAutoRotateHint: "दस सेकंड तक कोई क्लिक न हो तो यह धीरे-धीरे घूमता है; ऊपर पॉइंटर होने पर रुकता है, क्लिक या खिंचाव इसे बंद कर देता है।",
+  optionGlobeAutoRotateHint: "नीचे चुने समय तक कोई क्लिक न हो तो यह घूमता है, नीचे चुने समय में एक चक्कर; ऊपर पॉइंटर होने पर रुकता है, क्लिक या खिंचाव इसे बंद कर देता है।",
   dial_classic: "क्लासिक",
   dial_minimal: "सरल",
   dial_roman: "रोमन",
@@ -4209,7 +4361,15 @@ addCatalog("hi", {
   shortcutDialStyle: "चुनी गई जगह की डायल शैली",
   sunrise: "सूर्योदय",
   sunset: "सूर्यास्त",
-  sunNext: "अगली सूर्य घटना"
+  sunNext: "अगली सूर्य घटना",
+  optionHeroDial: "डायल शैली",
+  heroDialPlace: "जगह के समान",
+  optionGlobeRotateDelay: "शुरू होने में",
+  optionGlobeRotateSpeed: "एक चक्कर में",
+  secondsShort: "{seconds} से.",
+  moon: "चंद्रमा",
+  moonWaxing: "चंद्रमा · {percent} % · बढ़ता",
+  moonWaning: "चंद्रमा · {percent} % · घटता"
 })
 
 addCatalog("id", {
@@ -4390,7 +4550,7 @@ addCatalog("id", {
   mapStyleFlat: "Peta datar",
   mapStyleGlobe: "Bola dunia",
   optionGlobeAutoRotate: "Bola dunia berputar sendiri",
-  optionGlobeAutoRotateHint: "Setelah sepuluh detik tanpa klik, ia berputar pelan; penunjuk di atasnya menjedanya, klik atau seretan menghentikannya.",
+  optionGlobeAutoRotateHint: "Setelah waktu yang dipilih di bawah tanpa klik, ia berputar, satu putaran dalam waktu yang dipilih di bawah; penunjuk di atasnya menjedanya, klik atau seretan menghentikannya.",
   dial_classic: "Klasik",
   dial_minimal: "Minimal",
   dial_roman: "Romawi",
@@ -4400,7 +4560,15 @@ addCatalog("id", {
   shortcutDialStyle: "Gaya muka jam tempat terpilih",
   sunrise: "Matahari terbit",
   sunset: "Matahari terbenam",
-  sunNext: "Peristiwa matahari berikutnya"
+  sunNext: "Peristiwa matahari berikutnya",
+  optionHeroDial: "Gaya muka jam",
+  heroDialPlace: "Sama dengan tempatnya",
+  optionGlobeRotateDelay: "Mulai setelah",
+  optionGlobeRotateSpeed: "Satu putaran dalam",
+  secondsShort: "{seconds} dtk",
+  moon: "Bulan",
+  moonWaxing: "Bulan · {percent} % · membesar",
+  moonWaning: "Bulan · {percent} % · mengecil"
 })
 
 addCatalog("vi", {
@@ -4581,7 +4749,7 @@ addCatalog("vi", {
   mapStyleFlat: "Bản đồ phẳng",
   mapStyleGlobe: "Quả địa cầu",
   optionGlobeAutoRotate: "Quả địa cầu tự xoay",
-  optionGlobeAutoRotateHint: "Sau mười giây không nhấp, nó xoay chậm; con trỏ ở trên làm nó tạm dừng, một cú nhấp hoặc kéo sẽ dừng nó.",
+  optionGlobeAutoRotateHint: "Sau thời gian chọn bên dưới mà không có cú nhấp, nó xoay, một vòng trong thời gian chọn bên dưới; con trỏ ở trên làm nó tạm dừng, một cú nhấp hoặc kéo sẽ dừng nó.",
   dial_classic: "Cổ điển",
   dial_minimal: "Tối giản",
   dial_roman: "La Mã",
@@ -4591,7 +4759,15 @@ addCatalog("vi", {
   shortcutDialStyle: "Kiểu mặt đồng hồ của nơi đang chọn",
   sunrise: "Mặt trời mọc",
   sunset: "Mặt trời lặn",
-  sunNext: "Sự kiện mặt trời kế tiếp"
+  sunNext: "Sự kiện mặt trời kế tiếp",
+  optionHeroDial: "Kiểu mặt đồng hồ",
+  heroDialPlace: "Như của nơi đó",
+  optionGlobeRotateDelay: "Bắt đầu sau",
+  optionGlobeRotateSpeed: "Một vòng trong",
+  secondsShort: "{seconds} giây",
+  moon: "Trăng",
+  moonWaxing: "Trăng · {percent} % · đang tròn",
+  moonWaning: "Trăng · {percent} % · đang khuyết"
 })
 
 addCatalog("th", {
@@ -4772,7 +4948,7 @@ addCatalog("th", {
   mapStyleFlat: "แผนที่แบน",
   mapStyleGlobe: "ลูกโลก",
   optionGlobeAutoRotate: "ลูกโลกหมุนเอง",
-  optionGlobeAutoRotateHint: "หลังไม่มีการคลิกสิบวินาที ลูกโลกจะหมุนช้า ๆ ตัวชี้อยู่เหนือจะหยุดชั่วคราว คลิกหรือลากจะหยุดหมุน",
+  optionGlobeAutoRotateHint: "เมื่อไม่มีการคลิกตามเวลาที่เลือกด้านล่าง ลูกโลกจะหมุน หนึ่งรอบตามเวลาที่เลือกด้านล่าง ตัวชี้อยู่เหนือจะหยุดชั่วคราว คลิกหรือลากจะหยุดหมุน",
   dial_classic: "คลาสสิก",
   dial_minimal: "มินิมอล",
   dial_roman: "โรมัน",
@@ -4782,7 +4958,15 @@ addCatalog("th", {
   shortcutDialStyle: "รูปแบบหน้าปัดของสถานที่ที่เลือก",
   sunrise: "ดวงอาทิตย์ขึ้น",
   sunset: "ดวงอาทิตย์ตก",
-  sunNext: "เหตุการณ์ดวงอาทิตย์ถัดไป"
+  sunNext: "เหตุการณ์ดวงอาทิตย์ถัดไป",
+  optionHeroDial: "รูปแบบหน้าปัด",
+  heroDialPlace: "ตามสถานที่",
+  optionGlobeRotateDelay: "เริ่มหลังจาก",
+  optionGlobeRotateSpeed: "หมุนหนึ่งรอบใน",
+  secondsShort: "{seconds} วิ",
+  moon: "ดวงจันทร์",
+  moonWaxing: "ดวงจันทร์ · {percent} % · ข้างขึ้น",
+  moonWaning: "ดวงจันทร์ · {percent} % · ข้างแรม"
 })
 
 addCatalog("ja", {
@@ -4963,7 +5147,7 @@ addCatalog("ja", {
   mapStyleFlat: "平面地図",
   mapStyleGlobe: "地球儀",
   optionGlobeAutoRotate: "地球儀を自動で回す",
-  optionGlobeAutoRotateHint: "10秒間クリックがないとゆっくり回ります。ポインタを重ねると一時停止し、クリックやドラッグで止まります。",
+  optionGlobeAutoRotateHint: "下で設定した時間クリックがないと回り始め、下で設定した時間で 1 回転します。ポインタを重ねると一時停止し、クリックやドラッグで止まります。",
   dial_classic: "クラシック",
   dial_minimal: "ミニマル",
   dial_roman: "ローマ数字",
@@ -4973,7 +5157,15 @@ addCatalog("ja", {
   shortcutDialStyle: "選択した場所の文字盤スタイル",
   sunrise: "日の出",
   sunset: "日の入り",
-  sunNext: "次の日の出・日の入り"
+  sunNext: "次の日の出・日の入り",
+  optionHeroDial: "文字盤のスタイル",
+  heroDialPlace: "場所と同じ",
+  optionGlobeRotateDelay: "開始まで",
+  optionGlobeRotateSpeed: "1 回転",
+  secondsShort: "{seconds}秒",
+  moon: "月",
+  moonWaxing: "月 · {percent} % · 満ちていく",
+  moonWaning: "月 · {percent} % · 欠けていく"
 })
 
 addCatalog("ko", {
@@ -5154,7 +5346,7 @@ addCatalog("ko", {
   mapStyleFlat: "평면 지도",
   mapStyleGlobe: "지구본",
   optionGlobeAutoRotate: "지구본 자동 회전",
-  optionGlobeAutoRotateHint: "10초 동안 클릭이 없으면 천천히 돕니다. 포인터를 올리면 잠시 멈추고, 클릭하거나 끌면 멈춥니다.",
+  optionGlobeAutoRotateHint: "아래에서 정한 시간 동안 클릭이 없으면 돌기 시작해 아래에서 정한 시간에 한 바퀴 돕니다. 포인터를 올리면 잠시 멈추고, 클릭하거나 끌면 멈춥니다.",
   dial_classic: "클래식",
   dial_minimal: "미니멀",
   dial_roman: "로마 숫자",
@@ -5164,7 +5356,15 @@ addCatalog("ko", {
   shortcutDialStyle: "선택한 장소의 시계판 스타일",
   sunrise: "일출",
   sunset: "일몰",
-  sunNext: "다음 일출·일몰"
+  sunNext: "다음 일출·일몰",
+  optionHeroDial: "시계판 스타일",
+  heroDialPlace: "장소와 같게",
+  optionGlobeRotateDelay: "시작까지",
+  optionGlobeRotateSpeed: "한 바퀴에",
+  secondsShort: "{seconds}초",
+  moon: "달",
+  moonWaxing: "달 · {percent} % · 차는 중",
+  moonWaning: "달 · {percent} % · 기우는 중"
 })
 
 addCatalog("zh_CN", {
@@ -5345,7 +5545,7 @@ addCatalog("zh_CN", {
   mapStyleFlat: "平面地图",
   mapStyleGlobe: "地球仪",
   optionGlobeAutoRotate: "地球仪自动旋转",
-  optionGlobeAutoRotateHint: "十秒内没有点击时会缓慢旋转；指针停在上面会暂停，点击或拖动会让它停下。",
+  optionGlobeAutoRotateHint: "在下方设定的时间内没有点击时开始旋转，按下方设定的时间转一圈；指针停在上面会暂停，点击或拖动会让它停下。",
   dial_classic: "经典",
   dial_minimal: "极简",
   dial_roman: "罗马数字",
@@ -5355,7 +5555,15 @@ addCatalog("zh_CN", {
   shortcutDialStyle: "所选地点的表盘样式",
   sunrise: "日出",
   sunset: "日落",
-  sunNext: "下一次日出/日落"
+  sunNext: "下一次日出/日落",
+  optionHeroDial: "表盘样式",
+  heroDialPlace: "与地点相同",
+  optionGlobeRotateDelay: "开始于",
+  optionGlobeRotateSpeed: "转一圈用时",
+  secondsShort: "{seconds} 秒",
+  moon: "月亮",
+  moonWaxing: "月亮 · {percent} % · 盈",
+  moonWaning: "月亮 · {percent} % · 亏"
 })
 
 addCatalog("zh_TW", {
@@ -5536,7 +5744,7 @@ addCatalog("zh_TW", {
   mapStyleFlat: "平面地圖",
   mapStyleGlobe: "地球儀",
   optionGlobeAutoRotate: "地球儀自動旋轉",
-  optionGlobeAutoRotateHint: "十秒內沒有點擊時會緩慢旋轉；指標停在上面會暫停，點擊或拖曳會讓它停下。",
+  optionGlobeAutoRotateHint: "在下方設定的時間內沒有點擊時開始旋轉，依下方設定的時間轉一圈；指標停在上面會暫停，點擊或拖曳會讓它停下。",
   dial_classic: "經典",
   dial_minimal: "極簡",
   dial_roman: "羅馬數字",
@@ -5546,7 +5754,15 @@ addCatalog("zh_TW", {
   shortcutDialStyle: "所選地點的錶盤樣式",
   sunrise: "日出",
   sunset: "日落",
-  sunNext: "下一次日出／日落"
+  sunNext: "下一次日出／日落",
+  optionHeroDial: "錶盤樣式",
+  heroDialPlace: "與地點相同",
+  optionGlobeRotateDelay: "開始於",
+  optionGlobeRotateSpeed: "轉一圈用時",
+  secondsShort: "{seconds} 秒",
+  moon: "月亮",
+  moonWaxing: "月亮 · {percent} % · 盈",
+  moonWaning: "月亮 · {percent} % · 虧"
 })
 
 addCatalog("ar", {
@@ -5727,7 +5943,7 @@ addCatalog("ar", {
   mapStyleFlat: "خريطة مسطحة",
   mapStyleGlobe: "كرة أرضية",
   optionGlobeAutoRotate: "الكرة الأرضية تدور وحدها",
-  optionGlobeAutoRotateHint: "بعد عشر ثوانٍ بلا نقرة تدور ببطء؛ المؤشر فوقها يوقفها مؤقتًا، والنقر أو السحب يوقفها.",
+  optionGlobeAutoRotateHint: "بعد الوقت المحدد أدناه بلا نقرة تدور، دورة واحدة في الوقت المحدد أدناه؛ المؤشر فوقها يوقفها مؤقتًا، والنقر أو السحب يوقفها.",
   dial_classic: "كلاسيكي",
   dial_minimal: "بسيط",
   dial_roman: "روماني",
@@ -5737,7 +5953,15 @@ addCatalog("ar", {
   shortcutDialStyle: "نمط ميناء الساعة للمكان المحدد",
   sunrise: "الشروق",
   sunset: "الغروب",
-  sunNext: "الحدث الشمسي التالي"
+  sunNext: "الحدث الشمسي التالي",
+  optionHeroDial: "نمط ميناء الساعة",
+  heroDialPlace: "كما للمكان",
+  optionGlobeRotateDelay: "يبدأ بعد",
+  optionGlobeRotateSpeed: "دورة واحدة في",
+  secondsShort: "{seconds} ث",
+  moon: "القمر",
+  moonWaxing: "القمر · {percent} % · متزايد",
+  moonWaning: "القمر · {percent} % · متناقص"
 })
 
 addCatalog("he", {
@@ -5918,7 +6142,7 @@ addCatalog("he", {
   mapStyleFlat: "מפה שטוחה",
   mapStyleGlobe: "גלובוס",
   optionGlobeAutoRotate: "הגלובוס מסתובב מעצמו",
-  optionGlobeAutoRotateHint: "אחרי עשר שניות בלי לחיצה הוא מסתובב לאט; הסמן מעליו משהה אותו, לחיצה או גרירה עוצרת אותו.",
+  optionGlobeAutoRotateHint: "אחרי הזמן שנבחר למטה בלי לחיצה הוא מסתובב, סיבוב אחד בזמן שנבחר למטה; הסמן מעליו משהה אותו, לחיצה או גרירה עוצרת אותו.",
   dial_classic: "קלאסי",
   dial_minimal: "מינימלי",
   dial_roman: "רומי",
@@ -5928,7 +6152,15 @@ addCatalog("he", {
   shortcutDialStyle: "סגנון לוח השעון של המקום הנבחר",
   sunrise: "זריחה",
   sunset: "שקיעה",
-  sunNext: "אירוע השמש הבא"
+  sunNext: "אירוע השמש הבא",
+  optionHeroDial: "סגנון לוח השעון",
+  heroDialPlace: "כמו של המקום",
+  optionGlobeRotateDelay: "מתחיל אחרי",
+  optionGlobeRotateSpeed: "סיבוב אחד ב־",
+  secondsShort: "{seconds} ש׳",
+  moon: "ירח",
+  moonWaxing: "ירח · {percent} % · מתמלא",
+  moonWaning: "ירח · {percent} % · מתמעט"
 })
 
 addCatalog("fa", {
@@ -6109,7 +6341,7 @@ addCatalog("fa", {
   mapStyleFlat: "نقشهٔ تخت",
   mapStyleGlobe: "کرهٔ زمین",
   optionGlobeAutoRotate: "کره خودش می‌چرخد",
-  optionGlobeAutoRotateHint: "پس از ده ثانیه بدون کلیک آرام می‌چرخد؛ نشانگر روی آن مکثش می‌دهد، کلیک یا کشیدن آن را متوقف می‌کند.",
+  optionGlobeAutoRotateHint: "پس از زمانی که پایین انتخاب شده بدون کلیک می‌چرخد، یک دور در زمانی که پایین انتخاب شده؛ نشانگر روی آن مکثش می‌دهد، کلیک یا کشیدن آن را متوقف می‌کند.",
   dial_classic: "کلاسیک",
   dial_minimal: "ساده",
   dial_roman: "رومی",
@@ -6119,5 +6351,13 @@ addCatalog("fa", {
   shortcutDialStyle: "سبک صفحهٔ ساعت مکان انتخاب‌شده",
   sunrise: "طلوع آفتاب",
   sunset: "غروب آفتاب",
-  sunNext: "رویداد بعدی خورشید"
+  sunNext: "رویداد بعدی خورشید",
+  optionHeroDial: "سبک صفحهٔ ساعت",
+  heroDialPlace: "مانند مکان",
+  optionGlobeRotateDelay: "شروع پس از",
+  optionGlobeRotateSpeed: "یک دور در",
+  secondsShort: "{seconds} ث",
+  moon: "ماه",
+  moonWaxing: "ماه · {percent} % · رو به افزایش",
+  moonWaning: "ماه · {percent} % · رو به کاهش"
 })

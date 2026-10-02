@@ -152,7 +152,7 @@ Rectangle {
       value: panel.settingsDefaultTab,
       set: function(value) { panel.displayOptionsStore.setSettingsDisplaySetting("defaultTab", value) }
     }
-    var worldOption = tabOptions.world.filter(function(o) { return o.key === id && o.choices })[0]
+    var worldOption = tabOptions.world.concat(heroOptions).filter(function(o) { return o.key === id && o.choices })[0]
     if (worldOption) return {
       options: worldOption.choices,
       value: String(panel.settingsDisplaySetting(id, "")),
@@ -181,6 +181,10 @@ Rectangle {
     { key: "heroDayOfYear", title: panel.i18n("optionDayOfYear") },
     { key: "heroZone", title: panel.i18n("optionZone") },
     { key: "heroAnalog", title: panel.i18n("optionAnalog") },
+    { key: "heroDial", title: panel.i18n("optionHeroDial"), dependsOn: "heroAnalog", choices: [
+      { value: "place", label: panel.i18n("heroDialPlace") }, { value: "classic", label: panel.i18n("dial_classic") },
+      { value: "minimal", label: panel.i18n("dial_minimal") }, { value: "roman", label: panel.i18n("dial_roman") },
+      { value: "twentyFour", label: panel.i18n("dial_twentyFour") }, { value: "dots", label: panel.i18n("dial_dots") }] },
     { key: "heroSun", title: panel.i18n("optionSun") },
     { key: "heroSunNext", title: panel.i18n("sunNext") },
     { key: "heroGoldenHour", title: panel.i18n("optionGoldenHour"), hint: "optionGoldenHourHint" },
@@ -195,8 +199,13 @@ Rectangle {
       { key: "worldNight", title: panel.i18n("optionNight"), dependsOn: "worldMap" },
       { key: "worldRuler", title: panel.i18n("optionRuler"), dependsOn: "worldMap", style: "map" },
       { key: "worldMapLabels", title: panel.i18n("optionMapLabels"), dependsOn: "worldMap" },
+      { key: "worldMoon", title: panel.i18n("moon"), dependsOn: "worldMap" },
       { key: "globeAutoRotate", title: panel.i18n("optionGlobeAutoRotate"), dependsOn: "worldMap", style: "globe",
         hint: panel.i18n("optionGlobeAutoRotateHint") },
+      { key: "globeRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "globeAutoRotate", style: "globe",
+        choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
+      { key: "globeRotateSpeed", title: panel.i18n("optionGlobeRotateSpeed"), dependsOn: "globeAutoRotate", style: "globe",
+        choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) },
       { key: "worldList", title: panel.i18n("optionCityList") },
       { key: "worldDifference", title: panel.i18n("optionDifference"), dependsOn: "worldList" },
       { key: "worldDials", title: panel.i18n("optionWorldDials"), dependsOn: "worldList" },
@@ -272,8 +281,11 @@ Rectangle {
           { id: "citiesCount", type: "dropdown" })
       }
     } else {
-      for (var h = 0; h < heroOptions.length; h++)
-        items.push({ id: "switch:" + heroOptions[h].key, type: "switch", key: heroOptions[h].key })
+      for (var h = 0; h < heroOptions.length; h++) {
+        if (!optionAvailable(heroOptions[h])) continue
+        items.push(heroOptions[h].choices ? { id: heroOptions[h].key, type: "dropdown" }
+          : { id: "switch:" + heroOptions[h].key, type: "switch", key: heroOptions[h].key })
+      }
       var tabs = panel.settingsOrderFor("tabOrder")
       for (var t = 0; t < tabs.length; t++) {
         var master = panel.tabMasterKeys[tabs[t]]
@@ -591,6 +603,18 @@ Rectangle {
         visible: !!dropdownRow.modelData.hint
         text: visible ? panel.i18n(dropdownRow.modelData.hint) : ""
       }
+    }
+  }
+
+  // The wheel scrolls a fixed step, touchpads their scaled pixel deltas
+  // (Panel.wheelPixels), as in More Weather.
+  MouseArea {
+    anchors.fill: settingsFlick
+    z: 2
+    acceptedButtons: Qt.NoButton
+    onWheel: function(wheel) {
+      settingsView.scrollBy(-panel.wheelPixels(wheel, false))
+      wheel.accepted = true
     }
   }
 
@@ -1151,11 +1175,19 @@ Rectangle {
             width: parent.width
 
             TimeSwitchRow {
+              visible: !heroOptionRow.modelData.choices
               panel: settingsView.panel
               settingKey: heroOptionRow.modelData.key
               title: heroOptionRow.modelData.title
               kbFocused: settingsView.focusId === "switch:" + heroOptionRow.modelData.key
               onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
+            }
+            TimeOptionDropdown {
+              visible: !!heroOptionRow.modelData.choices
+              panel: settingsView.panel
+              settings: settingsView
+              option: heroOptionRow.modelData
+              rowEnabled: settingsView.optionAvailable(heroOptionRow.modelData)
             }
 
             Hint {

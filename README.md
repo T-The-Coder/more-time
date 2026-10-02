@@ -45,7 +45,7 @@ control.
   buttons in the corner mute the chimes (shown while a chime is set up) and
   open the app and the settings.
 - **Current place:** here, or one of your cities, like More Weather's "My
-  places". The row above the time shows it: the pin goes back to here, the name
+  places". The row above the time shows it: the location pin goes back to here, the name
   and ▾ open the World tab. With a city current, a line keeps the time here in
   view. `Alt 0` is here, `Alt 1`–`9` a city, `Alt ← →` go round, from any tab.
   The bar and the app show the same place, and it is kept across restarts.
@@ -73,10 +73,15 @@ control.
   - Or, instead of the flat map, a globe with the same zones, land, night side,
     golden and blue hour and cities: picking a city (or here) turns it there
     the short way round, a drag or the sideways wheel (⇧ wheel) turns it by
-    hand, the vertical wheel scrolls the tab, and if you like it turns slowly
-    by itself after ten seconds without a touch (only while you can see it;
-    the pointer over it pauses it).
-  - Below the map, "Here" and the city list: time, day/night, today, tomorrow
+    hand, the vertical wheel scrolls the tab, and if you like it turns by
+    itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4 or 8
+    minutes (only while you can see it; the pointer over it pauses it).
+  - Optionally the Moon on the map and the globe, where it stands at the
+    zenith right now, with its phase lit towards the Sun (the same phase
+    numbers as More Weather); hovering it names the phase ("Moon · 61 % ·
+    waxing").
+  - Below the map, your place (the location pin and its name, as in More
+    Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
     database, summer time included. Per row, as More Weather's menu bar
     entries do it, the sunrise, the sunset and the next of the two with a
@@ -88,7 +93,9 @@ control.
     24 hours (one turn a day, 00 at the bottom, the night part shaded from
     that place's sunset to sunrise) and dots. The clock on top shows the
     current place's; with **Clock faces in the list** (on in the app) each row
-    shows its own small one. `e` or the pencil on the selected row opens a
+    shows its own small one. Settings → Display → Clock → **Clock face style**
+    sets one style for the clock on top instead ("Same as the place" by
+    default). `e` or the pencil on the selected row (any row) opens a
     chooser under it (`← →` or a click picks, `Enter` / `Esc` close). The style
     is kept per city in the cities file and for here in `more-time-place.json`.
   - Cities can be found offline from the zone list, or anywhere through the

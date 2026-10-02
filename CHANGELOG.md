@@ -34,15 +34,23 @@ First release.
   - Or a globe (Settings → Display → Map style): the same zones and cities
     in an orthographic view, with the golden and blue hour as bands along the
     day/night line; it turns to the picked place, by drag or sideways wheel,
-    and optionally by itself after ten idle seconds.
+    and optionally by itself after 5, 10 or 30 idle seconds, one turn in 1, 2,
+    4 or 8 minutes.
+  - Optionally the Moon at its sub-lunar point with its phase, on the map and
+    the globe, with More Weather's phase numbers.
+  - Your own place is shown with More Weather's location pin, not a word.
   - A city list with the day and the difference to here.
   - Five clock face styles (classic, minimal, roman, 24 hours with the night
-    shaded, dots), chosen per place with `e`; small faces in the list.
+    shaded, dots), chosen per place with `e` or the pencil on any row; small
+    faces in the list; one style for the clock on top if you like.
   - City search offline from the tz database and online through the place
     search shared with More Weather (Open-Meteo, else Nominatim, with the
     nearest zone for its places), with More Weather's keys.
   - Import of More Weather's saved places as cities (Settings → General →
     Places).
+- **Scrolling:** wheel and touchpad scroll as in More Weather (a fixed step
+  per notch, touchpad deltas scaled up), in the view and in the settings;
+  the globe and the editors' values keep the wheel where they use it.
 - **Alarms:** as many as you like, once or on weekdays, with a name and a
   snooze length. Missed alarms are announced, and alarms up to ten minutes late
   still ring. The last check is kept on disk, so an alarm due while the

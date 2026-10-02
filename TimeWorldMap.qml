@@ -21,6 +21,10 @@ Item {
   LayoutMirroring.childrenInherit: true
 
   readonly property bool showNight: panel.displaySetting("worldNight", true)
+  readonly property bool showMoon: panel.displaySetting("worldMoon", false)
+  onShowMoonChanged: canvas.requestPaint()
+  // Where the Moon was drawn, for the hover: { x, y, moon } or null.
+  property var moonHit: null
   // The golden and the blue hour as bands along the day/night line, with
   // the clock's options of the same name.
   readonly property bool showGolden: panel.displaySetting("heroGoldenHour", true)
@@ -208,6 +212,22 @@ Item {
         ctx.arc(sun.x, sun.y, 7, 0, Math.PI * 2)
         ctx.stroke()
       }
+      // The Moon at its sub-lunar point, lit towards the Sun.
+      map.moonHit = null
+      if (map.showMoon) {
+        var moon = WorldMap.moonPosition(map.minuteMs)
+        var sunNow = WorldMap.subsolarPoint(map.minuteMs)
+        var mp = map.px(WorldMap.project(moon.lat, moon.lon))
+        var toward = WorldMap.towards(moon.lat, moon.lon, sunNow.lat, sunNow.lon, 4)
+        var dl = toward.lon - moon.lon
+        while (dl > 180) dl -= 360
+        while (dl < -180) dl += 360
+        var tp = map.px(WorldMap.project(toward.lat, moon.lon + dl))
+        var nfm = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
+        WorldMap.paintMoon(ctx, mp.x, mp.y, Style.space(5), Math.atan2(tp.y - mp.y, tp.x - mp.x), moon.illuminated,
+          rgba(map.panel.mutedText, 0.9), Qt.rgba(nfm.r, nfm.g, nfm.b, 0.9), rgba(ink, 0.6))
+        map.moonHit = { x: mp.x, y: mp.y, moon: moon }
+      }
       ctx.restore()
 
       ctx.strokeStyle = rgba(ink, 0.35)
@@ -316,6 +336,10 @@ Item {
     hoverEnabled: true
     onPositionChanged: function(mouse) {
       if (!map.mapData) return
+      if (map.moonHit && Math.hypot(map.moonHit.x - mouse.x, map.moonHit.y - mouse.y) <= Style.space(8)) {
+        map.hover = { moon: map.moonHit.moon, x: mouse.x, y: mouse.y }
+        return
+      }
       var x = mouse.x / map.unit - WorldMap.X_MAX
       var y = WorldMap.Y_MAX - (mouse.y - map.rulerHeight) / map.unit
       var minutes = WorldMap.unproject(x, y) ? WorldMap.zoneAt(map.mapData, x, y) : null
@@ -352,7 +376,8 @@ Item {
       anchors.centerIn: parent
       // The map's zones are standard time: summer time is not drawn, so
       // the label says so rather than show an hour that may be off.
-      text: map.hover ? Model.utcOffsetLabel(map.hover.minutes * 60) + "  ·  "
+      text: map.hover && map.hover.moon ? map.panel.moonText(map.hover.moon)
+        : map.hover ? Model.utcOffsetLabel(map.hover.minutes * 60) + "  ·  "
         + map.panel.clockFor(map.panel.nowMs, map.hover.minutes * 60, false)
         + "  " + map.panel.i18n("standardTime") : ""
       color: map.panel.foreground

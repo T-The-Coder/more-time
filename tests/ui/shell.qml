@@ -89,7 +89,13 @@ ShellRoot {
     function() { var g = globe(); g.centerLon = 180; g.hover = { minutes: 720, x: g.width / 2, y: g.height / 2 } },
     function() { shot("01e-globe-dateline") },
     // Night side with and without the bands, globe facing the evening line.
-    function() { globe().hover = null; globe().centerLon = WorldMap.subsolarPoint(Date.now()).lon + 80 },
+    function() {
+      display("worldMoon", true)
+      var m = WorldMap.moonPosition(Date.now())
+      console.log("MOON", m.lat.toFixed(1), m.lon.toFixed(1), Math.round(m.illuminated * 100) + " %", m.waxing ? "waxing" : "waning", panel.moonText(m))
+      globe().hover = null
+      globe().centerLon = WorldMap.subsolarPoint(Date.now()).lon + 80
+    },
     function() { shot("01g-globe-bands") },
     function() { display("heroGoldenHour", false); display("heroBlueHour", false) },
     function() { shot("01h-globe-no-bands") },
@@ -97,6 +103,17 @@ ShellRoot {
     function() { shot("01i-map-no-bands") },
     function() { display("heroGoldenHour", true); display("heroBlueHour", true) },
     function() { shot("01j-map-bands") },
+    // The Moon's tooltip on the globe, centred on it; the hero's clock face
+    // set to Roman for all places.
+    function() { display("worldStyle", "globe"); display("heroDial", "roman") },
+    function() { var g = globe(); g.finishTurn(); g.centerLon = WorldMap.moonPosition(Date.now()).lon },
+    function() {
+      var g = globe()
+      g.hover = g.moonHit ? { moon: g.moonHit.moon, x: g.moonHit.x, y: g.moonHit.y } : null
+      console.log("MOON hit", JSON.stringify(g.moonHit ? { x: Math.round(g.moonHit.x), y: Math.round(g.moonHit.y) } : null))
+    },
+    function() { shot("01k-globe-moon") },
+    function() { globe().hover = null; display("worldStyle", "map"); display("worldMoon", false); display("heroDial", "place") },
     // Clock faces: one style per place, the chooser open under here; the
     // hero shows here's 24-hour face with the night shaded.
     function() {
@@ -113,6 +130,24 @@ ShellRoot {
       console.log("DIALS", panel.cityList.map(function(c) { return c.dial }).join(","), panel.placeStore.hereDial)
     },
     function() { shot("01f-world-dials") },
+    // The chooser under another row: Tokyo (city 3), picked by the keys'
+    // path (stepDialStyle), written to the cities file.
+    function() {
+      panel.dialChooserOpen = false
+      panel.selectedCity = 2
+      // The keys as typed: e opens under the selected row, ← picks.
+      var e = { key: Qt.Key_E, text: "e", modifiers: 0, accepted: false }
+      panel.handlePanelKey(e)
+      var left = { key: Qt.Key_Left, text: "", modifiers: 0, accepted: false }
+      panel.handlePanelKey(left)
+      console.log("DIALS keys", e.accepted, left.accepted, panel.dialChooserOpen, panel.cityList[2].dial)
+    },
+    function() { shot("01f2-world-dial-tokyo") },
+    function() {
+      panel.citiesStore.file.reload()
+      var stored = JSON.parse(panel.citiesStore.file.text())
+      console.log("DIALS tokyo", panel.cityList[2].dial, "file", stored[2].name, stored[2].dial, "chooser", panel.dialChooserOpen)
+    },
     function() { panel.dialChooserOpen = false; display("worldMap", true); display("worldSunrise", false); display("worldSunset", false); display("heroSunNext", false); panel.setDialStyle(-1, "classic") },
     function() { panel.activeTab = "alarms" },
     function() { shot("02-alarms") },
@@ -180,16 +215,18 @@ ShellRoot {
       shot("08e-hero-chimes-muted")
     },
     function() { general("chimesMuted", false); panel.ringer.testChime("hourChime") },
-    function() { panel.settingsPage = "display"; panel.settingsTargetSurface = "menubar" },
+    function() { panel.openSettings("display"); panel.settingsTargetSurface = "menubar" },
     function() { shot("09-settings-menubar") },
     function() { panel.settingsTargetSurface = "app" },
     function() { shot("10-settings-app") },
     function() { panel.openSettings("display"); panel.settingsTargetSurface = "app" },
     function() { display("worldStyle", "globe"); display("globeAutoRotate", true) },
+    function() { panel.settingsItem.focusId = "heroDial" },
+    function() { shot("10a-settings-clock-face") },
     function() { panel.settingsItem.focusId = "worldStyle"; panel.settingsItem.scrollBy(420) },
     function() { shot("10b-settings-world-globe") },
     function() { display("worldStyle", "map"); display("globeAutoRotate", false); panel.settingsItem.focusId = ""; panel.settingsOpen = false },
-    function() { panel.settingsPage = "shortcuts" },
+    function() { panel.openSettings("shortcuts") },
     function() { shot("11-settings-shortcuts") },
     function() { panel.settingsPage = "sources" },
     function() { shot("12-settings-sources") },

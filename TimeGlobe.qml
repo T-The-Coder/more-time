@@ -25,6 +25,10 @@ Item {
   LayoutMirroring.childrenInherit: true
 
   readonly property bool showNight: panel.displaySetting("worldNight", true)
+  readonly property bool showMoon: panel.displaySetting("worldMoon", false)
+  onShowMoonChanged: canvas.requestPaint()
+  // Where the Moon was drawn on the front side, for the hover, or null.
+  property var moonHit: null
   readonly property bool showLabels: panel.displaySetting("worldMapLabels", true)
   readonly property bool showGolden: panel.displaySetting("heroGoldenHour", true)
   readonly property bool showBlue: panel.displaySetting("heroBlueHour", true)
@@ -146,9 +150,14 @@ Item {
     if (idleTimer.running) idleTimer.restart()
   }
 
+  // Settings → Display → World: after how many idle seconds it starts, and
+  // in how many minutes it makes one turn.
+  readonly property int rotateDelaySeconds: Number(panel.displaySetting("globeRotateDelay", "10")) || 10
+  readonly property int rotateTurnMinutes: Number(panel.displaySetting("globeRotateSpeed", "1")) || 1
+
   Timer {
     id: idleTimer
-    interval: 10000
+    interval: globe.rotateDelaySeconds * 1000
     running: globe.canRotate && !globe.rotating
     onTriggered: globe.rotating = true
   }
@@ -164,7 +173,7 @@ Item {
       var now = Date.now()
       var elapsed = Math.min(200, now - last)
       last = now
-      if (!turnAnimation.running) globe.centerLon += elapsed * 360 / 240000
+      if (!turnAnimation.running) globe.centerLon += elapsed * 360 / (globe.rotateTurnMinutes * 60000)
     }
   }
 
@@ -277,6 +286,21 @@ Item {
           ctx.beginPath()
           ctx.arc(sx, sy, 7, 0, Math.PI * 2)
           ctx.stroke()
+        }
+      }
+      // The Moon at its sub-lunar point, lit towards the Sun; hidden on the
+      // back side.
+      globe.moonHit = null
+      if (globe.showMoon) {
+        var moon = WorldMap.moonPosition(globe.minuteMs)
+        var mp = screenPoint(moon.lat, moon.lon, lon)
+        if (mp.visible) {
+          var toward = WorldMap.towards(moon.lat, moon.lon, tw.sun.lat, tw.sun.lon, 4)
+          var tp = screenPoint(toward.lat, toward.lon, lon)
+          var nfm = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
+          WorldMap.paintMoon(ctx, mp.x, mp.y, Style.space(5), Math.atan2(tp.y - mp.y, tp.x - mp.x), moon.illuminated,
+            rgba(globe.panel.mutedText, 0.9), Qt.rgba(nfm.r, nfm.g, nfm.b, 0.9), rgba(ink, 0.6))
+          globe.moonHit = { x: mp.x, y: mp.y, moon: moon }
         }
       }
       ctx.restore()
@@ -398,12 +422,20 @@ Item {
         globe.hover = null
         return
       }
+      if (globe.moonHit && Math.hypot(globe.moonHit.x - event.x, globe.moonHit.y - event.y) <= Style.space(8)) {
+        globe.hover = { moon: globe.moonHit.moon, x: event.x, y: event.y }
+        return
+      }
       var minutes = zoneUnder(event.x, event.y)
       globe.hover = minutes === null ? null : { minutes: minutes, x: event.x, y: event.y }
     }
     onExited: globe.hover = null
     // Only a sideways wheel (or Shift + wheel) turns the globe; the plain
-    // wheel goes on scrolling the tab.
+    // wheel goes on scrolling the tab (the page's wheel area leaves it the
+    // sideways ones: wantsWheel, Panel.wheelTakenBelow).
+    function wantsWheel(wheel) { return globe.panel.wheelIsSideways(wheel) }
+    Component.onCompleted: globe.panel.registerWheelArea(this)
+    Component.onDestruction: globe.panel.unregisterWheelArea(this)
     onWheel: function(event) {
       var sideways = event.angleDelta.x !== 0 ? event.angleDelta.x
         : ((event.modifiers & Qt.ShiftModifier) ? event.angleDelta.y : 0)
@@ -448,7 +480,8 @@ Item {
       id: hoverLabel
       anchors.centerIn: parent
       // The zones are standard time, as on the flat map.
-      text: globe.hover ? Model.utcOffsetLabel(globe.hover.minutes * 60) + "  ·  "
+      text: globe.hover && globe.hover.moon ? globe.panel.moonText(globe.hover.moon)
+        : globe.hover ? Model.utcOffsetLabel(globe.hover.minutes * 60) + "  ·  "
         + globe.panel.clockFor(globe.panel.nowMs, globe.hover.minutes * 60, false)
         + "  " + globe.panel.i18n("standardTime") : ""
       color: globe.panel.foreground

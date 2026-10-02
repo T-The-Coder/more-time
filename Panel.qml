@@ -391,6 +391,7 @@ Panel {
       heroDayOfYear: true,
       heroZone: true,
       heroAnalog: true,
+      heroDial: "place",
       heroNextAlarm: true,
       heroSun: true,
       heroSunNext: false,
@@ -403,6 +404,9 @@ Panel {
       worldRuler: true,
       worldMapLabels: true,
       globeAutoRotate: false,
+      worldMoon: false,
+      globeRotateDelay: "10",
+      globeRotateSpeed: "1",
       worldList: true,
       worldDifference: true,
       worldDials: true,
@@ -1013,6 +1017,11 @@ Panel {
     if (editingId === id) editingId = ""
   }
 
+  // The Moon's tooltip on the map and the globe: "Moon · 61 % · waxing".
+  function moonText(moon) {
+    return i18n(moon.waxing ? "moonWaxing" : "moonWaning", { percent: Math.round(moon.illuminated * 100) })
+  }
+
   // ---- Clock faces per place (TimeDial.qml) ----
   // -1 here (kept in more-time-place.json), 0… a city (in the cities file).
   function dialStyleFor(index) {
@@ -1326,6 +1335,47 @@ Panel {
     event.accepted = true
   }
 
+  // ---- Wheel and touchpad, as in More Weather (Panel.wheelPixels) ----
+  // Omarchy scales touchpad scrolling down to 0.4, which made the view
+  // crawl; pixel deltas are scaled back up. A mouse wheel scrolls a fixed
+  // step per notch. Flickable's own wheel handling is not used.
+  readonly property real touchpadScrollFactor: 2.5
+  function wheelPixels(wheel, horizontal) {
+    var pixels = horizontal ? wheel.pixelDelta.x : wheel.pixelDelta.y
+    if (pixels !== 0) return pixels * touchpadScrollFactor
+    var angle = horizontal ? wheel.angleDelta.x : wheel.angleDelta.y
+    return angle / 120 * Style.space(60)
+  }
+  function wheelIsSideways(wheel) {
+    if (wheel.modifiers & Qt.ShiftModifier) return true
+    if (wheel.pixelDelta.x !== 0 || wheel.pixelDelta.y !== 0)
+      return Math.abs(wheel.pixelDelta.x) > Math.abs(wheel.pixelDelta.y)
+    return Math.abs(wheel.angleDelta.x) > Math.abs(wheel.angleDelta.y)
+  }
+  // Sideways distance of a wheel step: Shift turns a vertical wheel sideways.
+  function wheelSidewaysPixels(wheel) {
+    var sideways = wheelPixels(wheel, true)
+    return sideways !== 0 ? sideways : wheelPixels(wheel, false)
+  }
+  // Areas inside the page that take the wheel themselves (the steppers'
+  // value, the globe sideways): each has wantsWheel(wheel).
+  property var wheelAreas: []
+  function registerWheelArea(item) {
+    if (wheelAreas.indexOf(item) < 0) wheelAreas = wheelAreas.concat([item])
+  }
+  function unregisterWheelArea(item) {
+    wheelAreas = wheelAreas.filter(function(area) { return area !== item })
+  }
+  function wheelTakenBelow(wheel, source) {
+    for (var i = 0; i < wheelAreas.length; i++) {
+      var area = wheelAreas[i]
+      if (!area || !area.visible || !area.wantsWheel(wheel)) continue
+      var p = area.mapFromItem(source, wheel.x, wheel.y)
+      if (p.x >= 0 && p.y >= 0 && p.x < area.width && p.y < area.height) return true
+    }
+    return false
+  }
+
   function scrollBy(delta) {
     var maximum = Math.max(0, contentScroll.contentHeight - contentScroll.height)
     contentScroll.contentY = Math.max(0, Math.min(maximum, contentScroll.contentY + delta))
@@ -1520,6 +1570,22 @@ Panel {
           active: root.currentTab !== ""
           sourceComponent: root.currentTab !== "" ? root.tabComponent(root.currentTab) : null
         }
+      }
+    }
+
+    // Every wheel and touchpad scroll over the page goes through
+    // wheelPixels, unless an area below takes it (wheelAreas).
+    MouseArea {
+      anchors.fill: contentScroll
+      z: 2
+      acceptedButtons: Qt.NoButton
+      onWheel: function(wheel) {
+        if (root.wheelTakenBelow(wheel, this)) {
+          wheel.accepted = false
+          return
+        }
+        root.scrollBy(-root.wheelPixels(wheel, false))
+        wheel.accepted = true
       }
     }
 

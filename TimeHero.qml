@@ -35,7 +35,10 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     width: Style.space(96)
     panel: hero.panel
-    style: hero.panel.dialStyleFor(hero.panel.selectedCity)
+    // Settings → Display → Clock → Clock face: the place's own, or one for
+    // all places.
+    readonly property string chosen: String(hero.panel.displaySetting("heroDial", "place"))
+    style: chosen === "place" ? hero.panel.dialStyleFor(hero.panel.selectedCity) : Model.dialStyle(chosen)
     parts: hero.parts
     showSeconds: hero.showSeconds
     offset: hero.panel.currentOffset
@@ -62,11 +65,11 @@ Item {
         height: Style.space(18)
         anchors.verticalCenter: parent.verticalCenter
 
+        // More Weather's location pin (nf-fa-map_marker).
         Text {
           anchors.centerIn: parent
-          text: "\u{f034e}"
-          color: pinMouse.containsMouse || !hero.panel.currentCity
-            ? Style.hoverStateColor(hero.panel.foreground, Color.accent) : hero.panel.mutedText
+          text: "\uf041"
+          color: pinMouse.containsMouse ? Style.hoverStateColor(hero.panel.foreground, Color.accent) : hero.panel.mutedText
           font.family: hero.panel.fontFamily
           font.pixelSize: Style.font.bodySmall
         }
@@ -77,6 +80,12 @@ Item {
           hoverEnabled: true
           cursorShape: Qt.PointingHandCursor
           onClicked: hero.panel.setCurrentPlace(-1)
+
+          PanelToolTip {
+            visible: pinMouse.containsMouse && !!hero.panel.currentCity
+            text: hero.panel.i18n("shortcutPlaceHere")
+            fontFamily: hero.panel.fontFamily
+          }
         }
       }
 
@@ -228,7 +237,7 @@ Item {
     Text {
       visible: !!hero.panel.currentCity
       width: parent.width
-      text: "\u{f034e}  " + hero.panel.i18n("hereClock", { time: hero.panel.localClock(false) })
+      text: "\uf041  " + hero.panel.i18n("hereClock", { time: hero.panel.localClock(false) })
       color: hero.panel.mutedText
       font.family: hero.panel.fontFamily
       font.pixelSize: Style.font.bodySmall
