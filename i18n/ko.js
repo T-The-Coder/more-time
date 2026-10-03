@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "오늘과 이번 주 뽀모도로 횟수",
   entry_pomodoroTally: "뽀모도로 횟수",
   citiesFull: "도시는 최대 24개입니다. 다른 도시를 추가하려면 하나를 제거하세요.",
-  alarmZoneUnknown: "이 컴퓨터는 시간대 {zone}을(를) 모릅니다. 이 알람은 울릴 수 없습니다."
+  alarmZoneUnknown: "이 컴퓨터는 시간대 {zone}을(를) 모릅니다. 이 알람은 울릴 수 없습니다.",
+  optionMoonStyle: "달",
+  moonStyleSpace: "비치는 그대로 (우주에서)",
+  moonStyleEarth: "여기서 보이는 모습"
 }

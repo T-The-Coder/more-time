@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "جولات بومودورو اليوم وهذا الأسبوع",
   entry_pomodoroTally: "جولات بومودورو",
   citiesFull: "24 مدينة على الأكثر: أزل واحدة لإضافة أخرى.",
-  alarmZoneUnknown: "لا يعرف هذا الحاسوب المنطقة الزمنية {zone}؛ لا يمكن لهذا المنبه أن يرن."
+  alarmZoneUnknown: "لا يعرف هذا الحاسوب المنطقة الزمنية {zone}؛ لا يمكن لهذا المنبه أن يرن.",
+  optionMoonStyle: "القمر",
+  moonStyleSpace: "كما هو مضاء (من الفضاء)",
+  moonStyleEarth: "كما يُرى من هنا"
 }

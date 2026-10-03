@@ -33,7 +33,13 @@ Item {
   }
   onTwilightChanged: canvas.requestPaint()
   readonly property bool showMoon: panel.displaySetting("worldMoon", false)
+  // "space": lit as from above; "earth": the phase as seen from the
+  // current place (here or the selected city), by its hemisphere.
+  readonly property string moonStyle: panel.displaySetting("worldMoonStyle", "space")
+  readonly property real observerLat: panel.currentCoordinates ? Number(panel.currentCoordinates.lat) || 0 : 0
   onShowMoonChanged: canvas.requestPaint()
+  onMoonStyleChanged: canvas.requestPaint()
+  onObserverLatChanged: canvas.requestPaint()
   // Where the Moon was drawn, for the hover: { x, y, moon } or null.
   property var moonHit: null
   readonly property real moonRadius: Style.space(6)
@@ -212,7 +218,8 @@ Item {
       map.moonHit = null
       if (moon) {
         var lift = Style.space(4)
-        var angle = Moon.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) })
+        var angle = Moon.moonLitAngleFor(map.moonStyle, moon,
+          Moon.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) }), map.observerLat)
         Moon.paintMoon(ctx, moonAt.x - lift, moonAt.y - lift, map.moonRadius, angle, moon.illuminated,
           map.moonLit, Moon.rgbText(WorldMap.nightFill(map.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
         map.moonHit = { x: moonAt.x - lift, y: moonAt.y - lift, moon: moon }

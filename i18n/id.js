@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Ronde pomodoro hari ini dan minggu ini",
   entry_pomodoroTally: "Ronde pomodoro",
   citiesFull: "Paling banyak 24 kota: hapus satu untuk menambah yang lain.",
-  alarmZoneUnknown: "Komputer ini tidak mengenal zona waktu {zone}; alarm ini tidak dapat berbunyi."
+  alarmZoneUnknown: "Komputer ini tidak mengenal zona waktu {zone}; alarm ini tidak dapat berbunyi.",
+  optionMoonStyle: "Bulan",
+  moonStyleSpace: "Seperti disinari (dari angkasa)",
+  moonStyleEarth: "Seperti terlihat dari sini"
 }

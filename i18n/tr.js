@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Bugün ve bu hafta pomodoro turları",
   entry_pomodoroTally: "Pomodoro turları",
   citiesFull: "En fazla 24 şehir: başka bir şehir eklemek için birini kaldırın.",
-  alarmZoneUnknown: "Bu bilgisayar {zone} saat dilimini tanımıyor; bu alarm çalamaz."
+  alarmZoneUnknown: "Bu bilgisayar {zone} saat dilimini tanımıyor; bu alarm çalamaz.",
+  optionMoonStyle: "Ay",
+  moonStyleSpace: "Aydınlandığı gibi (uzaydan)",
+  moonStyleEarth: "Buradan görüldüğü gibi"
 }

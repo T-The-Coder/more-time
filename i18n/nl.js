@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Pomodororondes vandaag en deze week",
   entry_pomodoroTally: "Pomodororondes",
   citiesFull: "Hooguit 24 steden: verwijder er een om een andere toe te voegen.",
-  alarmZoneUnknown: "Deze computer kent tijdzone {zone} niet; deze wekker kan niet afgaan."
+  alarmZoneUnknown: "Deze computer kent tijdzone {zone} niet; deze wekker kan niet afgaan.",
+  optionMoonStyle: "Maan",
+  moonStyleSpace: "Zoals hij verlicht is (vanuit de ruimte)",
+  moonStyleEarth: "Zoals je hem hier ziet"
 }

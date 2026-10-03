@@ -202,6 +202,8 @@ Rectangle {
       { key: "worldRuler", title: panel.i18n("optionRuler"), dependsOn: "worldMap", style: "map" },
       { key: "worldMapLabels", title: panel.i18n("optionMapLabels"), dependsOn: "worldMap" },
       { key: "worldMoon", title: panel.i18n("moon"), dependsOn: "worldMap" },
+      { key: "worldMoonStyle", title: panel.i18n("optionMoonStyle"), dependsOn: "worldMoon", choices: [
+        { value: "space", label: panel.i18n("moonStyleSpace") }, { value: "earth", label: panel.i18n("moonStyleEarth") }] },
       { key: "globeAutoRotate", title: panel.i18n("optionGlobeAutoRotate"), dependsOn: "worldMap", style: "globe",
         hint: panel.i18n("optionGlobeAutoRotateHint") },
       { key: "globeRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "globeAutoRotate", style: "globe",

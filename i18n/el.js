@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Γύροι pomodoro σήμερα και αυτή την εβδομάδα",
   entry_pomodoroTally: "Γύροι pomodoro",
   citiesFull: "Το πολύ 24 πόλεις: αφαίρεσε μία για να προσθέσεις άλλη.",
-  alarmZoneUnknown: "Αυτός ο υπολογιστής δεν γνωρίζει τη ζώνη {zone}· αυτό το ξυπνητήρι δεν μπορεί να χτυπήσει."
+  alarmZoneUnknown: "Αυτός ο υπολογιστής δεν γνωρίζει τη ζώνη {zone}· αυτό το ξυπνητήρι δεν μπορεί να χτυπήσει.",
+  optionMoonStyle: "Σελήνη",
+  moonStyleSpace: "Όπως φωτίζεται (από το διάστημα)",
+  moonStyleEarth: "Όπως φαίνεται από εδώ"
 }

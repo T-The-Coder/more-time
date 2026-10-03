@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Rodadas de pomodoro hoje e nesta semana",
   entry_pomodoroTally: "Rodadas de pomodoro",
   citiesFull: "No máximo 24 cidades: remova uma para adicionar outra.",
-  alarmZoneUnknown: "Este computador não conhece o fuso {zone}; este alarme não pode tocar."
+  alarmZoneUnknown: "Este computador não conhece o fuso {zone}; este alarme não pode tocar.",
+  optionMoonStyle: "Lua",
+  moonStyleSpace: "Como está iluminada (do espaço)",
+  moonStyleEarth: "Como se vê daqui"
 }

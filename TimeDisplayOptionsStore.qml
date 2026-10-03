@@ -180,6 +180,7 @@ Item {
     citiesCount: ["1", "2", "3", "4"],
     menubarAccents: ["off", "hover", "always"],
     worldStyle: ["map", "globe"],
+    worldMoonStyle: ["space", "earth"],
     globeRotateDelay: ["5", "10", "30"],
     globeRotateSpeed: ["1", "2", "4", "8"],
     heroDial: ["place", "classic", "minimal", "roman", "twentyFour", "dots"]

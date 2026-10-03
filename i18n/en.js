@@ -351,5 +351,8 @@ var catalog = {
   optionPomodoroTally: "Pomodoro rounds today and this week",
   entry_pomodoroTally: "Pomodoro rounds",
   citiesFull: "At most 24 cities: remove one to add another.",
-  alarmZoneUnknown: "Time zone {zone} is not known on this computer; this alarm cannot ring."
+  alarmZoneUnknown: "Time zone {zone} is not known on this computer; this alarm cannot ring.",
+  optionMoonStyle: "Moon",
+  moonStyleSpace: "As it is lit (from space)",
+  moonStyleEarth: "As seen from here"
 }

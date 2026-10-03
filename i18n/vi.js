@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Số vòng pomodoro hôm nay và tuần này",
   entry_pomodoroTally: "Số vòng pomodoro",
   citiesFull: "Tối đa 24 thành phố: xóa một để thêm cái khác.",
-  alarmZoneUnknown: "Máy tính này không biết múi giờ {zone}; báo thức này không thể reo."
+  alarmZoneUnknown: "Máy tính này không biết múi giờ {zone}; báo thức này không thể reo.",
+  optionMoonStyle: "Trăng",
+  moonStyleSpace: "Như được chiếu sáng (từ không gian)",
+  moonStyleEarth: "Như nhìn thấy từ đây"
 }

@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "今日と今週のポモドーロ回数",
   entry_pomodoroTally: "ポモドーロ回数",
   citiesFull: "都市は最大 24 件です。追加するには 1 件削除してください。",
-  alarmZoneUnknown: "このコンピューターはタイムゾーン {zone} を知りません。このアラームは鳴りません。"
+  alarmZoneUnknown: "このコンピューターはタイムゾーン {zone} を知りません。このアラームは鳴りません。",
+  optionMoonStyle: "月",
+  moonStyleSpace: "照らされている向き（宇宙から）",
+  moonStyleEarth: "ここから見た姿"
 }

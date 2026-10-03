@@ -425,6 +425,7 @@ Panel {
       worldMapLabels: true,
       globeAutoRotate: false,
       worldMoon: false,
+      worldMoonStyle: "space",
       globeRotateDelay: "10",
       globeRotateSpeed: "4",
       worldList: true,

@@ -351,5 +351,8 @@ var catalog = {
   optionPomodoroTally: "Pomodoro-Runden heute und diese Woche",
   entry_pomodoroTally: "Pomodoro-Runden",
   citiesFull: "Höchstens 24 Städte: Entferne eine, um eine andere hinzuzufügen.",
-  alarmZoneUnknown: "Die Zeitzone {zone} kennt dieser Rechner nicht; dieser Wecker kann nicht klingeln."
+  alarmZoneUnknown: "Die Zeitzone {zone} kennt dieser Rechner nicht; dieser Wecker kann nicht klingeln.",
+  optionMoonStyle: "Mond",
+  moonStyleSpace: "Wie er beleuchtet ist (aus dem All)",
+  moonStyleEarth: "Wie von hier aus gesehen"
 }

@@ -150,6 +150,15 @@ ShellRoot {
       console.log("MOON hit", JSON.stringify(g.moonHit ? { x: Math.round(g.moonHit.x), y: Math.round(g.moonHit.y) } : null))
     },
     function() { shot("01k-globe-moon") },
+    // The Moon as seen from here (its phase in the sky), then from space again.
+    function() { var g = globe(); g.hover = null; display("worldMoonStyle", "earth") },
+    function() {
+      var m = Moon.moonPosition(Date.now())
+      console.log("MOON style earth", m.waxing ? "waxing" : "waning", "observer", globe().observerLat.toFixed(1),
+        "lit", Moon.moonLitAngleFor("earth", m, 0, globe().observerLat) === 0 ? "right" : "left")
+    },
+    function() { shot("01l-globe-moon-earth") },
+    function() { display("worldMoonStyle", "space") },
     // What a frame of turning costs: the globe turns by itself for a few
     // seconds with every layer on (bands, night steps, moon).
     function() {

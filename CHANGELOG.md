@@ -13,12 +13,19 @@ All notable changes to More Time are documented here.
   blue band is now lightest at the day/night line and deepest towards the
   night, running into the night steps; the golden band stays strongest at
   the line.
+- **The Moon as seen from here:** a new choice under Display → Moon draws
+  it as you see it in the sky from the current place (lit on the right
+  while waxing and on the left while waning, mirrored south of the
+  equator) instead of lit from the Sun's direction as seen from space; on
+  the map and the globe alike.
 - **Groundwork for More Weather's globe (nothing changes in More Time):**
   the sun and sky calculations moved to `Sky.js`; `Globe.js` gained a view
   that tilts to any latitude, the poles included, and zooms, with the land
   outline in latitude and longitude (`data/globe-land.json`, built by
-  `tools/build-globe-land.py`). These files and their tests are shared with
-  More Weather.
+  `tools/build-globe-land.py`). The flat map's Equal Earth projection and
+  its twilight polygons moved to `EqualEarth.js`, which can also put that
+  land on a flat map. These files and their tests are shared with More
+  Weather.
 
 ## 1.0.1 — 2026-10-03
 

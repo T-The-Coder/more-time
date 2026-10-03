@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Раунды помидоро сегодня и за неделю",
   entry_pomodoroTally: "Раунды помидоро",
   citiesFull: "Не больше 24 городов: удалите один, чтобы добавить другой.",
-  alarmZoneUnknown: "Этот компьютер не знает часовой пояс {zone}; этот будильник не может звонить."
+  alarmZoneUnknown: "Этот компьютер не знает часовой пояс {zone}; этот будильник не может звонить.",
+  optionMoonStyle: "Луна",
+  moonStyleSpace: "Как она освещена (из космоса)",
+  moonStyleEarth: "Как видно отсюда"
 }

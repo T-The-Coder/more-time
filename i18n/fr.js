@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Tours de pomodoro aujourd’hui et cette semaine",
   entry_pomodoroTally: "Tours de pomodoro",
   citiesFull: "24 villes au plus : retire-en une pour en ajouter une autre.",
-  alarmZoneUnknown: "Le fuseau {zone} est inconnu de cet ordinateur ; cette alarme ne peut pas sonner."
+  alarmZoneUnknown: "Le fuseau {zone} est inconnu de cet ordinateur ; cette alarme ne peut pas sonner.",
+  optionMoonStyle: "Lune",
+  moonStyleSpace: "Telle qu’elle est éclairée (depuis l’espace)",
+  moonStyleEarth: "Telle qu’on la voit d’ici"
 }

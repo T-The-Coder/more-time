@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Pomodorokierrokset tänään ja tällä viikolla",
   entry_pomodoroTally: "Pomodorokierrokset",
   citiesFull: "Enintään 24 kaupunkia: poista yksi lisätäksesi toisen.",
-  alarmZoneUnknown: "Tämä tietokone ei tunne aikavyöhykettä {zone}; tämä herätys ei voi soida."
+  alarmZoneUnknown: "Tämä tietokone ei tunne aikavyöhykettä {zone}; tämä herätys ei voi soida.",
+  optionMoonStyle: "Kuu",
+  moonStyleSpace: "Kuten se on valaistu (avaruudesta)",
+  moonStyleEarth: "Kuten se näkyy täältä"
 }

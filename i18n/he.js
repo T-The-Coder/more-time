@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "סבבי פומודורו היום והשבוע",
   entry_pomodoroTally: "סבבי פומודורו",
   citiesFull: "לכל היותר 24 ערים: הסר אחת כדי להוסיף אחרת.",
-  alarmZoneUnknown: "המחשב הזה לא מכיר את אזור הזמן {zone}; המעורר הזה לא יכול לצלצל."
+  alarmZoneUnknown: "המחשב הזה לא מכיר את אזור הזמן {zone}; המעורר הזה לא יכול לצלצל.",
+  optionMoonStyle: "ירח",
+  moonStyleSpace: "כפי שהוא מואר (מהחלל)",
+  moonStyleEarth: "כפי שהוא נראה מכאן"
 }

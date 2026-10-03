@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Kola pomodora dnes a tento týden",
   entry_pomodoroTally: "Kola pomodora",
   citiesFull: "Nejvýš 24 měst: odeberte jedno, chcete-li přidat jiné.",
-  alarmZoneUnknown: "Tento počítač nezná pásmo {zone}; tento budík nemůže zvonit."
+  alarmZoneUnknown: "Tento počítač nezná pásmo {zone}; tento budík nemůže zvonit.",
+  optionMoonStyle: "Měsíc",
+  moonStyleSpace: "Jak je osvětlen (z vesmíru)",
+  moonStyleEarth: "Jak je vidět odsud"
 }

@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "今天和本周的番茄钟轮数",
   entry_pomodoroTally: "番茄钟轮数",
   citiesFull: "最多 24 个城市：移除一个才能添加另一个。",
-  alarmZoneUnknown: "本机不认识时区 {zone}；这个闹钟无法响铃。"
+  alarmZoneUnknown: "本机不认识时区 {zone}；这个闹钟无法响铃。",
+  optionMoonStyle: "月亮",
+  moonStyleSpace: "实际受光（从太空看）",
+  moonStyleEarth: "从这里看到的样子"
 }

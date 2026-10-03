@@ -89,7 +89,11 @@ control.
   - Optionally the Moon on the map and the globe, where it stands at the
     zenith right now: a small shaded sphere floating above its shadow, its
     phase lit towards the Sun (the same phase numbers as More Weather);
-    hovering it names the phase ("Moon · 61 % · waxing").
+    hovering it names the phase ("Moon · 61 % · waxing"). Display → Moon
+    switches it to "As seen from here": the phase as you see it in the sky
+    from the current place (here or the selected city), lit on the right
+    while waxing and on the left while waning, mirrored south of the
+    equator.
   - Below the map, your place (the location pin and its name, as in More
     Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
@@ -193,8 +197,9 @@ control.
     - Widget and app: what the clock shows (sunrise and sunset on in the app,
       off in the widget; golden and blue hour off), which tabs there are, their
       order and the tab on opening; for the World tab the map style (flat map
-      or globe), the night side, the ruler (flat map), city names and whether
-      the globe turns by itself.
+      or globe), the night side, the ruler (flat map), city names, the Moon
+      (lit as from space or as seen from here) and whether the globe turns by
+      itself.
   - **Sounds:** the sound for alarms, timers and pomodoro phases and their
     volume; the chimes (interval, tone, hour chime, volume, mute).
   - **Shortcuts:** every key and click, listed.
@@ -462,21 +467,26 @@ That is only needed when the source data changes; the result is committed.
 the tilted globe view.
 
 The sun and the sky (overhead point, elevation, sun times, twilight steps and
-colours) live in `Sky.js`, which knows no projection; `WorldMap.js` (the flat
-map's Equal Earth projection) keeps its old names as thin wrappers over it.
+colours) live in `Sky.js`, which knows no projection. `EqualEarth.js` holds
+the flat map's projection (`project`, `unproject`, `X_MAX`, `Y_MAX`,
+`outline`, `graticule`), the flat twilight polygons (`twilightPolygon`,
+`nightPolygon`) and `ringToMap`, which puts a ring of `data/globe-land.json`
+on the map, cut at ±180° for strokes. `WorldMap.js` keeps the time zones and
+the old names as thin wrappers over both. `Moon.js` draws the Moon either way
+(`moonLitAngleFor`: from space or as seen from a latitude).
 `Globe.js` holds the World tab's globe and, for More Weather's globe, a view
 that can tilt to any latitude and zoom (`viewMatrix`, `prepareVectors`,
 `prepareLand`, `projectView`, `unprojectView`, `frontPolygonsView`,
 `frontLinesView`, `capPolygonView`, `gridLinesView`), working on unit vectors
-and joining clipped fills along the rim. Their tests are `tests/sky.test.mjs`
-and `tests/globe.test.mjs`; `tests/globe-time.test.mjs` covers the parts that
+and joining clipped fills along the rim. Their tests are `tests/sky.test.mjs`,
+`tests/equal-earth.test.mjs` and `tests/globe.test.mjs`; `tests/globe-time.test.mjs` covers the parts that
 need More Time's flat map data.
 
 Some files are shared with [More Weather](https://github.com/T-The-Coder/more-weather)
 (the switches, buttons, bar placement, app launcher entry, the request helper,
 the place search with `PlaceSearch.js` and its test, the Moon with `Moon.js`,
-its test and the `MoonSphere` component, `Sky.js`, `Globe.js` and
-`data/globe-land.json` with their tests, and parts of the test setup). With both repositories side by side,
+its test and the `MoonSphere` component, `Sky.js`, `EqualEarth.js`, `Globe.js`
+and `data/globe-land.json` with their tests, and parts of the test setup). With both repositories side by side,
 `tests/shared-files.test.mjs` checks that the copies match, and
 `tools/sync-shared.sh from-sibling` or `to-sibling` copies them across with the
 names changed.

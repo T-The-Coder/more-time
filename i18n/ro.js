@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Runde pomodoro azi și săptămâna aceasta",
   entry_pomodoroTally: "Runde pomodoro",
   citiesFull: "Cel mult 24 de orașe: elimină unul ca să adaugi altul.",
-  alarmZoneUnknown: "Acest computer nu cunoaște fusul {zone}; această alarmă nu poate suna."
+  alarmZoneUnknown: "Acest computer nu cunoaște fusul {zone}; această alarmă nu poate suna.",
+  optionMoonStyle: "Luna",
+  moonStyleSpace: "Așa cum e luminată (din spațiu)",
+  moonStyleEarth: "Așa cum se vede de aici"
 }

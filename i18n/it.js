@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Giri di pomodoro oggi e questa settimana",
   entry_pomodoroTally: "Giri di pomodoro",
   citiesFull: "Al massimo 24 città: rimuovine una per aggiungerne un’altra.",
-  alarmZoneUnknown: "Questo computer non conosce il fuso {zone}; questa sveglia non può suonare."
+  alarmZoneUnknown: "Questo computer non conosce il fuso {zone}; questa sveglia non può suonare.",
+  optionMoonStyle: "Luna",
+  moonStyleSpace: "Come è illuminata (dallo spazio)",
+  moonStyleEarth: "Come si vede da qui"
 }

@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "आज और इस सप्ताह के पोमोडोरो दौर",
   entry_pomodoroTally: "पोमोडोरो दौर",
   citiesFull: "अधिकतम 24 शहर: दूसरा जोड़ने के लिए एक हटाएँ।",
-  alarmZoneUnknown: "यह कंप्यूटर समय क्षेत्र {zone} नहीं जानता; यह अलार्म नहीं बज सकता।"
+  alarmZoneUnknown: "यह कंप्यूटर समय क्षेत्र {zone} नहीं जानता; यह अलार्म नहीं बज सकता।",
+  optionMoonStyle: "चंद्रमा",
+  moonStyleSpace: "जैसे यह रोशन है (अंतरिक्ष से)",
+  moonStyleEarth: "जैसा यहाँ से दिखता है"
 }

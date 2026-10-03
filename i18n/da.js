@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Pomodororunder i dag og denne uge",
   entry_pomodoroTally: "Pomodororunder",
   citiesFull: "Højst 24 byer: fjern én for at tilføje en anden.",
-  alarmZoneUnknown: "Denne computer kender ikke tidszonen {zone}; denne alarm kan ikke ringe."
+  alarmZoneUnknown: "Denne computer kender ikke tidszonen {zone}; denne alarm kan ikke ringe.",
+  optionMoonStyle: "Måne",
+  moonStyleSpace: "Som den er oplyst (fra rummet)",
+  moonStyleEarth: "Som den ses herfra"
 }

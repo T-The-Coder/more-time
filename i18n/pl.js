@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Rundy pomodoro dziś i w tym tygodniu",
   entry_pomodoroTally: "Rundy pomodoro",
   citiesFull: "Najwyżej 24 miasta: usuń jedno, by dodać inne.",
-  alarmZoneUnknown: "Ten komputer nie zna strefy {zone}; ten budzik nie może dzwonić."
+  alarmZoneUnknown: "Ten komputer nie zna strefy {zone}; ten budzik nie może dzwonić.",
+  optionMoonStyle: "Księżyc",
+  moonStyleSpace: "Tak, jak jest oświetlony (z kosmosu)",
+  moonStyleEarth: "Tak, jak widać go stąd"
 }

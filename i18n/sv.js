@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Pomodororundor i dag och denna vecka",
   entry_pomodoroTally: "Pomodororundor",
   citiesFull: "Högst 24 städer: ta bort en för att lägga till en annan.",
-  alarmZoneUnknown: "Den här datorn känner inte tidszonen {zone}; det här alarmet kan inte ringa."
+  alarmZoneUnknown: "Den här datorn känner inte tidszonen {zone}; det här alarmet kan inte ringa.",
+  optionMoonStyle: "Måne",
+  moonStyleSpace: "Som den är belyst (från rymden)",
+  moonStyleEarth: "Som den syns härifrån"
 }

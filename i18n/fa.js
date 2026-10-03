@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "دورهای پومودورو امروز و این هفته",
   entry_pomodoroTally: "دورهای پومودورو",
   citiesFull: "حداکثر ۲۴ شهر: برای افزودن شهر دیگر یکی را حذف کنید.",
-  alarmZoneUnknown: "این رایانه منطقهٔ زمانی {zone} را نمی‌شناسد؛ این زنگ نمی‌تواند به صدا درآید."
+  alarmZoneUnknown: "این رایانه منطقهٔ زمانی {zone} را نمی‌شناسد؛ این زنگ نمی‌تواند به صدا درآید.",
+  optionMoonStyle: "ماه",
+  moonStyleSpace: "همان‌طور که روشن است (از فضا)",
+  moonStyleEarth: "همان‌طور که از اینجا دیده می‌شود"
 }

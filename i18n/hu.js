@@ -210,5 +210,8 @@ var catalog = {
   optionPomodoroTally: "Pomodorókörök ma és ezen a héten",
   entry_pomodoroTally: "Pomodorókörök",
   citiesFull: "Legfeljebb 24 város: távolíts el egyet, hogy újat vehess fel.",
-  alarmZoneUnknown: "Ez a gép nem ismeri a(z) {zone} időzónát; ez az ébresztő nem tud szólni."
+  alarmZoneUnknown: "Ez a gép nem ismeri a(z) {zone} időzónát; ez az ébresztő nem tud szólni.",
+  optionMoonStyle: "Hold",
+  moonStyleSpace: "Ahogy meg van világítva (az űrből)",
+  moonStyleEarth: "Ahogy innen látszik"
 }
