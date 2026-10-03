@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Toàn hệ, hệ bên trong, Trái Đất (cũng bằng Ctrl + bánh xe)",
   shortcutAstroReset: "Về khung nhìn ban đầu",
   sourceGroupAstro: "Hệ Mặt Trời",
-  sourceGroupAstroDetails: "Vị trí hành tinh từ các phần tử Kepler gần đúng của JPL (E. M. Standish, dùng cho 1800–2050, khoảng một phút cung), tính trên máy này; không tải gì xuống. Khoảng cách được vẽ theo r^0,45 để mọi quỹ đạo đều vừa."
+  sourceGroupAstroDetails: "Vị trí hành tinh từ các phần tử Kepler gần đúng của JPL (E. M. Standish, dùng cho 1800–2050, khoảng một phút cung), tính trên máy này; không tải gì xuống. Khoảng cách được vẽ theo r^0,45 để mọi quỹ đạo đều vừa.",
+  optionRotateFps: "Khung hình mỗi giây",
+  optionRotateFpsHint: "Nhiều khung hình trông mượt hơn và tốn nhiều thời gian xử lý hơn.",
+  hoverTooltip: "Chú giải khi rê chuột",
+  hoverTooltipHint: "Lặp lại các mục của thanh menu, kể cả mục khi rê chuột, trong chú giải của thanh."
 }

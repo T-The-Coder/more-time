@@ -32,6 +32,10 @@ control.
   the accent colour, the next alarm in the accent colour within an hour and red
   within ten minutes, each city in the accent colour by day (6 to 18 there) and
   muted at night, the seconds and the week number muted.
+- **Tooltip on hover** (off by default): the bar's own tooltip repeats every
+  entry the clock shows while hovered, one per line and with a word where the
+  bar shows only a symbol ("Next alarm 7:00 AM", "Timer Tea 2:16",
+  "New York 9:40 AM"); not while the popup is open.
 - Left click opens or closes the popup.
 - Middle click stops what rings, or else starts or pauses the first pomodoro.
 - Right click sends a notification with what is coming up.
@@ -79,8 +83,13 @@ control.
     the short way round, a drag or the sideways wheel (⇧ wheel) turns it by
     hand, the vertical wheel scrolls the tab, and if you like it turns by
     itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4
-    (default) or 8 minutes (only while you can see it; a click, drag or the wheel stops it,
-    the pointer merely resting on it does not, and the tooltips keep working).
+    (default) or 8 minutes, at 8, 15 (default), 24 or 30 frames a second (only
+    while you can see it: the popup open or the app window focused; a click,
+    drag or the wheel stops it, the pointer merely resting on it does not, and
+    the tooltips keep working). While it turns it is drawn more simply (flat
+    instead of hatched zones, a coarser coast, only the chosen place named,
+    the fills at a lower resolution), so turning stays light on the
+    processor.
   - The globe fills the window: as large as the visible height below it
     allows (the popup's up to its full height), at most the page's width and
     never smaller than 240 points (below that the page scrolls); it grows and
@@ -177,7 +186,7 @@ control.
     from the Sun and from Earth in au and light-minutes and its orbital
     period.
   - Settings → Display → Astro: orbits, names, the month ring, turning by
-    itself (delay and speed).
+    itself (delay, speed and frames per second).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.

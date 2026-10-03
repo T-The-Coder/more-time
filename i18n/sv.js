@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Hela systemet, inre systemet, jorden (även Ctrl + hjul)",
   shortcutAstroReset: "Tillbaka till startvyn",
   sourceGroupAstro: "Solsystemet",
-  sourceGroupAstroDetails: "Planetpositioner från JPL:s ungefärliga keplerska element (E. M. Standish, giltiga 1800–2050, ungefär en bågminut), beräknade på den här datorn; inget laddas ner. Avstånden ritas som r^0,45 så att alla banor får plats."
+  sourceGroupAstroDetails: "Planetpositioner från JPL:s ungefärliga keplerska element (E. M. Standish, giltiga 1800–2050, ungefär en bågminut), beräknade på den här datorn; inget laddas ner. Avstånden ritas som r^0,45 så att alla banor får plats.",
+  optionRotateFps: "Bilder per sekund",
+  optionRotateFpsHint: "Fler bilder ser mjukare ut och tar mer processortid.",
+  hoverTooltip: "Verktygstips vid hovring",
+  hoverTooltipHint: "Upprepar menyradens poster, även de vid hovring, i fältets verktygstips."
 }

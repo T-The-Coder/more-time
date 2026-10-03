@@ -71,6 +71,10 @@ Panel {
   // The two secondary text tones used everywhere: muted for labels and
   // supporting values, subtle for tertiary hints and hairline borders.
   readonly property color mutedText: Qt.darker(foreground, 1.35)
+  // The Sun wherever it is drawn (the maps' sun marker, the Astro tab): the
+  // golden hour's gold, softened towards the text and kept at 3:1 on the
+  // background like the sky-coloured time (WorldMap.skyColor at 0°).
+  readonly property color sunColor: WorldMap.skyColor(0, rgbOf(foreground), rgbOf(Color.popups.background))
   readonly property color subtleText: Qt.darker(foreground, 1.7)
   // Key hints: the text colour faded towards the background.
   readonly property color hintText: Qt.tint(foreground,
@@ -428,6 +432,7 @@ Panel {
       worldMoonStyle: "space",
       globeRotateDelay: "10",
       globeRotateSpeed: "4",
+      globeRotateFps: "15",
       worldList: true,
       worldDifference: true,
       worldDials: true,
@@ -446,6 +451,7 @@ Panel {
       astroAutoRotate: false,
       astroRotateDelay: "10",
       astroRotateSpeed: "4",
+      astroRotateFps: "15",
       tabOrder: defaultTabOrder(),
       defaultTab: "world"
     }
@@ -472,6 +478,7 @@ Panel {
       entryOrder: defaultEntryOrder(),
       citiesCount: "2",
       boldOnHover: true,
+      hoverTooltip: false,
       menubarAccents: "hover",
       openWidgetOnHover: false
     }
@@ -608,10 +615,13 @@ Panel {
   readonly property bool menubarOpenWidgetOnHover: !standaloneMode && menubarDisplaySetting("openWidgetOnHover", false)
   readonly property int menubarCitiesCount: Number(menubarDisplaySetting("citiesCount", "2")) || 2
 
-  function menubarEntryShown(key) {
+  // hovered: as if the pointer rested on the widget (the tooltip), else
+  // as it does now.
+  function menubarEntryShown(key, hovered) {
     if (!menubarShowClock) return false
     if (menubarDisplaySetting(key, false) === true) return true
-    if (menubarHovered && menubarDisplaySetting(key + "OnHover", false) === true) return true
+    var isHovered = hovered === undefined ? menubarHovered : hovered
+    if (isHovered && menubarDisplaySetting(key + "OnHover", false) === true) return true
     return menubarDisplaySetting(key + "WhenRelevant", false) === true && menubarEntryRelevant(key)
   }
 
@@ -651,8 +661,10 @@ Panel {
   // the colour of the sky); while coloured values are off
   // (menubarAccentsOn) every role is "". The parts make up the text; the
   // glyph takes the entry's colour.
-  readonly property var menubarEntries: {
+  readonly property var menubarEntries: menubarEntryList(menubarHovered)
+  function menubarEntryList(hovered) {
     var result = []
+    var secondsShown = menubarEntryShown("seconds", hovered) && (menubarEntryShown("time", hovered) || hovered)
     var order = sanitizedOrder(menubarDisplaySetting("entryOrder", null), "entryOrder")
     var items = itemsStore.items
     var now = nowMs
@@ -660,15 +672,15 @@ Panel {
     function role(name) { return accents ? name : "" }
     for (var i = 0; i < order.length; i++) {
       var key = order[i]
-      if (!menubarEntryShown(key)) continue
-      var entry = { key: key, text: "", glyph: "", urgent: false, color: "", parts: null }
+      if (!menubarEntryShown(key, hovered)) continue
+      var entry = { key: key, text: "", glyph: "", urgent: false, color: "", parts: null, label: "" }
       if (key === "time") {
         // Hours and minutes in the colour of the sky, the seconds muted,
         // then AM / PM.
         var clock = localClock(false)
         var skyHex = accents ? skyColorAt(now) : ""
         var sky = skyHex !== "" ? "sky" + skyHex : ""
-        if (menubarSecondsShown) {
+        if (secondsShown) {
           var suffix = hour12 ? (clock.match(/\s*\S+$/) || [""])[0] : ""
           var hm = suffix ? clock.slice(0, clock.length - suffix.length) : clock
           entry.parts = [{ text: hm, color: sky }, { text: ":" + Model.pad2(localParts.second), color: role("muted") }]
@@ -710,6 +722,7 @@ Panel {
         }
         if (timer) {
           var timerLeft = Model.timerRemaining(timer, now)
+          entry.label = timer.label || ""
           entry.glyph = "\u{f051f}"
           entry.text = durationText(timerLeft, { countdown: true })
           entry.color = role(timer.state === "paused" ? "muted" : (timerLeft <= 60000 ? "urgent" : "accent"))
@@ -728,6 +741,7 @@ Panel {
           if (pomodoro.state === "idle") continue
           var pomodoroLeft = Model.pomodoroRemaining(pomodoro, now)
           entry.glyph = pomodoro.phase === "work" ? "\u{f0996}" : "\u{f0176}"
+          entry.label = pomodoroPhaseName(pomodoro.phase)
           entry.text = durationText(pomodoroLeft, { countdown: true })
           // Focus in the accent colour, breaks muted like the phase label in
           // the popup, the last minute of a running phase urgent.
@@ -750,8 +764,37 @@ Panel {
       if (entry.text !== "" || entry.glyph !== "") result.push(entry)
     }
     if (!result.length && menubarHoverHandle)
-      result.push({ key: "handle", text: "", glyph: "\u{f0150}", urgent: false, color: "", parts: [] })
+      result.push({ key: "handle", text: "", glyph: "\u{f0150}", urgent: false, color: "", parts: [], label: "" })
     return result
+  }
+
+  // The bar's own tooltip (menu bar option "hoverTooltip"): every entry the
+  // bar shows while hovered, in its order, one per line, with a word where
+  // the bar shows only a glyph. Plain text, as the shell's tooltip is;
+  // nothing while the popup is open.
+  readonly property bool menubarTooltipOn: !standaloneMode && menubarDisplaySetting("hoverTooltip", false)
+  readonly property string menubarTooltipText: !menubarTooltipOn || opened ? "" : menubarTooltipLines().join("\n")
+  function menubarTooltipLines() {
+    var lines = []
+    var entries = menubarEntryList(true)
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i]
+      if (e.key === "cities") {
+        for (var c = 0; c < e.parts.length; c++) lines.push(e.parts[c].text.trim())
+      } else if (e.key === "nextAlarm" || e.key === "stopwatches" || e.key === "pomodoroTally") {
+        lines.push(i18n("entry_" + e.key) + " " + e.text)
+      } else if (e.key === "timers") {
+        lines.push(i18n("entry_timers") + (e.label ? " " + e.label : "") + " " + e.text)
+      } else if (e.key === "pomodoros") {
+        lines.push(e.label + " " + e.text)
+      } else if (e.key === "ringing") {
+        // What rings, by its title ("Tea is up").
+        for (var r = 0; r < ringer.ringing.length; r++) lines.push(ringer.ringing[r].title)
+      } else if (e.key !== "handle" && e.text !== "") {
+        lines.push(e.text)
+      }
+    }
+    return lines
   }
   readonly property bool menubarHasVisibleContent: menubarEntries.length > 0
 
@@ -1563,6 +1606,14 @@ Panel {
   }
   readonly property Item popupContentHost: popupLoader.item ? popupLoader.item.contentHost : null
   readonly property real contentHeight: contentColumn.implicitHeight
+  // Whether anything may move by itself (the globe and the solar system
+  // turning): the popup open in the bar, or the app's window shown and
+  // focused. An app window left open in the background, unfocused or on
+  // another workspace, stays still. motionForced: the screenshot harness,
+  // whose offscreen window never has the focus.
+  property bool motionForced: false
+  readonly property bool motionAllowed: opened && (!standaloneMode
+    || (standaloneWindow.visible && (keyCatcher.Window.active || motionForced)))
   // The height the content shows at once, and where the tab's content
   // starts in it: the World tab fits its globe or map into what is visible.
   // In the popup its cap, not its height, which follows the content.

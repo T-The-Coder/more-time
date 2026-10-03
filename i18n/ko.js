@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "태양계 전체, 내행성계, 지구 (Ctrl + 휠로도)",
   shortcutAstroReset: "처음 보기로 돌아가기",
   sourceGroupAstro: "태양계",
-  sourceGroupAstroDetails: "행성 위치는 JPL의 근사 케플러 궤도 요소(E. M. Standish, 1800–2050년 유효, 약 1분각)로 이 컴퓨터에서 계산하며 아무것도 내려받지 않습니다. 모든 궤도가 들어가도록 거리는 r^0.45로 그립니다."
+  sourceGroupAstroDetails: "행성 위치는 JPL의 근사 케플러 궤도 요소(E. M. Standish, 1800–2050년 유효, 약 1분각)로 이 컴퓨터에서 계산하며 아무것도 내려받지 않습니다. 모든 궤도가 들어가도록 거리는 r^0.45로 그립니다.",
+  optionRotateFps: "초당 프레임",
+  optionRotateFpsHint: "프레임이 많을수록 부드럽지만 프로세서 시간을 더 씁니다.",
+  hoverTooltip: "마우스를 올리면 도움말",
+  hoverTooltipHint: "메뉴 막대의 항목을, 마우스를 올릴 때만 보이는 것까지, 막대 도움말에 다시 보여 줍니다."
 }

@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Système entier, système intérieur, Terre (aussi Ctrl + molette)",
   shortcutAstroReset: "Revenir à la vue de départ",
   sourceGroupAstro: "Système solaire",
-  sourceGroupAstroDetails: "Positions des planètes d’après les éléments képlériens approchés du JPL (E. M. Standish, valables 1800–2050, environ une minute d’arc), calculées sur cet ordinateur ; rien n’est téléchargé. Les distances sont tracées en r^0,45 pour que toutes les orbites tiennent."
+  sourceGroupAstroDetails: "Positions des planètes d’après les éléments képlériens approchés du JPL (E. M. Standish, valables 1800–2050, environ une minute d’arc), calculées sur cet ordinateur ; rien n’est téléchargé. Les distances sont tracées en r^0,45 pour que toutes les orbites tiennent.",
+  optionRotateFps: "Images par seconde",
+  optionRotateFpsHint: "Plus d’images, c’est plus fluide, mais cela demande plus de temps processeur.",
+  hoverTooltip: "Info-bulle au survol",
+  hoverTooltipHint: "Reprend les éléments de la barre de menus, y compris ceux du survol, dans l’info-bulle de la barre."
 }

@@ -138,19 +138,34 @@ Item {
   }
   property var hover: null
 
-  onGlobeDataChanged: canvas.requestPaint()
-  onTwilightChanged: canvas.requestPaint()
-  onCitiesChanged: canvas.requestPaint()
-  onWidthChanged: canvas.requestPaint()
-  onShowLabelsChanged: canvas.requestPaint()
-  onHomeZoneChanged: canvas.requestPaint()
-  onCenterLonChanged: canvas.requestPaint()
+  onGlobeDataChanged: globe.repaint()
+  onTwilightChanged: globe.repaint()
+  onCitiesChanged: globe.repaint()
+  onWidthChanged: globe.repaint()
+  onShowLabelsChanged: globe.repaint()
+  onHomeZoneChanged: globe.repaint()
+  // While turning by itself the fills follow at most eight times a second
+  // (they move under a pixel a frame); everything else repaints both.
+  onCenterLonChanged: {
+    canvas.requestPaint()
+    if (!cheapFrames) return
+    var now = Date.now()
+    if (now - lastFillMs >= 120) {
+      lastFillMs = now
+      fillCanvas.requestPaint()
+    }
+  }
+  property double lastFillMs: 0
+  function repaint() {
+    canvas.requestPaint()
+    if (cheapFrames) fillCanvas.requestPaint()
+  }
   readonly property string labelStyle: panel.interfaceLanguage + "|" + panel.hour12 + "|" + panel.fontFamily
     + "|" + selectedIndex
   onLabelStyleChanged: canvas.requestPaint()
   Connections {
     target: globe.panel.zoneTable
-    function onRevisionChanged() { canvas.requestPaint() }
+    function onRevisionChanged() { globe.repaint() }
   }
 
   // ---- Turning by itself ----
@@ -159,7 +174,7 @@ Item {
   // tab). A press, drag, wheel or selection change stops it and restarts the
   // wait; a pointer resting on it does not, and the tooltip follows the turn.
   property bool rotating: false
-  readonly property bool canRotate: autoRotate && panel.opened && panel.currentTab === "world"
+  readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "world"
     && visible && !mouse.pressed
   onCanRotateChanged: if (!canRotate) rotating = false
 
@@ -180,13 +195,13 @@ Item {
     onTriggered: globe.rotating = true
   }
 
-  // A frame for every pixel the surface moves at the centre, not more
-  // often than 30 a second: at one turn in four minutes about five a second,
-  // which keeps a frame of 30–40 ms (QML, every layer on) cheap.
+  // Frames a second as set (globeRotateFps, 15 unless changed); the turn
+  // advances by the time elapsed. While turning it is drawn the cheap way
+  // (cheapFrames).
+  readonly property int rotateFps: Number(panel.displaySetting("globeRotateFps", "15")) || 15
   Timer {
     id: rotateTimer
-    interval: Math.max(33, Math.min(250, (180 / Math.PI / Math.max(1, globe.radius))
-      / (360 / (globe.rotateTurnMinutes * 60000))))
+    interval: Math.round(1000 / Math.max(1, globe.rotateFps))
     repeat: true
     running: globe.canRotate && globe.rotating
     property double last: 0
@@ -199,8 +214,70 @@ Item {
     }
   }
 
+  // While it turns by itself: no hatching, a coarser coastline without the
+  // smallest islands, only the selected place labelled.
+  readonly property bool cheapFrames: rotating
+  // Every `every`-th point, and no ring smaller than `least` degrees each
+  // way.
+  function coarseRings(rings, every, least) {
+    var out = []
+    for (var i = 0; i < rings.length; i++) {
+      var ring = rings[i]
+      var p = ring.p
+      var latLo = 90, latHi = -90
+      for (var k = 0; k < p.length; k += 2) {
+        if (p[k] < latLo) latLo = p[k]
+        if (p[k] > latHi) latHi = p[k]
+      }
+      if (ring.hi - ring.lo < least && latHi - latLo < least) continue
+      var flat = []
+      for (var j = 0; j < p.length; j += 2 * every) flat.push(p[j], p[j + 1])
+      if (flat.length >= 6) out.push(Globe.prepare(flat))
+    }
+    return out
+  }
+  readonly property var coarseLand: globeData ? coarseRings(globeData.land, 3, 1.5) : []
+  readonly property var coarseZones: globeData ? globeData.zones.map(function(zone) {
+    return { o: zone.o, rings: globe.coarseRings(zone.rings, 6, 3) }
+  }) : []
+  onCheapFramesChanged: {
+    canvas.requestPaint()
+    fillCanvas.requestPaint()
+  }
+
   // Where each city's dot was drawn, for clicks.
   property var cityHits: []
+
+  // The fills while it turns by itself (cheapFrames): zones, land and
+  // twilight at a third of the resolution, scaled up under the sharp
+  // lines of `canvas`. Fills are soft-edged anyway, and painting them is
+  // what costs (the rasterizer's time grows with the filled area).
+  readonly property real fillScale: 3
+  Canvas {
+    id: fillCanvas
+    visible: globe.cheapFrames
+    width: Math.ceil(globe.width / globe.fillScale)
+    height: Math.ceil(globe.height / globe.fillScale)
+    transformOrigin: Item.TopLeft
+    scale: globe.fillScale
+    smooth: true
+    onPaint: {
+      var ctx = getContext("2d")
+      ctx.reset()
+      if (!globe.cheapFrames || !globe.globeData || globe.radius <= 0) return
+      var lon = Globe.wrapLon(globe.centerLon)
+      ctx.scale(1 / globe.fillScale, 1 / globe.fillScale)
+      // No clip: every fill is clipped to the front side already, and a
+      // clip path makes each fill dearer.
+      canvas.disc(ctx)
+      ctx.fillStyle = canvas.rgba(canvas.ink, 0.03)
+      ctx.fill()
+      canvas.zonesPass(ctx, lon)
+      canvas.gridPass(ctx, lon)
+      canvas.landFillPass(ctx, lon)
+      canvas.twilightPass(ctx, lon)
+    }
+  }
 
   Canvas {
     id: canvas
@@ -244,64 +321,53 @@ Item {
       ctx.arc(globe.centerX, globe.centerY, globe.radius, 0, Math.PI * 2)
     }
 
-    onPaint: {
-      var started = Date.now()
-      var ctx = getContext("2d")
-      ctx.reset()
-      var data = globe.globeData
-      if (!data || globe.radius <= 0) return
-      var lon = Globe.wrapLon(globe.centerLon)
-      var R = globe.radius
-
-      ctx.save()
-      disc(ctx)
-      ctx.clip()
+    // The fills, in passes the cheap frames hand to fillCanvas.
+    function backgroundPass(ctx) {
       ctx.fillStyle = rgba(ink, 0.03)
-      ctx.fillRect(0, 0, width, height)
-
-      // Zebra: whole-hour zones alternate by the parity of their hour;
-      // zones off the full hour are hatched.
-      var hatch = ctx.createPattern(rgba(ink, 0.16), Qt.BDiagPattern)
-      for (var z = 0; z < data.zones.length; z++) {
-        var zone = data.zones[z]
+      ctx.fillRect(0, 0, globe.width, globe.height)
+    }
+    // Zebra: whole-hour zones alternate by the parity of their hour;
+    // zones off the full hour are hatched (flat while turning).
+    function zonesPass(ctx, lon) {
+      var hatch = globe.cheapFrames ? null : ctx.createPattern(rgba(ink, 0.16), Qt.BDiagPattern)
+      var zones = globe.cheapFrames ? globe.coarseZones : globe.globeData.zones
+      for (var z = 0; z < zones.length; z++) {
+        var zone = zones[z]
         var band = WorldMap.zebraBand(zone.o)
         fillRings(ctx, zone.rings, lon, zone.o === globe.homeZone ? rgba(accent, 0.22)
-          : (band === 2 ? hatch : rgba(ink, band === 1 ? 0.12 : 0.035)))
+          : (band === 2 ? (hatch || rgba(ink, 0.08)) : rgba(ink, band === 1 ? 0.12 : 0.035)))
       }
-
-      var zonesDone = Date.now()
-
-      // Meridians every 15° and the equator, faintly.
+    }
+    // Meridians every 15° and the equator, faintly.
+    function gridPass(ctx, lon) {
       ctx.strokeStyle = rgba(ink, 0.07)
       ctx.lineWidth = 1
-      var lines = Globe.gridLines(lon, R, 15)
+      var lines = Globe.gridLines(lon, globe.radius, 15)
       ctx.beginPath()
       for (var g = 0; g < lines.length; g++) trace(ctx, lines[g], false)
       ctx.stroke()
-
-      // Land: a light fill and a crisp coastline.
-      fillRings(ctx, data.land, lon, rgba(ink, 0.07))
-      ctx.beginPath()
-      for (var l = 0; l < data.land.length; l++) {
-        var coast = Globe.frontLines(data.land[l], lon, R)
-        for (var c = 0; c < coast.length; c++) trace(ctx, coast[c], false)
-      }
-      ctx.strokeStyle = rgba(ink, 0.55)
-      ctx.lineWidth = 0.8
-      ctx.stroke()
-
-      var landDone = Date.now()
-
-      // The twilight layers: the golden and the blue band with soft edges,
-      // the night in three steps (WorldMap.twilightLayers); then the Sun at
-      // its zenith point.
-      // Each cap is clipped to the front side once per frame, however many
-      // layers share it.
+    }
+    function landFillPass(ctx, lon) {
+      fillRings(ctx, globe.cheapFrames ? globe.coarseLand : globe.globeData.land, lon, rgba(ink, 0.07))
+    }
+    // The twilight layers: the golden and the blue band with soft edges,
+    // the night in three steps (WorldMap.twilightLayers). Each cap is
+    // clipped to the front side once per frame, however many layers share
+    // it.
+    // While turning, the caps come straight from the view (analytic, no
+    // clipping of rings).
+    function twilightPass(ctx, lon) {
       var tw = globe.twilight
       var front = {}
-      for (var e in tw.shapes) {
-        front[e] = []
-        for (var c = 0; c < tw.shapes[e].length; c++) front[e] = front[e].concat(Globe.frontPolygons(tw.shapes[e][c], lon, R))
+      if (globe.cheapFrames) {
+        var m = Globe.viewMatrix(0, lon)
+        var antiLon = tw.sun.lon > 0 ? tw.sun.lon - 180 : tw.sun.lon + 180
+        for (var a in tw.shapes) front[a] = Globe.capPolygonView(-tw.sun.lat, antiLon, 90 + Number(a), m, globe.radius)
+      } else {
+        for (var e in tw.shapes) {
+          front[e] = []
+          for (var c = 0; c < tw.shapes[e].length; c++) front[e] = front[e].concat(Globe.frontPolygons(tw.shapes[e][c], lon, globe.radius))
+        }
       }
       ctx.fillRule = Qt.OddEvenFill
       for (var t = 0; t < tw.layers.length; t++) {
@@ -313,9 +379,53 @@ Item {
         ctx.fillStyle = Qt.rgba(layer.fill.r, layer.fill.g, layer.fill.b, layer.fill.a)
         ctx.fill()
       }
+    }
+
+    onPaint: {
+      var started = Date.now()
+      var ctx = getContext("2d")
+      ctx.reset()
+      var data = globe.globeData
+      if (!data || globe.radius <= 0) return
+      var lon = Globe.wrapLon(globe.centerLon)
+      var R = globe.radius
+      // While turning by itself the fills go to fillCanvas, at a lower
+      // resolution; this canvas keeps the lines, the Sun, the Moon and the
+      // places sharp.
+      var split = globe.cheapFrames
+
+      ctx.save()
+      if (!split) {
+        disc(ctx)
+        ctx.clip()
+        backgroundPass(ctx)
+        zonesPass(ctx, lon)
+      }
+
+      var zonesDone = Date.now()
+
+      if (!split) gridPass(ctx, lon)
+
+      // Land: a light fill and a crisp coastline.
+      if (!split) landFillPass(ctx, lon)
+      var land = globe.cheapFrames ? globe.coarseLand : data.land
+      ctx.beginPath()
+      for (var l = 0; l < land.length; l++) {
+        var coast = Globe.frontLines(land[l], lon, R)
+        for (var c = 0; c < coast.length; c++) trace(ctx, coast[c], false)
+      }
+      ctx.strokeStyle = rgba(ink, 0.55)
+      ctx.lineWidth = 0.8
+      ctx.stroke()
+
+      var landDone = Date.now()
+
+      if (!split) twilightPass(ctx, lon)
+      // The Sun at its zenith point.
+      var tw = globe.twilight
       if (globe.showNight) {
         var sun = screenPoint(tw.sun.lat, tw.sun.lon, lon)
-        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, rgba(accent, 0.95))
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor)
       }
       // The Moon floats above its sub-lunar point, lifted along the view
       // direction (1.15 of its distance from the centre), its shadow on the
@@ -397,7 +507,7 @@ Item {
         ctx.fill()
         hits.push({ index: index, x: p.x, y: p.y })
         taken.push({ x: p.x - 4, y: p.y - 4, w: 8, h: 8 })
-        if (!globe.showLabels) continue
+        if (!globe.showLabels || (globe.cheapFrames && !selected)) continue
         var offset = globe.panel.cityOffset(city)
         var label = city.name + (offset !== null ? " " + globe.panel.clockFor(globe.minuteMs, offset, false) : "")
         ctx.font = selected ? boldFont : labelFont

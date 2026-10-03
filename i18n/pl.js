@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Cały układ, wewnętrzny układ, Ziemia (także Ctrl + kółko)",
   shortcutAstroReset: "Wróć do widoku początkowego",
   sourceGroupAstro: "Układ Słoneczny",
-  sourceGroupAstroDetails: "Położenia planet z przybliżonych elementów keplerowskich JPL (E. M. Standish, ważne 1800–2050, około minuty kątowej), liczone na tym komputerze; nic nie jest pobierane. Odległości rysowane jako r^0,45, by zmieściły się wszystkie orbity."
+  sourceGroupAstroDetails: "Położenia planet z przybliżonych elementów keplerowskich JPL (E. M. Standish, ważne 1800–2050, około minuty kątowej), liczone na tym komputerze; nic nie jest pobierane. Odległości rysowane jako r^0,45, by zmieściły się wszystkie orbity.",
+  optionRotateFps: "Klatki na sekundę",
+  optionRotateFpsHint: "Więcej klatek wygląda płynniej i zużywa więcej czasu procesora.",
+  hoverTooltip: "Podpowiedź po najechaniu",
+  hoverTooltipHint: "Powtarza wpisy paska menu, także te po najechaniu, w podpowiedzi paska."
 }

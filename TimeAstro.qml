@@ -230,7 +230,7 @@ Column {
 
     // ---- Turning by itself (the globe's options under astro* keys) ----
     property bool rotating: false
-    readonly property bool canRotate: autoRotate && panel.opened && panel.currentTab === "astro"
+    readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "astro"
       && visible && !mouse.pressed
     onCanRotateChanged: if (!canRotate) rotating = false
     readonly property int rotateDelaySeconds: Number(panel.displaySetting("astroRotateDelay", "10")) || 10
@@ -247,11 +247,12 @@ Column {
       running: sky.canRotate && !sky.rotating
       onTriggered: sky.rotating = true
     }
-    // A frame for every pixel the outer edge moves, at most 30 a second.
+    // Frames a second as set (astroRotateFps, 15 unless changed); the turn
+    // advances by the time elapsed.
+    readonly property int rotateFps: Number(panel.displaySetting("astroRotateFps", "15")) || 15
     Timer {
       id: rotateTimer
-      interval: Math.max(33, Math.min(250, (180 / Math.PI / Math.max(1, sky.width / 2))
-        / (360 / (sky.rotateTurnMinutes * 60000))))
+      interval: Math.round(1000 / Math.max(1, sky.rotateFps))
       repeat: true
       running: sky.canRotate && sky.rotating
       property double last: 0
@@ -300,15 +301,19 @@ Column {
         }
       }
 
+      // The Sun in warm gold (Panel.sunColor), so it reads on light and
+      // dark themes; the accent stays for the hand of the year and
+      // selection.
       function paintSun(ctx, x, y, r) {
+        var gold = sky.panel.sunColor
         var glow = ctx.createRadialGradient(x, y, r * 0.6, x, y, r * 2.6)
-        glow.addColorStop(0, rgba(accent, 0.30))
-        glow.addColorStop(1, rgba(accent, 0))
+        glow.addColorStop(0, rgba(gold, 0.30))
+        glow.addColorStop(1, rgba(gold, 0))
         ctx.fillStyle = glow
         ctx.beginPath()
         ctx.arc(x, y, r * 2.6, 0, Math.PI * 2)
         ctx.fill()
-        ctx.strokeStyle = rgba(accent, 0.45)
+        ctx.strokeStyle = rgba(gold, 0.6)
         ctx.lineWidth = 1.2
         ctx.lineCap = "round"
         ctx.beginPath()
@@ -319,8 +324,8 @@ Column {
         }
         ctx.stroke()
         var disc = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r)
-        disc.addColorStop(0, Qt.lighter(accent, 1.35))
-        disc.addColorStop(1, accent)
+        disc.addColorStop(0, Qt.lighter(gold, 1.25))
+        disc.addColorStop(1, gold)
         ctx.fillStyle = disc
         ctx.beginPath()
         ctx.arc(x, y, r, 0, Math.PI * 2)

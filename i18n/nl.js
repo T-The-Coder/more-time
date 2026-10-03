@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Heel het stelsel, binnenste stelsel, aarde (ook Ctrl + wiel)",
   shortcutAstroReset: "Terug naar het beginbeeld",
   sourceGroupAstro: "Zonnestelsel",
-  sourceGroupAstroDetails: "Planeetposities uit de benaderde kepleriaanse elementen van JPL (E. M. Standish, geldig 1800–2050, ongeveer een boogminuut), op deze computer berekend; er wordt niets gedownload. Afstanden zijn getekend als r^0,45 zodat alle banen passen."
+  sourceGroupAstroDetails: "Planeetposities uit de benaderde kepleriaanse elementen van JPL (E. M. Standish, geldig 1800–2050, ongeveer een boogminuut), op deze computer berekend; er wordt niets gedownload. Afstanden zijn getekend als r^0,45 zodat alle banen passen.",
+  optionRotateFps: "Beelden per seconde",
+  optionRotateFpsHint: "Meer beelden ogen vloeiender en kosten meer processortijd.",
+  hoverTooltip: "Tooltip bij aanwijzen",
+  hoverTooltipHint: "Herhaalt de items van de menubalk, ook die bij aanwijzen, in de tooltip van de balk."
 }

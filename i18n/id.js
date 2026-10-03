@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Seluruh sistem, sistem dalam, Bumi (juga Ctrl + roda)",
   shortcutAstroReset: "Kembali ke tampilan awal",
   sourceGroupAstro: "Tata surya",
-  sourceGroupAstroDetails: "Posisi planet dari elemen Kepler perkiraan JPL (E. M. Standish, berlaku 1800–2050, sekitar satu menit busur), dihitung di komputer ini; tidak ada yang diunduh. Jarak digambar sebagai r^0,45 agar semua orbit muat."
+  sourceGroupAstroDetails: "Posisi planet dari elemen Kepler perkiraan JPL (E. M. Standish, berlaku 1800–2050, sekitar satu menit busur), dihitung di komputer ini; tidak ada yang diunduh. Jarak digambar sebagai r^0,45 agar semua orbit muat.",
+  optionRotateFps: "Bingkai per detik",
+  optionRotateFpsHint: "Lebih banyak bingkai terlihat lebih mulus dan memakai lebih banyak waktu prosesor.",
+  hoverTooltip: "Tooltip saat diarahkan",
+  hoverTooltipHint: "Mengulang entri bilah menu, termasuk yang muncul saat diarahkan, di tooltip bilah."
 }

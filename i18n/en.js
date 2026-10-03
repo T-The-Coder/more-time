@@ -383,5 +383,9 @@ var catalog = {
   shortcutAstroZoom: "Whole system, inner system, Earth (also Ctrl + wheel)",
   shortcutAstroReset: "Back to the start view",
   sourceGroupAstro: "Solar system",
-  sourceGroupAstroDetails: "Planet positions from JPL's approximate Keplerian elements (E. M. Standish, valid 1800–2050, about an arcminute), computed on this computer; nothing is downloaded. Distances are drawn as r^0.45 so all orbits fit."
+  sourceGroupAstroDetails: "Planet positions from JPL's approximate Keplerian elements (E. M. Standish, valid 1800–2050, about an arcminute), computed on this computer; nothing is downloaded. Distances are drawn as r^0.45 so all orbits fit.",
+  optionRotateFps: "Frames per second",
+  optionRotateFpsHint: "More frames look smoother and use more processor time.",
+  hoverTooltip: "Tooltip on hover",
+  hoverTooltipHint: "Repeats the menu bar's entries, the hover ones included, in the bar's tooltip."
 }

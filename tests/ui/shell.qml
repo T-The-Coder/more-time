@@ -86,6 +86,7 @@ ShellRoot {
     // Silent, so an alarm or timer that comes due during the run plays
     // nothing on the speakers.
     function() {
+      panel.motionForced = true
       general("language", "en")
       general("alarmSound", "none")
       general("timerSound", "none")
@@ -179,7 +180,8 @@ ShellRoot {
       g.rotating = true
     },
     function() {},
-    function() {},
+    // Turning by itself: the cheap frames (fills at a lower resolution).
+    function() { shot("01m-globe-turning") },
     function() {
       var st = globe().paintStats
       var per = function(v) { return ((v || 0) / Math.max(1, st.count)).toFixed(1) }
@@ -316,6 +318,13 @@ ShellRoot {
     function() { panel.editingId = ""; panel.activeTab = "world"; general("language", "ar") },
     function() { shot("14-world-ar") },
     function() { panel.menubarHovered = true; console.log("MENUBAR", JSON.stringify(panel.menubarEntries)) },
+    // The bar's tooltip (hoverTooltip): the hover entries, one per line.
+    function() {
+      general("language", "en")
+      panel.menubarHovered = false
+      console.log("TOOLTIP", JSON.stringify(panel.menubarTooltipLines()))
+      panel.menubarHovered = true
+    },
     // The time's sky colour at a fixed place (Bobingen, as in Omarchy's
     // weather location) on 2 October: noon, 20:00, 23:00 local time, with
     // the contrast on the popup background.
@@ -417,7 +426,8 @@ ShellRoot {
       g.rotating = true
     },
     function() {},
-    function() {},
+    // Turning by itself: the cheap frames (fills at a lower resolution).
+    function() { shot("01m-globe-turning") },
     function() {
       var st = globe().paintStats
       var per = function(v) { return ((v || 0) / Math.max(1, st.count)).toFixed(1) }

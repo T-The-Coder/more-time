@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Teljes rendszer, belső rendszer, Föld (Ctrl + görgővel is)",
   shortcutAstroReset: "Vissza a kezdő nézetre",
   sourceGroupAstro: "Naprendszer",
-  sourceGroupAstroDetails: "A bolygók helyzete a JPL közelítő Kepler-elemeiből (E. M. Standish, 1800–2050 között érvényes, kb. egy ívperc), ezen a gépen számolva; semmi sem töltődik le. A távolságok r^0,45 szerint rajzolódnak, hogy minden pálya elférjen."
+  sourceGroupAstroDetails: "A bolygók helyzete a JPL közelítő Kepler-elemeiből (E. M. Standish, 1800–2050 között érvényes, kb. egy ívperc), ezen a gépen számolva; semmi sem töltődik le. A távolságok r^0,45 szerint rajzolódnak, hogy minden pálya elférjen.",
+  optionRotateFps: "Képkocka másodpercenként",
+  optionRotateFpsHint: "Több képkocka simább, de több processzoridőt használ.",
+  hoverTooltip: "Elemleírás rámutatáskor",
+  hoverTooltipHint: "A menüsor elemeit, a rámutatáskor megjelenőket is, megismétli a sáv elemleírásában."
 }

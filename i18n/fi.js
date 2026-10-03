@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Koko järjestelmä, sisempi järjestelmä, Maa (myös Ctrl + rulla)",
   shortcutAstroReset: "Takaisin alkunäkymään",
   sourceGroupAstro: "Aurinkokunta",
-  sourceGroupAstroDetails: "Planeettojen paikat JPL:n likimääräisistä Keplerin rataelementeistä (E. M. Standish, voimassa 1800–2050, noin kaariminuutti), laskettu tällä tietokoneella; mitään ei ladata. Etäisyydet piirretään muodossa r^0,45, jotta kaikki radat mahtuvat."
+  sourceGroupAstroDetails: "Planeettojen paikat JPL:n likimääräisistä Keplerin rataelementeistä (E. M. Standish, voimassa 1800–2050, noin kaariminuutti), laskettu tällä tietokoneella; mitään ei ladata. Etäisyydet piirretään muodossa r^0,45, jotta kaikki radat mahtuvat.",
+  optionRotateFps: "Kuvaa sekunnissa",
+  optionRotateFpsHint: "Useampi kuva näyttää sulavammalta ja vie enemmän suoritinaikaa.",
+  hoverTooltip: "Työkaluvihje osoitettaessa",
+  hoverTooltipHint: "Toistaa valikkopalkin kohdat, myös osoitettaessa näkyvät, palkin työkaluvihjeessä."
 }

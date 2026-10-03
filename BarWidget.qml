@@ -123,8 +123,15 @@ BarWidget {
     fixedHeight: root.vertical ? verticalClock.implicitHeight + Style.space(12) : -1
     horizontalMargin: 8.75
     verticalPadding: 8.75
-    // Tooltip suppressed because the panel is the detail view.
-    tooltipText: ""
+    // The popup is the detail view; the tooltip only with the menu bar
+    // option "hoverTooltip" (Panel.menubarTooltipText), kept up to date
+    // while it is shown.
+    tooltipText: panelLoader.item ? panelLoader.item.menubarTooltipText : ""
+    onTooltipTextChanged: {
+      if (!root.bar || root.bar.tooltipTarget !== button) return
+      if (tooltipText === "") root.bar.hideTooltip(button)
+      else root.bar.tooltipText = tooltipText
+    }
 
     Row {
       id: clockBarContent

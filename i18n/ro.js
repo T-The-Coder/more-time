@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Tot sistemul, sistemul interior, Pământul (și Ctrl + rotiță)",
   shortcutAstroReset: "Înapoi la vederea inițială",
   sourceGroupAstro: "Sistemul solar",
-  sourceGroupAstroDetails: "Pozițiile planetelor din elementele kepleriene aproximative ale JPL (E. M. Standish, valabile 1800–2050, cam un minut de arc), calculate pe acest calculator; nu se descarcă nimic. Distanțele sunt desenate ca r^0,45 ca să încapă toate orbitele."
+  sourceGroupAstroDetails: "Pozițiile planetelor din elementele kepleriene aproximative ale JPL (E. M. Standish, valabile 1800–2050, cam un minut de arc), calculate pe acest calculator; nu se descarcă nimic. Distanțele sunt desenate ca r^0,45 ca să încapă toate orbitele.",
+  optionRotateFps: "Cadre pe secundă",
+  optionRotateFpsHint: "Mai multe cadre arată mai fluid și folosesc mai mult timp de procesor.",
+  hoverTooltip: "Indiciu la trecerea cursorului",
+  hoverTooltipHint: "Repetă intrările barei de meniu, inclusiv cele la trecerea cursorului, în indiciul barei."
 }

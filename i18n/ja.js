@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "太陽系全体、内側の太陽系、地球（Ctrl + ホイールでも）",
   shortcutAstroReset: "最初の表示に戻る",
   sourceGroupAstro: "太陽系",
-  sourceGroupAstroDetails: "惑星の位置は JPL の近似ケプラー要素（E. M. Standish、1800–2050 年有効、精度約 1 分角）からこのコンピューターで計算し、何もダウンロードしません。すべての軌道が収まるよう距離は r^0.45 で描きます。"
+  sourceGroupAstroDetails: "惑星の位置は JPL の近似ケプラー要素（E. M. Standish、1800–2050 年有効、精度約 1 分角）からこのコンピューターで計算し、何もダウンロードしません。すべての軌道が収まるよう距離は r^0.45 で描きます。",
+  optionRotateFps: "1 秒あたりのフレーム数",
+  optionRotateFpsHint: "フレームが多いほど滑らかになり、プロセッサーの時間も多く使います。",
+  hoverTooltip: "ホバー時のツールチップ",
+  hoverTooltipHint: "メニューバーの項目（ホバー時のものを含む）をバーのツールチップに繰り返し表示します。"
 }

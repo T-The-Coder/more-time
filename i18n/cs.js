@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Celá soustava, vnitřní soustava, Země (také Ctrl + kolečko)",
   shortcutAstroReset: "Zpět na výchozí pohled",
   sourceGroupAstro: "Sluneční soustava",
-  sourceGroupAstroDetails: "Polohy planet z přibližných Keplerových elementů JPL (E. M. Standish, platné 1800–2050, asi úhlová minuta), počítané na tomto počítači; nic se nestahuje. Vzdálenosti jsou kresleny jako r^0,45, aby se vešly všechny dráhy."
+  sourceGroupAstroDetails: "Polohy planet z přibližných Keplerových elementů JPL (E. M. Standish, platné 1800–2050, asi úhlová minuta), počítané na tomto počítači; nic se nestahuje. Vzdálenosti jsou kresleny jako r^0,45, aby se vešly všechny dráhy.",
+  optionRotateFps: "Snímky za sekundu",
+  optionRotateFpsHint: "Více snímků vypadá plynuleji a spotřebuje víc času procesoru.",
+  hoverTooltip: "Popisek při najetí",
+  hoverTooltipHint: "Zopakuje položky lišty nabídek, i ty při najetí, v popisku lišty."
 }

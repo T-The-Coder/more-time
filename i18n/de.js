@@ -383,5 +383,9 @@ var catalog = {
   shortcutAstroZoom: "Ganzes System, inneres System, Erde (auch Strg + Rad)",
   shortcutAstroReset: "Zurück zur Startansicht",
   sourceGroupAstro: "Sonnensystem",
-  sourceGroupAstroDetails: "Planetenpositionen aus den genäherten Bahnelementen des JPL (E. M. Standish, gültig 1800–2050, etwa eine Bogenminute), auf diesem Rechner berechnet; nichts wird geladen. Abstände sind als r^0,45 gezeichnet, damit alle Bahnen passen."
+  sourceGroupAstroDetails: "Planetenpositionen aus den genäherten Bahnelementen des JPL (E. M. Standish, gültig 1800–2050, etwa eine Bogenminute), auf diesem Rechner berechnet; nichts wird geladen. Abstände sind als r^0,45 gezeichnet, damit alle Bahnen passen.",
+  optionRotateFps: "Bilder pro Sekunde",
+  optionRotateFpsHint: "Mehr Bilder wirken flüssiger und brauchen mehr Rechenzeit.",
+  hoverTooltip: "Tooltip beim Überfahren",
+  hoverTooltipHint: "Wiederholt die Einträge der Menüleiste, auch die beim Überfahren, im Tooltip der Leiste."
 }

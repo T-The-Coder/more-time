@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "整個太陽系、內太陽系、地球（也可 Ctrl + 滾輪）",
   shortcutAstroReset: "回到初始視圖",
   sourceGroupAstro: "太陽系",
-  sourceGroupAstroDetails: "行星位置依據 JPL 的近似克卜勒根數（E. M. Standish，適用 1800–2050 年，精度約 1 角分）在本機計算，不下載任何資料。距離按 r^0.45 繪製，使所有軌道都能容納。"
+  sourceGroupAstroDetails: "行星位置依據 JPL 的近似克卜勒根數（E. M. Standish，適用 1800–2050 年，精度約 1 角分）在本機計算，不下載任何資料。距離按 r^0.45 繪製，使所有軌道都能容納。",
+  optionRotateFps: "每秒影格數",
+  optionRotateFpsHint: "影格越多越流暢，佔用的處理器時間也越多。",
+  hoverTooltip: "懸停時顯示提示",
+  hoverTooltipHint: "在列的提示中重複選單列的項目，包括懸停時才顯示的項目。"
 }

@@ -210,6 +210,8 @@ Rectangle {
         choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
       { key: "globeRotateSpeed", title: panel.i18n("optionGlobeRotateSpeed"), dependsOn: "globeAutoRotate", style: "globe",
         choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) },
+      { key: "globeRotateFps", title: panel.i18n("optionRotateFps"), dependsOn: "globeAutoRotate", style: "globe",
+        hint: panel.i18n("optionRotateFpsHint"), choices: ["8", "15", "24", "30"].map(function(n) { return { value: n, label: n } }) },
       { key: "worldList", title: panel.i18n("optionCityList") },
       { key: "worldDifference", title: panel.i18n("optionDifference"), dependsOn: "worldList" },
       { key: "worldDials", title: panel.i18n("optionWorldDials"), dependsOn: "worldList" },
@@ -229,7 +231,9 @@ Rectangle {
       { key: "astroRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "astroAutoRotate",
         choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
       { key: "astroRotateSpeed", title: panel.i18n("optionGlobeRotateSpeed"), dependsOn: "astroAutoRotate",
-        choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) }
+        choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) },
+      { key: "astroRotateFps", title: panel.i18n("optionRotateFps"), dependsOn: "astroAutoRotate",
+        hint: panel.i18n("optionRotateFpsHint"), choices: ["8", "15", "24", "30"].map(function(n) { return { value: n, label: n } }) }
     ]
   })
   // A tab option can be set when its switch (dependsOn) is on and, with
@@ -291,6 +295,7 @@ Rectangle {
         }
         items.push({ id: "switch:boldOnHover", type: "switch", key: "boldOnHover" },
           { id: "menubarAccents", type: "dropdown" },
+          { id: "switch:hoverTooltip", type: "switch", key: "hoverTooltip" },
           { id: "switch:openWidgetOnHover", type: "switch", key: "openWidgetOnHover" },
           { id: "citiesCount", type: "dropdown" })
       }
@@ -1101,6 +1106,22 @@ Rectangle {
           leftPadding: Style.space(12)
           bottomPadding: Style.space(6)
           text: panel.i18n("menubarAccentsHint")
+          opacity: panel.settingsDisplaySetting("showClock", true) ? 1 : 0.42
+        }
+
+        TimeSwitchRow {
+          panel: settingsView.panel
+          settingKey: "hoverTooltip"
+          title: panel.i18n("hoverTooltip")
+          kbFocused: settingsView.focusId === "switch:hoverTooltip"
+          onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
+          rowEnabled: panel.settingsDisplaySetting("showClock", true)
+        }
+
+        Hint {
+          leftPadding: Style.space(12)
+          bottomPadding: Style.space(6)
+          text: panel.i18n("hoverTooltipHint")
           opacity: panel.settingsDisplaySetting("showClock", true) ? 1 : 0.42
         }
 

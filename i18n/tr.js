@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Tüm sistem, iç sistem, Dünya (Ctrl + tekerle de)",
   shortcutAstroReset: "Başlangıç görünümüne dön",
   sourceGroupAstro: "Güneş sistemi",
-  sourceGroupAstroDetails: "Gezegen konumları JPL'nin yaklaşık Kepler öğelerinden (E. M. Standish, 1800–2050 için geçerli, yaklaşık bir yay dakikası), bu bilgisayarda hesaplanır; hiçbir şey indirilmez. Tüm yörüngeler sığsın diye uzaklıklar r^0,45 olarak çizilir."
+  sourceGroupAstroDetails: "Gezegen konumları JPL'nin yaklaşık Kepler öğelerinden (E. M. Standish, 1800–2050 için geçerli, yaklaşık bir yay dakikası), bu bilgisayarda hesaplanır; hiçbir şey indirilmez. Tüm yörüngeler sığsın diye uzaklıklar r^0,45 olarak çizilir.",
+  optionRotateFps: "Saniyedeki kare",
+  optionRotateFpsHint: "Daha çok kare daha akıcı görünür ve daha çok işlemci zamanı kullanır.",
+  hoverTooltip: "Üzerine gelince ipucu",
+  hoverTooltipHint: "Menü çubuğunun öğelerini, üzerine gelince görünenler dahil, çubuğun ipucunda yineler."
 }

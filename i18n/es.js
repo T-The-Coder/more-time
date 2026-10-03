@@ -242,5 +242,9 @@ var catalog = {
   shortcutAstroZoom: "Sistema completo, sistema interior, Tierra (también Ctrl + rueda)",
   shortcutAstroReset: "Volver a la vista inicial",
   sourceGroupAstro: "Sistema solar",
-  sourceGroupAstroDetails: "Posiciones de los planetas a partir de los elementos keplerianos aproximados del JPL (E. M. Standish, válidos 1800–2050, cerca de un minuto de arco), calculadas en este equipo; no se descarga nada. Las distancias se dibujan como r^0,45 para que quepan todas las órbitas."
+  sourceGroupAstroDetails: "Posiciones de los planetas a partir de los elementos keplerianos aproximados del JPL (E. M. Standish, válidos 1800–2050, cerca de un minuto de arco), calculadas en este equipo; no se descarga nada. Las distancias se dibujan como r^0,45 para que quepan todas las órbitas.",
+  optionRotateFps: "Fotogramas por segundo",
+  optionRotateFpsHint: "Más fotogramas se ven más fluidos y usan más tiempo de procesador.",
+  hoverTooltip: "Información al pasar el ratón",
+  hoverTooltipHint: "Repite las entradas de la barra de menús, también las de al pasar el ratón, en la información emergente de la barra."
 }

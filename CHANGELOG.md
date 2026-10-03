@@ -4,6 +4,18 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Tooltip on hover:** a new menu bar option (off by default) shows the
+  bar's tooltip with every entry of the clock, the hover ones included, one
+  per line with a word for each symbol, updated while it is shown.
+- **The turning globe no longer keeps a processor core busy:** it (and the
+  solar system) turns by itself only while you can see it, with the popup
+  open or the app window focused, not while the app sits unfocused or on
+  another workspace; it starts again after the delay when you come back.
+  While turning it is drawn more simply (flat zones, a coarser coast, the
+  fills at a third of the resolution and refreshed eight times a second),
+  and a new setting picks the frames per second (8, 15, 24 or 30; 15 by
+  default). At 840 px and 15 frames a second it takes about a third of one
+  core, still about 1 % when nothing turns.
 - **New Astro tab: the solar system as a clock.** The Sun and the eight
   planets where they stand now (JPL's approximate Keplerian elements,
   computed on this computer, redrawn every minute), at a slant from above,
