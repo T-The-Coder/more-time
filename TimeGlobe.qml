@@ -302,7 +302,7 @@ Item {
 
   // While it turns by itself: no hatching, a coarser coastline without the
   // smallest islands, only the selected place labelled.
-  readonly property bool cheapFrames: rotating && !gpuSurface
+  readonly property bool cheapFrames: rotating && !surfaceOn
   // Every `every`-th point, and no ring smaller than `least` degrees each
   // way.
   function coarseRings(rings, every, least) {
@@ -341,6 +341,18 @@ Item {
   //      shaders run (not on the software scene graph of the offscreen
   //      harness); else the Canvas path below draws everything.
   readonly property bool gpuSurface: surface.available && zoom < 3
+  // The picture's last repaint (ms), for the harness and the status.
+  readonly property real textureMs: surfaceTexture.lastMs
+  // The Canvas as with the surface on (the harness measures that branch
+  // offscreen, where shaders do not run).
+  property bool forceSurfaceBranch: false
+  readonly property bool surfaceOn: gpuSurface || forceSurfaceBranch
+  onSurfaceOnChanged: repaint()
+  // Turning by itself, being dragged or turned: the per-frame Canvas keeps
+  // to the least (only the selected place named).
+  readonly property bool moving: rotating || mouse.dragged && mouse.pressed || turnAnimation.running
+  readonly property bool coastOverlay: surfaceOn && zoom >= 1 && !moving
+  onCoastOverlayChanged: repaint()
   onGpuSurfaceChanged: repaint()
   TimeGlobeTexture {
     id: surfaceTexture
@@ -360,6 +372,8 @@ Item {
     centerY: globe.centerY
     displayMs: globe.minuteMs
     night: globe.showNight
+    goldenBand: globe.showGolden
+    blueBand: globe.showBlue
     background: Color.popups.background
     baseColor: Qt.rgba(globe.panel.foreground.r, globe.panel.foreground.g, globe.panel.foreground.b, 0.03)
     textureSource: surfaceTexture
@@ -581,7 +595,7 @@ Item {
       var split = globe.cheapFrames
       // The GPU surface (TimeGlobeSurface) draws the sphere, the zones, the
       // land's fill and the night under this canvas.
-      var gpu = globe.gpuSurface
+      var gpu = globe.surfaceOn
 
       ctx.save()
       if (!split && !gpu) {
@@ -593,11 +607,14 @@ Item {
 
       var zonesDone = Date.now()
 
-      if (!split) gridPass(ctx, lon)
+      // With the surface the grid, the coast and the bands are in its
+      // picture and shader: per frame only the Sun, the Moon, the places
+      // and the rim are drawn here.
+      if (!split && !gpu) gridPass(ctx, lon)
 
       // Land: a light fill and a crisp coastline.
       if (!split && !gpu) landFillPass(ctx, lon)
-      var land = globe.cheapFrames ? globe.coarseLand : data.land
+      var land = gpu ? [] : (globe.cheapFrames ? globe.coarseLand : data.land)
       ctx.beginPath()
       for (var l = 0; l < land.length; l++) {
         var coast = Globe.frontLines(land[l], lon, R)
@@ -609,7 +626,7 @@ Item {
 
       var landDone = Date.now()
 
-      if (!split) twilightPass(ctx, lon, gpu)
+      if (!split && !gpu) twilightPass(ctx, lon, false)
       // The Sun at its zenith point.
       var tw = globe.twilight
       if (globe.showNight) {
@@ -691,7 +708,7 @@ Item {
       ctx.beginPath()
       ctx.arc(cx, cy, R, 0, Math.PI * 2)
       ctx.clip()
-      var gpu = globe.gpuSurface
+      var gpu = globe.surfaceOn
       if (!gpu) {
         ctx.fillStyle = rgba(ink, 0.03)
         ctx.fillRect(0, 0, width, height)
@@ -707,13 +724,16 @@ Item {
       ctx.strokeStyle = rgba(ink, 0.07)
       ctx.lineWidth = 1
       var t1 = Date.now()
-      var grid = Globe.gridLinesView(m, R, GlobeView.gridStep(globe.zoom))
+      var grid = gpu ? [] : Globe.gridLinesView(m, R, GlobeView.gridStep(globe.zoom))
       ctx.beginPath()
       for (var g = 0; g < grid.length; g++) traceXY(grid[g], false)
       ctx.stroke()
       if (!gpu) fillVectors(globe.landVectors, rgba(ink, 0.07))
       ctx.beginPath()
-      for (var l = 0; l < globe.landVectors.length; l++) {
+      // With the surface the coast is in its picture; zoomed in and at rest
+      // a crisp one goes on top (the picture's texels grow with the zoom).
+      var coastOn = !gpu || globe.coastOverlay
+      for (var l = 0; l < (coastOn ? globe.landVectors.length : 0); l++) {
         if (!inView(globe.landVectors[l])) continue
         var coast = Globe.frontLinesView(globe.landVectors[l], m, R)
         for (var c = 0; c < coast.length; c++) traceXY(coast[c], false)
@@ -727,7 +747,7 @@ Item {
       var caps = {}
       for (var e in tw.shapes) caps[e] = Globe.capPolygonView(-tw.sun.lat, antiLon, 90 + Number(e), m, R)
       ctx.fillRule = Qt.OddEvenFill
-      var layerCount = tw.layers.length - (gpu && globe.showNight ? 3 : 0)
+      var layerCount = gpu ? 0 : tw.layers.length
       for (var t = 0; t < layerCount; t++) {
         var layer = tw.layers[t]
         var polys = caps[layer.high].concat(layer.low !== null ? caps[layer.low] : [])
@@ -813,7 +833,7 @@ Item {
         ctx.fill()
         hits.push({ index: index, x: p.x, y: p.y })
         taken.push({ x: p.x - 4, y: p.y - 4, w: 8, h: 8 })
-        if (!globe.showLabels || (globe.cheapFrames && !selected)) continue
+        if (!globe.showLabels || ((globe.cheapFrames || (globe.surfaceOn && globe.moving)) && !selected)) continue
         var offset = globe.panel.cityOffset(city)
         var label = city.name + (offset !== null ? " " + globe.panel.clockFor(globe.minuteMs, offset, false) : "")
         ctx.font = selected ? boldFont : labelFont

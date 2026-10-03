@@ -203,6 +203,8 @@ Item {
     centerY: (WorldMap.Y_MAX * map.unit - map.focusY) * map.zoomScale + map.mapHeight / 2
     displayMs: map.minuteMs
     night: map.showNight
+    goldenBand: map.showGolden
+    blueBand: map.showBlue
     background: Color.popups.background
     baseColor: Qt.rgba(map.panel.foreground.r, map.panel.foreground.g, map.panel.foreground.b, 0.03)
     textureSource: surfaceTexture
@@ -288,7 +290,7 @@ Item {
       // Meridians every 15°: the ideal hour zones, faintly.
       ctx.strokeStyle = rgba(ink, 0.07)
       ctx.lineWidth = 1
-      var lines = WorldMap.graticule()
+      var lines = gpu ? [] : WorldMap.graticule()
       for (var g = 0; g < lines.length; g++) {
         ctx.beginPath()
         for (var gp = 0; gp < lines[g].length; gp++) {
@@ -304,9 +306,13 @@ Item {
       for (var l = 0; l < data.land.length; l++) traceRing(ctx, data.land[l], scale)
       ctx.fillStyle = rgba(ink, 0.07)
       if (!gpu) ctx.fill("evenodd")
-      ctx.strokeStyle = rgba(ink, 0.55)
-      ctx.lineWidth = 0.8
-      ctx.stroke()
+      // With the surface the coast is in its picture; zoomed in a crisp
+      // one goes on top (the map does not turn by itself).
+      if (!gpu || map.zoom >= 1) {
+        ctx.strokeStyle = rgba(ink, 0.55)
+        ctx.lineWidth = 0.8
+        ctx.stroke()
+      }
 
       // The twilight along the day/night line (WorldMap.twilightLayers): the
       // golden and the blue band with soft edges, then the night in three
@@ -314,7 +320,7 @@ Item {
       // the rule from fillRule, not from fill()'s argument.
       ctx.fillRule = Qt.OddEvenFill
       var tw = map.twilight
-      var layerCount = tw.layers.length - (gpu && map.showNight ? 3 : 0)
+      var layerCount = gpu ? 0 : tw.layers.length
       for (var t = 0; t < layerCount; t++) {
         var layer = tw.layers[t]
         ctx.beginPath()

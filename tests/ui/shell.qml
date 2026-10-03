@@ -127,7 +127,7 @@ ShellRoot {
       g.finishTurn()
       console.log("GLOBE", g.centerLon, g.width, g.height)
       // The software scene graph has no shaders: the Canvas path is tested.
-      console.log("CHECK surface off offscreen", g.gpuSurface, g.gpuSurface === false ? "ok" : "WRONG")
+      console.log("CHECK surface off offscreen", g.gpuSurface, g.gpuSurface === false ? "ok" : "WRONG", "texture ms", g.textureMs)
     },
     function() { shot("01b-globe") },
     function() { panel.selectedCity = 2 },
@@ -439,6 +439,19 @@ ShellRoot {
       var st = globe().paintStats
       var per = function(v) { return ((v || 0) / Math.max(1, st.count)).toFixed(1) }
       console.log("GLOBE frames large", st.count, "ms/frame", per(st.total), "max", st.max, "diameter", Math.round(globe().diameter))
+      // The same turning with the Canvas as when the GPU surface is on
+      // (forced: shaders do not run offscreen).
+      var g = globe()
+      g.forceSurfaceBranch = true
+      g.paintStats = { count: 0, total: 0, max: 0 }
+    },
+    function() {},
+    function() {
+      var g = globe()
+      var st = g.paintStats
+      console.log("GLOBE surface-branch frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(2), "max", st.max,
+        "diameter", Math.round(g.diameter))
+      g.forceSurfaceBranch = false
       display("globeAutoRotate", false)
     },
     function() { display("worldStyle", "map") },

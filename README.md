@@ -574,10 +574,12 @@ covers the parts that need More Time's flat map data.
 The World tab's globe and map draw their surface on the GPU where shaders run:
 `TimeGlobeSurface.qml` (shared with More Weather, with `shaders/globe.frag`, its
 compiled `shaders/globe.frag.qsb` and `tools/build-shaders.sh`) projects an
-equirectangular picture of the zones and the land (`TimeGlobeTexture.qml`,
-painted once per change) onto the globe or the Equal Earth map and adds the
-night; the Canvas keeps the coast, the grid, the golden and blue bands, the
-Sun, the Moon and the places. From z3, and on the software scene graph (the
+equirectangular picture (`TimeGlobeTexture.qml`, 2048 × 1024, painted once per
+change: the zones, the land, the coast and the grid) onto the globe or the
+Equal Earth map and adds the golden and blue bands and the night in the shader
+(its band uniforms are optional, off for More Weather); per frame the Canvas
+draws only the Sun, the Moon, the places and the rim (zoomed in and at rest
+also a crisp coast). From z3, and on the software scene graph (the
 offscreen screenshot harness: `CHECK surface off offscreen`), the Canvas draws
 everything as before. `qs ipc … call more-time status` reports
 `globe: { surface, fps, cpuPercent, turning }` for the shown globe.
