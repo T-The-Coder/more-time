@@ -104,6 +104,7 @@ Column {
   ]
 
   Text {
+    textFormat: Text.PlainText
     width: parent.width
     text: shortcutsPage.panel.i18n("shortcutsHint")
     color: shortcutsPage.panel.mutedText
@@ -134,6 +135,7 @@ Column {
         spacing: Style.space(6)
 
         Text {
+          textFormat: Text.PlainText
           text: shortcutsPage.panel.upperLabel(shortcutsPage.panel.i18n(groupCard.modelData.title))
           color: shortcutsPage.panel.foreground
           font.family: shortcutsPage.panel.fontFamily
@@ -170,6 +172,7 @@ Column {
                   border.width: Style.spacing.hairline
 
                   Text {
+                    textFormat: Text.PlainText
                     id: keyLabel
                     anchors.centerIn: parent
                     text: shortcutRow.modelData.translateKeys
@@ -184,6 +187,7 @@ Column {
             }
 
             Text {
+              textFormat: Text.PlainText
               id: actionText
               anchors.left: keyRow.right
               anchors.leftMargin: Style.space(8)

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "more-time",
   "name": "More Time",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Clock with a world map of the time zones, favourite cities, alarms, stopwatches, timers, pomodoros and a standalone app",
   "kinds": [
     "bar-widget"

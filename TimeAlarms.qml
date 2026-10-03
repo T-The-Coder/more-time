@@ -141,6 +141,7 @@ Column {
   }
 
   Text {
+    textFormat: Text.PlainText
     visible: view.list.length === 0
     width: parent.width
     text: view.panel.i18n("noAlarms")
@@ -177,6 +178,7 @@ Column {
           spacing: Style.space(2)
 
           Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: view.panel.itemTitle("alarms", card.modelData) + "  ·  " + view.panel.alarmDaysText(card.modelData.days)
             color: view.panel.mutedText
@@ -189,6 +191,7 @@ Column {
             spacing: Style.space(8)
 
             Text {
+              textFormat: Text.PlainText
               id: alarmTime
               text: view.panel.wallClock(card.modelData.hour, card.modelData.minute)
               color: view.panel.foreground
@@ -199,6 +202,7 @@ Column {
 
             // At a city's time: "Tokyo · 00:00 here".
             Text {
+              textFormat: Text.PlainText
               visible: card.modelData.tz !== ""
               anchors.baseline: alarmTime.baseline
               text: visible ? view.panel.i18n("alarmAtPlace", { place: card.modelData.placeName,
@@ -210,6 +214,7 @@ Column {
           }
 
           Text {
+            textFormat: Text.PlainText
             visible: view.panel.alarmZoneUnknown(card.modelData)
             text: visible ? view.panel.i18n("alarmZoneUnknown", { zone: card.modelData.tz }) : ""
             color: Color.urgent
@@ -218,6 +223,7 @@ Column {
           }
 
           Text {
+            textFormat: Text.PlainText
             visible: card.nextRing > 0
             text: card.modelData.snoozeUntil > view.panel.nowMs
               ? view.panel.i18n("snoozedUntil", { time: view.panel.wallClockAt(card.modelData.snoozeUntil) })
@@ -327,6 +333,7 @@ Column {
               border.width: Style.spacing.hairline
 
               Text {
+                textFormat: Text.PlainText
                 anchors.centerIn: parent
                 text: view.panel.weekdayName(parent.modelData, false)
                 color: parent.chosen ? Style.selectedStateColor(view.panel.foreground, Color.accent) : view.panel.foreground
@@ -354,6 +361,7 @@ Column {
           spacing: Style.space(8)
 
           Text {
+            textFormat: Text.PlainText
             anchors.verticalCenter: parent.verticalCenter
             text: view.panel.i18n("alarmPlace")
             color: view.panel.mutedText
@@ -398,6 +406,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: view.panel.i18n("alarmEditorKeysHint")
           color: view.panel.hintText

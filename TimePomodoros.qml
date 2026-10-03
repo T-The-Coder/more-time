@@ -83,6 +83,7 @@ Column {
   }
 
   Text {
+    textFormat: Text.PlainText
     visible: view.list.length === 0
     width: parent.width
     text: view.panel.i18n("noPomodoros")
@@ -119,6 +120,7 @@ Column {
           spacing: Style.space(2)
 
           Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: (card.modelData.label || view.panel.itemTitle("pomodoros", card.modelData)
                 + (view.list.length > 1 ? " " + (card.index + 1) : ""))
@@ -134,6 +136,7 @@ Column {
             spacing: Style.space(10)
 
             Text {
+              textFormat: Text.PlainText
               id: remainingText
               text: view.panel.durationText(Model.pomodoroRemaining(card.modelData, view.panel.nowMs), { countdown: true })
               color: card.modelData.state === "running" ? view.panel.foreground : view.panel.mutedText
@@ -143,6 +146,7 @@ Column {
             }
 
             Text {
+              textFormat: Text.PlainText
               anchors.baseline: remainingText.baseline
               text: view.panel.upperLabel(view.panel.pomodoroPhaseName(card.modelData.phase))
               color: card.onBreak ? Color.accent : view.panel.foreground
@@ -168,6 +172,7 @@ Column {
               }
             }
             Text {
+              textFormat: Text.PlainText
               visible: card.modelData.completed > 12
               text: "+" + (card.modelData.completed - 12)
               color: view.panel.mutedText
@@ -308,6 +313,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: view.panel.i18n("editorKeysHint")
           color: view.panel.hintText
@@ -321,6 +327,7 @@ Column {
 
   // Focus rounds today and this week, from the pomodoro log.
   Text {
+    textFormat: Text.PlainText
     visible: view.list.length > 0 || view.panel.pomodoroTally.week > 0
     width: parent.width
     text: view.panel.i18n("pomodoroTally", view.panel.pomodoroTally)

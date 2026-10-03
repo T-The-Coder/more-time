@@ -78,6 +78,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           anchors.horizontalCenter: parent.horizontalCenter
           text: view.panel.i18n("dial_" + choice.modelData)
           color: choice.picked ? Style.hoverStateColor(view.panel.foreground, Color.accent) : view.panel.mutedText
@@ -167,6 +168,7 @@ Column {
         border.width: Style.spacing.hairline
 
         Text {
+          textFormat: Text.PlainText
           anchors.left: parent.left
           anchors.leftMargin: Style.space(10)
           anchors.right: zoneText.left
@@ -182,6 +184,7 @@ Column {
         // A zone guessed from the nearest zone1970 city (Nominatim names
         // none) is marked "≈".
         Text {
+          textFormat: Text.PlainText
           id: zoneText
           anchors.right: parent.right
           anchors.rightMargin: Style.space(10)
@@ -204,6 +207,7 @@ Column {
 
     // The list is full (Model.MAX_CITIES): adding waits for a removal.
     Text {
+      textFormat: Text.PlainText
       visible: view.cities.length >= Model.MAX_CITIES
       width: parent.width
       text: view.panel.i18n("citiesFull")
@@ -214,6 +218,7 @@ Column {
     }
 
     Text {
+      textFormat: Text.PlainText
       visible: view.search.query.trim() !== "" && view.search.results.length === 0
       // Nothing in the zone list or from Open-Meteo: Enter also asks
       // Nominatim, once; after that, nothing found.
@@ -252,6 +257,7 @@ Column {
   }
 
   Text {
+    textFormat: Text.PlainText
     visible: view.cities.length === 0
     width: parent.width
     text: view.panel.i18n("noCities")
@@ -301,6 +307,7 @@ Column {
       }
 
       Text {
+        textFormat: Text.PlainText
         id: hereGlyph
         anchors.left: hereDial.visible ? hereDial.right : parent.left
         anchors.leftMargin: Style.space(10)
@@ -322,6 +329,7 @@ Column {
         spacing: Style.space(1)
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: view.panel.here.name
           color: view.panel.foreground
@@ -332,6 +340,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: [view.panel.zoneTable.localTz,
             Model.utcOffsetLabel(view.panel.localOffset)]
@@ -353,6 +362,7 @@ Column {
       }
 
       Text {
+        textFormat: Text.PlainText
         id: hereTime
         anchors.right: parent.right
         anchors.rightMargin: Style.space(10) + Style.space(28)
@@ -434,6 +444,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           id: dayGlyph
           anchors.left: rowDial.visible ? rowDial.right : parent.left
           anchors.leftMargin: Style.space(10)
@@ -454,6 +465,7 @@ Column {
           spacing: Style.space(1)
 
           Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: row.modelData.name
             color: view.panel.foreground
@@ -464,6 +476,7 @@ Column {
           }
 
           Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: [row.modelData.country,
               row.zoneState ? (row.zoneState.abbr && !/^[+-]/.test(row.zoneState.abbr) ? row.zoneState.abbr + " " : "")
@@ -492,6 +505,7 @@ Column {
           spacing: Style.space(1)
 
           Text {
+            textFormat: Text.PlainText
             anchors.right: parent.right
             text: row.offset === null ? "…" : view.panel.clockFor(view.panel.nowMs, row.offset, false)
             color: view.panel.foreground
@@ -501,6 +515,7 @@ Column {
           }
 
           Text {
+            textFormat: Text.PlainText
             visible: view.panel.displaySetting("worldDifference", true) && row.offset !== null
             anchors.right: parent.right
             text: (row.dayShift === 0 ? view.panel.i18n("today")

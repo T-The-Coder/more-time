@@ -22,6 +22,7 @@ Column {
       border.width: Style.spacing.hairline
 
       Text {
+        textFormat: Text.PlainText
         id: bell
         anchors.left: parent.left
         anchors.leftMargin: Style.space(12)
@@ -48,6 +49,7 @@ Column {
         spacing: Style.space(2)
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: parent.parent.modelData.title
           color: banner.panel.foreground
@@ -58,6 +60,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: parent.parent.modelData.body
           color: banner.panel.mutedText
@@ -91,6 +94,7 @@ Column {
   }
 
   Text {
+    textFormat: Text.PlainText
     width: parent.width
     horizontalAlignment: Text.AlignHCenter
     text: banner.panel.i18n("ringingKeysHint")

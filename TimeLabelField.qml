@@ -20,6 +20,7 @@ Item {
   height: implicitHeight
 
   Text {
+    textFormat: Text.PlainText
     id: label
     visible: !labelField.editing
     width: parent.width

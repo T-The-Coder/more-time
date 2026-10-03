@@ -75,6 +75,7 @@ Column {
           height: Math.max(sourceTitle.implicitHeight, inUseText.implicitHeight)
 
           Text {
+            textFormat: Text.PlainText
             id: sourceTitle
             anchors.left: parent.left
             anchors.right: inUseText.left
@@ -89,6 +90,7 @@ Column {
 
           // The provider serving this data at the moment.
           Text {
+            textFormat: Text.PlainText
             id: inUseText
             anchors.right: parent.right
             anchors.verticalCenter: sourceTitle.verticalCenter
@@ -107,6 +109,7 @@ Column {
         }
 
         Text {
+          textFormat: Text.PlainText
           width: parent.width
           text: sourcesPage.label(sourceCard.modelData.details)
           color: sourcesPage.panel.mutedText
@@ -124,6 +127,7 @@ Column {
             model: sourceCard.modelData.links
 
             Text {
+              textFormat: Text.PlainText
               required property var modelData
               text: modelData[0] + " ↗"
               color: linkMouse.containsMouse

@@ -1052,6 +1052,15 @@ function placeFrom(name, lat, lon) {
 
 // Omarchy's shared weather location (settings/weather.json):
 // { name, latitude, longitude } → { name, lat, lon }, or null.
+// Text for notify-send. Notification servers read markup in the body (and
+// some in the title), so a place or label from the network, a file or the
+// user that holds "<img src=…>" could load a remote image. The markup
+// characters become look-alikes that no server reads: ‹ › ＆.
+function notificationText(text) {
+  return String(text === undefined || text === null ? "" : text)
+    .replace(/&/g, "\uff06").replace(/</g, "\u2039").replace(/>/g, "\u203a")
+}
+
 function weatherLocation(raw) {
   var data
   try { data = JSON.parse(String(raw || "")) } catch (e) { return null }
@@ -1195,5 +1204,6 @@ if (typeof module !== "undefined") module.exports = {
   DEFAULT_TIMER_PRESETS: DEFAULT_TIMER_PRESETS, chimeMinuteFor: chimeMinuteFor,
   distanceKm: distanceKm, nearestZone: nearestZone, cityFromPlace: cityFromPlace, zoneForPlace: zoneForPlace,
   parseWeatherPlaces: parseWeatherPlaces, DIAL_STYLES: DIAL_STYLES, dialStyle: dialStyle, knownCity: knownCity, mergeImportedPlaces: mergeImportedPlaces,
-  IP_PLACE_PROVIDERS: IP_PLACE_PROVIDERS, ipPlace: ipPlace, placeFrom: placeFrom, weatherLocation: weatherLocation
+  IP_PLACE_PROVIDERS: IP_PLACE_PROVIDERS, ipPlace: ipPlace, placeFrom: placeFrom, weatherLocation: weatherLocation,
+  notificationText: notificationText
 }

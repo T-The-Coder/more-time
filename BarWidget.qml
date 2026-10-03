@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import qs.Commons
 import qs.Ui
+import "Model.js" as Model
 
 BarWidget {
   id: root
@@ -142,6 +143,7 @@ BarWidget {
           spacing: Style.space(3)
 
           Text {
+            textFormat: Text.PlainText
             visible: entryRow.modelData.glyph !== ""
             anchors.verticalCenter: parent.verticalCenter
             text: entryRow.modelData.glyph
@@ -162,6 +164,7 @@ BarWidget {
               model: entryRow.modelData.parts || []
 
               Text {
+                textFormat: Text.PlainText
                 required property var modelData
                 anchors.verticalCenter: parent.verticalCenter
                 text: modelData.text
@@ -197,6 +200,7 @@ BarWidget {
         }
 
         Text {
+          textFormat: Text.PlainText
           required property string modelData
           required property int index
           anchors.horizontalCenter: parent.horizontalCenter
@@ -216,7 +220,7 @@ BarWidget {
       if (!root.bar || !panel) return
       if (b === Qt.RightButton) {
         var lines = panel.statusSummary()
-        Quickshell.execDetached(["omarchy-notification-send", "-g", "\u{f0150}", lines[0], lines.slice(1).join("\n")])
+        Quickshell.execDetached(["omarchy-notification-send", "-g", "\u{f0150}", Model.notificationText(lines[0]), Model.notificationText(lines.slice(1).join("\n"))])
       } else if (b === Qt.MiddleButton) {
         // Stops what rings; otherwise starts or pauses the first pomodoro.
         if (panel.ringer.ringing.length) panel.ringer.stopNewest()

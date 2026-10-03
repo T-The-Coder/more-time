@@ -46,6 +46,7 @@ Row {
     }
 
     Text {
+      textFormat: Text.PlainText
       anchors.verticalCenter: parent.verticalCenter
       text: parent.time
       color: fields.textColor

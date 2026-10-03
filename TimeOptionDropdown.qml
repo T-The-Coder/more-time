@@ -19,6 +19,7 @@ Item {
   opacity: rowEnabled ? 1 : 0.42
 
   Text {
+    textFormat: Text.PlainText
     anchors.left: parent.left
     anchors.leftMargin: Style.space(12)
     anchors.right: dropdown.left

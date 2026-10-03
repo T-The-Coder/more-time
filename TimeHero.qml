@@ -67,6 +67,7 @@ Item {
 
         // More Weather's location pin (nf-fa-map_marker).
         Text {
+          textFormat: Text.PlainText
           anchors.centerIn: parent
           text: "\uf041"
           color: pinMouse.containsMouse ? Style.hoverStateColor(hero.panel.foreground, Color.accent) : hero.panel.mutedText
@@ -90,6 +91,7 @@ Item {
       }
 
       Text {
+        textFormat: Text.PlainText
         width: Math.min(implicitWidth, Math.max(Style.space(90), textColumn.width - Style.space(40)))
         anchors.verticalCenter: parent.verticalCenter
         text: hero.panel.upperLabel(hero.panel.currentName)
@@ -109,6 +111,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         Text {
+          textFormat: Text.PlainText
           anchors.centerIn: parent
           text: "▾"
           color: hero.panel.mutedText
@@ -139,6 +142,7 @@ Item {
         LayoutMirroring.childrenInherit: true
 
         Text {
+          textFormat: Text.PlainText
           id: bigTime
           text: hero.mainText
           color: hero.timeColor
@@ -148,6 +152,7 @@ Item {
         }
 
         Text {
+          textFormat: Text.PlainText
           visible: hero.showSeconds
           anchors.baseline: bigTime.baseline
           text: ":" + Model.pad2(hero.parts.second)
@@ -157,6 +162,7 @@ Item {
         }
 
         Text {
+          textFormat: Text.PlainText
           visible: hero.panel.hour12
           anchors.baseline: bigTime.baseline
           leftPadding: Style.space(4)
@@ -186,6 +192,7 @@ Item {
     }
 
     Text {
+      textFormat: Text.PlainText
       visible: hero.panel.displaySetting("heroDate", true)
       width: parent.width
       text: hero.panel.dateFor(hero.panel.nowMs, hero.panel.currentOffset, "long")
@@ -197,6 +204,7 @@ Item {
 
     // Sunrise and sunset, the golden and the blue hour, at the current place.
     Text {
+      textFormat: Text.PlainText
       readonly property string line: hero.panel.sunLine(hero.panel.currentCoordinates, hero.panel.currentOffset,
         hero.panel.displaySetting("heroSun", true), hero.panel.displaySetting("heroGoldenHour", false),
         hero.panel.displaySetting("heroBlueHour", false), hero.panel.displaySetting("heroSunNext", false))
@@ -213,6 +221,7 @@ Item {
     }
 
     Text {
+      textFormat: Text.PlainText
       readonly property var pieces: {
         var list = []
         var p = hero.parts
@@ -235,6 +244,7 @@ Item {
 
     // A city is current: the time here stays in view.
     Text {
+      textFormat: Text.PlainText
       visible: !!hero.panel.currentCity
       width: parent.width
       text: "\uf041  " + hero.panel.i18n("hereClock", { time: hero.panel.localClock(false) })
@@ -246,6 +256,7 @@ Item {
 
     // Focus rounds today and this week (heroPomodoroTally).
     Text {
+      textFormat: Text.PlainText
       visible: hero.panel.displaySetting("heroPomodoroTally", false)
       width: parent.width
       text: "\u{f0996}  " + hero.panel.i18n("pomodoroTally", hero.panel.pomodoroTally)
@@ -256,6 +267,7 @@ Item {
     }
 
     Text {
+      textFormat: Text.PlainText
       visible: hero.panel.displaySetting("heroNextAlarm", true) && hero.panel.nextAlarm !== null
       width: parent.width
       text: hero.panel.nextAlarm

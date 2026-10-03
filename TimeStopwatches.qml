@@ -32,6 +32,7 @@ Column {
   }
 
   Text {
+    textFormat: Text.PlainText
     visible: view.list.length === 0
     width: parent.width
     text: view.panel.i18n("noStopwatches")
@@ -74,6 +75,7 @@ Column {
           }
 
           Text {
+            textFormat: Text.PlainText
             id: timeText
             text: view.elapsedText(card.modelData)
             color: card.modelData.running ? view.panel.foreground : view.panel.mutedText
@@ -139,6 +141,7 @@ Column {
             spacing: Style.space(10)
 
             Text {
+              textFormat: Text.PlainText
               width: Style.space(56)
               text: view.panel.i18n("lapNumber", { number: parent.modelData.number })
               color: view.panel.mutedText
@@ -146,6 +149,7 @@ Column {
               font.pixelSize: Style.font.bodySmall
             }
             Text {
+              textFormat: Text.PlainText
               width: Style.space(90)
               text: view.panel.durationText(parent.modelData.split, { hundredths: view.hundredths })
               color: parent.modelData.fastest ? Color.accent
@@ -155,6 +159,7 @@ Column {
               font.bold: parent.modelData.fastest || parent.modelData.slowest
             }
             Text {
+              textFormat: Text.PlainText
               text: view.panel.durationText(parent.modelData.total, { hundredths: view.hundredths })
               color: view.panel.mutedText
               font.family: view.panel.fontFamily

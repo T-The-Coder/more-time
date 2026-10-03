@@ -479,10 +479,10 @@ Item {
 
   function startNotifier(ring) {
     var args = ["notify-send", "--app-name=More Time", "--icon=more-time", "--urgency=critical",
-      "--print-id", "--wait", "--action=stop=" + panel.i18n("stop")]
-    if (ring.kind === "alarm") args.push("--action=snooze=" + panel.i18n("snoozeFor",
-      { minutes: panel.alarmSnoozeMinutes(ring.itemId) }))
-    args.push(ring.title, ring.body)
+      "--print-id", "--wait", "--action=stop=" + Model.notificationText(panel.i18n("stop"))]
+    if (ring.kind === "alarm") args.push("--action=snooze=" + Model.notificationText(panel.i18n("snoozeFor",
+      { minutes: panel.alarmSnoozeMinutes(ring.itemId) })))
+    args.push(Model.notificationText(ring.title), Model.notificationText(ring.body))
     var proc = notifierComponent.createObject(ringer, { ringKey: ring.key, command: args })
     var next = Object.assign({}, notifiers)
     next[ring.key] = proc
@@ -513,7 +513,7 @@ Item {
 
   function notify(title, body, urgency) {
     Quickshell.execDetached(["notify-send", "--app-name=More Time", "--icon=more-time",
-      "--urgency=" + (urgency || "normal"), title, body])
+      "--urgency=" + (urgency || "normal"), Model.notificationText(title), Model.notificationText(body)])
   }
 
   // ---- Stop and snooze, from any instance ----

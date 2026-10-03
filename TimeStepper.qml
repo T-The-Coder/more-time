@@ -15,6 +15,7 @@ Column {
   spacing: Style.space(2)
 
   Text {
+    textFormat: Text.PlainText
     anchors.horizontalCenter: parent.horizontalCenter
     text: stepper.title
     color: stepper.panel.mutedText
@@ -55,6 +56,7 @@ Column {
     }
 
     Text {
+      textFormat: Text.PlainText
       id: valueLabel
       anchors.centerIn: parent
       text: stepper.valueText

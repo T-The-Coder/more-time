@@ -15,6 +15,7 @@ Item {
   // Right-aligned and muted like More Weather's section hints, directly
   // left of the button; shortened when there is no room.
   Text {
+    textFormat: Text.PlainText
     id: hintText
     anchors.right: addButton.visible ? addButton.left : parent.right
     anchors.rightMargin: addButton.visible ? Style.space(10) : 0

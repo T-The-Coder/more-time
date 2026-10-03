@@ -22,6 +22,7 @@ Rectangle {
   border.width: Style.spacing.hairline
 
   Text {
+    textFormat: Text.PlainText
     id: text
     anchors.centerIn: parent
     text: label.panel.mapHoverText(label.hover)

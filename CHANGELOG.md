@@ -2,6 +2,18 @@
 
 All notable changes to More Time are documented here.
 
+## 1.0.1 — 2026-10-03
+
+- **Names are shown as plain text:** place names from the search, the cities
+  file, Omarchy's weather location and the IP lookup, alarm places and every
+  label you type no longer pass through Qt's rich-text detection, so a crafted
+  name with HTML cannot load a remote image (which would reveal your IP
+  address). Every text in the widget, the popup and the app is plain now.
+- **Notifications carry no markup:** in the titles and texts handed to
+  `notify-send` and Omarchy's notification (alarms, timers, missed alarms,
+  pomodoro phases, the bar's status on right-click), `<`, `>` and `&` become
+  the look-alikes ‹ › ＆, which no notification server reads as markup.
+
 ## 1.0.0 — 2026-10-02
 
 First release.

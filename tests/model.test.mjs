@@ -561,3 +561,9 @@ test("pomodoro tally: rounds per day, today and this week", () => {
   assert.deepEqual({ ...items.pomodoroLog }, { "2026-10-03": 4 })
   assert.deepEqual({ ...M.pomodoroTally({}, now, 1) }, { today: 0, week: 0 })
 })
+
+test("notification texts carry no markup", () => {
+  assert.equal(M.notificationText('Bad <img src="http://x/a.png"> & co'), 'Bad \u2039img src="http://x/a.png"\u203a \uff06 co')
+  assert.equal(M.notificationText("Tokyo 8:04"), "Tokyo 8:04")
+  assert.equal(M.notificationText(undefined), "")
+})

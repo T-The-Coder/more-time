@@ -431,6 +431,11 @@ tests/ui-shots.sh      # screenshots of every view, offscreen, with a throwaway 
 tests/ui-showcase.sh   # the README pictures: cities, alarms, timers, pomodoros, Berlin as here
 ```
 
+Every `Text` sets `textFormat: Text.PlainText`, so a place name or label
+holding HTML is never rendered as rich text; `tests/plain-text.test.mjs`
+checks the texts fed by the identifiers in `tests/plain-text-sources.json`.
+Texts for `notify-send` go through `Model.notificationText()`.
+
 The texts of the 30 languages live in `i18n/<language>.js`, one file each
 (`en.js`, `de.js`, … `zh_TW.js`); `I18n.js` imports them and holds the
 lookup. `tests/load.mjs` resolves those imports for the Node tests.

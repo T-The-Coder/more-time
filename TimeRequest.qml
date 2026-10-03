@@ -41,7 +41,7 @@ QtObject {
   readonly property int maxErrorChars: 4096
 
   // Identifies this client to services that require it; harmless everywhere else.
-  readonly property string userAgent: "more-time/1.0 (+https://github.com/T-The-Coder/more-time)"
+  readonly property string userAgent: "more-time/1.0.1 (+https://github.com/T-The-Coder/more-time)"
 
   // $1 is the stdout ceiling; the rest are curl's arguments, passed as argv so
   // nothing from a request is ever parsed by the shell. The ceiling leaves room

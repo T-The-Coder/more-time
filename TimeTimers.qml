@@ -89,6 +89,7 @@ Column {
     }
 
     Text {
+      textFormat: Text.PlainText
       visible: entry.text !== ""
       height: Style.space(32)
       verticalAlignment: Text.AlignVCenter
@@ -102,6 +103,7 @@ Column {
   }
 
   Text {
+    textFormat: Text.PlainText
     visible: view.list.length === 0
     width: parent.width
     text: view.panel.i18n("noTimers")
@@ -147,6 +149,7 @@ Column {
           }
 
           Text {
+            textFormat: Text.PlainText
             text: card.modelData.state === "done" ? view.panel.i18n("timerExpired")
               : view.panel.durationText(card.remaining, { countdown: true })
             color: card.modelData.state === "done" ? Color.urgent

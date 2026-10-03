@@ -455,6 +455,7 @@ Rectangle {
   }
 
   component SectionTitle: Text {
+    textFormat: Text.PlainText
     color: settingsView.panel.foreground
     font.family: settingsView.panel.fontFamily
     font.pixelSize: Style.font.bodySmall
@@ -463,6 +464,7 @@ Rectangle {
   }
 
   component Hint: Text {
+    textFormat: Text.PlainText
     width: parent ? parent.width : 0
     color: settingsView.panel.mutedText
     font.family: settingsView.panel.fontFamily
@@ -513,6 +515,7 @@ Rectangle {
       }
 
       Text {
+        textFormat: Text.PlainText
         visible: dropdownRow.kind !== "switch"
         text: dropdownRow.modelData.title
         color: panel.mutedText
@@ -644,6 +647,7 @@ Rectangle {
           spacing: Style.space(2)
 
           Text {
+            textFormat: Text.PlainText
             text: panel.i18n("settings")
             color: panel.foreground
             font.family: panel.fontFamily
@@ -652,6 +656,7 @@ Rectangle {
           }
 
           Text {
+            textFormat: Text.PlainText
             text: panel.settingsPage === "shortcuts" ? panel.i18n("shortcutsSubtitle")
               : (panel.settingsPage === "general" ? panel.i18n("generalSubtitle")
               : (panel.settingsPage === "sources" ? panel.i18n("sourcesSubtitle")
@@ -694,6 +699,7 @@ Rectangle {
             color: selected || pageMouse.containsMouse ? Style.hoverFillFor(panel.foreground, Color.accent) : "transparent"
 
             Text {
+              textFormat: Text.PlainText
               id: pageLabel
               anchors.centerIn: parent
               text: panel.upperLabel(panel.i18n("settingsPage_" + parent.modelData))
@@ -719,6 +725,7 @@ Rectangle {
       }
 
       Text {
+        textFormat: Text.PlainText
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
         text: panel.i18n("settingsPagesKeysHint")
@@ -743,6 +750,7 @@ Rectangle {
       // ================= General =================
 
       Text {
+        textFormat: Text.PlainText
         visible: panel.settingsPage === "general" || panel.settingsPage === "sounds"
         width: parent.width
         text: panel.i18n("settingsGeneralKeysHint")
@@ -796,6 +804,7 @@ Rectangle {
           SectionTitle { topPadding: Style.space(10); text: panel.upperLabel(panel.i18n("settingsTransfer")) }
 
           Text {
+            textFormat: Text.PlainText
             text: panel.i18n("settingsTransferFile")
             color: panel.mutedText
             font.family: panel.fontFamily
@@ -841,6 +850,7 @@ Rectangle {
           }
 
           Text {
+            textFormat: Text.PlainText
             readonly property var status: panel.settingsTransfer.status
             visible: status !== null
             width: parent.width
@@ -869,6 +879,7 @@ Rectangle {
 
           // How the last import went.
           Text {
+            textFormat: Text.PlainText
             readonly property var status: panel.placesImport.status
             visible: status !== null || panel.placesImport.busy
             width: parent.width
@@ -933,6 +944,7 @@ Rectangle {
               height: parent.height
 
               Text {
+                textFormat: Text.PlainText
                 anchors.centerIn: parent
                 text: panel.i18n(parent.modelData)
                 color: parent.selected || surfaceMouse.containsMouse
@@ -967,6 +979,7 @@ Rectangle {
       }
 
       Text {
+        textFormat: Text.PlainText
         visible: panel.settingsPage === "display"
         width: parent.width
         text: panel.i18n("settingsKeysHint")
@@ -977,6 +990,7 @@ Rectangle {
       }
 
       Text {
+        textFormat: Text.PlainText
         visible: panel.settingsPage === "display"
         width: parent.width
         text: panel.i18n("displaySettingsHint") + " " + panel.i18n(panel.settingsTargetSurface === "menubar"
@@ -1018,6 +1032,7 @@ Rectangle {
               model: [panel.i18n("showAlways"), panel.i18n("showWhenRelevant"), panel.i18n("showOnHover")]
 
               Text {
+                textFormat: Text.PlainText
                 required property string modelData
                 width: settingsView.switchColumnWidth
                 horizontalAlignment: Text.AlignHCenter
@@ -1217,6 +1232,7 @@ Rectangle {
         height: Style.space(40)
 
         Text {
+          textFormat: Text.PlainText
           anchors.left: parent.left
           anchors.verticalCenter: parent.verticalCenter
           text: panel.i18n("defaultTab")
