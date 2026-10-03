@@ -449,6 +449,8 @@ Panel {
       astroNames: true,
       astroMonthRing: true,
       astroRotation: true,
+      astroTimeline: true,
+      astroInfo: true,
       astroEarthInset: true,
       astroAutoRotate: false,
       astroRotateDelay: "10",
@@ -1292,6 +1294,12 @@ Panel {
     var shift = !!(event.modifiers & Qt.ShiftModifier)
 
     if (key === Qt.Key_Escape) {
+      // The Astro tab first: a travel stops, the date field is left.
+      if (currentTab === "astro" && !settingsOpen && contentLoader.item && contentLoader.item.handleAstroEscape
+          && contentLoader.item.handleAstroEscape()) {
+        event.accepted = true
+        return
+      }
       if (dialChooserOpen) dialChooserOpen = false
       else if (editingId !== "") editingId = ""
       else if (searchOpen) searchOpen = false

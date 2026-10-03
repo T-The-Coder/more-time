@@ -1,9 +1,13 @@
 import QtQuick
 import Quickshell.Io
 import qs.Commons
+import qs.Ui
 import "Astro.js" as Astro
 import "AstroRotation.js" as AstroRotation
 import "AstroEvents.js" as AstroEvents
+import "AstroClock.js" as AstroClock
+import "AstroDate.js" as AstroDate
+import "Model.js" as Model
 import "Globe.js" as Globe
 import "Moon.js" as Moon
 import "AstroView.js" as AstroView
@@ -24,7 +28,7 @@ Column {
   TimeTabHeader {
     width: parent.width
     panel: view.panel
-    hint: view.panel.i18n("astroKeysHint")
+    hint: view.panel.i18n("astroKeysHint") + (view.showTimeline ? " · " + view.panel.i18n("astroTimeKeysHint") : "")
   }
 
   // Ctrl + ← → turn, Ctrl + ↑ ↓ tilt, + − zoom, 0 back to the start view
@@ -42,6 +46,30 @@ Column {
       return true
     }
     if (control) return false
+    // The timeline: , . a day, Space play / pause, n or Backspace back to
+    // now, g the date field (Space stays the ringing's while something
+    // rings).
+    if (text === "," || text === ".") {
+      sky.stepDays(text === "." ? 1 : -1)
+      return true
+    }
+    if (key === Qt.Key_Space && !view.panel.ringer.ringing.length && view.showTimeline) {
+      sky.togglePlay()
+      return true
+    }
+    if (text === "n" || key === Qt.Key_Backspace) {
+      sky.backToNow()
+      return true
+    }
+    if (text === "g" && view.showTimeline) {
+      dateField.forceActiveFocus()
+      dateField.selectAll()
+      return true
+    }
+    if ((key === Qt.Key_Return || key === Qt.Key_Enter) && sky.traveling) {
+      sky.stopTravel()
+      return true
+    }
     if (text === "+" || text === "=" || key === Qt.Key_Plus) {
       sky.zoomBy(1)
       return true
@@ -57,13 +85,32 @@ Column {
     return false
   }
 
+  // Esc: a running travel stops where it is; the date field is left
+  // (Panel.handlePanelKey asks before closing).
+  function handleAstroEscape() {
+    if (sky.traveling) {
+      sky.stopTravel()
+      return true
+    }
+    if (dateField.activeFocus) {
+      view.panel.restoreKeyFocus()
+      return true
+    }
+    return false
+  }
+
+  readonly property bool showTimeline: panel.displaySetting("astroTimeline", true)
+  readonly property bool showInfo: panel.displaySetting("astroInfo", true)
+
   Item {
     id: sky
     objectName: "timeAstro"
     width: parent.width
-    // Fills the visible height below it, like the globe: never taller than
-    // wide, never lower than Style.space(240).
+    // Fills the visible height below it (less the timeline and the info
+    // line), like the globe: never taller than wide, never lower than
+    // Style.space(240).
     readonly property real fitHeight: view.panel.viewportHeight - view.panel.tabContentTop - view.y - y - Style.space(16)
+      - (timeline.visible ? timeline.height + view.spacing : 0) - (infoLine.visible ? infoLine.height + view.spacing : 0)
     height: Math.max(Style.space(240), Math.min(width * 0.9, fitHeight))
 
     // Pictures are never mirrored, whatever the language.
@@ -158,7 +205,114 @@ Column {
     }
 
     // ---- The bodies, once a minute ----
-    readonly property double minuteMs: Math.floor(panel.nowMs / 60000) * 60000
+    // ---- The shown instant: now (to the minute), or pinned by the
+    //      timeline, playback or a travel ("Go to date") ----
+    readonly property double liveMs: Math.floor(panel.nowMs / 60000) * 60000
+    property bool timePinned: false
+    property double pinnedMs: 0
+    readonly property double minuteMs: timePinned ? pinnedMs : liveMs
+    readonly property bool approximate: Astro.isApproximate(minuteMs)
+    // The scrubber's days count from now, or from the pinned moment when
+    // that lies more than its year away (AstroClock.js).
+    readonly property double scrubBase: timePinned && Math.abs(pinnedMs - liveMs) > AstroClock.RANGE_DAYS * AstroClock.DAY_MS
+      ? pinnedMs : liveMs
+    readonly property int scrubIndex: AstroClock.nearestIndex(scrubBase, minuteMs)
+    readonly property bool nowInRange: scrubBase === liveMs
+
+    function showAt(ms) {
+      pinnedMs = ms
+      timePinned = true
+    }
+    function stepDays(days) {
+      stopTravel()
+      playing = false
+      var next = minuteMs + days * AstroClock.DAY_MS
+      var limit = AstroClock.RANGE_DAYS * AstroClock.DAY_MS
+      showAt(Math.max(scrubBase - limit, Math.min(scrubBase + limit, next)))
+    }
+    function scrubTo(index) {
+      stopTravel()
+      showAt(scrubBase + (index - AstroClock.NOW_INDEX) * AstroClock.DAY_MS)
+    }
+    function backToNow() {
+      playing = false
+      if (!timePinned) return
+      travelTo(liveMs, true)
+    }
+
+    // Playing: a day, a week or a month a second (AstroClock.timing).
+    property bool playing: false
+    property int speedIndex: 0
+    function togglePlay() {
+      stopTravel()
+      if (!playing && !timePinned) showAt(liveMs)
+      playing = !playing
+    }
+    Timer {
+      id: playTimer
+      interval: AstroClock.timing(sky.speedIndex).delay
+      repeat: true
+      running: sky.playing && sky.panel.opened && sky.panel.currentTab === "astro"
+      onTriggered: {
+        var t = AstroClock.timing(sky.speedIndex)
+        var next = sky.minuteMs + t.step * AstroClock.DAY_MS
+        var end = sky.scrubBase + AstroClock.RANGE_DAYS * AstroClock.DAY_MS
+        if (next >= end) {
+          sky.showAt(end)
+          sky.playing = false
+        } else {
+          sky.showAt(next)
+        }
+      }
+    }
+
+    // A travel: from the shown moment to another in AstroDate.TRAVEL_MS,
+    // eased, every frame at its own moment (a time lapse).
+    property bool traveling: false
+    readonly property bool moving: playing || traveling || rotating
+    property double travelFrom: 0
+    property double travelTarget: 0
+    property double travelStart: 0
+    property bool travelToNow: false
+    function travelTo(ms, toNow) {
+      playing = false
+      travelFrom = minuteMs
+      travelTarget = ms
+      travelToNow = !!toNow
+      travelStart = Date.now()
+      showAt(travelFrom)
+      traveling = true
+    }
+    function stopTravel() {
+      traveling = false
+    }
+    // Ends a running travel at once (the screenshot harness).
+    function finishTravel() {
+      if (!traveling) return
+      traveling = false
+      if (travelToNow) timePinned = false
+      else showAt(travelTarget)
+    }
+    Timer {
+      interval: 33
+      repeat: true
+      running: sky.traveling && sky.panel.opened
+      onTriggered: {
+        var t = (Date.now() - sky.travelStart) / AstroDate.TRAVEL_MS
+        if (t >= 1) {
+          sky.finishTravel()
+          return
+        }
+        sky.showAt(AstroDate.travelAt(sky.travelFrom, sky.travelTarget, t))
+      }
+    }
+
+    // The shown moment as text: "Sunday, 20 July 1969 · 9:17 PM", the
+    // computer's local time.
+    function momentText(ms) {
+      var offset = Model.localOffsetSeconds(ms)
+      return panel.dateFor(ms, offset, "long") + " · " + panel.clockFor(ms, offset, false)
+    }
     readonly property double dayMs: Math.floor(minuteMs / 86400000) * 86400000
     readonly property int year: new Date(minuteMs).getUTCFullYear()
     // True positions (au) and drawn ones (model units), by planet.
@@ -321,7 +475,7 @@ Column {
     // ---- Turning by itself (the globe's options under astro* keys) ----
     property bool rotating: false
     readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "astro"
-      && visible && !mouse.pressed
+      && visible && !mouse.pressed && !playing && !traveling
     onCanRotateChanged: if (!canRotate) rotating = false
     readonly property int rotateDelaySeconds: Number(panel.displaySetting("astroRotateDelay", "10")) || 10
     readonly property int rotateTurnMinutes: Number(panel.displaySetting("astroRotateSpeed", "4")) || 4
@@ -538,7 +692,8 @@ Column {
           for (var l = 0; l < sky.landRings.length; l++) {
             // Islands smaller than a pixel at this size are left out.
             var landRing = sky.landRings[l]
-            if (landRing.sinMax >= 0 && landRing.sinMax * R < 1) continue
+            // While time runs or the view turns, only what spans a few pixels.
+            if (landRing.sinMax >= 0 && landRing.sinMax * R < (sky.moving ? 4 : 1)) continue
             var polys = Globe.frontPolygonsView(landRing, vm, R)
             for (var p = 0; p < polys.length; p++) trace(polys[p])
           }
@@ -625,6 +780,21 @@ Column {
         return [earth, moon]
       }
 
+      // When the view is not now: the shown moment, bottom left.
+      function paintShownLabel(ctx) {
+        if (!sky.timePinned) return
+        var text = sky.momentText(sky.minuteMs) + (sky.approximate ? " · " + sky.panel.i18n("astroApproximate") : "")
+        ctx.font = sky.panel.canvasFont(Style.font.caption, true, false)
+        var tw = ctx.measureText(text).width + 10
+        var th = Style.font.caption + 8
+        ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.85)
+        ctx.fillRect(4, height - th - 4, tw, th)
+        ctx.fillStyle = accent
+        ctx.textAlign = "left"
+        ctx.textBaseline = "middle"
+        ctx.fillText(text, 9, height - th / 2 - 4)
+      }
+
       onPaint: {
         var started = Date.now()
         var ctx = getContext("2d")
@@ -661,6 +831,7 @@ Column {
             ctx.fillStyle = it.key === sky.pinned ? accent : rgba(ink, 0.9)
             ctx.fillText(label, lx + 3, ly + (fontPx + 4) / 2 + 0.5)
           }
+          paintShownLabel(ctx)
           var spentEarth = Date.now() - started
           var se = sky.paintStats
           sky.paintStats = { count: se.count + 1, total: se.total + spentEarth, max: Math.max(se.max, spentEarth) }
@@ -858,6 +1029,7 @@ Column {
           sky.insetRect = { x: ix, y: iy, w: insetSize, h: insetSize }
         }
 
+        paintShownLabel(ctx)
         var spent = Date.now() - started
         var st = sky.paintStats
         sky.paintStats = { count: st.count + 1, total: st.total + spent, max: Math.max(st.max, spent) }
@@ -965,5 +1137,226 @@ Column {
       onZoomOut: sky.zoomBy(-1)
       onZoomIn: sky.zoomBy(1)
     }
+  }
+
+  // ---- The info line (AstroEvents.js), its searches once per shown day ----
+  readonly property double infoDay: Math.floor(sky.minuteMs / 86400000)
+  property var info: null
+  onInfoDayChanged: infoTimer.restart()
+  onShowInfoChanged: if (showInfo) infoTimer.restart()
+  Component.onCompleted: computeInfo()
+  Timer {
+    id: infoTimer
+    interval: 250
+    onTriggered: view.computeInfo()
+  }
+  function computeInfo() {
+    if (!showInfo) return
+    var ms = sky.minuteMs
+    var moon = AstroEvents.moonInfo(ms)
+    var season = AstroEvents.nextSeasonEvent(ms)
+    var seen = AstroEvents.visibility(ms)
+    var opposition = null
+    for (var i = 0; i < AstroEvents.OUTER_PLANETS.length; i++) {
+      var key = AstroEvents.OUTER_PLANETS[i]
+      var at = AstroEvents.nextOpposition(key, ms)
+      if (at && (!opposition || at < opposition.utcMs)) opposition = { key: key, utcMs: at }
+    }
+    info = { moon: moon, season: season, seen: seen, opposition: opposition }
+  }
+  function shortMoment(ms) {
+    var offset = Model.localOffsetSeconds(ms)
+    return panel.dateFor(ms, offset, "short") + " " + panel.clockFor(ms, offset, false)
+  }
+  readonly property string infoText: {
+    if (!info) return ""
+    var lines = []
+    if (sky.timePinned)
+      lines.push(panel.i18n("astroShown", { date: sky.momentText(sky.minuteMs) }) + (sky.approximate ? " · " + panel.i18n("astroApproximate") : ""))
+    var phase = Moon.moonPhaseFraction(sky.minuteMs)
+    var moonLine = panel.i18n("moonPhase_" + AstroEvents.phaseKey(phase)) + " · "
+      + panel.i18n("astroMoonLit", { percent: Math.round((1 - Math.cos(2 * Math.PI * phase)) / 2 * 100) })
+    if (info.moon.nextNew && info.moon.nextFull)
+      moonLine += " · " + panel.i18n("astroMoonNext", { newMoon: shortMoment(info.moon.nextNew), fullMoon: shortMoment(info.moon.nextFull) })
+    lines.push(moonLine)
+    var yearLine = []
+    if (info.season) yearLine.push(panel.i18n("astroSeason_" + info.season.key) + " " + shortMoment(info.season.utcMs))
+    if (info.opposition) yearLine.push(panel.i18n("astroOpposition", { planet: panel.i18n("astroBody_" + info.opposition.key),
+      date: shortMoment(info.opposition.utcMs) }))
+    if (yearLine.length) lines.push(yearLine.join(" · "))
+    var evening = [], morning = []
+    for (var key in info.seen) {
+      if (info.seen[key] === "evening") evening.push(panel.i18n("astroBody_" + key))
+      else if (info.seen[key] === "morning") morning.push(panel.i18n("astroBody_" + key))
+    }
+    var skyLine = []
+    if (evening.length) skyLine.push(panel.i18n("astroEvening", { planets: evening.join(", ") }))
+    if (morning.length) skyLine.push(panel.i18n("astroMorning", { planets: morning.join(", ") }))
+    if (skyLine.length) lines.push(skyLine.join(" · "))
+    return lines.join("\n")
+  }
+
+  // ---- The timeline: play, the year either side, speed, now; Go to date ----
+  Column {
+    id: timeline
+    visible: view.showTimeline
+    width: parent.width
+    spacing: Style.space(6)
+
+    Row {
+      width: parent.width
+      spacing: Style.space(8)
+
+      TimeIconButton {
+        id: playButton
+        anchors.verticalCenter: parent.verticalCenter
+        panel: view.panel
+        glyph: sky.playing ? "\u{f03e4}" : "\u{f040a}"
+        glyphSize: Style.font.body
+        active: sky.playing
+        onActivated: sky.togglePlay()
+      }
+
+      // The track: a year back to a year on, a mark at now, the handle at
+      // the shown day; a click or a drag picks a day.
+      Item {
+        id: track
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width - playButton.width - speeds.width - nowButton.width - 3 * parent.spacing
+        height: Style.space(24)
+        readonly property real fraction: sky.scrubIndex / AstroClock.LAST_INDEX
+        Rectangle {
+          anchors.verticalCenter: parent.verticalCenter
+          width: parent.width
+          height: Style.space(2)
+          radius: height / 2
+          color: view.panel.subtleText
+        }
+        Rectangle {
+          visible: sky.nowInRange
+          x: parent.width * AstroClock.NOW_INDEX / AstroClock.LAST_INDEX - width / 2
+          anchors.verticalCenter: parent.verticalCenter
+          width: Style.space(2)
+          height: Style.space(12)
+          color: Color.accent
+        }
+        Rectangle {
+          x: parent.width * track.fraction - width / 2
+          anchors.verticalCenter: parent.verticalCenter
+          width: Style.space(10)
+          height: width
+          radius: width / 2
+          color: sky.timePinned ? Color.accent : view.panel.foreground
+        }
+        MouseArea {
+          anchors.fill: parent
+          cursorShape: Qt.PointingHandCursor
+          function pick(x) {
+            sky.playing = false
+            sky.scrubTo(Math.round(Math.max(0, Math.min(1, x / width)) * AstroClock.LAST_INDEX))
+          }
+          onPressed: function(event) { pick(event.x) }
+          onPositionChanged: function(event) { if (pressed) pick(event.x) }
+        }
+      }
+
+      // The speeds: a day, a week, a month a second.
+      Row {
+        id: speeds
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: Style.space(4)
+        Repeater {
+          model: AstroClock.SPEEDS
+          Rectangle {
+            required property var modelData
+            required property int index
+            width: speedText.implicitWidth + Style.space(10)
+            height: Style.space(20)
+            radius: Style.cornerRadius
+            color: sky.speedIndex === index ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22) : "transparent"
+            border.color: sky.speedIndex === index ? Color.accent : view.panel.subtleText
+            border.width: Style.spacing.hairline
+            Text {
+              id: speedText
+              textFormat: Text.PlainText
+              anchors.centerIn: parent
+              text: view.panel.i18n("astroSpeed_" + parent.modelData.key)
+              color: sky.speedIndex === parent.index ? Color.accent : view.panel.mutedText
+              font.family: view.panel.fontFamily
+              font.pixelSize: Style.font.caption
+            }
+            MouseArea {
+              anchors.fill: parent
+              cursorShape: Qt.PointingHandCursor
+              onClicked: sky.speedIndex = parent.index
+            }
+          }
+        }
+      }
+
+      TimeButton {
+        id: nowButton
+        anchors.verticalCenter: parent.verticalCenter
+        panel: view.panel
+        label: view.panel.i18n("astroNow")
+        onActivated: sky.backToNow()
+      }
+    }
+
+    // Go to date: typed, read as it is typed, Enter travels there.
+    Row {
+      width: parent.width
+      spacing: Style.space(10)
+
+      TextField {
+        id: dateField
+        width: Math.min(Style.space(220), parent.width / 2)
+        foreground: view.panel.foreground
+        font.family: view.panel.fontFamily
+        font.pixelSize: Style.font.bodySmall
+        placeholderText: view.panel.i18n("astroGoToPlaceholder")
+        readonly property var parsed: AstroDate.parseDate(text,
+          AstroDate.dateOrder(view.panel.interfaceLocale.dateFormat(Locale.ShortFormat)))
+        onAccepted: {
+          if (sky.traveling) {
+            sky.stopTravel()
+            return
+          }
+          if (!parsed.ok) return
+          sky.travelTo(parsed.ms, false)
+          view.panel.restoreKeyFocus()
+        }
+        onActiveFocusChanged: {
+          if (activeFocus) view.panel.activeTextField = dateField
+          else if (view.panel.activeTextField === dateField) view.panel.activeTextField = null
+        }
+      }
+
+      Text {
+        textFormat: Text.PlainText
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width - dateField.width - parent.spacing
+        text: dateField.text === "" ? view.panel.i18n("astroGoToHint")
+          : (dateField.parsed.ok ? "= " + sky.momentText(dateField.parsed.ms)
+            + (Astro.isApproximate(dateField.parsed.ms) ? " · " + view.panel.i18n("astroApproximate") : "")
+            : view.panel.i18n(dateField.parsed.reason === "range" ? "astroOutOfRange" : "astroNotADate"))
+        color: dateField.text !== "" && !dateField.parsed.ok ? Color.urgent : view.panel.mutedText
+        font.family: view.panel.fontFamily
+        font.pixelSize: Style.font.caption
+        wrapMode: Text.WordWrap
+      }
+    }
+  }
+
+  Text {
+    id: infoLine
+    textFormat: Text.PlainText
+    visible: view.showInfo && text !== ""
+    width: parent.width
+    text: view.infoText
+    color: view.panel.mutedText
+    font.family: view.panel.fontFamily
+    font.pixelSize: Style.font.caption
+    wrapMode: Text.WordWrap
   }
 }

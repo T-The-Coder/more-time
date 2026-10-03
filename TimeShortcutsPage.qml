@@ -79,7 +79,11 @@ Column {
         { keys: ["Ctrl ← →"], action: "shortcutAstroTurn" },
         { keys: ["Ctrl ↑ ↓"], action: "shortcutAstroTilt" },
         { keys: ["+", "−"], action: "shortcutAstroZoom" },
-        { keys: ["0"], action: "shortcutAstroReset" }
+        { keys: ["0"], action: "shortcutAstroReset" },
+        { keys: [",", "."], action: "shortcutAstroStep" },
+        { keys: ["Space"], action: "shortcutAstroPlay" },
+        { keys: ["n", "⌫"], action: "shortcutAstroNow" },
+        { keys: ["g"], action: "shortcutAstroGoTo" }
       ]
     },
     {

@@ -56,6 +56,8 @@ test("every key used in the QML exists", () => {
     sound_: ["alarm", "bell", "complete", "message", "phone", "none"],
     settingsPage_: ["general", "display", "sounds", "shortcuts", "sources"],
     dial_: ["classic", "minimal", "roman", "twentyFour", "dots"],
+    astroSpeed_: ["day", "week", "month"],
+    astroSeason_: ["marchEquinox", "juneSolstice", "septemberEquinox", "decemberSolstice"],
     moonPhase_: ["new", "waxingCrescent", "firstQuarter", "waxingGibbous", "full", "waningGibbous", "lastQuarter", "waningCrescent"],
     astroBody_: ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "moon"]
   }

@@ -46,6 +46,7 @@ ShellRoot {
     return null
   }
   function astro() { return findNamed(panel.contentRoot, "timeAstro") }
+  function astroView() { return astro().parent }
   // The app window's size, in pixels.
   // The app's size in pixels: an offscreen window keeps its first size,
   // so the content area takes the size inside the window's padding (the
@@ -522,6 +523,32 @@ ShellRoot {
       console.log("ASTRO saturn", JSON.stringify(a.hover ? a.hover.text : null))
     },
     function() { shot("40h-astro-saturn-high") },
+    // The timeline: 90 days ahead; 1969-07-20 20:17 UTC; a travel half
+    // way; what a frame costs while playing a month a second.
+    function() { var a = astro(); a.pointer = null; a.updateHover(); a.elevation = 30; a.zoomIndex = 1; a.scrubTo(366 + 90) },
+    function() { console.log("ASTRO info", JSON.stringify(astroView().infoText)); shot("41a-astro-timeline-90") },
+    function() { astro().showAt(Date.UTC(1969, 6, 20, 20, 17)) },
+    function() { console.log("ASTRO 1969", JSON.stringify(astroView().infoText)); shot("41b-astro-1969") },
+    function() { astro().zoomIndex = 0; astro().travelTo(Date.UTC(2026, 9, 3, 12), false) },
+    function() { console.log("ASTRO travel", new Date(astro().minuteMs).toISOString()); shot("41c-astro-travel") },
+    function() {
+      var a = astro()
+      a.finishTravel()
+      a.zoomIndex = 1
+      a.speedIndex = 2
+      a.paintStats = { count: 0, total: 0, max: 0 }
+      a.togglePlay()
+    },
+    function() {},
+    function() {
+      var a = astro()
+      var st = a.paintStats
+      console.log("ASTRO playback frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(1), "max", st.max)
+      a.togglePlay()
+      a.finishTravel()
+      a.backToNow()
+      a.finishTravel()
+    },
     function() {
       var a = astro()
       a.pointer = null

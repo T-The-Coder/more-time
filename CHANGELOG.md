@@ -4,6 +4,15 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Astro: timeline, Go to date and the info line.** A timeline under the
+  solar system plays the year either side of today at a day, a week or a
+  month a second, with a track to drag and `,` `.` `Space` `n` keys; **Go
+  to date** (`g`) travels in a time lapse to any moment from 3000 BC to
+  3000 AD and stays there until **Now** brings it back (outside 1800–2050
+  from JPL's long-range elements, marked approximate). An info line names
+  the Moon's phase and its next new and full moon, the next equinox or
+  solstice, the next opposition and the planets in the evening and the
+  morning sky. Everything in the view follows the shown moment.
 - **Zoom on the globe and the map, buttons in the Astro tab:** a small
   cluster at the top right (crosshair, −, +) as on More Weather's globe. The
   globe and the flat map zoom in three steps (to about 1,600 km across) with

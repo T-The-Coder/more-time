@@ -205,9 +205,24 @@ control.
     its day and the tilt of its axis (≈ where the rotation is known only
     roughly); on the Moon its phase, the lit part, its distance in km and
     light-seconds and its age since the new moon.
+  - Under the model a timeline plays the year either side of today (a day,
+    a week or a month a second; `,` `.` a day, `Space` play, `n` or `⌫` back
+    to now, a click or a drag on the track), and **Go to date** (`g`) travels
+    in a 2.5-second time lapse to any date from 3000 BC to 3000 AD (typed
+    as `1969-07-20 20:17`, `20.07.1969 20:17`, `07/20/1969` where the
+    language writes it so, or a bare year; this computer's local time); the
+    planets run along their orbits, the Earth spins and the Moon circles on
+    the way, and the view stays at that moment until **Now** travels back.
+    Outside 1800–2050 the planets come from JPL's long-range elements and
+    are marked approximate. Everything follows the shown moment: the bodies,
+    Earth's lit side, the Moon, the month ring's hand and the hover values.
+  - An info line under it: the shown moment when it is not now, the Moon's
+    phase with the next new and full moon, the next equinox or solstice and
+    the next opposition, and which planets are in the evening and the
+    morning sky.
   - Settings → Display → Astro: orbits, names, the month ring, rotation and
-    tilt, the Earth and Moon inset, turning by itself (delay, speed and
-    frames per second).
+    tilt, the Earth and Moon inset, the timeline, the info line, turning by
+    itself (delay, speed and frames per second).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.
@@ -329,6 +344,10 @@ too.
 | `Ctrl ↑ ↓` | Tilt the view (also a drag up or down) |
 | `+` / `−` | Whole system, inner system, Earth (also `Ctrl` + wheel) |
 | `0` | Back to the start view (the crosshair button keeps the zoom step) |
+| `,` / `.` | A day back / forward |
+| `Space` | Play or pause the timeline |
+| `n` / `⌫` | Back to now (a time lapse) |
+| `g` | Go to a date (`Enter` travels, `Esc` leaves the field or stops the travel) |
 | **While something rings** | |
 | `Space` / `Enter` | Stop |
 | `s` | Snooze |
@@ -373,8 +392,9 @@ too.
   drawn on the map, but the clocks include it.
 - **Solar system:** the planets' Keplerian elements and their rates from JPL's
   [Approximate Positions of the Planets](https://ssd.jpl.nasa.gov/planets/approx_pos.html)
-  (E. M. Standish, table 1, valid 1800–2050, about an arcminute), solved on this
-  computer (`Astro.js`); nothing is downloaded. The bodies' poles, prime
+  (E. M. Standish, table 1, valid 1800–2050, about an arcminute; tables 2a and
+  2b with the extra terms for Jupiter to Neptune for 3000 BC to 3000 AD), solved
+  on this computer (`Astro.js`); nothing is downloaded. The bodies' poles, prime
   meridians and rotation rates from the IAU WGCCRE model
   ([NAIF pck00010](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc)),
   Saturn's rings from NASA's fact sheet, the Moon's place and distance from
@@ -554,6 +574,7 @@ covers the parts that need More Time's flat map data.
 The Astro tab is `TimeAstro.qml` over two pure files: `Astro.js` (JPL's
 approximate elements, Kepler's equation, heliocentric positions, orbits,
 periods and the year's marks: equinoxes, solstices and month starts) and
+`AstroDate.js` (reading "Go to date", the eased travel) and
 `AstroView.js` (the r^0.45 model scale, body sizes, the camera, projection,
 depth order, zoom steps and hit testing). `tests/astro.test.mjs` checks the
 positions against references derived independently (the Sun's longitude from

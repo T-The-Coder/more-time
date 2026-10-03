@@ -153,3 +153,42 @@ test("orbits: closed, on the orbit, and the periods", () => {
   near(A.periodDays("jupiter"), 4332.6, 1)
   near(A.periodDays("neptune"), 60190, 100)
 })
+
+test("long-range elements: Table 2 agrees with Table 1 inside 1800–2050", () => {
+  // The two fits (JPL, approx_pos.html) differ by their nominal errors at
+  // most: under 0.01° for the inner planets, a few tenths for the giants.
+  const limits = { mercury: 0.01, venus: 0.01, earth: 0.01, mars: 0.05, jupiter: 0.2, saturn: 0.4, uranus: 0.35, neptune: 0.15 }
+  for (const planet of A.PLANETS) {
+    for (let year = 1800; year <= 2050; year += 10) {
+      const ms = A.utc(year, 0, 1)
+      near(angle(A.position(planet, ms, "short").lon, A.position(planet, ms, "long").lon), 0, limits[planet], `${planet} ${year}`)
+    }
+  }
+  assert.ok(!A.isApproximate(Date.UTC(2026, 9, 3)))
+  assert.ok(A.isApproximate(A.utc(1600, 0, 1)) && A.isApproximate(A.utc(2100, 0, 1)))
+})
+
+test("the great conjunction of 2020-12-21: Jupiter and Saturn together, seen from Earth", () => {
+  // The closest since 1623: about 0.1° apart in the sky on 21 December
+  // 2020 (widely published). Geocentric longitudes from both tables.
+  const ms = Date.UTC(2020, 11, 21, 18)
+  for (const table of ["short", "long"]) {
+    const e = A.position("earth", ms, table)
+    const lon = (p) => { const q = A.position(p, ms, table); return Math.atan2(q.y - e.y, q.x - e.x) / RAD }
+    near(angle(lon("jupiter"), lon("saturn")), 0, 0.3, table)
+  }
+})
+
+test("far past and future: positions stay on their orbits", () => {
+  for (const year of [-2999, -1000, 1000, 1500, 2500, 3000]) {
+    const ms = A.utc(year, 5, 1)
+    for (const planet of A.PLANETS) {
+      const el = A.elementsAt(planet, A.julianCenturies(ms))
+      const p = A.position(planet, ms)
+      assert.ok(p.r >= el.a * (1 - el.e) - 1e-9 && p.r <= el.a * (1 + el.e) + 1e-9, `${planet} ${year}`)
+    }
+  }
+  // Seasons in a year before 100 AD are found (Date.UTC would read 50 as 1950).
+  const marks = A.seasonMarks(50)
+  assert.equal(new Date(marks.seasons[0].utcMs).getUTCFullYear(), 50)
+})
