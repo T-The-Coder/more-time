@@ -956,6 +956,9 @@ Panel {
   property bool searchOpen: false
   property bool newTimerOpen: false
   property var activeTextField: null
+  // The World tab's globe while it shows (its `perf` for the status), or
+  // the flat map's.
+  property var globeItem: null
   readonly property bool editingText: !!activeTextField && activeTextField.activeFocus
 
   function closeEditors() {
@@ -1577,6 +1580,9 @@ Panel {
         language: root.interfaceLanguage,
         hour12: root.hour12,
         localOffset: root.localOffset,
+        // The World tab's globe or map: GPU surface or Canvas, frames a
+        // second, CPU (this process), and the last minute turning by itself.
+        globe: root.globeItem ? root.globeItem.perf : null,
         zones: Object.keys(root.zoneTable.zones).length,
         zonesFetchedAt: root.zoneTable.fetchedAt,
         cities: root.cityList.map(function(c) {

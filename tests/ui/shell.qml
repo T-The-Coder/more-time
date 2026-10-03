@@ -122,7 +122,13 @@ ShellRoot {
     // and the blue hour on.
     function() { display("worldStyle", "globe"); display("worldNight", true); display("heroGoldenHour", true); display("heroBlueHour", true) },
     function() { panel.selectedCity = 0 },
-    function() { var g = globe(); g.finishTurn(); console.log("GLOBE", g.centerLon, g.width, g.height) },
+    function() {
+      var g = globe()
+      g.finishTurn()
+      console.log("GLOBE", g.centerLon, g.width, g.height)
+      // The software scene graph has no shaders: the Canvas path is tested.
+      console.log("CHECK surface off offscreen", g.gpuSurface, g.gpuSurface === false ? "ok" : "WRONG")
+    },
     function() { shot("01b-globe") },
     function() { panel.selectedCity = 2 },
     function() {

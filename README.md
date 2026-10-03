@@ -571,6 +571,17 @@ and joining clipped fills along the rim. Their tests are `tests/sky.test.mjs`,
 `tests/equal-earth.test.mjs` and `tests/globe.test.mjs`; `tests/globe-time.test.mjs`
 covers the parts that need More Time's flat map data.
 
+The World tab's globe and map draw their surface on the GPU where shaders run:
+`TimeGlobeSurface.qml` (shared with More Weather, with `shaders/globe.frag`, its
+compiled `shaders/globe.frag.qsb` and `tools/build-shaders.sh`) projects an
+equirectangular picture of the zones and the land (`TimeGlobeTexture.qml`,
+painted once per change) onto the globe or the Equal Earth map and adds the
+night; the Canvas keeps the coast, the grid, the golden and blue bands, the
+Sun, the Moon and the places. From z3, and on the software scene graph (the
+offscreen screenshot harness: `CHECK surface off offscreen`), the Canvas draws
+everything as before. `qs ipc … call more-time status` reports
+`globe: { surface, fps, cpuPercent, turning }` for the shown globe.
+
 The Astro tab is `TimeAstro.qml` over two pure files: `Astro.js` (JPL's
 approximate elements, Kepler's equation, heliocentric positions, orbits,
 periods and the year's marks: equinoxes, solstices and month starts) and

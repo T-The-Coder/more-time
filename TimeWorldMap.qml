@@ -5,6 +5,7 @@ import qs.Commons
 import "Model.js" as Model
 import "WorldMap.js" as WorldMap
 import "Moon.js" as Moon
+import "Globe.js" as Globe
 
 // The world map of the World tab, Equal Earth (less distorted than Mercator,
 // equal in area): the time zones in alternating stripes, the night side, the
@@ -173,6 +174,43 @@ Item {
   // Where each city's dot was drawn, for clicks.
   property var cityHits: []
 
+  // ---- The GPU surface in its Equal Earth mode (TimeGlobeSurface.qml):
+  //      the zones, the land's fill and the night from the same picture as
+  //      the globe's, up to z2 and where shaders run; the Canvas keeps the
+  //      rest (and draws everything otherwise).
+  readonly property var globeData: mapData ? Globe.prepareData(mapData, WorldMap.unproject) : null
+  readonly property bool gpuSurface: surface.available && zoom < 3
+  onGpuSurfaceChanged: canvas.requestPaint()
+  TimeGlobeTexture {
+    id: surfaceTexture
+    globeData: map.globeData
+    homeZone: map.homeZone
+    ink: map.panel.foreground
+  }
+  TimeGlobeSurface {
+    id: surface
+    x: 0
+    y: map.rulerHeight
+    width: map.mapWidth
+    height: map.mapHeight
+    visible: map.gpuSurface
+    style: "map"
+    zoom: map.zoom
+    centerLat: 0
+    centerLon: 0
+    // Where the map's 0°/0° sits in the surface (map.px without the ruler).
+    centerX: (WorldMap.X_MAX * map.unit - map.focusX) * map.zoomScale + map.mapWidth / 2
+    centerY: (WorldMap.Y_MAX * map.unit - map.focusY) * map.zoomScale + map.mapHeight / 2
+    displayMs: map.minuteMs
+    night: map.showNight
+    background: Color.popups.background
+    baseColor: Qt.rgba(map.panel.foreground.r, map.panel.foreground.g, map.panel.foreground.b, 0.03)
+    textureSource: surfaceTexture
+  }
+  property var perf: ({ surface: gpuSurface, fps: 0, cpuMsPerFrame: 0, cpuPercent: 0, textureMs: surfaceTexture.lastMs })
+  Component.onCompleted: map.panel.globeItem = map
+  Component.onDestruction: if (map.panel.globeItem === map) map.panel.globeItem = null
+
   Canvas {
     id: canvas
     anchors.fill: parent
@@ -226,13 +264,18 @@ Item {
       tracePoints(ctx, outline)
       ctx.clip()
 
-      ctx.fillStyle = rgba(ink, 0.03)
-      ctx.fillRect(0, 0, width, height)
+      // With the GPU surface the zones, the land's fill and the night are
+      // under this canvas already.
+      var gpu = map.gpuSurface
+      if (!gpu) {
+        ctx.fillStyle = rgba(ink, 0.03)
+        ctx.fillRect(0, 0, width, height)
+      }
 
       // Zebra: whole-hour zones alternate light and dark by the parity of
       // their hour; zones off the full hour are hatched.
       var hatch = ctx.createPattern(rgba(ink, 0.16), Qt.BDiagPattern)
-      for (var z = 0; z < data.zones.length; z++) {
+      for (var z = 0; z < (gpu ? 0 : data.zones.length); z++) {
         var zone = data.zones[z]
         var band = WorldMap.zebraBand(zone.o)
         ctx.beginPath()
@@ -260,7 +303,7 @@ Item {
       ctx.beginPath()
       for (var l = 0; l < data.land.length; l++) traceRing(ctx, data.land[l], scale)
       ctx.fillStyle = rgba(ink, 0.07)
-      ctx.fill("evenodd")
+      if (!gpu) ctx.fill("evenodd")
       ctx.strokeStyle = rgba(ink, 0.55)
       ctx.lineWidth = 0.8
       ctx.stroke()
@@ -271,7 +314,8 @@ Item {
       // the rule from fillRule, not from fill()'s argument.
       ctx.fillRule = Qt.OddEvenFill
       var tw = map.twilight
-      for (var t = 0; t < tw.layers.length; t++) {
+      var layerCount = tw.layers.length - (gpu && map.showNight ? 3 : 0)
+      for (var t = 0; t < layerCount; t++) {
         var layer = tw.layers[t]
         ctx.beginPath()
         tracePoints(ctx, tw.shapes[layer.high])

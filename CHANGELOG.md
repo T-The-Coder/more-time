@@ -4,6 +4,13 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **The globe and the map on the GPU:** where the graphics allow it, the
+  World tab's globe and map draw the zones, the land and the night with a
+  shader (shared with More Weather) from a picture painted once per change,
+  so turning by itself costs little; lines, the golden and blue bands, the
+  Sun, the Moon and the places stay as they were. Without GPU drawing, and
+  zoomed in to the last step, it draws as before. The IPC status reports the
+  globe's frames and processor share.
 - **Astro: timeline, Go to date and the info line.** A timeline under the
   solar system plays the year either side of today at a day, a week or a
   month a second, with a track to drag and `,` `.` `Space` `n` keys; **Go

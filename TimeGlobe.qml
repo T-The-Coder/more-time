@@ -302,7 +302,7 @@ Item {
 
   // While it turns by itself: no hatching, a coarser coastline without the
   // smallest islands, only the selected place labelled.
-  readonly property bool cheapFrames: rotating
+  readonly property bool cheapFrames: rotating && !gpuSurface
   // Every `every`-th point, and no ring smaller than `least` degrees each
   // way.
   function coarseRings(rings, every, least) {
@@ -333,6 +333,96 @@ Item {
 
   // Where each city's dot was drawn, for clicks.
   property var cityHits: []
+
+  // ---- The GPU surface (TimeGlobeSurface.qml, shared with More Weather):
+  //      the sphere, the zones, the land's fill and the night, from an
+  //      equirectangular picture (TimeGlobeTexture.qml) painted once per
+  //      change; turning only changes its uniforms. Up to z2 and where
+  //      shaders run (not on the software scene graph of the offscreen
+  //      harness); else the Canvas path below draws everything.
+  readonly property bool gpuSurface: surface.available && zoom < 3
+  onGpuSurfaceChanged: repaint()
+  TimeGlobeTexture {
+    id: surfaceTexture
+    globeData: globe.globeData
+    homeZone: globe.homeZone
+    ink: globe.panel.foreground
+  }
+  TimeGlobeSurface {
+    id: surface
+    anchors.fill: parent
+    visible: globe.gpuSurface
+    style: "globe"
+    centerLat: globe.tilted ? globe.centerLat : 0
+    centerLon: globe.centerLon
+    radius: globe.radius
+    centerX: globe.centerX
+    centerY: globe.centerY
+    displayMs: globe.minuteMs
+    night: globe.showNight
+    background: Color.popups.background
+    baseColor: Qt.rgba(globe.panel.foreground.r, globe.panel.foreground.g, globe.panel.foreground.b, 0.03)
+    textureSource: surfaceTexture
+  }
+
+  // ---- What the globe costs, for the IPC status (Panel status: globe):
+  //      every 5 s while shown, the frames drawn (the surface's, else the
+  //      Canvas's) and this process's CPU time from /proc/self/stat; the
+  //      last minute spent turning by itself kept apart.
+  property var perf: ({ surface: false, fps: 0, cpuMsPerFrame: 0, cpuPercent: 0, textureMs: 0 })
+  property var perfLast: null
+  property var turningHistory: []
+  property FileView procStat: FileView {
+    path: "/proc/self/stat"
+    blockLoading: true
+    printErrors: false
+  }
+  Component.onDestruction: if (globe.panel.globeItem === globe) globe.panel.globeItem = null
+  Timer {
+    interval: 5000
+    repeat: true
+    running: globe.panel.opened && globe.panel.currentTab === "world" && globe.visible
+    onRunningChanged: {
+      globe.perfLast = null
+      if (running) globe.panel.globeItem = globe
+    }
+    onTriggered: {
+      globe.procStat.reload()
+      var text = String(globe.procStat.text() || "")
+      var fields = text.slice(text.lastIndexOf(")") + 2).split(" ")
+      var cpuMs = (Number(fields[11]) + Number(fields[12])) * 10
+      var frames = globe.gpuSurface ? surface.frames : globe.paintStats.count
+      var now = Date.now()
+      var last = globe.perfLast
+      if (last && isFinite(cpuMs) && now > last.at) {
+        var dFrames = Math.max(0, frames - last.frames), dCpu = cpuMs - last.cpu, dt = now - last.at
+        var history = globe.turningHistory
+        if (last.turning && globe.rotating) {
+          history = history.concat([{ dt: dt, frames: dFrames, cpu: dCpu, surface: globe.gpuSurface }])
+          var total = 0
+          for (var h = history.length - 1; h >= 0; h--) {
+            total += history[h].dt
+            if (total > 60000) { history = history.slice(h + 1); break }
+          }
+          globe.turningHistory = history
+        }
+        var tDt = 0, tFrames = 0, tCpu = 0
+        for (var k = 0; k < history.length; k++) {
+          tDt += history[k].dt
+          tFrames += history[k].frames
+          tCpu += history[k].cpu
+        }
+        globe.perf = { surface: globe.gpuSurface, fps: Math.round(dFrames / dt * 10000) / 10,
+          cpuMsPerFrame: dFrames ? Math.round(dCpu / dFrames * 10) / 10 : 0,
+          cpuPercent: Math.round(dCpu / dt * 1000) / 10, textureMs: surfaceTexture.lastMs,
+          turning: { seconds: Math.round(tDt / 1000), fps: tDt ? Math.round(tFrames / tDt * 10000) / 10 : 0,
+            cpuPercent: tDt ? Math.round(tCpu / tDt * 1000) / 10 : 0,
+            cpuMsPerFrame: tFrames ? Math.round(tCpu / tFrames * 10) / 10 : 0,
+            surface: history.length ? history[history.length - 1].surface : globe.gpuSurface } }
+      }
+      globe.perfLast = { at: now, cpu: cpuMs, frames: frames, turning: globe.rotating }
+    }
+  }
 
   // The fills while it turns by itself (cheapFrames): zones, land and
   // twilight at a third of the resolution, scaled up under the sharp
@@ -442,7 +532,9 @@ Item {
     // it.
     // While turning, the caps come straight from the view (analytic, no
     // clipping of rings).
-    function twilightPass(ctx, lon) {
+    // With the GPU surface only the golden and blue bands are drawn here;
+    // the night's three steps are the shader's.
+    function twilightPass(ctx, lon, bandsOnly) {
       var tw = globe.twilight
       var front = {}
       if (globe.cheapFrames) {
@@ -456,7 +548,8 @@ Item {
         }
       }
       ctx.fillRule = Qt.OddEvenFill
-      for (var t = 0; t < tw.layers.length; t++) {
+      var count = tw.layers.length - (bandsOnly && globe.showNight ? 3 : 0)
+      for (var t = 0; t < count; t++) {
         var layer = tw.layers[t]
         var polys = front[layer.high].concat(layer.low !== null ? front[layer.low] : [])
         if (!polys.length) continue
@@ -486,9 +579,12 @@ Item {
       // resolution; this canvas keeps the lines, the Sun, the Moon and the
       // places sharp.
       var split = globe.cheapFrames
+      // The GPU surface (TimeGlobeSurface) draws the sphere, the zones, the
+      // land's fill and the night under this canvas.
+      var gpu = globe.gpuSurface
 
       ctx.save()
-      if (!split) {
+      if (!split && !gpu) {
         disc(ctx)
         ctx.clip()
         backgroundPass(ctx)
@@ -500,7 +596,7 @@ Item {
       if (!split) gridPass(ctx, lon)
 
       // Land: a light fill and a crisp coastline.
-      if (!split) landFillPass(ctx, lon)
+      if (!split && !gpu) landFillPass(ctx, lon)
       var land = globe.cheapFrames ? globe.coarseLand : data.land
       ctx.beginPath()
       for (var l = 0; l < land.length; l++) {
@@ -513,7 +609,7 @@ Item {
 
       var landDone = Date.now()
 
-      if (!split) twilightPass(ctx, lon)
+      if (!split) twilightPass(ctx, lon, gpu)
       // The Sun at its zenith point.
       var tw = globe.twilight
       if (globe.showNight) {
@@ -595,11 +691,14 @@ Item {
       ctx.beginPath()
       ctx.arc(cx, cy, R, 0, Math.PI * 2)
       ctx.clip()
-      ctx.fillStyle = rgba(ink, 0.03)
-      ctx.fillRect(0, 0, width, height)
+      var gpu = globe.gpuSurface
+      if (!gpu) {
+        ctx.fillStyle = rgba(ink, 0.03)
+        ctx.fillRect(0, 0, width, height)
+      }
       var t0 = Date.now()
       var hatch = ctx.createPattern(rgba(ink, 0.16), Qt.BDiagPattern)
-      for (var z = 0; z < globe.zoneVectors.length; z++) {
+      for (var z = 0; z < (gpu ? 0 : globe.zoneVectors.length); z++) {
         var zone = globe.zoneVectors[z]
         var band = WorldMap.zebraBand(zone.o)
         fillVectors(zone.rings, zone.o === globe.homeZone ? rgba(accent, 0.22)
@@ -612,7 +711,7 @@ Item {
       ctx.beginPath()
       for (var g = 0; g < grid.length; g++) traceXY(grid[g], false)
       ctx.stroke()
-      fillVectors(globe.landVectors, rgba(ink, 0.07))
+      if (!gpu) fillVectors(globe.landVectors, rgba(ink, 0.07))
       ctx.beginPath()
       for (var l = 0; l < globe.landVectors.length; l++) {
         if (!inView(globe.landVectors[l])) continue
@@ -628,7 +727,8 @@ Item {
       var caps = {}
       for (var e in tw.shapes) caps[e] = Globe.capPolygonView(-tw.sun.lat, antiLon, 90 + Number(e), m, R)
       ctx.fillRule = Qt.OddEvenFill
-      for (var t = 0; t < tw.layers.length; t++) {
+      var layerCount = tw.layers.length - (gpu && globe.showNight ? 3 : 0)
+      for (var t = 0; t < layerCount; t++) {
         var layer = tw.layers[t]
         var polys = caps[layer.high].concat(layer.low !== null ? caps[layer.low] : [])
         if (!polys.length) continue
