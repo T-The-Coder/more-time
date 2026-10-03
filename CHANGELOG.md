@@ -9,6 +9,10 @@ All notable changes to More Time are documented here.
   full height), at most the page's width and at least 240 points, and
   follows the window as you resize it. The flat map narrows, centred and in
   its proportions, when it would not fit the visible height.
+- **The blue hour deepens towards the night:** on the map and the globe the
+  blue band is now lightest at the day/night line and deepest towards the
+  night, running into the night steps; the golden band stays strongest at
+  the line.
 - **Groundwork for More Weather's globe (nothing changes in More Time):**
   the sun and sky calculations moved to `Sky.js`; `Globe.js` gained a view
   that tilts to any latitude, the poles included, and zooms, with the land

@@ -68,7 +68,9 @@ control.
     blue-black shade that also shows on dark themes. The Sun's zenith point
     is a small rayed sun. With the clock's golden and blue hour options on, a
     gold band on the day side of the day/night line (sun +6° to 0°) and a
-    blue one on the night side (0° to −8°), their outer edges fading.
+    blue one on the night side (0° to −8°): the gold strongest at the line
+    and fading towards the day, the blue light at the line and deepening
+    towards the night.
   - A ruler with the hour in every zone above the map and the offsets below it.
   - Your cities as dots with their time.
   - Hovering a zone names its offset and time.
