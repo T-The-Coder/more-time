@@ -220,7 +220,17 @@ Rectangle {
     alarms: [],
     timers: [],
     stopwatches: [{ key: "stopwatchHundredths", title: panel.i18n("optionHundredths") }],
-    pomodoros: []
+    pomodoros: [],
+    astro: [
+      { key: "astroOrbits", title: panel.i18n("optionAstroOrbits") },
+      { key: "astroNames", title: panel.i18n("optionAstroNames") },
+      { key: "astroMonthRing", title: panel.i18n("optionAstroMonthRing"), hint: panel.i18n("optionAstroMonthRingHint") },
+      { key: "astroAutoRotate", title: panel.i18n("optionAstroAutoRotate"), hint: panel.i18n("optionGlobeAutoRotateHint") },
+      { key: "astroRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "astroAutoRotate",
+        choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
+      { key: "astroRotateSpeed", title: panel.i18n("optionGlobeRotateSpeed"), dependsOn: "astroAutoRotate",
+        choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) }
+    ]
   })
   // A tab option can be set when its switch (dependsOn) is on and, with
   // `style`, the map is drawn in that style.

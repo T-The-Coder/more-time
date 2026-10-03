@@ -4,6 +4,16 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **New Astro tab: the solar system as a clock.** The Sun and the eight
+  planets where they stand now (JPL's approximate Keplerian elements,
+  computed on this computer, redrawn every minute), at a slant from above,
+  distances as r^0.45 so all orbits fit. A drag turns and tilts the view,
+  `Ctrl` + arrows too, `+` `−` or `Ctrl` + wheel zoom between the whole
+  system, the inner system and Earth's neighbourhood, `0` resets; it can turn
+  by itself like the globe. A month ring around Earth's orbit makes Earth the
+  hand of the year, with the equinoxes and solstices marked; the pointer on a
+  body shows its distances and period. On in the app, off in the widget;
+  `tab astro` over IPC.
 - **The globe fills the window:** instead of stopping at a fixed size, it
   takes the height visible below it in the app or the popup (the popup's
   full height), at most the page's width and at least 240 points, and

@@ -71,6 +71,15 @@ Column {
       ]
     },
     {
+      title: "shortcutsGroupAstro",
+      rows: [
+        { keys: ["Ctrl ← →"], action: "shortcutAstroTurn" },
+        { keys: ["Ctrl ↑ ↓"], action: "shortcutAstroTilt" },
+        { keys: ["+", "−"], action: "shortcutAstroZoom" },
+        { keys: ["0"], action: "shortcutAstroReset" }
+      ]
+    },
+    {
       title: "shortcutsGroupRinging",
       rows: [
         { keys: ["Space", "Enter"], action: "shortcutStopRinging" },

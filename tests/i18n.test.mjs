@@ -55,7 +55,8 @@ test("every key used in the QML exists", () => {
     entry_: ["time", "seconds", "weekday", "date", "week", "cities", "nextAlarm", "timers", "stopwatches", "pomodoros", "ringing", "pomodoroTally"],
     sound_: ["alarm", "bell", "complete", "message", "phone", "none"],
     settingsPage_: ["general", "display", "sounds", "shortcuts", "sources"],
-    dial_: ["classic", "minimal", "roman", "twentyFour", "dots"]
+    dial_: ["classic", "minimal", "roman", "twentyFour", "dots"],
+    astroBody_: ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "moon"]
   }
   const used = new Set()
   for (const file of readdirSync(root).filter((name) => name.endsWith(".qml"))) {
@@ -68,7 +69,7 @@ test("every key used in the QML exists", () => {
     used.delete(prefix)
     for (const name of names) used.add(prefix + name)
   }
-  for (const tab of ["world", "alarms", "timers", "stopwatches", "pomodoros"]) {
+  for (const tab of ["world", "alarms", "timers", "stopwatches", "pomodoros", "astro"]) {
     used.add(tab + "Tab")
     used.add(tab + "TabHint")
   }

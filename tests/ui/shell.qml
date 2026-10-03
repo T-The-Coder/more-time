@@ -36,6 +36,16 @@ ShellRoot {
     return null
   }
   function globe() { return findGlobe(panel.contentRoot) }
+  function findNamed(item, name) {
+    if (!item) return null
+    if (item.objectName === name) return item
+    for (var i = 0; i < item.children.length; i++) {
+      var found = findNamed(item.children[i], name)
+      if (found) return found
+    }
+    return null
+  }
+  function astro() { return findNamed(panel.contentRoot, "timeAstro") }
   // The app window's size, in pixels.
   // The app's size in pixels: an offscreen window keeps its first size,
   // so the content area takes the size inside the window's padding (the
@@ -434,6 +444,54 @@ ShellRoot {
     function() { mapSize("popup") },
     function() { shot("31f-map-popup") },
     function() { appSizeReset() },
+    // The Astro tab: the whole system, the inner system, two camera angles,
+    // a body's label, and what a frame costs while it turns.
+    function() { display("worldStyle", "map"); panel.activeTab = "astro" },
+    function() {
+      var a = astro()
+      console.log("ASTRO size", Math.round(a.width) + "x" + Math.round(a.height), "earth lon", a.bodies.earth.au.lon.toFixed(2),
+        "marks", a.marks.seasons.map(function(m) { return m.key + " " + new Date(m.utcMs).toISOString().slice(0, 16) }).join(", "))
+    },
+    function() { shot("40a-astro-system") },
+    function() { astro().zoomIndex = 1 },
+    function() { shot("40b-astro-inner") },
+    function() { var a = astro(); a.zoomIndex = 0; a.azimuth = 40; a.elevation = 70 },
+    function() { shot("40c-astro-high") },
+    function() { var a = astro(); a.azimuth = 150; a.elevation = 12 },
+    function() { shot("40d-astro-low") },
+    function() {
+      var a = astro()
+      a.azimuth = a.startAzimuth
+      a.elevation = 30
+      a.zoomIndex = 1
+    },
+    function() {
+      var a = astro()
+      var earth = a.hits.filter(function(h) { return h.key === "earth" })[0]
+      a.pointer = { x: earth.x, y: earth.y }
+      a.updateHover()
+      console.log("ASTRO hover", JSON.stringify(a.hover ? a.hover.text : null))
+    },
+    function() { shot("40e-astro-hover") },
+    function() {
+      var a = astro()
+      a.pointer = null
+      a.updateHover()
+      a.zoomIndex = 0
+      display("astroAutoRotate", true)
+      a.paintStats = { count: 0, total: 0, max: 0 }
+      a.rotating = true
+    },
+    function() {},
+    function() {},
+    function() {
+      var a = astro()
+      var st = a.paintStats
+      console.log("ASTRO frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(1), "max", st.max,
+        "size", Math.round(a.width) + "x" + Math.round(a.height))
+      display("astroAutoRotate", false)
+      panel.activeTab = "world"
+    },
     // Deleting a city before the current one keeps the same city current.
     function() {
       panel.setCurrentPlace(2)

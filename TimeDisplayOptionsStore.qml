@@ -183,6 +183,8 @@ Item {
     worldMoonStyle: ["space", "earth"],
     globeRotateDelay: ["5", "10", "30"],
     globeRotateSpeed: ["1", "2", "4", "8"],
+    astroRotateDelay: ["5", "10", "30"],
+    astroRotateSpeed: ["1", "2", "4", "8"],
     heroDial: ["place", "classic", "minimal", "roman", "twentyFour", "dots"]
   })
 

@@ -36,6 +36,11 @@ Column {
         ["Equal Earth", "https://equal-earth.com/"]]
     },
     {
+      title: "sourceGroupAstro", details: "sourceGroupAstroDetails",
+      inUse: "JPL · KEPLERIAN ELEMENTS",
+      links: [["JPL: Approximate Positions of the Planets", "https://ssd.jpl.nasa.gov/planets/approx_pos.html"]]
+    },
+    {
       title: "sourceGroupLocation", details: "sourceGroupLocationDetails",
       inUse: !panel.here.detect ? ""
         : (panel.here.place && panel.here.place.source === "ip" && panel.here.ipPlace

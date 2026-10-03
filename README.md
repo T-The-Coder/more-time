@@ -156,6 +156,28 @@ control.
   - A dot for each finished round, and a tally of focus rounds: today and this
     week under the list, optionally in the clock and in the bar. The items file
     keeps the count per day for 60 days.
+- **Astro:** the solar system as a clock (on in the app, off in the widget).
+  - The Sun and the eight planets where they stand now, from JPL's
+    approximate Keplerian elements, computed on this computer and redrawn
+    every minute. Distances are drawn as r^0.45 (Mercury to Neptune fit in
+    about 1:7); every orbit keeps its true shape and tilt. The planets are
+    small shaded spheres lit from the Sun, in restrained tints, with their
+    names where there is room.
+  - Seen at a slant from above the ecliptic: a drag turns and tilts the view
+    (10° to 80° above the ecliptic), the sideways wheel (⇧ wheel) turns it,
+    `Ctrl` + wheel or `+` `−` switch between the whole system, the inner
+    system and Earth's neighbourhood, `0` returns to the start. Like the
+    globe it can turn by itself after a few idle seconds. The far halves of
+    the orbits are fainter.
+  - The month ring around Earth's orbit: the months' starts and initials, the
+    equinoxes and solstices in the accent colour, and a line from the Sun
+    through Earth as the hand of the year; a dashed arrow (γ) points to the
+    vernal point.
+  - The pointer on a body (or a click, which keeps it) shows its distance
+    from the Sun and from Earth in au and light-minutes and its orbital
+    period.
+  - Settings → Display → Astro: orbits, names, the month ring, turning by
+    itself (delay and speed).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.
@@ -269,6 +291,11 @@ too.
 | `← →` / `h l` | Select a place: here or a city (`↑ ↓` / `j k` too) |
 | `e` | Clock face style of the selected place (`← →` pick, `Enter` / `Esc` close) |
 | `x` / `Del` | Remove the city (press twice) |
+| **Astro** | |
+| `Ctrl ← →` | Turn the view (also a drag or the sideways wheel) |
+| `Ctrl ↑ ↓` | Tilt the view (also a drag up or down) |
+| `+` / `−` | Whole system, inner system, Earth (also `Ctrl` + wheel) |
+| `0` | Back to the start view |
 | **While something rings** | |
 | `Space` / `Enter` | Stop |
 | `s` | Snooze |
@@ -311,6 +338,10 @@ too.
   [Equal Earth](https://equal-earth.com/) and shipped with the plugin
   (`data/worldmap.json`, 170 KB). The zones are standard time; summer time is not
   drawn on the map, but the clocks include it.
+- **Solar system:** the planets' Keplerian elements and their rates from JPL's
+  [Approximate Positions of the Planets](https://ssd.jpl.nasa.gov/planets/approx_pos.html)
+  (E. M. Standish, table 1, valid 1800–2050, about an arcminute), solved on this
+  computer (`Astro.js`); nothing is downloaded.
 - **Sounds:** the freedesktop sound theme (`/usr/share/sounds/freedesktop`).
   The five chime tones are synthesized once by `python3`
   (`data/chime-tones.py`) into `~/.cache/more-time`; nothing is downloaded.
@@ -420,7 +451,7 @@ qs ipc -p /usr/share/omarchy/shell call more-time toggleChimes
 |---|---|
 | `open`, `close`, `toggle` (`show`, `hide`) | The popup |
 | `settings` | Opens the popup with the settings |
-| `tab <name>` | Opens the popup on a tab: `world`, `alarms`, `timers`, `stopwatches`, `pomodoros` |
+| `tab <name>` | Opens the popup on a tab: `world`, `alarms`, `timers`, `stopwatches`, `pomodoros`, `astro` |
 | `city <n>` | Opens the popup on the World tab with city *n* (from 1) as the current place |
 | `here` | Opens the popup on the World tab with here as the current place |
 | `nextCity`, `previousCity` | Opens the popup on the World tab and makes the next / previous place current (here and the cities in turn) |
@@ -479,8 +510,17 @@ that can tilt to any latitude and zoom (`viewMatrix`, `prepareVectors`,
 `prepareLand`, `projectView`, `unprojectView`, `frontPolygonsView`,
 `frontLinesView`, `capPolygonView`, `gridLinesView`), working on unit vectors
 and joining clipped fills along the rim. Their tests are `tests/sky.test.mjs`,
-`tests/equal-earth.test.mjs` and `tests/globe.test.mjs`; `tests/globe-time.test.mjs` covers the parts that
-need More Time's flat map data.
+`tests/equal-earth.test.mjs` and `tests/globe.test.mjs`; `tests/globe-time.test.mjs`
+covers the parts that need More Time's flat map data.
+
+The Astro tab is `TimeAstro.qml` over two pure files: `Astro.js` (JPL's
+approximate elements, Kepler's equation, heliocentric positions, orbits,
+periods and the year's marks: equinoxes, solstices and month starts) and
+`AstroView.js` (the r^0.45 model scale, body sizes, the camera, projection,
+depth order, zoom steps and hit testing). `tests/astro.test.mjs` checks the
+positions against references derived independently (the Sun's longitude from
+the Astronomical Almanac's formula, the 2026 seasons, Earth's perihelion, the
+Mars opposition of February 2027), `tests/astro-view.test.mjs` the view.
 
 Some files are shared with [More Weather](https://github.com/T-The-Coder/more-weather)
 (the switches, buttons, bar placement, app launcher entry, the request helper,

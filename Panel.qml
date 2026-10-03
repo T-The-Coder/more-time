@@ -394,7 +394,7 @@ Panel {
   }
 
   function defaultTabOrder() {
-    return ["world", "alarms", "timers", "stopwatches", "pomodoros"]
+    return ["world", "alarms", "timers", "stopwatches", "pomodoros", "astro"]
   }
 
   function defaultEntryOrder() {
@@ -439,6 +439,13 @@ Panel {
       showStopwatches: true,
       stopwatchHundredths: true,
       showPomodoros: true,
+      showAstro: true,
+      astroOrbits: true,
+      astroNames: true,
+      astroMonthRing: true,
+      astroAutoRotate: false,
+      astroRotateDelay: "10",
+      astroRotateSpeed: "4",
       tabOrder: defaultTabOrder(),
       defaultTab: "world"
     }
@@ -454,6 +461,8 @@ Panel {
     options.heroGoldenHour = false
     options.heroBlueHour = false
     options.worldRuler = false
+    // The solar system wants room: the app shows it, the widget not.
+    options.showAstro = false
     return options
   }
 
@@ -528,7 +537,7 @@ Panel {
 
   readonly property var tabMasterKeys: ({
     world: "showWorld", alarms: "showAlarms", timers: "showTimers",
-    stopwatches: "showStopwatches", pomodoros: "showPomodoros"
+    stopwatches: "showStopwatches", pomodoros: "showPomodoros", astro: "showAstro"
   })
   readonly property var displayTabs: sanitizedOrder(displaySetting("tabOrder", null), "tabOrder")
     .filter(function(key) { return displaySetting(tabMasterKeys[key], true) })
@@ -557,7 +566,8 @@ Panel {
 
   function tabGlyph(key) {
     return key === "world" ? "\u{f01e7}" : (key === "alarms" ? "\u{f0020}"
-      : (key === "timers" ? "\u{f051f}" : (key === "stopwatches" ? "\u{f13ab}" : "\u{f0996}")))
+      : (key === "timers" ? "\u{f051f}" : (key === "stopwatches" ? "\u{f13ab}"
+      : (key === "astro" ? "\u{f15db}" : "\u{f0996}"))))
   }
 
   function showTab(key) {
@@ -1065,6 +1075,7 @@ Panel {
   // The label of the flat map and the globe (TimeMapHoverLabel.qml).
   function mapHoverText(hover) {
     if (!hover) return ""
+    if (hover.text) return hover.text
     if (hover.moon) return moonText(hover.moon)
     return Model.utcOffsetLabel(hover.minutes * 60) + "  ·  " + clockFor(nowMs, hover.minutes * 60, false)
       + "  " + i18n("standardTime")
@@ -1258,6 +1269,13 @@ Panel {
     }
     // Typing goes to the field; Enter there is the field's own business.
     if (editingText) return
+    // The Astro tab's camera: Ctrl + arrows turn and tilt, + − zoom, 0
+    // back to the start (TimeAstro.handleAstroKey).
+    if (currentTab === "astro" && !alt && contentLoader.item && contentLoader.item.handleAstroKey
+        && contentLoader.item.handleAstroKey(event)) {
+      event.accepted = true
+      return
+    }
     if (control) return
 
     if (ringer.ringing.length) {
@@ -1460,7 +1478,7 @@ Panel {
     function hide(): void { root.close() }
     function toggle(): void { root.toggle() }
     function settings(): void { root.openFromHotkey(); root.openSettings() }
-    // A tab by name (world, alarms, timers, stopwatches, pomodoros).
+    // A tab by name (world, alarms, timers, stopwatches, pomodoros, astro).
     function tab(name: string): void { root.openFromHotkey(); root.showTab(name) }
     // The World tab with city n (1-based) selected; the next / previous city.
     // The current place: city n (from 1), the next / previous one, or here.
@@ -1581,6 +1599,7 @@ Panel {
     if (key === "alarms") return alarmsComponent
     if (key === "timers") return timersComponent
     if (key === "stopwatches") return stopwatchesComponent
+    if (key === "astro") return astroComponent
     return pomodorosComponent
   }
 
@@ -1589,6 +1608,7 @@ Panel {
   Component { id: timersComponent; TimeTimers { panel: root } }
   Component { id: stopwatchesComponent; TimeStopwatches { panel: root } }
   Component { id: pomodorosComponent; TimePomodoros { panel: root } }
+  Component { id: astroComponent; TimeAstro { panel: root } }
 
   // The visible tree, for test screenshots (tests/ui-shots.sh).
   readonly property Item contentRoot: keyCatcher

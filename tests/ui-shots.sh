@@ -23,7 +23,7 @@ JSON
 theme="$HOME/.local/state/omarchy/current/theme"
 [ -e "$theme" ] && ln -s "$theme" "$work/home/.local/state/omarchy/current/theme"
 HOME="$work/home" XDG_CACHE_HOME="$work/home/.cache" MORE_PLUGINS_OFFLINE=1 MORE_TIME_SOUND_DRY_RUN=1 XDG_RUNTIME_DIR="$work/run" MT_SHOTS="$out" QT_QPA_PLATFORM=offscreen \
-  timeout 240 qs -n -p "$work/config" >"$work/log.txt" 2>&1
+  timeout 320 qs -n -p "$work/config" >"$work/log.txt" 2>&1
 echo "log: $work/log.txt"
 echo "shots: $out"
 grep -E "SHOT|MENUBAR|SKY|PLACE|GLOBE|DIALS|MOON|CHECK|IMPORT|SEARCH|STATUS|CHIME|dry run|STEP FAILED|ERROR|WARN|Error|error" "$work/log.txt" | grep -v "^$" | head -80
