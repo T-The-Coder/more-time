@@ -59,7 +59,8 @@ test("every key used in the QML exists", () => {
     astroSpeed_: ["day", "week", "month"],
     astroSeason_: ["marchEquinox", "juneSolstice", "septemberEquinox", "decemberSolstice"],
     moonPhase_: ["new", "waxingCrescent", "firstQuarter", "waxingGibbous", "full", "waningGibbous", "lastQuarter", "waningCrescent"],
-    astroBody_: ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "moon"]
+    astroBody_: ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "moon",
+      "ceres", "pluto", "eris", "halley", "io", "europa", "ganymede", "callisto", "titan", "voyager1", "voyager2", "newhorizons", "jwst"]
   }
   const used = new Set()
   for (const file of readdirSync(root).filter((name) => name.endsWith(".qml"))) {

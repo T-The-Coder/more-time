@@ -41,6 +41,12 @@ Column {
       links: [["JPL: Approximate Positions of the Planets", "https://ssd.jpl.nasa.gov/planets/approx_pos.html"]]
     },
     {
+      title: "sourceGroupAstroBodies", details: "sourceGroupAstroBodiesDetails",
+      inUse: "JPL SBDB · HORIZONS · SAT ELEMENTS",
+      links: [["JPL SBDB", "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html"], ["JPL Horizons", "https://ssd.jpl.nasa.gov/horizons/"],
+        ["JPL: Planetary Satellite Mean Elements", "https://ssd.jpl.nasa.gov/sats/elem/sep.html"]]
+    },
+    {
       title: "sourceGroupAstroRotation", details: "sourceGroupAstroRotationDetails",
       inUse: "IAU WGCCRE · NAIF PCK00010",
       links: [["NAIF pck00010.tpc", "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc"],

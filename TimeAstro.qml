@@ -6,6 +6,7 @@ import "Astro.js" as Astro
 import "AstroRotation.js" as AstroRotation
 import "AstroEvents.js" as AstroEvents
 import "AstroClock.js" as AstroClock
+import "AstroBodies.js" as AstroBodies
 import "AstroDate.js" as AstroDate
 import "Model.js" as Model
 import "Globe.js" as Globe
@@ -374,6 +375,55 @@ Column {
       }
       return out
     }
+    // ---- More bodies (AstroBodies.js), each group its own switch ----
+    readonly property bool showBelts: panel.displaySetting("astroBelts", true)
+    readonly property bool showDwarfs: panel.displaySetting("astroDwarfs", true)
+    readonly property bool showComets: panel.displaySetting("astroComets", false)
+    readonly property bool showMoons: panel.displaySetting("astroMoons", false)
+    readonly property bool showSpacecraft: panel.displaySetting("astroSpacecraft", false)
+    onShowBeltsChanged: canvas.requestPaint()
+    onShowDwarfsChanged: canvas.requestPaint()
+    onShowCometsChanged: canvas.requestPaint()
+    onShowMoonsChanged: canvas.requestPaint()
+    onShowSpacecraftChanged: canvas.requestPaint()
+    // The belts' sample points move little in a day: once per shown day.
+    readonly property var belts: {
+      if (!showBelts) return null
+      var ms = dayMs
+      return { asteroids: AstroBodies.beltPoints("asteroids", ms, 400).map(function(p) { return AstroView.modelPoint(p) }),
+        kuiper: AstroBodies.beltPoints("kuiper", ms, 600).map(function(p) { return AstroView.modelPoint(p) }) }
+    }
+    // The small bodies' fixed orbits (model units), once.
+    readonly property var smallOrbits: {
+      var out = {}
+      for (var i = 0; i < AstroBodies.SMALL_BODY_KEYS.length; i++) {
+        var key = AstroBodies.SMALL_BODY_KEYS[i]
+        out[key] = AstroBodies.orbit(key, key === "halley" ? 256 : 160).map(function(p) { return AstroView.modelPoint(p) })
+      }
+      return out
+    }
+    // Positions of the dwarf planets, Halley, the large moons and the
+    // spacecraft at the shown moment.
+    readonly property var extras: {
+      var ms = minuteMs
+      var out = {}
+      var small = AstroBodies.SMALL_BODY_KEYS
+      for (var i = 0; i < small.length; i++) {
+        var au = AstroBodies.position(small[i], ms)
+        out[small[i]] = { au: au, model: AstroView.modelPoint(au) }
+      }
+      for (var m = 0; m < AstroBodies.MOON_KEYS.length; m++) out[AstroBodies.MOON_KEYS[m]] = { rel: AstroBodies.moonPosition(AstroBodies.MOON_KEYS[m], ms) }
+      for (var c = 0; c < AstroBodies.SPACECRAFT_KEYS.length; c++) out[AstroBodies.SPACECRAFT_KEYS[c]] = { au: AstroBodies.spacecraftPosition(AstroBodies.SPACECRAFT_KEYS[c], ms) }
+      return out
+    }
+    onBeltsChanged: canvas.requestPaint()
+    onExtrasChanged: canvas.requestPaint()
+    // The planet whose moons show close up: the one under the pointer or
+    // the one clicked (Jupiter, Saturn).
+    readonly property string moonHost: !showMoons ? "" : (hover && hover.key === "jupiter" || hover && hover.key === "saturn" ? hover.key
+      : (pinned === "jupiter" || pinned === "saturn" ? pinned : ""))
+    onMoonHostChanged: canvas.requestPaint()
+
     readonly property var spins: {
       var ms = minuteMs
       var out = {}
@@ -446,6 +496,31 @@ Column {
         lines.push(turnLine())
         return lines.join("\n")
       }
+      var extra = extras[key]
+      if (extra && AstroBodies.MOONS[key]) {
+        var mm = AstroBodies.MOONS[key]
+        lines.push(panel.i18n("astroFromPlanet", { km: number(mm.aKm, 0), planet: panel.i18n("astroBody_" + mm.planet) }))
+        lines.push(panel.i18n("astroOrbitDays", { days: number(AstroBodies.moonPeriodDays(key), 2) }))
+        return lines.join("\n")
+      }
+      if (key === "jwst") {
+        var j = extra.au
+        lines.push(panel.i18n("astroFromEarthKm", { km: number(Math.round(Astro.distance(j, earth) * 149597870.7), 0) }))
+        return lines.join("\n")
+      }
+      if (extra && AstroBodies.SPACECRAFT[key]) {
+        lines.push(distanceLine("astroFromSun", extra.au.r))
+        lines.push(panel.i18n("astroSpeedAway", { speed: number(extra.au.speed, 2) }))
+        return lines.join("\n")
+      }
+      if (extra && AstroBodies.SMALL_BODIES[key]) {
+        lines.push(distanceLine("astroFromSun", extra.au.r))
+        lines.push(distanceLine("astroFromEarth", Astro.distance(extra.au, earth)))
+        var sd = AstroBodies.periodDays(key)
+        lines.push(sd < 1000 ? panel.i18n("astroOrbitDays", { days: number(sd, 0) })
+          : panel.i18n("astroOrbitYears", { years: number(sd / 365.25, 1) }))
+        return lines.join("\n")
+      }
       var p = bodies[key].au
       lines.push(distanceLine("astroFromSun", p.r))
       if (key !== "earth") lines.push(distanceLine("astroFromEarth", Astro.distance(p, earth)))
@@ -463,7 +538,7 @@ Column {
         return
       }
       var hit = AstroView.hitTest(hits, p.x, p.y, Style.space(6))
-      hover = hit ? { text: infoText(hit.key), x: p.x, y: p.y } : pinnedHover()
+      hover = hit ? { key: hit.key, text: infoText(hit.key), x: p.x, y: p.y } : pinnedHover()
     }
     function pinnedHover() {
       if (pinned === "") return null
@@ -671,6 +746,35 @@ Column {
         }
       }
 
+      // A dwarf planet (a small grey sphere) or Halley (a nucleus and its
+      // tail, pointing away from the Sun, longer the nearer it is).
+      function paintSmallBody(ctx, body, cam, scale, sun) {
+        if (body.key === "halley") {
+          var au = sky.extras.halley.au
+          var tail = AstroBodies.tailDirection(au)
+          var len = Math.min(60, 24 / Math.max(0.3, au.r))
+          var tv = AstroView.view(tail, cam)
+          var tl = Math.sqrt(tv.x * tv.x + tv.y * tv.y) || 1
+          var ex = body.x + tv.x / tl * len, ey = body.y - tv.y / tl * len
+          var grad = ctx.createLinearGradient(body.x, body.y, ex, ey)
+          grad.addColorStop(0, Qt.rgba(0.75, 0.85, 1, 0.55))
+          grad.addColorStop(1, Qt.rgba(0.75, 0.85, 1, 0))
+          ctx.strokeStyle = grad
+          ctx.lineWidth = 2.2
+          ctx.lineCap = "round"
+          ctx.beginPath()
+          ctx.moveTo(body.x, body.y)
+          ctx.lineTo(ex, ey)
+          ctx.stroke()
+          ctx.fillStyle = Qt.rgba(0.85, 0.92, 1, 1)
+          ctx.beginPath()
+          ctx.arc(body.x, body.y, body.r * 0.8, 0, Math.PI * 2)
+          ctx.fill()
+          return
+        }
+        paintPlanet(ctx, body.x, body.y, body.r, sky.softTint("#a8a49c"), sun.x, sun.y)
+      }
+
       // The Earth as a globe seen from the camera: land from
       // data/globe-land.json, the night in three steps round the antisolar
       // point, all through Globe.js' view functions (y up, flipped here).
@@ -776,6 +880,16 @@ Column {
         for (var i = 0; i < order.length; i++) {
           if (order[i].key === "earth") paintEarthGlobe(ctx, cx, cy, R, axes)
           else paintMoonBody(ctx, moon.x, moon.y, moon.r, axes)
+        }
+        // JWST near L2, four times the Moon's distance away from the Sun:
+        // beyond this view, so a small mark at its edge, opposite the Sun.
+        if (sky.showSpacecraft && !small && sl > 0.05) {
+          var jx = cx - sx / sl * size * 0.47, jy = cy + sy / sl * size * 0.47
+          ctx.fillStyle = rgba(ink, 0.8)
+          ctx.beginPath()
+          ctx.rect(jx - 2.5, jy - 2.5, 5, 5)
+          ctx.fill()
+          return [earth, moon, { key: "jwst", x: jx, y: jy, depth: 0, r: 4 }]
         }
         return [earth, moon]
       }
@@ -927,8 +1041,41 @@ Column {
           ctx.stroke()
         }
 
+        // The belts as faint points, the small bodies' orbits dashed.
+        if (sky.belts) {
+          // One path for all points, the view's arithmetic inline (a
+          // thousand points a frame while the view turns).
+          var bands = [sky.belts.asteroids, sky.belts.kuiper]
+          var ca = cam.ca, sa = cam.sa, ce = cam.ce, se = cam.se
+          ctx.beginPath()
+          for (var bb = 0; bb < bands.length; bb++) {
+            var list = bands[bb]
+            for (var bp = 0; bp < list.length; bp++) {
+              var pt = list[bp]
+              var px = cx + (pt.x * ca + pt.y * sa) * scale
+              var py = cy - ((-pt.x * sa + pt.y * ca) * se + pt.z * ce) * scale
+              if (px < 0 || px > w || py < 0 || py > h) continue
+              ctx.rect(px - 0.6, py - 0.6, 1.2, 1.2)
+            }
+          }
+          ctx.fillStyle = rgba(ink, 0.32)
+          ctx.fill()
+        }
+        var smallKeys = (sky.showDwarfs ? ["ceres", "pluto", "eris"] : []).concat(sky.showComets ? ["halley"] : [])
+        if (sky.showOrbits && smallKeys.length) {
+          ctx.setLineDash([2, 3])
+          for (var so = 0; so < smallKeys.length; so++)
+            strokeSplit(ctx, sky.smallOrbits[smallKeys[so]].map(proj), true, ink, 0.1, 0.22, 0.8)
+          ctx.setLineDash([])
+        }
+
         // The bodies, far first; the Sun at depth 0.
         var drawn = [{ key: "sun", x: sun.x, y: sun.y, depth: 0, r: AstroView.bodyRadius(Astro.RADIUS_KM.sun) }]
+        for (var sk = 0; sk < smallKeys.length; sk++) {
+          var sq = proj(sky.extras[smallKeys[sk]].model)
+          if (sq.x < -20 || sq.x > w + 20 || sq.y < -20 || sq.y > h + 20) continue
+          drawn.push({ key: smallKeys[sk], x: sq.x, y: sq.y, depth: sq.depth, r: smallKeys[sk] === "halley" ? 2.5 : 3, small: true })
+        }
         for (var b = 0; b < keys.length; b++) {
           var q = proj(sky.bodies[keys[b]].model)
           drawn.push({ key: keys[b], x: q.x, y: q.y, depth: q.depth, r: AstroView.bodyRadius(Astro.RADIUS_KM[keys[b]]) })
@@ -939,6 +1086,10 @@ Column {
           var body = order[d]
           if (body.key === "sun") {
             paintSun(ctx, body.x, body.y, body.r)
+            continue
+          }
+          if (body.small) {
+            paintSmallBody(ctx, body, cam, scale, sun)
             continue
           }
           if (spinning && body.key === "saturn") paintRings(ctx, body.x, body.y, body.r, sky.spins.rings, axes, true)
@@ -956,6 +1107,80 @@ Column {
             ctx.arc(tinyX, tinyY, 2.2, 0, Math.PI * 2)
             ctx.fill()
             drawn.push({ key: "moon", x: tinyX, y: tinyY, depth: body.depth + gv.depth * 0.01, r: 2.2 })
+          }
+        }
+        // The large moons of the planet under the pointer or clicked, close
+        // up: their circles (radius by distance, 40 px for Callisto) in
+        // their true plane, the moons where they stand.
+        if (sky.moonHost !== "") {
+          var host = drawn.filter(function(item) { return item.key === sky.moonHost })[0]
+          if (host) {
+            var keysM = AstroBodies.MOON_KEYS.filter(function(k) { return AstroBodies.MOONS[k].planet === sky.moonHost })
+            for (var mk = 0; mk < keysM.length; mk++) {
+              var mkey = keysM[mk]
+              var spec = AstroBodies.MOONS[mkey]
+              var ringPx = host.r + 6 + spec.aKm / 1882700 * 40
+              var normal = AstroBodies.moonOrbitNormal(mkey)
+              var ua = AstroRotation.norm(AstroRotation.cross(normal, axes.toward))
+              var wa = AstroRotation.cross(normal, ua)
+              ctx.strokeStyle = rgba(ink, 0.25)
+              ctx.lineWidth = 0.8
+              ctx.beginPath()
+              for (var ti = 0; ti <= 48; ti++) {
+                var tt = 2 * Math.PI * ti / 48
+                var ox = (dot(ua, axes.right) * Math.cos(tt) + dot(wa, axes.right) * Math.sin(tt)) * ringPx
+                var oy = (dot(ua, axes.up) * Math.cos(tt) + dot(wa, axes.up) * Math.sin(tt)) * ringPx
+                if (ti === 0) ctx.moveTo(host.x + ox, host.y - oy)
+                else ctx.lineTo(host.x + ox, host.y - oy)
+              }
+              ctx.stroke()
+              var rel = sky.extras[mkey].rel
+              var rr = Math.sqrt(rel.x * rel.x + rel.y * rel.y + rel.z * rel.z) || 1
+              var dir = { x: rel.x / rr, y: rel.y / rr, z: rel.z / rr }
+              var mx = host.x + dot(dir, axes.right) * ringPx, my = host.y - dot(dir, axes.up) * ringPx
+              var behind = dot(dir, axes.toward) < 0 && Math.hypot(mx - host.x, my - host.y) < host.r
+              if (behind) continue
+              ctx.fillStyle = Qt.rgba(0.88, 0.86, 0.80, 1)
+              ctx.beginPath()
+              ctx.arc(mx, my, 2.4, 0, Math.PI * 2)
+              ctx.fill()
+              drawn.push({ key: mkey, x: mx, y: my, depth: host.depth + 0.001, r: 2.4 })
+            }
+          }
+        }
+        // The spacecraft far beyond the view: arrows at its edge in their
+        // direction from the Sun, with the distance.
+        if (sky.showSpacecraft) {
+          var craft = ["voyager1", "voyager2", "newhorizons"]
+          ctx.font = smallFont
+          for (var ci = 0; ci < craft.length; ci++) {
+            var ca = sky.extras[craft[ci]].au
+            var cv = AstroView.view(ca, cam)
+            var cl = Math.sqrt(cv.x * cv.x + cv.y * cv.y)
+            if (cl < 1e-6) continue
+            var ux = cv.x / cl, uy = -cv.y / cl
+            // Where the ray from the Sun leaves the canvas, a little inside.
+            var tx = ux > 0 ? (w - 14 - sun.x) / ux : (ux < 0 ? (14 - sun.x) / ux : Infinity)
+            var ty = uy > 0 ? (h - 14 - sun.y) / uy : (uy < 0 ? (14 - sun.y) / uy : Infinity)
+            var tEdge = Math.max(0, Math.min(tx, ty))
+            var ex = sun.x + ux * tEdge, ey = sun.y + uy * tEdge
+            var ang = Math.atan2(uy, ux)
+            ctx.fillStyle = rgba(ink, 0.75)
+            ctx.beginPath()
+            ctx.moveTo(ex + Math.cos(ang) * 7, ey + Math.sin(ang) * 7)
+            ctx.lineTo(ex + Math.cos(ang + 2.6) * 6, ey + Math.sin(ang + 2.6) * 6)
+            ctx.lineTo(ex + Math.cos(ang - 2.6) * 6, ey + Math.sin(ang - 2.6) * 6)
+            ctx.closePath()
+            ctx.fill()
+            var clabel = sky.panel.i18n("astroBody_" + craft[ci]) + " · " + Math.round(ca.r) + " au"
+            var cw = ctx.measureText(clabel).width
+            ctx.textBaseline = "middle"
+            ctx.textAlign = "left"
+            var lx2 = Math.max(2, Math.min(w - cw - 2, ex - Math.cos(ang) * 10 - (ux > 0 ? cw : 0)))
+            var ly2 = Math.max(8, Math.min(h - 8, ey - Math.sin(ang) * 10))
+            ctx.fillStyle = rgba(ink, 0.7)
+            ctx.fillText(clabel, lx2, ly2)
+            drawn.push({ key: craft[ci], x: ex, y: ey, depth: 0, r: 7 })
           }
         }
         sky.hits = drawn

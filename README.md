@@ -205,6 +205,14 @@ control.
     its day and the tilt of its axis (≈ where the rotation is known only
     roughly); on the Moon its phase, the lit part, its distance in km and
     light-seconds and its age since the new moon.
+  - More bodies, each group with its own switch: the asteroid and Kuiper
+    belts as faint point bands and the dwarf planets Ceres, Pluto and Eris
+    (on by default); Halley's Comet with its tail pointing away from the Sun;
+    the large moons (Io, Europa, Ganymede, Callisto around Jupiter, Titan
+    around Saturn) close up while the pointer rests on the planet or after a
+    click on it; Voyager 1 and 2 and New Horizons as arrows at the edge with
+    their distance, and JWST near L2 in the Earth and Moon view. The pointer
+    on any of them names it with its distances, period or speed.
   - Under the model a timeline plays the year either side of today (a day,
     a week or a month a second; `,` `.` a day, `Space` play, `n` or `⌫` back
     to now, a click or a drag on the track), and **Go to date** (`g`) travels
@@ -221,8 +229,9 @@ control.
     the next opposition, and which planets are in the evening and the
     morning sky.
   - Settings → Display → Astro: orbits, names, the month ring, rotation and
-    tilt, the Earth and Moon inset, the timeline, the info line, turning by
-    itself (delay, speed and frames per second).
+    tilt, the Earth and Moon inset, the timeline, the belts, the dwarf
+    planets, Halley's Comet, the large moons, the spacecraft, the info line,
+    turning by itself (delay, speed and frames per second).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.
@@ -399,7 +408,10 @@ too.
   ([NAIF pck00010](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc)),
   Saturn's rings from NASA's fact sheet, the Moon's place and distance from
   Meeus, checked against JPL Horizons and SBDB (`AstroRotation.js`,
-  `AstroEvents.js`; see `ASTRO-MODULES.md`).
+  `AstroEvents.js`; see `ASTRO-MODULES.md`). Ceres, Pluto and Eris from JPL's
+  Small-Body Database, Halley from JPL Horizons' elements, the large moons from
+  JPL's satellite mean elements, the spacecraft from Horizons' state vectors
+  (`AstroBodies.js`).
 - **Sounds:** the freedesktop sound theme (`/usr/share/sounds/freedesktop`).
   The five chime tones are synthesized once by `python3`
   (`data/chime-tones.py`) into `~/.cache/more-time`; nothing is downloaded.

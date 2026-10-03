@@ -568,6 +568,33 @@ ShellRoot {
       a.backToNow()
       a.finishTravel()
     },
+    // More bodies: belts and dwarf planets (on by default), Halley, the
+    // spacecraft and Jupiter's moons (pinned) switched on; the Earth–Moon
+    // view with JWST; Halley's and Voyager 1's labels.
+    function() {
+      display("astroComets", true); display("astroMoons", true); display("astroSpacecraft", true)
+      var a = astro(); a.zoomIndex = 0; a.elevation = 40; a.azimuth = -60; a.pinned = "jupiter"
+    },
+    function() { shot("42a-astro-bodies") },
+    function() {
+      var a = astro()
+      var moons = a.hits.filter(function(h) { return h.key === "io" || h.key === "ganymede" })
+      console.log("ASTRO moons", moons.length, JSON.stringify(moons.length ? a.infoText(moons[0].key) : null))
+      var v1 = a.hits.filter(function(h) { return h.key === "voyager1" })[0]
+      console.log("ASTRO voyager", JSON.stringify(v1 ? a.infoText("voyager1") : null))
+      a.pinned = ""
+      a.elevation = 70
+    },
+    function() {
+      var a = astro()
+      var hal = a.hits.filter(function(h) { return h.key === "halley" })[0]
+      if (hal) { a.pointer = { x: hal.x, y: hal.y }; a.updateHover() }
+      console.log("ASTRO halley", JSON.stringify(a.hover ? a.hover.text : null))
+    },
+    function() { shot("42b-astro-halley") },
+    function() { var a = astro(); a.pointer = null; a.pinned = ""; a.updateHover(); a.zoomIndex = 2 },
+    function() { console.log("ASTRO jwst", JSON.stringify(astro().infoText("jwst"))); shot("42c-astro-jwst") },
+    function() { var a = astro(); a.zoomIndex = 0; a.pinned = "jupiter" },
     function() {
       var a = astro()
       a.pointer = null

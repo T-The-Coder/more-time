@@ -4,6 +4,13 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Astro: belts, dwarf planets, Halley, moons and spacecraft.** The
+  asteroid and Kuiper belts and Ceres, Pluto and Eris (on by default),
+  Halley's Comet with its tail, the large moons of Jupiter and Saturn close
+  up on the planet under the pointer or clicked, Voyager 1 and 2 and New
+  Horizons as arrows at the edge with their distance and JWST near L2 in
+  the Earth and Moon view; each group has its own switch, and the pointer
+  names each body with its distances, period or speed.
 - **The globe and the map on the GPU:** where the graphics allow it, the
   World tab's globe and map draw the zones, the land and the night with a
   shader (shared with More Weather) from a picture painted once per change,
