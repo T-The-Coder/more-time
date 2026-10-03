@@ -455,11 +455,26 @@ it.
 
 The map data is built from Natural Earth with `python3 tools/build-worldmap.py`.
 That is only needed when the source data changes; the result is committed.
+`python3 tools/build-globe-land.py` then turns its land into
+`data/globe-land.json` (latitude and longitude, counter-clockwise rings) for
+the tilted globe view.
+
+The sun and the sky (overhead point, elevation, sun times, twilight steps and
+colours) live in `Sky.js`, which knows no projection; `WorldMap.js` (the flat
+map's Equal Earth projection) keeps its old names as thin wrappers over it.
+`Globe.js` holds the World tab's globe and, for More Weather's globe, a view
+that can tilt to any latitude and zoom (`viewMatrix`, `prepareVectors`,
+`prepareLand`, `projectView`, `unprojectView`, `frontPolygonsView`,
+`frontLinesView`, `capPolygonView`, `gridLinesView`), working on unit vectors
+and joining clipped fills along the rim. Their tests are `tests/sky.test.mjs`
+and `tests/globe.test.mjs`; `tests/globe-time.test.mjs` covers the parts that
+need More Time's flat map data.
 
 Some files are shared with [More Weather](https://github.com/T-The-Coder/more-weather)
 (the switches, buttons, bar placement, app launcher entry, the request helper,
 the place search with `PlaceSearch.js` and its test, the Moon with `Moon.js`,
-its test and the `MoonSphere` component, and parts of the test setup). With both repositories side by side,
+its test and the `MoonSphere` component, `Sky.js`, `Globe.js` and
+`data/globe-land.json` with their tests, and parts of the test setup). With both repositories side by side,
 `tests/shared-files.test.mjs` checks that the copies match, and
 `tools/sync-shared.sh from-sibling` or `to-sibling` copies them across with the
 names changed.

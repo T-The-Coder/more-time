@@ -53,14 +53,7 @@ test("zone lookup on the map", () => {
   assert.equal(at(0, -30), -120)
 })
 
-test("sun and night side", () => {
-  // June solstice noon UTC: sun over the Tropic of Cancer near Greenwich.
-  const june = W.subsolarPoint(Date.UTC(2026, 5, 21, 12))
-  near(june.lat, 23.44, 0.2)
-  near(june.lon, 0, 1)
-  const december = W.subsolarPoint(Date.UTC(2026, 11, 21, 0))
-  near(december.lat, -23.44, 0.2)
-  near(Math.abs(december.lon), 180, 1)
+test("night side", () => {
   const night = W.nightPolygon(Date.UTC(2026, 5, 21, 12))
   assert.ok(night.length > 100)
   // At that moment midnight is at 180°: the date line is dark, Greenwich not.
@@ -69,109 +62,22 @@ test("sun and night side", () => {
   assert.ok(!W.ringContains(ring, W.project(0, 1).x, 0, 1))
 })
 
+test("the sun's names delegate to Sky.js", () => {
+  const ms = Date.UTC(2026, 9, 2, 15, 44)
+  const S = load("Sky.js")
+  assert.deepEqual({ ...W.subsolarPoint(ms) }, { ...S.subsolarPoint(ms) })
+  assert.equal(W.sunElevation(48, 11, ms), S.sunElevation(48, 11, ms))
+  assert.deepEqual(JSON.stringify(W.sunTimes(48, 11, ms, 7200)), JSON.stringify(S.sunTimes(48, 11, ms, 7200)))
+  assert.equal(W.twilightRings(ms, -4)[0].length, S.twilightRings(ms, -4)[0].length)
+  assert.equal(W.skyColor(-3), S.skyColor(-3))
+  assert.equal(W.twilightLayers({ night: true }, [1, 1, 1]).length, 3)
+})
+
 test("zebra bands", () => {
   assert.equal(W.zebraBand(60), 1)
   assert.equal(W.zebraBand(-60), 1)
   assert.equal(W.zebraBand(120), 0)
   assert.equal(W.zebraBand(330), 2)
-})
-
-// ---- The sky colour of the menu bar time ----
-
-// Bobingen near Augsburg, 2 October 2026 (CEST = UTC+2).
-const place = [48.27, 10.83]
-const at = (h, m = 0) => Date.UTC(2026, 9, 2, h - 2, m)
-const elevation = (ms) => W.sunElevation(place[0], place[1], ms)
-const strongest = (mix) => Object.entries(mix).sort((a, b) => b[1] - a[1])[0][0]
-
-test("sun elevation: noon high, sunset near zero, midnight deep", () => {
-  // Solar noon here is about 13:10 CEST; early October the sun stands at
-  // about 90 − 48.3 − 3.6 ≈ 38°.
-  near(elevation(at(13, 10)), 38.2, 1)
-  // Sunset about 18:58 CEST.
-  near(elevation(at(18, 58)), -0.6, 1)
-  assert.ok(elevation(at(1, 10)) < -40)
-  // The equator at an equinox noon: nearly overhead.
-  assert.ok(W.sunElevation(0, 0, Date.UTC(2026, 2, 20, 12, 7)) > 89)
-})
-
-test("sky mix: day, golden hour, blue hour, night", () => {
-  for (const e of [-30, -14, -10, -6, -4, -1, 2, 5, 8, 40]) {
-    const mix = W.skyMix(e)
-    near(mix.day + mix.golden + mix.blue + mix.night, 1, 1e-9)
-  }
-  assert.equal(strongest(W.skyMix(elevation(at(13)))), "day")
-  assert.equal(strongest(W.skyMix(elevation(at(19)))), "golden")
-  assert.equal(W.skyMix(-6).blue, 1)
-  assert.equal(strongest(W.skyMix(elevation(at(23)))), "night")
-  assert.equal(W.skyMix(-14).night, 1)
-  assert.equal(W.skyMix(8).day, 1)
-  // Monotone from day to night: as the sun sinks, the weight moves only
-  // towards later phases.
-  const rank = (mix) => mix.golden * 1 + mix.blue * 2 + mix.night * 3
-  let previous = -1
-  for (let e = 12; e >= -16; e -= 0.25) {
-    const r = rank(W.skyMix(e))
-    assert.ok(r >= previous - 1e-9, `rank falls at ${e}°`)
-    previous = r
-  }
-})
-
-test("sky colour: base colours, softened and readable", () => {
-  assert.equal(W.skyColor(40), "#5ea8e8")
-  assert.equal(W.skyColor(-30), "#4a3c9a")
-  assert.equal(W.skyColor(0), "#e3a447")
-  // On a dark theme the night is lifted towards the text until it reads.
-  const darkBg = W.hexRgb("#1e1e2e")
-  const darkFg = W.hexRgb("#cdd6f4")
-  const lightBg = W.hexRgb("#eff1f5")
-  const lightFg = W.hexRgb("#4c4f69")
-  for (const e of [40, 0, -6, -30]) {
-    assert.ok(W.contrast(W.hexRgb(W.skyColor(e, darkFg, darkBg)), darkBg) >= 3, `dark ${e}`)
-    assert.ok(W.contrast(W.hexRgb(W.skyColor(e, lightFg, lightBg)), lightBg) >= 3, `light ${e}`)
-  }
-})
-
-test("sun times: Berlin, 2 October 2026 (CEST)", () => {
-  const berlin = [52.52, 13.405]
-  const cest = 2 * 3600
-  const local = (h, m) => Date.UTC(2026, 9, 2, h - 2, m)
-  const t = W.sunTimes(berlin[0], berlin[1], local(12, 0), cest)
-  const minutes = (ms) => Math.round((ms - Date.UTC(2026, 9, 1, 22, 0)) / 60000)
-  const hm = (h, m) => h * 60 + m
-  assert.equal(t.polar, "")
-  // Almanac values for Berlin that day: sunrise 07:09, sunset 18:42, solar
-  // noon 12:55 (±3 min).
-  assert.ok(Math.abs(minutes(t.sunrise) - hm(7, 9)) <= 3, `sunrise ${minutes(t.sunrise)}`)
-  assert.ok(Math.abs(minutes(t.sunset) - hm(18, 42)) <= 3, `sunset ${minutes(t.sunset)}`)
-  assert.ok(Math.abs((minutes(t.sunrise) + minutes(t.sunset)) / 2 - hm(12, 55)) <= 2)
-  // Evening golden hour from +6° to −4°, then the blue hour to −8°.
-  assert.ok(minutes(t.goldenEvening[0]) >= hm(17, 50) && minutes(t.goldenEvening[0]) <= hm(18, 5))
-  assert.ok(minutes(t.goldenEvening[1]) >= hm(18, 55) && minutes(t.goldenEvening[1]) <= hm(19, 10))
-  assert.equal(t.blueEvening[0], t.goldenEvening[1])
-  assert.ok(minutes(t.blueEvening[1]) > minutes(t.blueEvening[0]) + 15)
-  assert.ok(minutes(t.blueEvening[1]) <= hm(19, 45))
-  // The morning mirrors it: blue, then golden across sunrise.
-  assert.equal(t.blueMorning[1], t.goldenMorning[0])
-  assert.ok(t.goldenMorning[0] < t.sunrise && t.sunrise < t.goldenMorning[1])
-  assert.ok(t.goldenEvening[0] < t.sunset && t.sunset < t.goldenEvening[1])
-  // The same day whatever moment of it is asked for.
-  assert.deepEqual(W.sunTimes(berlin[0], berlin[1], local(0, 5), cest), t)
-  // The limits are the sky colour's: golden at the start of the golden hour
-  // changes to blue in the middle of the stops.
-  near(W.sunElevation(berlin[0], berlin[1], t.goldenEvening[1]), -4, 0.05)
-})
-
-test("sun times: polar night and midnight sun", () => {
-  // Longyearbyen (78° N): no sunrise in December, no sunset in June.
-  const night = W.sunTimes(78.22, 15.65, Date.UTC(2026, 11, 21, 12), 3600)
-  assert.equal(night.polar, "night")
-  assert.equal(night.sunrise, 0)
-  assert.equal(night.sunset, 0)
-  assert.deepEqual([...night.goldenEvening], [0, 0])
-  const day = W.sunTimes(78.22, 15.65, Date.UTC(2026, 5, 21, 12), 7200)
-  assert.equal(day.polar, "day")
-  assert.equal(day.sunset, 0)
 })
 
 test("twilight bands: nested caps around the point opposite the sun", () => {
@@ -222,16 +128,6 @@ test("twilight: the flat map's polygon and the globe's rings cover the same area
   }
 })
 
-test("night fill: 70 % black and 30 % night sky, stronger on dark themes", () => {
-  const light = W.nightFill(W.hexRgb("#eff1f5"))
-  const dark = W.nightFill(W.hexRgb("#1e1e2e"))
-  near(light.r, 0x4a / 255 * 0.3, 1e-9)
-  near(light.b, 0x9a / 255 * 0.3, 1e-9)
-  assert.equal(light.a, 0.30)
-  assert.equal(dark.a, 0.38)
-  assert.equal(dark.r, light.r)
-})
-
 test("twilight bands along the map's outline: only where the sun is in range", () => {
   // The flat map fills a band as the even-odd of two caps; at the outline
   // (±179°) and inside (0°) membership must equal the elevation test. At
@@ -258,21 +154,7 @@ test("twilight bands along the map's outline: only where the sun is in range", (
   }
 })
 
-
-test("twilight layers: soft bands, then the night in three steps", () => {
-  const bg = W.hexRgb("#eff1f5")
-  const all = W.twilightLayers({ golden: true, blue: true, night: true }, bg)
-  assert.deepEqual(all.map((l) => [l.high, l.low, l.fill.a]), [
-    [6, 4, 0.10], [4, 2, 0.20], [2, 0, 0.28],
-    [0, -3, 0.28], [-3, -6, 0.20], [-6, -8, 0.10],
-    [0, -6, 0.12], [-6, -12, 0.24], [-12, null, 0.30]])
-  // The night steps in the night colour, darker with every step; dark themes
-  // take the stronger full night.
-  near(all[6].fill.r, W.nightFill(bg).r, 1e-12)
-  assert.equal(W.twilightLayers({ night: true }, W.hexRgb("#1e1e2e"))[2].fill.a, 0.38)
-  assert.deepEqual([...W.twilightElevations(all)], [6, 4, 2, 0, -3, -6, -8, -12])
-  assert.equal(W.twilightLayers({}, bg).length, 0)
-  // Every cap they use matches the sun's elevation, on the map and as rings.
+test("twilight layers: every cap matches the sun's elevation on the map", () => {
   for (const ms of [Date.UTC(2026, 5, 21, 18), Date.UTC(2026, 2, 20, 9, 30)]) {
     for (const e of [4, 2, -3, -6, -12]) {
       const polygon = W.twilightPolygon(ms, e)

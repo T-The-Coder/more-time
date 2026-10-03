@@ -1,3 +1,7 @@
+// The globe's projection and clipping (Globe.js), with the land outline of
+// data/globe-land.json and the sun of Sky.js. Shared by the More plugins
+// (tools/sync-shared.sh); tests that need More Time's flat map data are in
+// its tests/globe-time.test.mjs.
 import { test } from "node:test"
 import assert from "node:assert"
 import { readFileSync } from "node:fs"
@@ -5,8 +9,8 @@ import { join } from "node:path"
 import { load, root } from "./load.mjs"
 
 const G = load("Globe.js")
-const W = load("WorldMap.js")
-const data = JSON.parse(readFileSync(join(root, "data/worldmap.json"), "utf8"))
+const S = load("Sky.js")
+const land = JSON.parse(readFileSync(join(root, "data/globe-land.json"), "utf8"))
 const near = (a, b, eps = 1e-9) => assert.ok(Math.abs(a - b) < eps, `${a} != ${b}`)
 const R = 100
 
@@ -86,48 +90,217 @@ test("a ring across the date line shows whole when facing it", () => {
   near(G.polygonArea(polys[0]), G.polygonArea(G.frontPolygons(square(-10, -15, 10, 5), 0, R)[0]), 1e-6)
 })
 
-test("the data on the globe: cached, closed, all on the disc", () => {
-  const prepared = G.prepareData(data, W.unproject)
-  assert.equal(prepared.land.length, data.land.length)
-  assert.equal(G.prepareData(JSON.parse(JSON.stringify(data)), W.unproject), prepared, "cached")
-  let area = 0
-  for (const zone of prepared.zones)
-    for (const ring of zone.rings)
-      for (const poly of G.frontPolygons(ring, 13, R)) {
-        for (let i = 0; i < poly.length; i++) assert.ok(Math.abs(poly[i]) <= R + 1e-6)
-        area += G.polygonArea(poly)
-      }
-  // The zones tile the earth: their front parts cover about the disc.
-  near(area / (Math.PI * R * R), 1, 0.05)
-  // Berlin's zone at Berlin, through the globe and back to the map.
-  const p = G.projectOrtho(52.5, 13.4, 13, R)
-  const back = G.unprojectOrtho(p.x, p.y, 13, R)
-  const q = W.project(back.lat, back.lon)
-  assert.equal(W.zoneAt(data, q.x, q.y), 60)
+// ---- The tilted, zoomable view ----
+
+// Even-odd point in polygons, flat [x0, y0, ...] arrays.
+const insideAny = (polys, x, y) => {
+  let inside = false
+  for (const ring of polys) {
+    for (let i = 0, j = ring.length - 2; i < ring.length; j = i, i += 2) {
+      const xi = ring[i], yi = ring[i + 1], xj = ring[j], yj = ring[j + 1]
+      if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside
+    }
+  }
+  return inside
+}
+// The land rings as flat [lon, lat, ...] in degrees, for lookups on the
+// plain lat/lon plane (where the file's rings are simple polygons).
+const landLonLat = land.land.map((ring) => ring.map((v) => v / land.scale))
+const onLand = (lat, lon) => landLonLat.some((ring) => insideAny([ring], lon, lat))
+const antarctica = land.land.findIndex((ring) => ring.some((v, i) => i % 2 === 1 && v === -90 * land.scale))
+const views = [[0, 13], [45, -100], [-60, 150], [80, 30], [90, 0], [-90, 0], [-30, 179.5]]
+
+test("globe land data: lat/lon rings, counter-clockwise, small", () => {
+  assert.equal(land.scale, 100)
+  assert.equal(land.land.length, 347)
+  assert.ok(readFileSync(join(root, "data/globe-land.json")).length < 120 * 1024)
+  for (const ring of land.land) {
+    assert.ok(ring.length >= 6 && ring.length % 2 === 0)
+    let area = 0
+    for (let i = 0, j = ring.length - 2; i < ring.length; j = i, i += 2) {
+      assert.ok(Number.isInteger(ring[i]) && Math.abs(ring[i]) <= 18000 && Math.abs(ring[i + 1]) <= 9000)
+      area += ring[j] * ring[i + 1] - ring[i] * ring[j + 1]
+    }
+    assert.ok(area > 0, "counter-clockwise")
+  }
+  assert.ok(antarctica >= 0, "Antarctica reaches the pole")
+  const rings = G.prepareLand(land)
+  assert.equal(rings.length, 347)
+  assert.equal(G.prepareLand(JSON.parse(JSON.stringify(land))), rings, "cached")
 })
 
-test("twilight areas: night, golden and blue rings", () => {
-  // June solstice noon UTC: the night (one pole) as one ring holding 180°.
-  const june = Date.UTC(2026, 5, 21, 12)
-  const night = W.twilightRings(june, 0)
-  assert.equal(night.length, 1)
-  assert.deepEqual(W.twilightPolygon(june, 0), W.nightPolygon(june))
-  const flat = W.nightPolygon(june).flatMap(p => [p.x, p.y])
-  assert.ok(W.ringContains(flat, W.project(0, 179).x, 0, 1))
-  // Near the equinox −8° holds no pole (an oval) and +6° both (two rings).
-  const equinox = Date.UTC(2026, 2, 20, 15)
-  assert.equal(W.twilightRings(equinox, -8).length, 1)
-  assert.equal(W.twilightRings(equinox, 6).length, 2)
-  // Every boundary point has the sun at that elevation.
-  for (const [ms, e] of [[june, 6], [june, -4], [equinox, -8], [equinox, 6], [june, 0]]) {
-    const rings = W.twilightRings(ms, e)
-    const boundary = rings[rings.length - 1].filter(p => Math.abs(p.lat) < 89 && Math.abs(Math.abs(p.lon) - 180) > 1e-9)
-    for (const p of boundary.slice(0, 120)) near(W.sunElevation(p.lat, p.lon, ms), e, 0.2)
+test("view: projection round trips at any tilt, the poles included", () => {
+  for (const [cLat, cLon] of views) {
+    const m = G.viewMatrix(cLat, cLon)
+    // The centre faces the viewer, north is up (or the view is at a pole).
+    const centre = G.projectView(cLat, cLon, m, R)
+    near(centre.x, 0, 1e-9)
+    near(centre.y, 0, 1e-9)
+    for (let lat = -85; lat <= 85; lat += 17) {
+      for (let lon = -180; lon < 180; lon += 23) {
+        const p = G.projectView(lat, lon, m, R)
+        if (!p.visible) continue
+        assert.ok(Math.hypot(p.x, p.y) <= R + 1e-9)
+        const back = G.unprojectView(p.x, p.y, m, R)
+        near(back.lat, lat, 1e-6)
+        near(G.shortestTurn(back.lon, lon), 0, 1e-6)
+      }
+    }
   }
-  // On the globe, the night facing midnight covers about half the disc.
-  const sun = W.subsolarPoint(june)
-  const rings = night.map(r => G.prepareLatLon(r))
-  let area = 0
-  for (const ring of rings) for (const poly of G.frontPolygons(ring, sun.lon + 90, R)) area += G.polygonArea(poly)
-  near(area / (Math.PI * R * R), 0.5, 0.03)
+  assert.equal(G.unprojectView(R, R, G.viewMatrix(20, 0), R), null)
+  // Vectors work as well as lat/lon.
+  const m = G.viewMatrix(45, -100)
+  const p = G.projectView([0, 0, 1], m, R)
+  near(p.y, R * Math.cos(45 * Math.PI / 180), 1e-9)
+  near(p.x, 0, 1e-9)
+})
+
+test("view: at tilt 0 it is the equatorial view", () => {
+  for (const cLon of [0, 13.4, -150, 179]) {
+    const m = G.viewMatrix(0, cLon)
+    for (const [lat, lon] of [[0, cLon], [52.5, cLon + 40], [-33.9, cLon - 70], [10, cLon + 120]]) {
+      const a = G.projectView(lat, lon, m, R)
+      const b = G.projectOrtho(lat, lon, cLon, R)
+      near(a.x, b.x, 1e-9)
+      near(a.y, b.y, 1e-9)
+      assert.equal(a.visible, b.visible)
+    }
+  }
+  // From above the north pole: the equator is the rim, 45° N at cos 45°.
+  const top = G.viewMatrix(90, 0)
+  near(Math.hypot(G.projectView(0, 77, top, R).x, G.projectView(0, 77, top, R).y), R, 1e-9)
+  near(Math.hypot(G.projectView(45, -20, top, R).x, G.projectView(45, -20, top, R).y), R * Math.SQRT1_2, 1e-9)
+  assert.ok(!G.projectView(-1, 0, top, R).visible)
+})
+
+test("view: land fills at tilt 0 match the equatorial clipping", () => {
+  const rings = G.prepareLand(land)
+  for (const cLon of [13, -75, 140, 180]) {
+    let before = 0
+    let after = 0
+    for (let r = 0; r < land.land.length; r++) {
+      const points = []
+      for (let i = 0; i < land.land[r].length; i += 2) points.push({ lat: land.land[r][i + 1] / 100, lon: land.land[r][i] / 100 })
+      const old = G.frontPolygons(G.prepareLatLon(points), cLon, R).reduce((a, p) => a + G.polygonArea(p), 0)
+      const now = G.frontPolygonsView(rings[r], G.viewMatrix(0, cLon), R).reduce((a, p) => a + G.polygonArea(p), 0)
+      before += old
+      after += now
+      if (old > 0.01 * Math.PI * R * R) near(now / old, 1, 0.005)
+    }
+    assert.ok(before > 0.1 * Math.PI * R * R)
+    near(after / before, 1, 0.005)
+  }
+})
+
+test("view: land fills agree with the land at every point, at any tilt", () => {
+  const rings = G.prepareLand(land)
+  for (const [cLat, cLon] of views) {
+    const m = G.viewMatrix(cLat, cLon)
+    const polys = rings.flatMap((ring) => G.frontPolygonsView(ring, m, R))
+    for (const poly of polys) for (let i = 0; i < poly.length; i += 2) assert.ok(Math.hypot(poly[i], poly[i + 1]) <= R + 1e-6)
+    let points = 0
+    let wrong = 0
+    for (let x = -R + 1; x < R; x += 4) {
+      for (let y = -R + 1; y < R; y += 4) {
+        const place = G.unprojectView(x, y, m, R)
+        if (!place) continue
+        points++
+        if (insideAny(polys, x, y) !== onLand(place.lat, place.lon)) wrong++
+      }
+    }
+    assert.ok(wrong / points < 0.005, `${cLat},${cLon}: ${wrong} of ${points} points wrong`)
+  }
+})
+
+test("view: Antarctica from above and below the poles, and tilted", () => {
+  const ring = G.prepareLand(land)[antarctica]
+  assert.deepEqual(G.frontPolygonsView(ring, G.viewMatrix(90, 0), R), [])
+  assert.deepEqual(G.frontLinesView(ring, G.viewMatrix(90, 0), R), [])
+  const below = G.frontPolygonsView(ring, G.viewMatrix(-90, 0), R)
+  assert.equal(below.length, 1)
+  // About 14 million km² seen straight down, within about 25° of the pole.
+  const area = G.polygonArea(below[0]) / (R * R)
+  assert.ok(area > 0.2 && area < 0.45, `area ${area}`)
+  assert.ok(insideAny(below, 0, 0), "the pole is land")
+  // The coast only: nothing along the ±180° seam or the pole.
+  for (const m of [G.viewMatrix(-90, 0), G.viewMatrix(-30, 179.5), G.viewMatrix(-60, 0)]) {
+    for (const line of G.frontLinesView(ring, m, R)) {
+      for (let i = 0; i < line.length; i += 2) {
+        const place = G.unprojectView(line[i] * 0.999999, line[i + 1] * 0.999999, m, R)
+        assert.ok(place && place.lat > -86, "no stroke at the pole")
+      }
+    }
+  }
+})
+
+test("view: strokes stay on the disc and never run along the rim", () => {
+  const rings = G.prepareLand(land)
+  for (const [cLat, cLon] of views) {
+    const m = G.viewMatrix(cLat, cLon)
+    for (const ring of rings) {
+      for (const line of G.frontLinesView(ring, m, R)) {
+        assert.ok(line.length >= 4)
+        for (let i = 2; i < line.length; i += 2) {
+          const a = Math.hypot(line[i - 2], line[i - 1]), b = Math.hypot(line[i], line[i + 1])
+          assert.ok(a <= R + 1e-6 && b <= R + 1e-6)
+          // A cut lands on the rim and the next point may lie a hair inside
+          // it (a coast grazing the rim); a run along the rim would step about 2°.
+          const step = Math.hypot(line[i] - line[i - 2], line[i + 1] - line[i - 1])
+          assert.ok(!(Math.abs(a - R) < 1e-4 && Math.abs(b - R) < 1e-4 && step > 2), "along the rim")
+        }
+      }
+    }
+  }
+  const grid = G.gridLinesView(G.viewMatrix(30, 10), R, 30)
+  assert.ok(grid.length >= 10)
+  for (const line of grid) for (let i = 0; i < line.length; i += 2) assert.ok(Math.hypot(line[i], line[i + 1]) <= R + 1e-6)
+})
+
+test("view: twilight caps match the sun's elevation at tilts 0, 45 and 80", () => {
+  for (const ms of [Date.UTC(2026, 5, 21, 18), Date.UTC(2026, 9, 2, 15, 44), Date.UTC(2026, 11, 21, 6)]) {
+    const sun = S.subsolarPoint(ms)
+    const anti = { lat: -sun.lat, lon: sun.lon > 0 ? sun.lon - 180 : sun.lon + 180 }
+    for (const tilt of [0, 45, 80, -80]) {
+      for (const cLon of [sun.lon + 90, sun.lon - 60, anti.lon]) {
+        const m = G.viewMatrix(tilt, cLon)
+        for (const e of [6, 0, -6, -12]) {
+          const polys = G.capPolygonView(anti.lat, anti.lon, 90 + e, m, R)
+          for (let x = -R + 2; x < R; x += 7) {
+            for (let y = -R + 2; y < R; y += 7) {
+              const place = G.unprojectView(x, y, m, R)
+              if (!place || Math.hypot(x, y) > R - 1) continue
+              const elevation = S.sunElevation(place.lat, place.lon, ms)
+              if (Math.abs(elevation - e) < 0.6) continue
+              assert.equal(insideAny(polys, x, y), elevation < e, `${e}° tilt ${tilt} at ${place.lat.toFixed(1)},${place.lon.toFixed(1)}`)
+            }
+          }
+        }
+      }
+    }
+  }
+  // Wholly behind, wholly in front, covering the front.
+  const m = G.viewMatrix(0, 0)
+  assert.deepEqual(G.capPolygonView(0, 180, 30, m, R), [])
+  const small = G.capPolygonView(0, 0, 30, m, R)
+  assert.equal(small.length, 1)
+  near(G.polygonArea(small[0]) / (Math.PI * R * R), 0.25, 0.01)
+  const all = G.capPolygonView(0, 0, 95, m, R)
+  assert.equal(all.length, 1)
+  near(G.polygonArea(all[0]) / (Math.PI * R * R), 1, 0.001)
+  // Holding all but 5° round the view's centre: the disc with a hole.
+  const ring = G.capPolygonView(0, 180, 175, m, R)
+  assert.equal(ring.length, 2)
+  assert.ok(!insideAny(ring, 0, 0) && insideAny(ring, 0, R * 0.5))
+  near((G.polygonArea(ring[0]) - G.polygonArea(ring[1])) / (Math.PI * R * R), 1 - Math.sin(5 * Math.PI / 180) ** 2, 0.001)
+})
+
+test("view: zoomed in, the radius just grows", () => {
+  const m = G.viewMatrix(48, 11)
+  const big = 50000
+  const p = G.projectView(48.2, 11.5, m, big)
+  const back = G.unprojectView(p.x, p.y, m, big)
+  near(back.lat, 48.2, 1e-6)
+  near(back.lon, 11.5, 1e-6)
+  const night = G.capPolygonView(0, 0, 90, m, big)
+  for (const poly of night) for (let i = 0; i < poly.length; i += 2) assert.ok(Math.hypot(poly[i], poly[i + 1]) <= big + 1e-3)
 })

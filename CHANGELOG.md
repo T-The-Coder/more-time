@@ -9,6 +9,12 @@ All notable changes to More Time are documented here.
   full height), at most the page's width and at least 240 points, and
   follows the window as you resize it. The flat map narrows, centred and in
   its proportions, when it would not fit the visible height.
+- **Groundwork for More Weather's globe (nothing changes in More Time):**
+  the sun and sky calculations moved to `Sky.js`; `Globe.js` gained a view
+  that tilts to any latitude, the poles included, and zooms, with the land
+  outline in latitude and longitude (`data/globe-land.json`, built by
+  `tools/build-globe-land.py`). These files and their tests are shared with
+  More Weather.
 
 ## 1.0.1 — 2026-10-03
 
