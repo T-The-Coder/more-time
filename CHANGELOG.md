@@ -2,6 +2,14 @@
 
 All notable changes to More Time are documented here.
 
+## Unreleased
+
+- **The globe fills the window:** instead of stopping at a fixed size, it
+  takes the height visible below it in the app or the popup (the popup's
+  full height), at most the page's width and at least 240 points, and
+  follows the window as you resize it. The flat map narrows, centred and in
+  its proportions, when it would not fit the visible height.
+
 ## 1.0.1 — 2026-10-03
 
 - **Names are shown as plain text:** place names from the search, the cities

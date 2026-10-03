@@ -47,7 +47,9 @@ Item {
   readonly property bool showLabels: panel.displaySetting("worldMapLabels", true)
   readonly property real rulerHeight: showRuler ? Style.space(16) : 0
   readonly property real mapWidth: width
-  readonly property real mapHeight: width * WorldMap.Y_MAX / WorldMap.X_MAX
+  // Height over width; TimeWorld narrows the map to fit the visible height.
+  readonly property real aspect: WorldMap.Y_MAX / WorldMap.X_MAX
+  readonly property real mapHeight: width * aspect
   readonly property real unit: mapWidth / (2 * WorldMap.X_MAX)
   implicitHeight: mapHeight + rulerHeight * 2
 

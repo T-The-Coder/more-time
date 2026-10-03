@@ -40,7 +40,10 @@ Item {
   readonly property bool showGolden: panel.displaySetting("heroGoldenHour", false)
   readonly property bool showBlue: panel.displaySetting("heroBlueHour", false)
   readonly property bool autoRotate: panel.displaySetting("globeAutoRotate", false)
-  readonly property real diameter: Math.min(width, Style.space(380))
+  // The visible height below the globe's top (TimeWorld): the globe fills
+  // it, as wide as the page at most and Style.space(240) at least.
+  property real fitHeight: Infinity
+  readonly property real diameter: Math.min(width, Math.max(Style.space(240), Math.min(width, fitHeight)))
   readonly property real radius: diameter / 2
   readonly property real centerX: width / 2
   readonly property real centerY: radius

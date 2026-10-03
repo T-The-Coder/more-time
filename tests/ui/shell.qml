@@ -36,6 +36,41 @@ ShellRoot {
     return null
   }
   function globe() { return findGlobe(panel.contentRoot) }
+  // The app window's size, in pixels.
+  // The app's size in pixels: an offscreen window keeps its first size,
+  // so the content area takes the size inside the window's padding (the
+  // page scrolls inside it, as in a window of that size).
+  function appSize(w, h) {
+    var content = panel.contentRoot
+    var pad = Style.spacing.popupPadding
+    content.anchors.fill = undefined
+    content.width = w - 2 * pad
+    content.height = h - 2 * pad
+  }
+  function appSizeReset() {
+    var content = panel.contentRoot
+    content.anchors.fill = content.parent
+  }
+  function globeSize(label) {
+    var g = globe()
+    console.log("GLOBE size", label, "content", Math.round(panel.contentRoot.width) + "x" + Math.round(panel.contentRoot.height),
+      "viewport", Math.round(panel.viewportHeight), "diameter", Math.round(g.diameter), "page width", Math.round(g.width),
+      "bottom", Math.round(g.mapToItem(panel.contentRoot, 0, g.diameter).y))
+  }
+  function findMap(item) {
+    if (!item) return null
+    if (item.aspect !== undefined && item.mapHeight !== undefined) return item
+    for (var i = 0; i < item.children.length; i++) {
+      var found = findMap(item.children[i])
+      if (found) return found
+    }
+    return null
+  }
+  function mapSize(label) {
+    var m = findMap(panel.contentRoot)
+    console.log("MAP size", label, "viewport", Math.round(panel.viewportHeight), "map", Math.round(m.width) + "x" + Math.round(m.implicitHeight),
+      "bottom", Math.round(m.mapToItem(panel.contentRoot, 0, m.implicitHeight).y))
+  }
 
   readonly property var steps: [
     // Silent, so an alarm or timer that comes due during the run plays
@@ -351,6 +386,45 @@ ShellRoot {
     function() { panel.openSettings("display"); panel.settingsTargetSurface = "app" },
     function() { shot("readme-display") },
     function() { panel.settingsOpen = false; panel.activeTab = "world"; display("worldMoon", false); harness.backdrop.destroy() },
+    // The globe and the map fill the visible height: the app at 941×1150,
+    // at 600×700 and at the popup's size (500 wide, 720 high at most).
+    function() { display("worldStyle", "globe"); appSize(941, 1150) },
+    function() { globeSize("941x1150"); globe().finishTurn() },
+    function() { shot("31a-globe-941x1150") },
+    function() {
+      display("globeAutoRotate", true)
+      var g = globe()
+      g.paintStats = { count: 0, total: 0, max: 0 }
+      g.rotating = true
+    },
+    function() {},
+    function() {},
+    function() {
+      var st = globe().paintStats
+      var per = function(v) { return ((v || 0) / Math.max(1, st.count)).toFixed(1) }
+      console.log("GLOBE frames large", st.count, "ms/frame", per(st.total), "max", st.max, "diameter", Math.round(globe().diameter))
+      display("globeAutoRotate", false)
+    },
+    function() { display("worldStyle", "map") },
+    function() { mapSize("941x1150") },
+    function() { shot("31b-map-941x1150") },
+    function() { display("worldStyle", "globe"); appSize(600, 700) },
+    function() { globeSize("600x700"); globe().finishTurn() },
+    function() { shot("31c-globe-600x700") },
+    function() { display("worldStyle", "map") },
+    function() { mapSize("600x700") },
+    function() { shot("31d-map-600x700") },
+    function() {
+      display("worldStyle", "globe")
+      var pad = Style.spacing.popupPadding
+      appSize(Style.space(500) + 2 * pad, Style.space(720) + 2 * pad)
+    },
+    function() { globeSize("popup"); globe().finishTurn() },
+    function() { shot("31e-globe-popup") },
+    function() { display("worldStyle", "map") },
+    function() { mapSize("popup") },
+    function() { shot("31f-map-popup") },
+    function() { appSizeReset() },
     // Deleting a city before the current one keeps the same city current.
     function() {
       panel.setCurrentPlace(2)

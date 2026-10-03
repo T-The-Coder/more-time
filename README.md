@@ -79,6 +79,11 @@ control.
     itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4
     (default) or 8 minutes (only while you can see it; a click, drag or the wheel stops it,
     the pointer merely resting on it does not, and the tooltips keep working).
+  - The globe fills the window: as large as the visible height below it
+    allows (the popup's up to its full height), at most the page's width and
+    never smaller than 240 points (below that the page scrolls); it grows and
+    shrinks as you resize the window. The flat map keeps its proportions and
+    narrows, centred, when it would not fit the visible height.
   - Optionally the Moon on the map and the globe, where it stands at the
     zenith right now: a small shaded sphere floating above its shadow, its
     phase lit towards the Sun (the same phase numbers as More Weather);

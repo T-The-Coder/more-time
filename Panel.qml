@@ -1544,6 +1544,12 @@ Panel {
   }
   readonly property Item popupContentHost: popupLoader.item ? popupLoader.item.contentHost : null
   readonly property real contentHeight: contentColumn.implicitHeight
+  // The height the content shows at once, and where the tab's content
+  // starts in it: the World tab fits its globe or map into what is visible.
+  // In the popup its cap, not its height, which follows the content.
+  readonly property real viewportHeight: standaloneMode ? contentScroll.height
+    : (popupLoader.item ? popupLoader.item.contentCap : Style.space(720))
+  readonly property real tabContentTop: contentLoader.y
 
   readonly property bool popupPointerInside: !standaloneMode && opened && !!popupLoader.item && popupLoader.item.spanHovered
   readonly property bool popupPointerOnAnchor: !standaloneMode && !!popupLoader.item && popupLoader.item.anchorHovered

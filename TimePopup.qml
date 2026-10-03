@@ -18,6 +18,8 @@ KeyboardPanel {
   centerOnBar: true
   focusTarget: timePanel.contentRoot
   contentWidth: panel.fittedContentWidth(Style.space(500))
+  // The tallest the card gets; the World tab sizes its globe to it.
+  readonly property real contentCap: panel.fittedContentHeight(Style.space(720))
   contentHeight: panel.fittedContentHeight(timePanel.settingsOpen
     ? Style.space(650)
     : Math.min(Style.space(720), timePanel.contentHeight))

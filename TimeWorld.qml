@@ -233,6 +233,11 @@ Column {
 
   // The flat map or the globe ("worldStyle"); both take the same inputs.
   Loader {
+    id: worldMapSlot
+    // The height still visible below the slot's top in the app window or
+    // the popup, less a margin: the globe and the map fit into it, down to
+    // a minimum below which the page scrolls.
+    readonly property real fitHeight: view.panel.viewportHeight - view.panel.tabContentTop - y - Style.space(16)
     visible: view.panel.displaySetting("worldMap", true)
     active: visible
     width: parent.width
@@ -241,15 +246,25 @@ Column {
   }
   Component {
     id: flatMapView
-    TimeWorldMap {
-      panel: view.panel
-      selectedIndex: view.panel.selectedCity
-      onCityClicked: function(index) { view.panel.selectedCity = index }
+    // Full width, unless the map would not fit the visible height: then
+    // narrower, centred, at least Style.space(240) high.
+    Item {
+      implicitHeight: flatMap.implicitHeight
+      TimeWorldMap {
+        id: flatMap
+        readonly property real fitMapHeight: Math.max(Style.space(240), worldMapSlot.fitHeight - rulerHeight * 2)
+        width: Math.min(parent.width, fitMapHeight / aspect)
+        x: (parent.width - width) / 2
+        panel: view.panel
+        selectedIndex: view.panel.selectedCity
+        onCityClicked: function(index) { view.panel.selectedCity = index }
+      }
     }
   }
   Component {
     id: globeView
     TimeGlobe {
+      fitHeight: worldMapSlot.fitHeight
       panel: view.panel
       selectedIndex: view.panel.selectedCity
       onCityClicked: function(index) { view.panel.selectedCity = index }
