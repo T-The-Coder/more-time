@@ -92,7 +92,8 @@ Column {
   TimeTabHeader {
     width: parent.width
     panel: view.panel
-    hint: view.panel.i18n("worldKeysHint")
+    hint: view.panel.i18n("worldKeysHint") + (view.panel.displaySetting("worldMap", true)
+      ? " · " + view.panel.i18n("globeKeysHint") : "")
     addLabel: view.panel.i18n("addCity")
     onAdd: view.panel.openCitySearch()
   }
@@ -229,6 +230,14 @@ Column {
       font.pixelSize: Style.font.caption
       font.italic: true
     }
+  }
+
+  // Zoom and turn keys for the globe or the flat map (Panel.handlePanelKey).
+  function handleMapKey(event) {
+    var item = worldMapSlot.item
+    if (!item || !worldMapSlot.visible) return false
+    var target = item.handleMapKey ? item : (item.children.length && item.children[0].handleMapKey ? item.children[0] : null)
+    return target ? target.handleMapKey(event) : false
   }
 
   // The flat map or the globe ("worldStyle"); both take the same inputs.

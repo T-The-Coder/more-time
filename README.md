@@ -95,6 +95,13 @@ control.
     never smaller than 240 points (below that the page scrolls); it grows and
     shrinks as you resize the window. The flat map keeps its proportions and
     narrows, centred, when it would not fit the visible height.
+  - Zoom: the buttons at the top right (crosshair: the current place in the
+    middle; − and +), `+` `−`, `Ctrl` + wheel at the pointer or a double
+    click zoom the globe and the flat map in three steps, to about 1,600 km
+    across. Zoomed in, a drag turns and tilts the globe (seen from any
+    latitude) or pans the map; the ruler hides while the map is zoomed.
+    `0` shows the whole earth again. The globe turns by itself only when
+    zoomed out.
   - Optionally the Moon on the map and the globe, where it stands at the
     zenith right now: a small shaded sphere floating above its shadow, its
     phase lit towards the Sun (the same phase numbers as More Weather);
@@ -182,11 +189,25 @@ control.
     equinoxes and solstices in the accent colour, and a line from the Sun
     through Earth as the hand of the year; a dashed arrow (γ) points to the
     vernal point.
+  - The bodies turn as they do in space (IAU rotation model): faint latitude
+    bands round each pole and a meridian line that turns with the body,
+    Uranus on its side, Saturn's rings in their own plane, drawn in front of
+    and behind the planet.
+  - Earth and the Moon: the third zoom step and a small inset in the corner
+    (a click on it zooms there) show Earth as a real globe, turned and tilted
+    as it is now and seen from the camera's side, with the land and the
+    night in three steps, and the Moon on its orbit around it (the distance
+    enlarged, the shape and tilt true), lit by the Sun, its near side
+    (marked) always facing Earth. A gold arrow points to the Sun. In the
+    inner system a tiny Moon sits beside Earth.
   - The pointer on a body (or a click, which keeps it) shows its distance
-    from the Sun and from Earth in au and light-minutes and its orbital
-    period.
-  - Settings → Display → Astro: orbits, names, the month ring, turning by
-    itself (delay, speed and frames per second).
+    from the Sun and from Earth in au and light-minutes, its orbital period,
+    its day and the tilt of its axis (≈ where the rotation is known only
+    roughly); on the Moon its phase, the lit part, its distance in km and
+    light-seconds and its age since the new moon.
+  - Settings → Display → Astro: orbits, names, the month ring, rotation and
+    tilt, the Earth and Moon inset, turning by itself (delay, speed and
+    frames per second).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.
@@ -290,7 +311,7 @@ too.
 | `Space` | Weekday on / off |
 | `Enter` | Done, or type the name |
 | **World** | |
-| `/` / `+` | Add a city |
+| `/` / `n` | Add a city (`+` too while the map is hidden) |
 | `↑ ↓` (search) | Move within the results or the saved places |
 | `Tab` / `⇧ Tab` (search) | Switch between results and saved places |
 | `Enter` (search) | Use the result, or switch to the saved place |
@@ -300,11 +321,14 @@ too.
 | `← →` / `h l` | Select a place: here or a city (`↑ ↓` / `j k` too) |
 | `e` | Clock face style of the selected place (`← →` pick, `Enter` / `Esc` close) |
 | `x` / `Del` | Remove the city (press twice) |
+| `+` / `−` | Zoom the globe or the map in / out (also `Ctrl` + wheel at the pointer, a double click, the buttons) |
+| `0` | The whole globe or map, on the current place |
+| `Ctrl ← → ↑ ↓` | Turn and tilt the zoomed globe, or pan the zoomed map |
 | **Astro** | |
 | `Ctrl ← →` | Turn the view (also a drag or the sideways wheel) |
 | `Ctrl ↑ ↓` | Tilt the view (also a drag up or down) |
 | `+` / `−` | Whole system, inner system, Earth (also `Ctrl` + wheel) |
-| `0` | Back to the start view |
+| `0` | Back to the start view (the crosshair button keeps the zoom step) |
 | **While something rings** | |
 | `Space` / `Enter` | Stop |
 | `s` | Snooze |
@@ -350,7 +374,12 @@ too.
 - **Solar system:** the planets' Keplerian elements and their rates from JPL's
   [Approximate Positions of the Planets](https://ssd.jpl.nasa.gov/planets/approx_pos.html)
   (E. M. Standish, table 1, valid 1800–2050, about an arcminute), solved on this
-  computer (`Astro.js`); nothing is downloaded.
+  computer (`Astro.js`); nothing is downloaded. The bodies' poles, prime
+  meridians and rotation rates from the IAU WGCCRE model
+  ([NAIF pck00010](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc)),
+  Saturn's rings from NASA's fact sheet, the Moon's place and distance from
+  Meeus, checked against JPL Horizons and SBDB (`AstroRotation.js`,
+  `AstroEvents.js`; see `ASTRO-MODULES.md`).
 - **Sounds:** the freedesktop sound theme (`/usr/share/sounds/freedesktop`).
   The five chime tones are synthesized once by `python3`
   (`data/chime-tones.py`) into `~/.cache/more-time`; nothing is downloaded.

@@ -5,6 +5,7 @@ import qs.Commons
 import "WorldMap.js" as WorldMap
 import "Moon.js" as Moon
 import "Globe.js" as Globe
+import "GlobeView.js" as GlobeView
 
 // The World tab's other map: the earth as a globe, seen from above the
 // equator, drawn like the flat map (TimeWorldMap.qml) — the time zones in
@@ -40,6 +41,8 @@ Item {
   // total and longest milliseconds, and the total per part (zones, land and
   // grid, twilight and sky, places).
   property var paintStats: ({ count: 0, total: 0, max: 0 })
+  // The same per part for the zoomed or tilted frames (paintView).
+  property var viewStats: null
   // The pointer resting over the globe, for the hover, or null.
   property var pointer: null
   readonly property bool showLabels: panel.displaySetting("worldMapLabels", true)
@@ -50,28 +53,98 @@ Item {
   // it, as wide as the page at most and Style.space(240) at least.
   property real fitHeight: Infinity
   readonly property real diameter: Math.min(width, Math.max(Style.space(240), Math.min(width, fitHeight)))
-  readonly property real radius: diameter / 2
+  // Zoomed in (z1 … z3, the radius doubling per step) or tilted, it is
+  // drawn through Globe.js' view functions from (centerLat, centerLon);
+  // the whole globe (z0, upright) keeps the equatorial drawing and its
+  // cheap frames for turning by itself.
+  readonly property int maxZoom: 3
+  property int zoom: 0
+  property real centerLat: 0
+  readonly property bool tilted: zoom > 0 || Math.abs(centerLat) > 0.01
+  onZoomChanged: repaint()
+  onCenterLatChanged: repaint()
+  readonly property real radius: diameter / 2 * Math.pow(2, zoom)
   readonly property real centerX: width / 2
-  readonly property real centerY: radius
+  readonly property real centerY: diameter / 2
   implicitHeight: diameter
 
   // The longitude facing the viewer, unwrapped: turns animate through it
   // the short way and the drawing wraps it.
   property real centerLon: 0
-  NumberAnimation {
+  ParallelAnimation {
     id: turnAnimation
-    target: globe
-    property: "centerLon"
-    duration: 600
-    easing.type: Easing.InOutCubic
+    NumberAnimation { id: latAnimation; target: globe; property: "centerLat"; duration: 600; easing.type: Easing.InOutCubic }
+    NumberAnimation { id: lonAnimation; target: globe; property: "centerLon"; duration: 600; easing.type: Easing.InOutCubic }
   }
 
-  function turnTo(lon) {
+  // Turns to a longitude the short way round; with a latitude (zoomed in)
+  // it tilts there too, and at z0 it rights itself.
+  function turnTo(lon, lat) {
     if (lon === null || lon === undefined || isNaN(lon)) return
     turnAnimation.stop()
-    turnAnimation.from = centerLon
-    turnAnimation.to = centerLon + Globe.shortestTurn(centerLon, lon)
+    latAnimation.from = centerLat
+    latAnimation.to = zoom === 0 || lat === null || lat === undefined || isNaN(lat) ? (zoom === 0 ? 0 : centerLat)
+      : GlobeView.clampLat(lat)
+    lonAnimation.from = centerLon
+    lonAnimation.to = centerLon + Globe.shortestTurn(centerLon, lon)
     turnAnimation.start()
+  }
+  // One step in or out with the place under (px, py) from the middle kept
+  // there (GlobeView.zoomedCentre); back at z0 the globe stands upright.
+  function zoomAt(delta, px, py) {
+    touched()
+    var next = Math.max(0, Math.min(maxZoom, zoom + delta))
+    if (next === zoom) return
+    turnAnimation.stop()
+    if (next === 0) {
+      zoom = 0
+      turnTo(centerLon)
+      return
+    }
+    var r1 = diameter / 2 * Math.pow(2, next)
+    var centre = GlobeView.zoomedCentre(centerLat, centerLon, radius, r1, px, py)
+    centerLat = centre.lat
+    centerLon = centre.lon
+    zoom = next
+  }
+  function zoomBy(delta) { zoomAt(delta, 0, 0) }
+  // The crosshair: the current place in the middle, the zoom kept.
+  function recenter() {
+    touched()
+    var c = panel.currentCoordinates || home
+    if (c) turnTo(c.lon, c.lat)
+  }
+  // 0: the whole globe, upright, on the current place.
+  function reset() {
+    touched()
+    zoom = 0
+    var c = panel.currentCoordinates || home
+    turnTo(c ? c.lon : centerLon)
+  }
+  // Ctrl + arrows: east and west turn, north and south tilt (zoomed in).
+  function turnStep(east, north) {
+    touched()
+    var step = GlobeView.stepDegrees(zoom, radius, diameter)
+    var lat = turnAnimation.running ? latAnimation.to : centerLat
+    var lon = turnAnimation.running ? lonAnimation.to : centerLon
+    var cos = zoom >= 1 ? Math.max(0.2, Math.cos(lat * Math.PI / 180)) : 1
+    turnTo(lon + east * step / cos, lat + north * step)
+  }
+  // Keys from the World tab (Panel.handlePanelKey): + − zoom, 0 the whole
+  // globe, Ctrl + arrows turn and tilt.
+  function handleMapKey(event) {
+    var text = event.text
+    var control = (event.modifiers & Qt.ControlModifier) !== 0
+    if (control) {
+      if (event.key === Qt.Key_Left || event.key === Qt.Key_Right) turnStep(event.key === Qt.Key_Right ? 1 : -1, 0)
+      else if (event.key === Qt.Key_Up || event.key === Qt.Key_Down) turnStep(0, event.key === Qt.Key_Up ? 1 : -1)
+      else return false
+      return true
+    }
+    if (text === "+" || text === "=") { zoomBy(1); return true }
+    if (text === "-" || text === "−") { zoomBy(-1); return true }
+    if (text === "0") { reset(); return true }
+    return false
   }
   // Ends a running turn at once (the screenshot harness).
   function finishTurn() {
@@ -84,13 +157,19 @@ Item {
     return index < 0 && home ? home.lon : null
   }
 
+  function placeLat(index) {
+    var city = index >= 0 ? cities[index] : null
+    if (city && city.lat !== null && city.lon !== null) return city.lat
+    return index < 0 && home ? home.lat : null
+  }
+
   Component.onCompleted: {
     var lon = placeLon(selectedIndex)
     centerLon = lon === null ? (home ? home.lon : 0) : lon
   }
   onSelectedIndexChanged: {
     touched()
-    turnTo(placeLon(selectedIndex))
+    turnTo(placeLon(selectedIndex), placeLat(selectedIndex))
   }
 
   // Parsed per view, converted to lat/lon once per process (Globe.js).
@@ -175,7 +254,7 @@ Item {
   // wait; a pointer resting on it does not, and the tooltip follows the turn.
   property bool rotating: false
   readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "world"
-    && visible && !mouse.pressed
+    && visible && !mouse.pressed && !tilted
   onCanRotateChanged: if (!canRotate) rotating = false
 
   function touched() {
@@ -213,6 +292,13 @@ Item {
       if (!turnAnimation.running) globe.centerLon += elapsed * 360 / (globe.rotateTurnMinutes * 60000)
     }
   }
+
+  // The zones and the land as unit vectors for the view (Globe.js), from
+  // the same rings, once per process.
+  readonly property var zoneVectors: globeData ? globeData.zones.map(function(zone) {
+    return { o: zone.o, rings: zone.rings.map(function(ring) { return Globe.prepareVectors(ring.p) }) }
+  }) : []
+  readonly property var landVectors: globeData ? globeData.land.map(function(ring) { return Globe.prepareVectors(ring.p) }) : []
 
   // While it turns by itself: no hatching, a coarser coastline without the
   // smallest islands, only the selected place labelled.
@@ -389,6 +475,13 @@ Item {
       if (!data || globe.radius <= 0) return
       var lon = Globe.wrapLon(globe.centerLon)
       var R = globe.radius
+      if (globe.tilted) {
+        paintView(ctx)
+        var doneView = Date.now()
+        var sv = globe.paintStats
+        globe.paintStats = { count: sv.count + 1, total: sv.total + doneView - started, max: Math.max(sv.max, doneView - started) }
+        return
+      }
       // While turning by itself the fills go to fillCanvas, at a lower
       // resolution; this canvas keeps the lines, the Sun, the Moon and the
       // places sharp.
@@ -452,7 +545,7 @@ Item {
       ctx.stroke()
 
       var skyDone = Date.now()
-      paintPlaces(ctx, lon)
+      paintPlaces(ctx, function(lat, lon2) { return screenPoint(lat, lon2, lon) })
       mouse.updateHover()
       var done = Date.now()
       var st = globe.paintStats
@@ -461,12 +554,125 @@ Item {
         sky: (st.sky || 0) + skyDone - landDone, places: (st.places || 0) + done - skyDone }
     }
 
+    // Zoomed in or tilted: everything through the view matrix, sharp, the
+    // twilight as analytic caps.
+    function paintView(ctx) {
+      var m = Globe.viewMatrix(globe.centerLat, Globe.wrapLon(globe.centerLon))
+      var R = globe.radius
+      var cx = globe.centerX, cy = globe.centerY
+      function traceXY(xy, close) {
+        ctx.moveTo(cx + xy[0], cy - xy[1])
+        for (var i = 2; i < xy.length; i += 2) ctx.lineTo(cx + xy[i], cy - xy[i + 1])
+        if (close) ctx.closePath()
+      }
+      // Zoomed in, most rings lie outside the canvas: a ring is skipped when
+      // its bounding cap, projected, misses the canvas.
+      var W = width, H = height
+      function inView(ring) {
+        if (ring.sinMax < 0) return true
+        var c = ring.c
+        var bound = R * Math.sqrt(Math.max(0, 2 - 2 * Math.sqrt(Math.max(0, 1 - ring.sinMax * ring.sinMax)))) + 2
+        var px = cx + R * (m[0] * c[0] + m[1] * c[1] + m[2] * c[2])
+        var py = cy - R * (m[3] * c[0] + m[4] * c[1] + m[5] * c[2])
+        return px + bound >= 0 && px - bound <= W && py + bound >= 0 && py - bound <= H
+      }
+      function fillVectors(rings, style) {
+        ctx.beginPath()
+        for (var r = 0; r < rings.length; r++) {
+          if (!inView(rings[r])) continue
+          var polys = Globe.frontPolygonsView(rings[r], m, R)
+          for (var q = 0; q < polys.length; q++) traceXY(polys[q], true)
+        }
+        ctx.fillStyle = style
+        ctx.fillRule = Qt.OddEvenFill
+        ctx.fill()
+      }
+      function toScreen(lat, lon) {
+        var p = Globe.projectView(lat, lon, m, R)
+        return { x: cx + p.x, y: cy - p.y, visible: p.visible }
+      }
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(cx, cy, R, 0, Math.PI * 2)
+      ctx.clip()
+      ctx.fillStyle = rgba(ink, 0.03)
+      ctx.fillRect(0, 0, width, height)
+      var t0 = Date.now()
+      var hatch = ctx.createPattern(rgba(ink, 0.16), Qt.BDiagPattern)
+      for (var z = 0; z < globe.zoneVectors.length; z++) {
+        var zone = globe.zoneVectors[z]
+        var band = WorldMap.zebraBand(zone.o)
+        fillVectors(zone.rings, zone.o === globe.homeZone ? rgba(accent, 0.22)
+          : (band === 2 ? hatch : rgba(ink, band === 1 ? 0.12 : 0.035)))
+      }
+      ctx.strokeStyle = rgba(ink, 0.07)
+      ctx.lineWidth = 1
+      var t1 = Date.now()
+      var grid = Globe.gridLinesView(m, R, GlobeView.gridStep(globe.zoom))
+      ctx.beginPath()
+      for (var g = 0; g < grid.length; g++) traceXY(grid[g], false)
+      ctx.stroke()
+      fillVectors(globe.landVectors, rgba(ink, 0.07))
+      ctx.beginPath()
+      for (var l = 0; l < globe.landVectors.length; l++) {
+        if (!inView(globe.landVectors[l])) continue
+        var coast = Globe.frontLinesView(globe.landVectors[l], m, R)
+        for (var c = 0; c < coast.length; c++) traceXY(coast[c], false)
+      }
+      ctx.strokeStyle = rgba(ink, 0.55)
+      ctx.lineWidth = 0.8
+      ctx.stroke()
+      var t2 = Date.now()
+      var tw = globe.twilight
+      var antiLon = tw.sun.lon > 0 ? tw.sun.lon - 180 : tw.sun.lon + 180
+      var caps = {}
+      for (var e in tw.shapes) caps[e] = Globe.capPolygonView(-tw.sun.lat, antiLon, 90 + Number(e), m, R)
+      ctx.fillRule = Qt.OddEvenFill
+      for (var t = 0; t < tw.layers.length; t++) {
+        var layer = tw.layers[t]
+        var polys = caps[layer.high].concat(layer.low !== null ? caps[layer.low] : [])
+        if (!polys.length) continue
+        ctx.beginPath()
+        for (var k = 0; k < polys.length; k++) traceXY(polys[k], true)
+        ctx.fillStyle = Qt.rgba(layer.fill.r, layer.fill.g, layer.fill.b, layer.fill.a)
+        ctx.fill()
+      }
+      if (globe.showNight) {
+        var sun = toScreen(tw.sun.lat, tw.sun.lon)
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor)
+      }
+      var moon = globe.showMoon ? Moon.moonPosition(globe.minuteMs) : null
+      var moonAt = moon ? toScreen(moon.lat, moon.lon) : null
+      if (moon && moonAt.visible) Moon.paintMoonShadow(ctx, moonAt.x, moonAt.y, globe.moonRadius)
+      ctx.restore()
+      globe.moonHit = null
+      if (moon && moonAt.visible) {
+        var mx = cx + (moonAt.x - cx) * (1 + 0.15 / Math.pow(2, globe.zoom))
+        var my = cy + (moonAt.y - cy) * (1 + 0.15 / Math.pow(2, globe.zoom))
+        var angle = Moon.moonLitAngleFor(globe.moonStyle, moon, Moon.moonLitAngle(moon, tw.sun, toScreen), globe.observerLat)
+        Moon.paintMoon(ctx, mx, my, globe.moonRadius, angle, moon.illuminated, "238,236,226",
+          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
+        globe.moonHit = { x: mx, y: my, moon: moon }
+      }
+      ctx.strokeStyle = rgba(ink, 0.35)
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.arc(cx, cy, R, 0, Math.PI * 2)
+      ctx.stroke()
+      var t3 = Date.now()
+      paintPlaces(ctx, toScreen)
+      mouse.updateHover()
+      var st = globe.viewStats || { zones: 0, land: 0, sky: 0, places: 0 }
+      globe.viewStats = { zones: st.zones + t1 - t0, land: st.land + t2 - t1, sky: st.sky + t3 - t2, places: st.places + Date.now() - t3 }
+    }
+
     function screenPoint(lat, lon, centerLon) {
       var p = Globe.projectOrtho(lat, lon, centerLon, globe.radius)
       return { x: globe.centerX + p.x, y: globe.centerY - p.y, visible: p.visible }
     }
 
-    function paintPlaces(ctx, centerLon) {
+    // toScreen(lat, lon): { x, y, visible } on the canvas.
+    function paintPlaces(ctx, toScreen) {
       var taken = []
       var hits = []
       function free(rect) {
@@ -477,7 +683,7 @@ Item {
         return true
       }
       if (globe.home) {
-        var hp = screenPoint(globe.home.lat, globe.home.lon, centerLon)
+        var hp = toScreen(globe.home.lat, globe.home.lon)
         if (hp.visible) {
           ctx.strokeStyle = accent
           ctx.lineWidth = 1.5
@@ -497,7 +703,7 @@ Item {
         var index = order[k]
         var city = globe.cities[index]
         if (city.lat === null || city.lon === null) continue
-        var p = screenPoint(city.lat, city.lon, centerLon)
+        var p = toScreen(city.lat, city.lon)
         // Behind the globe: not drawn, not clickable.
         if (!p.visible) continue
         var selected = index === globe.selectedIndex
@@ -543,12 +749,16 @@ Item {
     anchors.fill: parent
     hoverEnabled: true
     property real pressX: 0
+    property real pressY: 0
     property real pressLon: 0
+    property real pressLat: 0
     property bool dragged: false
 
     function zoneUnder(x, y) {
       if (!globe.mapData) return null
-      var place = Globe.unprojectOrtho(x - globe.centerX, globe.centerY - y, Globe.wrapLon(globe.centerLon), globe.radius)
+      var place = globe.tilted
+        ? Globe.unprojectView(x - globe.centerX, globe.centerY - y, Globe.viewMatrix(globe.centerLat, Globe.wrapLon(globe.centerLon)), globe.radius)
+        : Globe.unprojectOrtho(x - globe.centerX, globe.centerY - y, Globe.wrapLon(globe.centerLon), globe.radius)
       if (!place) return null
       var p = WorldMap.project(place.lat, place.lon)
       return WorldMap.zoneAt(globe.mapData, p.x, p.y)
@@ -558,14 +768,23 @@ Item {
       globe.touched()
       turnAnimation.stop()
       pressX = event.x
+      pressY = event.y
       pressLon = globe.centerLon
+      pressLat = globe.centerLat
       dragged = false
     }
     onPositionChanged: function(event) {
       if (pressed) {
-        if (Math.abs(event.x - pressX) > Style.space(4)) dragged = true
-        // The surface follows the pointer at the centre of the globe.
-        if (dragged) globe.centerLon = pressLon - (event.x - pressX) / Math.max(1, globe.radius) * 180 / Math.PI
+        if (Math.abs(event.x - pressX) + (globe.zoom > 0 ? Math.abs(event.y - pressY) : 0) > Style.space(4)) dragged = true
+        // The surface follows the pointer at the centre of the globe;
+        // zoomed in, a drag up or down tilts it too.
+        if (dragged && globe.zoom > 0) {
+          var c = GlobeView.panned(pressLat, pressLon, event.x - pressX, event.y - pressY, globe.radius)
+          globe.centerLat = c.lat
+          globe.centerLon = c.lon
+        } else if (dragged) {
+          globe.centerLon = pressLon - (event.x - pressX) / Math.max(1, globe.radius) * 180 / Math.PI
+        }
         globe.hover = null
         return
       }
@@ -587,12 +806,23 @@ Item {
     // Only a sideways wheel (or Shift + wheel) turns the globe; the plain
     // wheel goes on scrolling the tab (the page's wheel area leaves it the
     // sideways ones: wantsWheel, Panel.wheelTakenBelow).
-    function wantsWheel(wheel) { return globe.panel.wheelIsSideways(wheel) }
+    function wantsWheel(wheel) { return (wheel.modifiers & Qt.ControlModifier) !== 0 || globe.panel.wheelIsSideways(wheel) }
     // Any wheel over it stops the turning, also one that scrolls the page.
     function noticeWheel(wheel) { globe.touched() }
     Component.onCompleted: globe.panel.registerWheelArea(this)
     Component.onDestruction: globe.panel.unregisterWheelArea(this)
+    property real zoomWheel: 0
+    // A double click zooms in at the pointer, Ctrl + wheel in or out.
+    onDoubleClicked: function(event) { globe.zoomAt(1, event.x - globe.centerX, event.y - globe.centerY) }
     onWheel: function(event) {
+      if (event.modifiers & Qt.ControlModifier) {
+        zoomWheel += event.angleDelta.y
+        if (Math.abs(zoomWheel) >= 120) {
+          globe.zoomAt(zoomWheel > 0 ? 1 : -1, event.x - globe.centerX, event.y - globe.centerY)
+          zoomWheel = 0
+        }
+        return
+      }
       var sideways = event.angleDelta.x !== 0 ? event.angleDelta.x
         : ((event.modifiers & Qt.ShiftModifier) ? event.angleDelta.y : 0)
       if (sideways === 0) {
@@ -601,7 +831,8 @@ Item {
       }
       globe.touched()
       turnAnimation.stop()
-      globe.centerLon -= sideways / 120 * 10
+      if (globe.zoom > 0) globe.centerLon -= sideways / 120 * 10 / Math.pow(2, globe.zoom)
+      else globe.centerLon -= sideways / 120 * 10
     }
     onClicked: function(event) {
       if (dragged) return
@@ -616,9 +847,21 @@ Item {
       }
       if (best < 0) return
       // Clicking the city already chosen still brings it to the middle.
-      if (best === globe.selectedIndex) globe.turnTo(globe.placeLon(best))
+      if (best === globe.selectedIndex) globe.turnTo(globe.placeLon(best), globe.placeLat(best))
       globe.cityClicked(best)
     }
+  }
+
+  TimeZoomControls {
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.margins: Style.space(6)
+    panel: globe.panel
+    canZoomOut: globe.zoom > 0
+    canZoomIn: globe.zoom < globe.maxZoom
+    onRecenter: globe.recenter()
+    onZoomOut: globe.zoomBy(-1)
+    onZoomIn: globe.zoomBy(1)
   }
 
   TimeMapHoverLabel {

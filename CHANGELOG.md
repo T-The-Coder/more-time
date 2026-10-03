@@ -4,6 +4,23 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Zoom on the globe and the map, buttons in the Astro tab:** a small
+  cluster at the top right (crosshair, −, +) as on More Weather's globe. The
+  globe and the flat map zoom in three steps (to about 1,600 km across) with
+  the buttons, `+` `−`, `Ctrl` + wheel at the pointer or a double click; the
+  zoomed globe turns and tilts to any latitude under a drag, the zoomed map
+  pans; `0` shows the whole earth. In the World tab `+` now zooms (`/` and
+  `n` still add a city). In the Astro tab the crosshair returns to the start
+  view and − + step between the whole system, the inner system and Earth.
+- **Astro: Earth, Moon and the bodies turning.** Earth is a real globe in
+  the Earth–Moon zoom and in a new corner inset (a click zooms there): its
+  land, its night, turned and tilted as it is now and seen from the
+  camera's side; the Moon circles it lit by the Sun, its near side always
+  towards Earth, with phase, distance and age on hover. The planets show
+  their tilt and turning (latitude bands, a meridian), Uranus lies on its
+  side, Saturn wears its rings in their plane; hover adds the day's length
+  and the axial tilt. The Sun is drawn in warm gold. New options: rotation
+  and tilt, the Earth and Moon inset.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.

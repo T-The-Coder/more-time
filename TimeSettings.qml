@@ -227,6 +227,8 @@ Rectangle {
       { key: "astroOrbits", title: panel.i18n("optionAstroOrbits") },
       { key: "astroNames", title: panel.i18n("optionAstroNames") },
       { key: "astroMonthRing", title: panel.i18n("optionAstroMonthRing"), hint: panel.i18n("optionAstroMonthRingHint") },
+      { key: "astroRotation", title: panel.i18n("optionAstroRotation"), hint: panel.i18n("optionAstroRotationHint") },
+      { key: "astroEarthInset", title: panel.i18n("optionAstroEarthInset"), hint: panel.i18n("optionAstroEarthInsetHint") },
       { key: "astroAutoRotate", title: panel.i18n("optionAstroAutoRotate"), hint: panel.i18n("optionGlobeAutoRotateHint") },
       { key: "astroRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "astroAutoRotate",
         choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },

@@ -41,6 +41,13 @@ Column {
       links: [["JPL: Approximate Positions of the Planets", "https://ssd.jpl.nasa.gov/planets/approx_pos.html"]]
     },
     {
+      title: "sourceGroupAstroRotation", details: "sourceGroupAstroRotationDetails",
+      inUse: "IAU WGCCRE · NAIF PCK00010",
+      links: [["NAIF pck00010.tpc", "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc"],
+        ["JPL Horizons", "https://ssd.jpl.nasa.gov/horizons/"], ["JPL SBDB", "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html"],
+        ["NSSDCA: Saturn's rings", "https://nssdc.gsfc.nasa.gov/planetary/factsheet/satringfact.html"]]
+    },
+    {
       title: "sourceGroupLocation", details: "sourceGroupLocationDetails",
       inUse: !panel.here.detect ? ""
         : (panel.here.place && panel.here.place.source === "ip" && panel.here.ipPlace

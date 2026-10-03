@@ -58,7 +58,7 @@ Column {
     {
       title: "shortcutsGroupWorld",
       rows: [
-        { keys: ["/", "+"], action: "shortcutCitySearch" },
+        { keys: ["/", "n"], action: "shortcutCitySearch" },
         { keys: ["↑ ↓"], action: "shortcutSearchSelect" },
         { keys: ["Tab", "⇧ Tab"], action: "shortcutSearchSection" },
         { keys: ["Enter"], action: "shortcutSearchPick" },
@@ -67,7 +67,10 @@ Column {
         { keys: ["Esc"], action: "shortcutSearchCancel" },
         { keys: ["← →", "h l"], action: "shortcutCity" },
         { keys: ["e"], action: "shortcutDialStyle" },
-        { keys: ["x", "Del"], action: "shortcutCityRemove" }
+        { keys: ["x", "Del"], action: "shortcutCityRemove" },
+        { keys: ["Ctrl ← → ↑ ↓"], action: "shortcutGlobeTurn" },
+        { keys: ["+", "−"], action: "shortcutGlobeZoom" },
+        { keys: ["0"], action: "shortcutGlobeCenter" }
       ]
     },
     {

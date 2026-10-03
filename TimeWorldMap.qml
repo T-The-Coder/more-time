@@ -69,8 +69,78 @@ Item {
     }
   }
 
+  // ---- Zoom (z0 … z3, the scale doubling per step) and panning ----
+  // focusX/Y: the map point (px of the whole map, before zooming) in the
+  // middle of the view, kept so the view never leaves the map. The ruler
+  // is hidden while zoomed in.
+  readonly property int maxZoom: 3
+  property int zoom: 0
+  readonly property real zoomScale: Math.pow(2, zoom)
+  property real focusX: mapWidth / 2
+  property real focusY: mapHeight / 2
+  readonly property bool rulerShown: showRuler && zoom === 0
+  onZoomChanged: { clampFocus(); canvas.requestPaint() }
+  onFocusXChanged: canvas.requestPaint()
+  onFocusYChanged: canvas.requestPaint()
+  onMapWidthChanged: clampFocus()
+
+  function clampFocus() {
+    var hx = mapWidth / 2 / zoomScale, hy = mapHeight / 2 / zoomScale
+    focusX = Math.max(hx, Math.min(mapWidth - hx, focusX))
+    focusY = Math.max(hy, Math.min(mapHeight - hy, focusY))
+  }
+  // One step in or out with the map point under (sx, sy) kept there.
+  function zoomAt(delta, sx, sy) {
+    var next = Math.max(0, Math.min(maxZoom, zoom + delta))
+    if (next === zoom) return
+    var k0 = zoomScale, k1 = Math.pow(2, next)
+    var mx = (sx - mapWidth / 2) / k0 + focusX
+    var my = (sy - rulerHeight - mapHeight / 2) / k0 + focusY
+    focusX = mx - (sx - mapWidth / 2) / k1
+    focusY = my - (sy - rulerHeight - mapHeight / 2) / k1
+    zoom = next
+    clampFocus()
+  }
+  function zoomBy(delta) { zoomAt(delta, mapWidth / 2, rulerHeight + mapHeight / 2) }
+  // The crosshair: the current place in the middle, the zoom kept.
+  function recenter() {
+    var c = panel.currentCoordinates
+    if (!c) return
+    var p = WorldMap.project(c.lat, c.lon)
+    focusX = (p.x + WorldMap.X_MAX) * unit
+    focusY = (WorldMap.Y_MAX - p.y) * unit
+    clampFocus()
+  }
+  // 0: the whole map.
+  function reset() {
+    zoom = 0
+    focusX = mapWidth / 2
+    focusY = mapHeight / 2
+  }
+  // Keys from the World tab (Panel.handlePanelKey): + − zoom, 0 whole map,
+  // Ctrl + arrows pan by a quarter of the view.
+  function handleMapKey(event) {
+    var text = event.text
+    var control = (event.modifiers & Qt.ControlModifier) !== 0
+    if (control && (event.key === Qt.Key_Left || event.key === Qt.Key_Right || event.key === Qt.Key_Up || event.key === Qt.Key_Down)) {
+      var step = mapWidth / 4 / zoomScale
+      if (event.key === Qt.Key_Left) focusX -= step
+      else if (event.key === Qt.Key_Right) focusX += step
+      else if (event.key === Qt.Key_Up) focusY -= step
+      else focusY += step
+      clampFocus()
+      return true
+    }
+    if (control) return false
+    if (text === "+" || text === "=") { zoomBy(1); return true }
+    if (text === "-" || text === "−") { zoomBy(-1); return true }
+    if (text === "0") { reset(); return true }
+    return false
+  }
+
   function px(point) {
-    return { x: (point.x + WorldMap.X_MAX) * unit, y: (WorldMap.Y_MAX - point.y) * unit + rulerHeight }
+    return { x: ((point.x + WorldMap.X_MAX) * unit - focusX) * zoomScale + mapWidth / 2,
+      y: ((WorldMap.Y_MAX - point.y) * unit - focusY) * zoomScale + mapHeight / 2 + rulerHeight }
   }
 
   // The minute, not the second: the night side and the labels move slowly.
@@ -123,9 +193,10 @@ Item {
 
     // A ring of the data file: integers in projected units × scale.
     function traceRing(ctx, ring, scale) {
-      var u = map.unit / scale
-      var ox = WorldMap.X_MAX * map.unit
-      var oy = WorldMap.Y_MAX * map.unit + map.rulerHeight
+      var k = map.zoomScale
+      var u = map.unit / scale * k
+      var ox = (WorldMap.X_MAX * map.unit - map.focusX) * k + map.mapWidth / 2
+      var oy = (WorldMap.Y_MAX * map.unit - map.focusY) * k + map.mapHeight / 2 + map.rulerHeight
       ctx.moveTo(ox + ring[0] * u, oy - ring[1] * u)
       for (var i = 2; i < ring.length; i += 2) ctx.lineTo(ox + ring[i] * u, oy - ring[i + 1] * u)
       ctx.closePath()
@@ -144,7 +215,13 @@ Item {
       var outline = WorldMap.outline()
 
       // The globe's outline holds everything; the zones fill it edge to edge.
+      // Zoomed in, the map stays between the ruler strips.
       ctx.save()
+      if (map.zoom > 0) {
+        ctx.beginPath()
+        ctx.rect(0, map.rulerHeight, width, map.mapHeight)
+        ctx.clip()
+      }
       ctx.beginPath()
       tracePoints(ctx, outline)
       ctx.clip()
@@ -231,7 +308,7 @@ Item {
       tracePoints(ctx, outline)
       ctx.stroke()
 
-      if (map.showRuler) paintRuler(ctx)
+      if (map.rulerShown) paintRuler(ctx)
       paintPlaces(ctx)
     }
 
@@ -326,19 +403,61 @@ Item {
   }
 
   // Hover names the zone under the pointer; a click on a dot picks the city.
+  // A drag pans while zoomed in, Ctrl + wheel zooms at the pointer, a
+  // double click zooms in there.
   MouseArea {
+    id: mouseArea
     anchors.fill: parent
     hoverEnabled: true
+    property real pressX: 0
+    property real pressY: 0
+    property real pressFocusX: 0
+    property real pressFocusY: 0
+    property bool dragged: false
+    onPressed: function(mouse) {
+      pressX = mouse.x
+      pressY = mouse.y
+      pressFocusX = map.focusX
+      pressFocusY = map.focusY
+      dragged = false
+    }
     onPositionChanged: function(mouse) {
+      if (pressed && map.zoom > 0) {
+        if (Math.abs(mouse.x - pressX) + Math.abs(mouse.y - pressY) > Style.space(4)) dragged = true
+        if (dragged) {
+          map.focusX = pressFocusX - (mouse.x - pressX) / map.zoomScale
+          map.focusY = pressFocusY - (mouse.y - pressY) / map.zoomScale
+          map.clampFocus()
+          map.hover = null
+          return
+        }
+      }
       if (!map.mapData) return
       map.hover = map.panel.mapHoverAt(map.moonHit, mouse.x, mouse.y, function(px, py) {
-        var x = px / map.unit - WorldMap.X_MAX
-        var y = WorldMap.Y_MAX - (py - map.rulerHeight) / map.unit
+        var x = ((px - map.mapWidth / 2) / map.zoomScale + map.focusX) / map.unit - WorldMap.X_MAX
+        var y = WorldMap.Y_MAX - ((py - map.rulerHeight - map.mapHeight / 2) / map.zoomScale + map.focusY) / map.unit
         return WorldMap.unproject(x, y) ? WorldMap.zoneAt(map.mapData, x, y) : null
       })
     }
     onExited: map.hover = null
+    onDoubleClicked: function(mouse) { map.zoomAt(1, mouse.x, mouse.y) }
+    function wantsWheel(wheel) { return (wheel.modifiers & Qt.ControlModifier) !== 0 }
+    Component.onCompleted: map.panel.registerWheelArea(this)
+    Component.onDestruction: map.panel.unregisterWheelArea(this)
+    property real zoomWheel: 0
+    onWheel: function(wheel) {
+      if (!(wheel.modifiers & Qt.ControlModifier)) {
+        wheel.accepted = false
+        return
+      }
+      zoomWheel += wheel.angleDelta.y
+      if (Math.abs(zoomWheel) >= 120) {
+        map.zoomAt(zoomWheel > 0 ? 1 : -1, wheel.x, wheel.y)
+        zoomWheel = 0
+      }
+    }
     onClicked: function(mouse) {
+      if (dragged) return
       var best = -1
       var bestDistance = Style.space(14)
       for (var i = 0; i < map.cityHits.length; i++) {
@@ -356,5 +475,18 @@ Item {
     panel: map.panel
     hover: map.hover
     boundsWidth: map.width
+  }
+
+  TimeZoomControls {
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.topMargin: map.rulerHeight + Style.space(6)
+    anchors.rightMargin: Style.space(6)
+    panel: map.panel
+    canZoomOut: map.zoom > 0
+    canZoomIn: map.zoom < map.maxZoom
+    onRecenter: map.recenter()
+    onZoomOut: map.zoomBy(-1)
+    onZoomIn: map.zoomBy(1)
   }
 }

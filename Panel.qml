@@ -448,6 +448,8 @@ Panel {
       astroOrbits: true,
       astroNames: true,
       astroMonthRing: true,
+      astroRotation: true,
+      astroEarthInset: true,
       astroAutoRotate: false,
       astroRotateDelay: "10",
       astroRotateSpeed: "4",
@@ -1316,6 +1318,13 @@ Panel {
     // back to the start (TimeAstro.handleAstroKey).
     if (currentTab === "astro" && !alt && contentLoader.item && contentLoader.item.handleAstroKey
         && contentLoader.item.handleAstroKey(event)) {
+      event.accepted = true
+      return
+    }
+    // The World tab's globe or map: + − zoom, 0 the whole earth, Ctrl +
+    // arrows turn (TimeWorld.handleMapKey).
+    if (currentTab === "world" && !alt && !searchOpen && !dialChooserOpen && contentLoader.item
+        && contentLoader.item.handleMapKey && contentLoader.item.handleMapKey(event)) {
       event.accepted = true
       return
     }

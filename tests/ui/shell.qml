@@ -454,6 +454,24 @@ ShellRoot {
     function() { mapSize("popup") },
     function() { shot("31f-map-popup") },
     function() { appSizeReset() },
+    // Zoomed in: the globe at z2 on Europe (tilted), what a moving frame
+    // costs there, and the flat map at z2 on the current place.
+    function() { display("worldStyle", "globe"); var g = globe(); g.zoomBy(1); g.zoomBy(1) },
+    function() { var g = globe(); g.turnTo(10.8, 48.3); g.finishTurn() },
+    function() { shot("32a-globe-z2") },
+    function() { var g = globe(); g.paintStats = { count: 0, total: 0, max: 0 }; g.turnTo(g.centerLon + 30, 40) },
+    function() {
+      var g = globe()
+      var st = g.paintStats
+      console.log("GLOBE z2 moving frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(1), "max", st.max,
+        "zoom", g.zoom, "lat", g.centerLat.toFixed(1))
+      g.reset()
+      g.finishTurn()
+    },
+    function() { display("worldStyle", "map") },
+    function() { var m = findMap(panel.contentRoot); m.zoomBy(1); m.zoomBy(1); m.recenter() },
+    function() { shot("32b-map-z2") },
+    function() { findMap(panel.contentRoot).reset() },
     // The Astro tab: the whole system, the inner system, two camera angles,
     // a body's label, and what a frame costs while it turns.
     function() { display("worldStyle", "map"); panel.activeTab = "astro" },
@@ -483,6 +501,27 @@ ShellRoot {
       console.log("ASTRO hover", JSON.stringify(a.hover ? a.hover.text : null))
     },
     function() { shot("40e-astro-hover") },
+    // The Earth–Moon zoom with the Moon's label; Saturn from high above
+    // with its rings and its label.
+    function() { var a = astro(); a.pointer = null; a.updateHover(); a.zoomIndex = 2 },
+    function() { shot("40f-astro-earth-moon") },
+    function() {
+      var a = astro()
+      var moon = a.hits.filter(function(h) { return h.key === "moon" })[0]
+      a.pointer = { x: moon.x, y: moon.y }
+      a.updateHover()
+      console.log("ASTRO moon", JSON.stringify(a.hover ? a.hover.text : null))
+    },
+    function() { shot("40g-astro-moon-hover") },
+    function() { var a = astro(); a.pointer = null; a.updateHover(); a.zoomIndex = 0; a.elevation = 75 },
+    function() {
+      var a = astro()
+      var saturn = a.hits.filter(function(h) { return h.key === "saturn" })[0]
+      a.pointer = { x: saturn.x, y: saturn.y }
+      a.updateHover()
+      console.log("ASTRO saturn", JSON.stringify(a.hover ? a.hover.text : null))
+    },
+    function() { shot("40h-astro-saturn-high") },
     function() {
       var a = astro()
       a.pointer = null
