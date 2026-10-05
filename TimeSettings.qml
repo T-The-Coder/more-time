@@ -208,6 +208,9 @@ Rectangle {
     { key: "heroNextAlarm", title: panel.i18n("optionNextAlarm"), section: "sectionMore" },
     { key: "heroPomodoroTally", title: panel.i18n("optionPomodoroTally") }
   ]
+  function lapseChoices(ids) {
+    return ids.map(function(id) { return { value: id, label: panel.i18n("lapse_" + id) } })
+  }
   readonly property var tabOptions: ({
     world: [
       { key: "worldMap", title: panel.i18n("optionMap"), section: "sectionMap" },
@@ -222,6 +225,9 @@ Rectangle {
       { key: "worldMoon", title: panel.i18n("moon"), dependsOn: "worldMap" },
       { key: "worldMoonStyle", title: panel.i18n("optionMoonStyle"), dependsOn: "worldMoon", choices: [
         { value: "space", label: panel.i18n("moonStyleSpace") }, { value: "earth", label: panel.i18n("moonStyleEarth") }] },
+      { key: "worldTimeline", title: panel.i18n("optionWorldTimeline"), dependsOn: "worldMap", hint: panel.i18n("optionWorldTimelineHint") },
+      { key: "worldLapse", title: panel.i18n("optionLapseSpeed"), dependsOn: "worldTimeline",
+        choices: lapseChoices(["realTime", "dayInMinute", "dayIn10Seconds", "seasonsInMinute"]) },
       { key: "worldList", title: panel.i18n("optionCityList"), section: "sectionCityList" },
       { key: "worldDifference", title: panel.i18n("optionDifference"), dependsOn: "worldList" },
       { key: "worldDials", title: panel.i18n("optionWorldDials"), dependsOn: "worldList" },
@@ -240,6 +246,7 @@ Rectangle {
       { key: "astroRotation", title: panel.i18n("optionAstroRotation"), hint: panel.i18n("optionAstroRotationHint") },
       { key: "astroEarthInset", title: panel.i18n("optionAstroEarthInset"), hint: panel.i18n("optionAstroEarthInsetHint") },
       { key: "astroInfo", title: panel.i18n("optionAstroInfo"), hint: panel.i18n("optionAstroInfoHint") },
+      { key: "astroEvents", title: panel.i18n("optionAstroEvents"), hint: panel.i18n("optionAstroEventsHint") },
       { key: "astroBelts", title: panel.i18n("optionAstroBelts"), section: "sectionObjects" },
       { key: "astroDwarfs", title: panel.i18n("optionAstroDwarfs") },
       { key: "astroComets", title: panel.i18n("optionAstroComets") },
@@ -250,6 +257,9 @@ Rectangle {
       { key: "astroConstellations", title: panel.i18n("optionAstroConstellations"), hint: panel.i18n("optionAstroConstellationsHint") },
       { key: "astroTimeline", title: panel.i18n("optionAstroTimeline"), hint: panel.i18n("optionAstroTimelineHint"),
         section: "sectionTime" },
+      { key: "astroLapse", title: panel.i18n("optionLapseSpeed"), dependsOn: "astroTimeline",
+        choices: lapseChoices(["realTime", "dayInMinute", "monthInMinute", "yearInHour", "yearIn10Minutes", "yearInMinute"]) },
+      { key: "astroAutoplay", title: panel.i18n("optionAstroAutoplay"), dependsOn: "astroTimeline", hint: panel.i18n("optionAstroAutoplayHint") },
       { key: "astroAutoRotate", title: panel.i18n("optionAstroAutoRotate"), hint: panel.i18n("optionGlobeAutoRotateHint") }
     ]
   })

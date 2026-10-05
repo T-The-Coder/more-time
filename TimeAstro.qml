@@ -9,6 +9,10 @@ import "AstroClock.js" as AstroClock
 import "AstroBodies.js" as AstroBodies
 import "AstroIss.js" as AstroIss
 import "AstroDate.js" as AstroDate
+import "AstroLapse.js" as AstroLapse
+import "AstroAlmanac.js" as AstroAlmanac
+import "AstroEclipses.js" as AstroEclipses
+import "AstroEventWords.js" as AstroEventWords
 import "Model.js" as Model
 import "Globe.js" as Globe
 import "Moon.js" as Moon
@@ -33,6 +37,7 @@ Column {
     width: parent.width
     panel: view.panel
     hint: view.panel.i18n("astroKeysHint") + (view.showTimeline ? " · " + view.panel.i18n("astroTimeKeysHint") : "")
+      + (view.showInfo || view.showEvents ? " · " + view.panel.i18n("astroPanelKeysHint") : "")
   }
 
   // Ctrl + ← → turn, Ctrl + ↑ ↓ tilt, + − zoom, 0 back to the start view
@@ -65,6 +70,25 @@ Column {
       sky.backToNow()
       return true
     }
+    if (text === "i" && view.showInfo) {
+      view.infoExpanded = !view.infoExpanded
+      return true
+    }
+    if (text === "e" && view.showEvents) {
+      view.eventsOpen = !view.eventsOpen
+      return true
+    }
+    if (view.eventsOpen && view.showEvents && view.eventRows.length && (key === Qt.Key_Up || key === Qt.Key_Down)) {
+      var last = view.eventRows.length - 1
+      var at = view.eventSelected < 0 ? (key === Qt.Key_Down ? 0 : last)
+        : Math.max(0, Math.min(last, view.eventSelected + (key === Qt.Key_Down ? 1 : -1)))
+      view.eventSelected = at
+      return true
+    }
+    if ((key === Qt.Key_Return || key === Qt.Key_Enter) && !sky.traveling && view.eventsOpen && view.eventSelected >= 0) {
+      view.travelToEvent(view.eventSelected)
+      return true
+    }
     if (text === "g" && view.showTimeline) {
       dateField.forceActiveFocus()
       dateField.selectAll()
@@ -92,6 +116,10 @@ Column {
   // Esc: a running travel stops where it is; the date field is left
   // (Panel.handlePanelKey asks before closing).
   function handleAstroEscape() {
+    if (lapseMenuOpen) {
+      lapseMenuOpen = false
+      return true
+    }
     if (sky.traveling) {
       sky.stopTravel()
       return true
@@ -105,6 +133,137 @@ Column {
 
   readonly property bool showTimeline: panel.displaySetting("astroTimeline", true)
   readonly property bool showInfo: panel.displaySetting("astroInfo", true)
+  // The info area: one line, or all of it (`i` or a click).
+  property bool infoExpanded: false
+  // The time lapse's speeds, open under the timeline.
+  property bool lapseMenuOpen: false
+
+  // ---- Eclipses: the catalogue's files for the shown time ± 2 years,
+  //      read one after another into AstroEclipses.js (shared by the
+  //      almanac) ----
+  property int eclipseRevision: 0
+  // Every file asked for (a FileView each, kept: AstroEclipses ignores a
+  // file added twice).
+  property var eclipseFiles: []
+  readonly property int eclipseYear: Math.floor(sky.minuteMs / (365.25 * 86400000))
+  onEclipseYearChanged: queueEclipses()
+  onEclipseRevisionChanged: {
+    infoTimer.restart()
+    eventsTimer.ask()
+  }
+  function queueEclipses() {
+    var span = 2 * 365.25 * 86400000
+    var missing = AstroEclipses.missingChunks(sky.minuteMs - span, sky.minuteMs + span)
+    var files = eclipseFiles.slice()
+    for (var i = 0; i < missing.length; i++) if (files.indexOf(missing[i].file) < 0) files.push(missing[i].file)
+    if (files.length !== eclipseFiles.length) eclipseFiles = files
+  }
+  Instantiator {
+    model: view.eclipseFiles
+    delegate: FileView {
+      required property string modelData
+      path: sky.dataPath(modelData)
+      printErrors: false
+      onLoaded: {
+        try { AstroEclipses.addChunk(JSON.parse(text())) } catch (e) { console.warn("more-time: eclipse data unreadable:", e) }
+        view.eclipseRevision++
+      }
+    }
+  }
+
+  // ---- Sky events (AstroAlmanac.js): the 3 before and the 6 after the
+  //      shown moment (or the page turned to), by kind ----
+  readonly property bool showEvents: panel.displaySetting("astroEvents", true) === true
+  property bool eventsOpen: false
+  property string eventsFilter: "all"
+  property double eventsAnchor: 0
+  property int eventSelected: -1
+  property var eventRows: []
+  // The filters (AstroEventWords.FILTERS) with their chips' glyphs.
+  readonly property var eventFilters: [
+    { id: "all", glyph: "\u{f0279}" }, { id: "eclipses", glyph: "\u{f050e}" }, { id: "planets", glyph: "\u{f0018}" },
+    { id: "moon", glyph: "\u{f0f65}" }, { id: "seasons", glyph: "\u{f059a}" }
+  ]
+  function eventOptions() { return AstroEventWords.optionsFor(eventsFilter) }
+  // A change of the shown day follows it (the page turned is left).
+  readonly property double shownDay: sky.dayMs
+  onShownDayChanged: {
+    eventsAnchor = 0
+    eventsTimer.ask()
+  }
+  onEventsFilterChanged: {
+    eventsAnchor = 0
+    eventSelected = -1
+    eventsTimer.ask()
+  }
+  onEventsAnchorChanged: eventsTimer.ask()
+  onEventsOpenChanged: {
+    eventSelected = -1
+    revealEvents = eventsOpen
+    eventsTimer.ask()
+  }
+  // Just opened: the rows, once there, scrolled into view.
+  property bool revealEvents: false
+  onEventRowsChanged: {
+    if (!revealEvents) return
+    revealEvents = false
+    revealTimer.restart()
+  }
+  // After the rows are laid out.
+  Timer {
+    id: revealTimer
+    interval: 60
+    onTriggered: view.panel.revealItem(eventsPanel)
+  }
+  // At most four lists a second while time runs.
+  Timer {
+    id: eventsTimer
+    interval: 250
+    function ask() { if (!running) start() }
+    onTriggered: view.computeEvents()
+  }
+  function computeEvents() {
+    if (!showEvents || !eventsOpen) return
+    var at = eventsAnchor || sky.minuteMs
+    var near = AstroAlmanac.nearest(at, 6, eventOptions())
+    var list = AstroEventWords.rowsAround(near, 3, 6)
+    var rows = []
+    for (var i = 0; i < list.length; i++)
+      rows.push({ utcMs: list[i].utcMs, past: list[i].utcMs < sky.minuteMs, when: eventWhen(list[i].utcMs), text: eventText(list[i]) })
+    eventRows = rows
+    if (eventSelected >= rows.length) eventSelected = -1
+  }
+  // Earlier: the six before the first row; later: the six after the last.
+  function pageEvents(direction) {
+    if (!eventRows.length) return
+    eventSelected = -1
+    if (direction > 0) {
+      eventsAnchor = eventRows[eventRows.length - 1].utcMs + 1
+      return
+    }
+    var near = AstroAlmanac.nearest(eventRows[0].utcMs, 6, eventOptions())
+    if (near.previous.length) eventsAnchor = near.previous[0].utcMs
+  }
+  function travelToEvent(index) {
+    var row = eventRows[index]
+    if (!row) return
+    eventSelected = index
+    sky.travelTo(row.utcMs, false)
+  }
+  // An event in words (AstroEventWords.words); an eclipse says whether
+  // it can be seen from the current place.
+  function eventText(e) {
+    var w = AstroEventWords.words(e)
+    var values = {}
+    for (var b in w.bodies) values[b] = panel.i18n("astroBody_" + w.bodies[b])
+    for (var n in w.numbers) values[n] = panel.latinDigits(Number(w.numbers[n]).toLocaleString(panel.interfaceLocale, "f", 1))
+    var text = (w.approximate ? "≈ " : "") + (w.key ? panel.i18n(w.key, values) : e.kind)
+    var c = panel.currentCoordinates
+    var found = e.kind === "eclipse" && c ? AstroEclipses.between(e.utcMs - 1, e.utcMs + 1)[0] : null
+    if (found) text += " · " + panel.i18n(AstroEclipses.visibleFrom(found, Number(c.lat), Number(c.lon)) ? "eventVisibleFrom" : "eventNotVisibleFrom",
+      { place: panel.currentName })
+    return text
+  }
 
   Item {
     id: sky
@@ -113,9 +272,13 @@ Column {
     // Fills the visible height below it (less the timeline and the info
     // line), like the globe: never taller than wide, never lower than
     // Style.space(240).
-    readonly property real fitHeight: view.panel.viewportHeight - view.panel.tabContentTop - view.y - y - Style.space(16)
-      - (timeline.visible ? timeline.height + view.spacing : 0) - (infoLine.visible ? infoLine.height + view.spacing : 0)
-      - astroChips.height - view.spacing
+    // The info area counts with one line (it unfolds below, the page
+    // scrolls), the events panel not at all; never less than 55 % of the
+    // visible height.
+    readonly property real visibleHeight: view.panel.viewportHeight - view.panel.tabContentTop - view.y - y - Style.space(16)
+    readonly property real fitHeight: Math.max(visibleHeight * 0.55, visibleHeight
+      - (timeline.visible ? timeline.height + view.spacing : 0) - (infoArea.visible ? infoArea.oneLineHeight + view.spacing : 0)
+      - astroChips.height - view.spacing)
     height: Math.max(Style.space(240), Math.min(width * 0.9, fitHeight))
 
     // Pictures are never mirrored, whatever the language.
@@ -245,31 +408,45 @@ Column {
       travelTo(liveMs, true)
     }
 
-    // Playing: a day, a week or a month a second (AstroClock.timing).
+    // Playing: a time lapse (AstroLapse.js) at the speed chosen under the
+    // timeline (display setting astroLapse), from the shown moment on.
     property bool playing: false
-    property int speedIndex: 0
+    readonly property string lapseId: {
+      var id = panel.displaySetting("astroLapse", "yearInMinute")
+      var p = AstroLapse.preset(id)
+      return p && p.views.indexOf("astro") >= 0 ? id : "yearInMinute"
+    }
+    readonly property var lapse: AstroLapse.preset(lapseId)
     function togglePlay() {
       stopTravel()
-      if (!playing && !timePinned) showAt(liveMs)
+      if (!playing && !timePinned) showAt(Date.now())
       playing = !playing
     }
     Timer {
       id: playTimer
-      interval: AstroClock.timing(sky.speedIndex).delay
+      interval: Math.max(16, Math.round(AstroLapse.frameInterval(sky.lapse, Math.max(15, sky.rotateFps))))
       repeat: true
       running: sky.playing && sky.panel.opened && sky.panel.currentTab === "astro"
+      property double last: 0
+      property double carry: 0
+      onRunningChanged: {
+        last = Date.now()
+        carry = 0
+      }
       onTriggered: {
-        var t = AstroClock.timing(sky.speedIndex)
-        var next = sky.minuteMs + t.step * AstroClock.DAY_MS
-        var end = sky.scrubBase + AstroClock.RANGE_DAYS * AstroClock.DAY_MS
-        if (next >= end) {
-          sky.showAt(end)
-          sky.playing = false
-        } else {
-          sky.showAt(next)
-        }
+        var now = Date.now()
+        var r = AstroLapse.advance(sky.minuteMs, sky.lapse, Math.min(1000, now - last), carry, 1)
+        last = now
+        carry = r.carryMs
+        sky.showAt(r.shownMs)
+        if (r.stopped) sky.playing = false
       }
     }
+    // "Play on opening" (astroAutoplay): the lapse starts when the tab shows.
+    readonly property bool autoplay: panel.displaySetting("astroAutoplay", false) === true
+    readonly property bool tabShown: panel.opened && panel.currentTab === "astro"
+    onTabShownChanged: if (tabShown && autoplay && !playing && !traveling) togglePlay()
+    Component.onCompleted: if (tabShown && autoplay && !playing) togglePlay()
 
     // A travel: from the shown moment to another in AstroDate.TRAVEL_MS,
     // eased, every frame at its own moment (a time lapse).
@@ -582,6 +759,26 @@ Column {
     // What painting costs (the screenshot harness measures a turn).
     property var paintStats: ({ count: 0, total: 0, max: 0 })
 
+    // "in Leo": the zodiac constellation at a geocentric ecliptic longitude
+    // (J2000, radians), AstroStars.zodiacAt.
+    function inConstellation(lonRad) {
+      return panel.i18n("astroInConstellation", { constellation: constellationName(AstroStars.zodiacAt(lonRad * 180 / Math.PI)) })
+    }
+
+    // An eclipse within a few hours of the shown moment (the catalogue
+    // files the view has read): { e, fade } with fade 1 at its greatest,
+    // or null. The Earth–Moon view shows the Moon's shadow on Earth or
+    // tints the Moon copper.
+    readonly property var eclipseNow: {
+      var revision = view.eclipseRevision
+      var e = AstroEclipses.nearest(minuteMs)
+      if (!e) return null
+      var half = (e.kind === "solar" ? 2 : 3) * 3600000
+      var dt = Math.abs(minuteMs - e.utcMs)
+      return dt > half ? null : { e: e, fade: 1 - dt / half }
+    }
+    onEclipseNowChanged: canvas.requestPaint()
+
     function infoText(key) {
       var earth = bodies.earth.au
       var lines = [panel.i18n("astroBody_" + key)]
@@ -607,12 +804,16 @@ Column {
         lines.push(panel.i18n("astroMoonDistance", { km: number(Math.round(info.distanceKm), 0),
           seconds: number(info.distanceKm / 299792.458, 2) }))
         lines.push(panel.i18n("astroMoonAge", { days: number(info.ageDays, 1) }))
+        var mg = AstroEvents.moonGeocentric(minuteMs)
+        lines.push(inConstellation(Math.atan2(mg.y, mg.x)))
+        if (eclipseNow && eclipseNow.e.kind === "lunar") lines.push(panel.i18n("eclipse_lunar_" + eclipseNow.e.type))
         var place = panel.moonPlaceLine(minuteMs, playing || traveling)
         if (place) lines.push(place)
         return lines.join("\n")
       }
       if (key === "sun") {
         lines.push(distanceLine("astroFromEarth", earth.r))
+        lines.push(inConstellation(Math.atan2(-earth.y, -earth.x)))
         lines.push(turnLine())
         return lines.join("\n")
       }
@@ -652,6 +853,8 @@ Column {
       var p = bodies[key].au
       lines.push(distanceLine("astroFromSun", p.r))
       if (key !== "earth") lines.push(distanceLine("astroFromEarth", Astro.distance(p, earth)))
+      if (key !== "earth") lines.push(inConstellation(Math.atan2(p.y - earth.y, p.x - earth.x)))
+      if (key === "earth" && eclipseNow && eclipseNow.e.kind === "solar") lines.push(panel.i18n("eclipse_solar_" + eclipseNow.e.type))
       var days = Astro.periodDays(key)
       lines.push(days < 1000 ? panel.i18n("astroOrbitDays", { days: number(days, 0) })
         : panel.i18n("astroOrbitYears", { years: number(days / 365.25, 1) }))
@@ -666,7 +869,29 @@ Column {
         return
       }
       var hit = AstroView.hitTest(hits, p.x, p.y, Style.space(6))
-      hover = hit ? { key: hit.key, text: infoText(hit.key), x: p.x, y: p.y } : (starHover(p.x, p.y) || pinnedHover())
+      var star = hit ? null : starHover(p.x, p.y)
+      hoverFigure = hit || star ? -1 : figureAt(p.x, p.y)
+      hover = hit ? { key: hit.key, text: infoText(hit.key), x: p.x, y: p.y }
+        : (star || (hoverFigure >= 0 ? { key: "figure", text: constellations.latin[hoverFigure], x: p.x, y: p.y } : pinnedHover()))
+    }
+    // The constellation figure under the pointer (index), highlighted; −1
+    // for none.
+    property int hoverFigure: -1
+    onHoverFigureChanged: figureHighlight.requestPaint()
+    function figureAt(x, y) {
+      var p = starProjection
+      if (!showConstellations || !figures || !constellations || !p) return -1
+      var best = -1, bestD = Style.space(5)
+      for (var f = 0; f < figures.length; f++) {
+        var segs = figures[f].segments
+        for (var g = 0; g < segs.length; g++) {
+          var a = segs[g][0], b = segs[g][1]
+          if (!p.on[a] || !p.on[b]) continue
+          var d = AstroView.segmentDistance(x, y, p.x[a], p.y[a], p.x[b], p.y[b])
+          if (d < bestD) { bestD = d; best = f }
+        }
+      }
+      return best
     }
     function pinnedHover() {
       if (pinned === "") return null
@@ -834,6 +1059,7 @@ Column {
           }
         }
         sky.constellationPlaces = places
+        if (sky.hoverFigure >= 0) figureHighlight.requestPaint()
         var spent = Date.now() - started
         var st = paintStats
         paintStats = { count: st.count + 1, total: st.total + spent, max: Math.max(st.max, spent),
@@ -859,11 +1085,38 @@ Column {
           text: place ? place.text : ""
           x: place ? place.x - implicitWidth / 2 : 0
           y: place ? place.y - implicitHeight / 2 : 0
-          color: Qt.rgba(starCanvas.ink.r, starCanvas.ink.g, starCanvas.ink.b, 0.38)
+          color: Qt.rgba(starCanvas.ink.r, starCanvas.ink.g, starCanvas.ink.b,
+            place && sky.constellations && sky.hoverFigure >= 0 && (place.text === sky.constellations.latin[sky.hoverFigure]
+              || place.text === sky.constellations.abbr[sky.hoverFigure]) ? 0.9 : 0.38)
           font.family: sky.panel.fontFamily
           font.pixelSize: constellationLabels.fontPx
           font.italic: true
         }
+      }
+    }
+
+    // The figure under the pointer, drawn stronger over the faint ones.
+    Canvas {
+      id: figureHighlight
+      anchors.fill: parent
+      visible: sky.showConstellations && starCanvas.visible
+      onPaint: {
+        var ctx = getContext("2d")
+        ctx.reset()
+        var f = sky.hoverFigure, p = sky.starProjection
+        if (f < 0 || !p || !sky.figures || !sky.figures[f]) return
+        var ink = starCanvas.ink
+        ctx.strokeStyle = Qt.rgba(ink.r, ink.g, ink.b, 0.55)
+        ctx.lineWidth = 1.4
+        ctx.beginPath()
+        var segs = sky.figures[f].segments
+        for (var g = 0; g < segs.length; g++) {
+          var a = segs[g][0], b = segs[g][1]
+          if (!p.on[a] || !p.on[b]) continue
+          ctx.moveTo(p.x[a], p.y[a])
+          ctx.lineTo(p.x[b], p.y[b])
+        }
+        ctx.stroke()
       }
     }
 
@@ -1101,6 +1354,29 @@ Column {
           ctx.fillStyle = Qt.rgba(0, 0, 0.08, Math.min(0.75, layer.fill.a * 1.6))
           ctx.fill()
         }
+        // A solar eclipse: the Moon's shadow round the catalogue's point
+        // of greatest eclipse, the penumbra soft, the umbra (total,
+        // annular, hybrid) a dark dot.
+        var ecl = sky.eclipseNow
+        if (ecl && ecl.e.kind === "solar") {
+          var sp = Globe.projectView(ecl.e.lat, ecl.e.lon, vm, R)
+          if (sp.visible) {
+            var ex = x + sp.x, ey = y - sp.y
+            var pen = ctx.createRadialGradient(ex, ey, 0, ex, ey, R * 0.55)
+            pen.addColorStop(0, Qt.rgba(0, 0, 0, 0.5 * ecl.fade))
+            pen.addColorStop(1, Qt.rgba(0, 0, 0, 0))
+            ctx.fillStyle = pen
+            ctx.beginPath()
+            ctx.arc(ex, ey, R * 0.55, 0, Math.PI * 2)
+            ctx.fill()
+            if (ecl.e.type !== "partial") {
+              ctx.fillStyle = Qt.rgba(0, 0, 0, 0.85 * ecl.fade)
+              ctx.beginPath()
+              ctx.arc(ex, ey, Math.max(1.5, R * 0.05), 0, Math.PI * 2)
+              ctx.fill()
+            }
+          }
+        }
         ctx.beginPath()
         ctx.arc(x, y, R, 0, Math.PI * 2)
         ctx.strokeStyle = rgba(ink, 0.35)
@@ -1117,6 +1393,16 @@ Column {
         var lit = (1 + dot(s, axes.toward)) / 2
         Moon.paintMoon(ctx, x, y, r, angle, lit, "238,236,226",
           Moon.rgbText(Sky.nightFill(sky.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
+        // A lunar eclipse: copper in Earth's umbra, a faint dimming in a
+        // penumbral one.
+        var ecl = sky.eclipseNow
+        if (ecl && ecl.e.kind === "lunar") {
+          var depth = ecl.e.type === "penumbral" ? 0.2 : Math.min(0.8, 0.35 + 0.45 * Math.min(1, ecl.e.umbralMagnitude || 0))
+          ctx.fillStyle = Qt.rgba(0.72, 0.36, 0.18, depth * ecl.fade)
+          ctx.beginPath()
+          ctx.arc(x, y, r, 0, Math.PI * 2)
+          ctx.fill()
+        }
         var near = em.moonNear
         if (near && r >= 4 && dot(near, axes.toward) > 0.1) {
           ctx.fillStyle = Qt.rgba(0.35, 0.36, 0.40, 0.45)
@@ -1227,7 +1513,7 @@ Column {
 
       // When the view is not now: the shown moment, bottom left.
       function paintShownLabel(ctx) {
-        if (!sky.timePinned) return
+        if (!sky.timePinned || view.showTimeline) return
         var text = sky.momentText(sky.minuteMs) + (sky.approximate ? " · " + sky.panel.i18n("astroApproximate") : "")
         ctx.font = sky.panel.canvasFont(Style.font.caption, true, false)
         var tw = ctx.measureText(text).width + 10
@@ -1700,7 +1986,10 @@ Column {
   property var info: null
   onInfoDayChanged: infoTimer.restart()
   onShowInfoChanged: if (showInfo) infoTimer.restart()
-  Component.onCompleted: computeInfo()
+  Component.onCompleted: {
+    queueEclipses()
+    computeInfo()
+  }
   Timer {
     id: infoTimer
     interval: 250
@@ -1718,7 +2007,17 @@ Column {
       var at = AstroEvents.nextOpposition(key, ms)
       if (at && (!opposition || at < opposition.utcMs)) opposition = { key: key, utcMs: at }
     }
-    info = { moon: moon, season: season, seen: seen, opposition: opposition }
+    info = { moon: moon, season: season, seen: seen, opposition: opposition,
+      eclipses: { solar: AstroEclipses.next("solar", ms), lunar: AstroEclipses.next("lunar", ms) } }
+  }
+  // A moment with its year, for the events and the next eclipses: "Wed 12
+  // Aug 2026 7:46 PM" (this computer's local time; years before 1 as the
+  // astronomers count, 0 = 1 BC).
+  function eventWhen(ms) {
+    var offset = Model.localOffsetSeconds(ms)
+    var year = Model.zonedParts(ms, offset).year
+    return panel.dateFor(ms, offset, "short") + " " + (year < 0 ? "−" + (-year) : year)
+      + " " + panel.clockFor(ms, offset, false)
   }
   function shortMoment(ms) {
     var offset = Model.localOffsetSeconds(ms)
@@ -1727,7 +2026,7 @@ Column {
   readonly property string infoText: {
     if (!info) return ""
     var lines = []
-    if (sky.timePinned)
+    if (sky.timePinned && !view.showTimeline)
       lines.push(panel.i18n("astroShown", { date: sky.momentText(sky.minuteMs) }) + (sky.approximate ? " · " + panel.i18n("astroApproximate") : ""))
     var phase = Moon.moonPhaseFraction(sky.minuteMs)
     var moonLine = panel.i18n("moonPhase_" + AstroEvents.phaseKey(phase)) + " · "
@@ -1742,6 +2041,13 @@ Column {
     if (info.opposition) yearLine.push(panel.i18n("astroOpposition", { planet: panel.i18n("astroBody_" + info.opposition.key),
       date: shortMoment(info.opposition.utcMs) }))
     if (yearLine.length) lines.push(yearLine.join(" · "))
+    var eclipseLine = []
+    var kinds = ["solar", "lunar"]
+    for (var k = 0; k < kinds.length; k++) {
+      var e = info.eclipses ? info.eclipses[kinds[k]] : null
+      if (e) eclipseLine.push((e.approximate ? "≈ " : "") + panel.i18n("eclipse_" + e.kind + "_" + e.type) + " " + eventWhen(e.utcMs))
+    }
+    if (eclipseLine.length) lines.push(eclipseLine.join(" · "))
     var evening = [], morning = []
     for (var key in info.seen) {
       if (info.seen[key] === "evening") evening.push(panel.i18n("astroBody_" + key))
@@ -1785,7 +2091,8 @@ Column {
     onToggled: function(id) { view.panel.setViewDisplaySetting(keys[id], !on(id)) }
   }
 
-  // ---- The timeline: play, the year either side, speed, now; Go to date ----
+  // ---- The timeline: play, the year either side, now; the time lapse's
+  //      speed, the shown moment, Go to date ----
   Column {
     id: timeline
     visible: view.showTimeline
@@ -1811,7 +2118,7 @@ Column {
       Item {
         id: track
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width - playButton.width - speeds.width - nowButton.width - 3 * parent.spacing
+        width: parent.width - playButton.width - nowButton.width - 2 * parent.spacing
         height: Style.space(24)
         readonly property real fraction: sky.scrubIndex / AstroClock.LAST_INDEX
         Rectangle {
@@ -1849,40 +2156,6 @@ Column {
         }
       }
 
-      // The speeds: a day, a week, a month a second.
-      Row {
-        id: speeds
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: Style.space(4)
-        Repeater {
-          model: AstroClock.SPEEDS
-          Rectangle {
-            required property var modelData
-            required property int index
-            width: speedText.implicitWidth + Style.space(10)
-            height: Style.space(20)
-            radius: Style.cornerRadius
-            color: sky.speedIndex === index ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22) : "transparent"
-            border.color: sky.speedIndex === index ? Color.accent : view.panel.subtleText
-            border.width: Style.spacing.hairline
-            Text {
-              id: speedText
-              textFormat: Text.PlainText
-              anchors.centerIn: parent
-              text: view.panel.i18n("astroSpeed_" + parent.modelData.key)
-              color: sky.speedIndex === parent.index ? Color.accent : view.panel.mutedText
-              font.family: view.panel.fontFamily
-              font.pixelSize: Style.font.caption
-            }
-            MouseArea {
-              anchors.fill: parent
-              cursorShape: Qt.PointingHandCursor
-              onClicked: sky.speedIndex = parent.index
-            }
-          }
-        }
-      }
-
       TimeButton {
         id: nowButton
         anchors.verticalCenter: parent.verticalCenter
@@ -1892,14 +2165,15 @@ Column {
       }
     }
 
-    // Go to date: typed, read as it is typed, Enter travels there.
+    // Go to date (typed, read as it is typed, Enter travels there), the
+    // time lapse's speed, the shown moment.
     Row {
       width: parent.width
       spacing: Style.space(10)
 
       TextField {
         id: dateField
-        width: Math.min(Style.space(220), parent.width / 2)
+        width: Math.min(Style.space(200), parent.width / 3)
         foreground: view.panel.foreground
         font.family: view.panel.fontFamily
         font.pixelSize: Style.font.bodySmall
@@ -1921,31 +2195,250 @@ Column {
         }
       }
 
+      // The speed: a chip that opens the list of speeds above it.
+      Rectangle {
+        id: lapseChip
+        anchors.verticalCenter: parent.verticalCenter
+        width: lapseText.implicitWidth + Style.space(14)
+        height: Style.space(22)
+        radius: Style.cornerRadius
+        color: view.lapseMenuOpen ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22) : "transparent"
+        border.color: view.lapseMenuOpen ? Color.accent : view.panel.subtleText
+        border.width: Style.spacing.hairline
+        Text {
+          id: lapseText
+          textFormat: Text.PlainText
+          anchors.centerIn: parent
+          text: view.panel.i18n("lapse_" + sky.lapseId) + " ▾"
+          color: view.lapseMenuOpen ? Color.accent : view.panel.mutedText
+          font.family: view.panel.fontFamily
+          font.pixelSize: Style.font.caption
+        }
+        MouseArea {
+          anchors.fill: parent
+          cursorShape: Qt.PointingHandCursor
+          onClicked: view.lapseMenuOpen = !view.lapseMenuOpen
+        }
+        Rectangle {
+          id: lapseMenu
+          visible: view.lapseMenuOpen
+          z: 100
+          y: -height - Style.space(4)
+          width: Style.space(200)
+          height: lapseColumn.implicitHeight + Style.space(8)
+          radius: Style.cornerRadius
+          color: Color.popups.background
+          border.color: view.panel.subtleText
+          border.width: Style.spacing.hairline
+          Column {
+            id: lapseColumn
+            x: Style.space(4)
+            y: Style.space(4)
+            width: parent.width - Style.space(8)
+            Repeater {
+              model: AstroLapse.presetsFor("astro")
+              Rectangle {
+                required property var modelData
+                width: lapseColumn.width
+                height: Style.space(24)
+                radius: Style.cornerRadius
+                color: presetMouse.containsMouse ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.15) : "transparent"
+                Text {
+                  textFormat: Text.PlainText
+                  anchors.verticalCenter: parent.verticalCenter
+                  x: Style.space(6)
+                  width: parent.width - Style.space(12)
+                  text: view.panel.i18n("lapse_" + parent.modelData.id)
+                  color: parent.modelData.id === sky.lapseId ? Color.accent : view.panel.foreground
+                  font.family: view.panel.fontFamily
+                  font.pixelSize: Style.font.caption
+                  elide: Text.ElideRight
+                }
+                MouseArea {
+                  id: presetMouse
+                  anchors.fill: parent
+                  hoverEnabled: true
+                  cursorShape: Qt.PointingHandCursor
+                  onClicked: {
+                    view.panel.setViewDisplaySetting("astroLapse", parent.modelData.id)
+                    view.lapseMenuOpen = false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // The shown moment, counting while the lapse runs; while a date is
+      // typed, what it reads as.
       Text {
         textFormat: Text.PlainText
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width - dateField.width - parent.spacing
-        text: dateField.text === "" ? view.panel.i18n("astroGoToHint")
-          : (dateField.parsed.ok ? "= " + sky.momentText(dateField.parsed.ms)
+        width: parent.width - dateField.width - lapseChip.width - 2 * parent.spacing
+        text: dateField.text !== ""
+          ? (dateField.parsed.ok ? "= " + sky.momentText(dateField.parsed.ms)
             + (Astro.isApproximate(dateField.parsed.ms) ? " · " + view.panel.i18n("astroApproximate") : "")
             : view.panel.i18n(dateField.parsed.reason === "range" ? "astroOutOfRange" : "astroNotADate"))
-        color: dateField.text !== "" && !dateField.parsed.ok ? Color.urgent : view.panel.mutedText
+          : sky.momentText(sky.minuteMs) + (sky.approximate ? " · " + view.panel.i18n("astroApproximate") : "")
+        color: dateField.text !== "" && !dateField.parsed.ok ? Color.urgent
+          : (dateField.text === "" && sky.timePinned ? Color.accent : view.panel.mutedText)
         font.family: view.panel.fontFamily
         font.pixelSize: Style.font.caption
-        wrapMode: Text.WordWrap
+        elide: Text.ElideRight
       }
     }
   }
 
-  Text {
-    id: infoLine
-    textFormat: Text.PlainText
-    visible: view.showInfo && text !== ""
+  // ---- Info (one line, or all of it) and, beside it, the sky events ----
+  Item {
+    id: infoArea
+    readonly property bool hasInfo: view.showInfo && view.infoText !== ""
+    visible: hasInfo || view.showEvents
     width: parent.width
-    text: view.infoText
-    color: view.panel.mutedText
-    font.family: view.panel.fontFamily
-    font.pixelSize: Style.font.caption
-    wrapMode: Text.WordWrap
+    height: Math.max(hasInfo ? infoTextItem.implicitHeight : 0, view.showEvents ? eventsButton.height : 0)
+    readonly property real oneLineHeight: Math.max(Style.font.caption * 1.4, view.showEvents ? eventsButton.height : 0)
+
+    Text {
+      id: infoToggle
+      textFormat: Text.PlainText
+      visible: infoArea.hasInfo
+      anchors.left: parent.left
+      anchors.top: parent.top
+      text: view.infoExpanded ? "▾" : "▸"
+      color: view.panel.mutedText
+      font.family: view.panel.fontFamily
+      font.pixelSize: Style.font.caption
+    }
+    Text {
+      id: infoTextItem
+      textFormat: Text.PlainText
+      visible: infoArea.hasInfo
+      anchors.left: infoToggle.right
+      anchors.leftMargin: Style.space(4)
+      anchors.right: view.showEvents ? eventsButton.left : parent.right
+      anchors.rightMargin: view.showEvents ? Style.space(8) : 0
+      anchors.top: parent.top
+      text: view.infoExpanded ? view.infoText : view.infoText.split("\n")[0]
+      color: view.panel.mutedText
+      font.family: view.panel.fontFamily
+      font.pixelSize: Style.font.caption
+      wrapMode: view.infoExpanded ? Text.WordWrap : Text.NoWrap
+      elide: Text.ElideRight
+    }
+    MouseArea {
+      visible: infoArea.hasInfo
+      anchors.left: parent.left
+      anchors.right: infoTextItem.right
+      anchors.top: parent.top
+      height: infoTextItem.implicitHeight
+      cursorShape: Qt.PointingHandCursor
+      onClicked: view.infoExpanded = !view.infoExpanded
+    }
+    TimeButton {
+      id: eventsButton
+      visible: view.showEvents
+      anchors.right: parent.right
+      anchors.top: parent.top
+      panel: view.panel
+      label: view.panel.i18n("astroEventsToggle") + (view.eventsOpen ? " ▾" : " ▸")
+      onActivated: view.eventsOpen = !view.eventsOpen
+    }
+  }
+
+  // The events: by kind, a page earlier or later, each row travelling to
+  // its moment (a click, or ↑ ↓ and Enter).
+  Column {
+    id: eventsPanel
+    visible: view.showEvents && view.eventsOpen
+    width: parent.width
+    spacing: Style.space(4)
+
+    Item {
+      width: parent.width
+      height: Math.max(eventFilterChips.height, laterButton.height)
+      TimeChipBar {
+        id: eventFilterChips
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width - earlierButton.width - laterButton.width - Style.space(16)
+        panel: view.panel
+        chips: view.eventFilters.map(function(f) { return { id: f.id, glyph: f.glyph, label: "eventsFilter_" + f.id, on: view.eventsFilter === f.id } })
+        onToggled: function(id) { view.eventsFilter = id }
+      }
+      TimeButton {
+        id: earlierButton
+        anchors.right: laterButton.left
+        anchors.rightMargin: Style.space(6)
+        anchors.verticalCenter: parent.verticalCenter
+        panel: view.panel
+        label: view.panel.i18n("eventsEarlier")
+        onActivated: view.pageEvents(-1)
+      }
+      TimeButton {
+        id: laterButton
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        panel: view.panel
+        label: view.panel.i18n("eventsLater")
+        onActivated: view.pageEvents(1)
+      }
+    }
+
+    Text {
+      textFormat: Text.PlainText
+      visible: view.eventRows.length === 0
+      text: view.panel.i18n("eventsNone")
+      color: view.panel.mutedText
+      font.family: view.panel.fontFamily
+      font.pixelSize: Style.font.caption
+    }
+
+    Repeater {
+      model: view.eventRows
+      Rectangle {
+        id: eventRow
+        required property var modelData
+        required property int index
+        width: eventsPanel.width
+        height: Math.max(whenText.implicitHeight, eventText.implicitHeight) + Style.space(4)
+        radius: Style.cornerRadius
+        color: view.eventSelected === index ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.2)
+          : (rowMouse.containsMouse ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.1) : "transparent")
+        Text {
+          id: whenText
+          textFormat: Text.PlainText
+          x: Style.space(4)
+          anchors.verticalCenter: parent.verticalCenter
+          width: Math.min(Style.space(190), parent.width * 0.4)
+          text: eventRow.modelData.when
+          color: eventRow.modelData.past ? view.panel.subtleText : view.panel.mutedText
+          font.family: view.panel.fontFamily
+          font.pixelSize: Style.font.caption
+          elide: Text.ElideRight
+        }
+        Text {
+          id: eventText
+          textFormat: Text.PlainText
+          anchors.left: whenText.right
+          anchors.leftMargin: Style.space(8)
+          anchors.right: parent.right
+          anchors.rightMargin: Style.space(4)
+          anchors.verticalCenter: parent.verticalCenter
+          text: eventRow.modelData.text
+          color: eventRow.modelData.past ? view.panel.mutedText : view.panel.foreground
+          font.family: view.panel.fontFamily
+          font.pixelSize: Style.font.caption
+          wrapMode: Text.WordWrap
+        }
+        MouseArea {
+          id: rowMouse
+          anchors.fill: parent
+          hoverEnabled: true
+          cursorShape: Qt.PointingHandCursor
+          onClicked: view.travelToEvent(eventRow.index)
+        }
+      }
+    }
   }
 }

@@ -2,6 +2,7 @@ import QtQuick
 import qs.Commons
 import qs.Ui
 import "Model.js" as Model
+import "AstroLapse.js" as AstroLapse
 
 // The world clock: the map with the time zones, then "Here" and the
 // favourite cities with their time, their day against here, and their
@@ -10,6 +11,7 @@ import "Model.js" as Model
 // through Open-Meteo's geocoder.
 Column {
   id: view
+  objectName: "timeWorld"
   required property var panel
   spacing: Style.space(10)
 
@@ -94,6 +96,7 @@ Column {
     panel: view.panel
     hint: view.panel.i18n("worldKeysHint") + (view.panel.displaySetting("worldMap", true)
       ? " · " + view.panel.i18n("globeKeysHint") : "")
+      + (view.panel.displaySetting("worldMap", true) && view.timelineOn ? " · " + view.panel.i18n("worldTimeKeysHint") : "")
     addLabel: view.panel.i18n("addCity")
     onAdd: view.panel.openCitySearch()
   }
@@ -234,6 +237,22 @@ Column {
 
   // Zoom and turn keys for the globe or the flat map (Panel.handlePanelKey).
   function handleMapKey(event) {
+    // The timeline: , . a day, Space play / pause (unless something
+    // rings), Backspace back to now (n stays the city search).
+    if (worldTimeline.visible && !(event.modifiers & Qt.ControlModifier)) {
+      if (event.text === "," || event.text === ".") {
+        stepDays(event.text === "." ? 1 : -1)
+        return true
+      }
+      if (event.key === Qt.Key_Space && !panel.ringer.ringing.length) {
+        togglePlay()
+        return true
+      }
+      if (event.key === Qt.Key_Backspace && panel.worldTimePinned) {
+        backToNow()
+        return true
+      }
+    }
     var item = worldMapSlot.item
     if (!item || !worldMapSlot.visible) return false
     var target = item.handleMapKey ? item : (item.children.length && item.children[0].handleMapKey ? item.children[0] : null)
@@ -248,11 +267,36 @@ Column {
     // a minimum below which the page scrolls.
     readonly property real fitHeight: view.panel.viewportHeight - view.panel.tabContentTop - y - Style.space(16)
       - (worldChips.visible ? worldChips.height + view.spacing : 0)
+      - (worldTimeline.visible ? worldTimeline.height + view.spacing : 0)
     visible: view.panel.displaySetting("worldMap", true)
     active: visible
     width: parent.width
     height: item ? item.implicitHeight : 0
     sourceComponent: view.panel.displaySetting("worldStyle", "map") === "globe" ? globeView : flatMapView
+
+    // While the timeline shows another instant: which, over the map.
+    Rectangle {
+      z: 20
+      visible: view.panel.worldTimePinned
+      x: Style.space(4)
+      y: Style.space(4)
+      width: shownLabel.implicitWidth + Style.space(12)
+      height: shownLabel.implicitHeight + Style.space(6)
+      radius: Style.cornerRadius
+      color: Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.85)
+      border.color: Color.accent
+      border.width: Style.spacing.hairline
+      Text {
+        id: shownLabel
+        textFormat: Text.PlainText
+        anchors.centerIn: parent
+        text: view.panel.i18n("astroShown", { date: view.shownText() })
+        color: Color.accent
+        font.family: view.panel.fontFamily
+        font.pixelSize: Style.font.caption
+        font.bold: true
+      }
+    }
   }
   // The chips under the map: its shape, the night, the twilight bands, the
   // Moon, the labels, the ruler (flat map); the same options as the World
@@ -286,6 +330,133 @@ Column {
       }
     }
   }
+  // ---- The timeline under the map: a time lapse (AstroLapse.js) of the
+  //      night, the twilight, the Sun and the Moon; the city list keeps the
+  //      real time ----
+  readonly property bool timelineOn: panel.displaySetting("worldTimeline", true) === true
+  property bool playing: false
+  readonly property string lapseId: {
+    var id = panel.displaySetting("worldLapse", "dayInMinute")
+    var p = AstroLapse.preset(id)
+    return p && p.views.indexOf("globe") >= 0 ? id : "dayInMinute"
+  }
+  readonly property var lapse: AstroLapse.preset(lapseId)
+  readonly property int lapseFps: Number(panel.generalSetting("motionFps", "15")) || 15
+  function showAt(ms) {
+    panel.worldShownMs = ms
+    panel.worldTimePinned = true
+  }
+  function togglePlay() {
+    if (!playing && !panel.worldTimePinned) showAt(Date.now())
+    playing = !playing
+  }
+  function stepDays(days) {
+    playing = false
+    showAt((panel.worldTimePinned ? panel.worldShownMs : Date.now()) + days * 86400000)
+  }
+  function backToNow() {
+    playing = false
+    panel.worldTimePinned = false
+  }
+  // Leaving the tab or switching the timeline off goes back to now.
+  onTimelineOnChanged: if (!timelineOn) backToNow()
+  Component.onDestruction: {
+    panel.worldTimePinned = false
+  }
+  Timer {
+    id: worldLapseTimer
+    interval: Math.max(16, Math.round(AstroLapse.frameInterval(view.lapse, view.lapseFps)))
+    repeat: true
+    running: view.playing && view.panel.opened && view.panel.currentTab === "world"
+    property double last: 0
+    property double carry: 0
+    onRunningChanged: {
+      last = Date.now()
+      carry = 0
+    }
+    onTriggered: {
+      var now = Date.now()
+      var r = AstroLapse.advance(view.panel.worldShownMs, view.lapse, Math.min(1000, now - last), carry, 1)
+      last = now
+      carry = r.carryMs
+      view.showAt(r.shownMs)
+      if (r.stopped) view.playing = false
+    }
+  }
+  // The shown instant in this computer's local time.
+  function shownText() {
+    var ms = panel.worldMinuteMs
+    var offset = Model.localOffsetSeconds(ms)
+    return panel.dateFor(ms, offset, "long") + " · " + panel.clockFor(ms, offset, false)
+  }
+
+  Row {
+    id: worldTimeline
+    visible: worldMapSlot.visible && view.timelineOn
+    width: parent.width
+    spacing: Style.space(8)
+
+    TimeIconButton {
+      id: worldPlay
+      anchors.verticalCenter: parent.verticalCenter
+      panel: view.panel
+      glyph: view.playing ? "\u{f03e4}" : "\u{f040a}"
+      glyphSize: Style.font.body
+      active: view.playing
+      onActivated: view.togglePlay()
+    }
+    // The speeds: a day in a minute, a day in ten seconds, the seasons.
+    Row {
+      id: worldSpeeds
+      anchors.verticalCenter: parent.verticalCenter
+      spacing: Style.space(4)
+      Repeater {
+        model: ["dayInMinute", "dayIn10Seconds", "seasonsInMinute"]
+        Rectangle {
+          required property string modelData
+          readonly property bool picked: view.lapseId === modelData
+          width: speedLabel.implicitWidth + Style.space(10)
+          height: Style.space(20)
+          radius: Style.cornerRadius
+          color: picked ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22) : "transparent"
+          border.color: picked ? Color.accent : view.panel.subtleText
+          border.width: Style.spacing.hairline
+          Text {
+            id: speedLabel
+            textFormat: Text.PlainText
+            anchors.centerIn: parent
+            text: view.panel.i18n("lapseShort_" + parent.modelData)
+            color: parent.picked ? Color.accent : view.panel.mutedText
+            font.family: view.panel.fontFamily
+            font.pixelSize: Style.font.caption
+          }
+          MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: view.panel.setViewDisplaySetting("worldLapse", parent.modelData)
+          }
+        }
+      }
+    }
+    Text {
+      textFormat: Text.PlainText
+      anchors.verticalCenter: parent.verticalCenter
+      width: parent.width - worldPlay.width - worldSpeeds.width - worldNow.width - 3 * parent.spacing
+      text: view.shownText()
+      color: view.panel.worldTimePinned ? Color.accent : view.panel.mutedText
+      font.family: view.panel.fontFamily
+      font.pixelSize: Style.font.caption
+      elide: Text.ElideRight
+    }
+    TimeButton {
+      id: worldNow
+      anchors.verticalCenter: parent.verticalCenter
+      panel: view.panel
+      label: view.panel.i18n("astroNow")
+      onActivated: view.backToNow()
+    }
+  }
+
   Component {
     id: flatMapView
     // Full width, unless the map would not fit the visible height: then

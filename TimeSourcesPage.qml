@@ -80,6 +80,13 @@ Column {
       notice: sourcesPage.d3CelestialLicence
     },
     {
+      title: "sourceGroupEclipses", details: "sourceGroupEclipsesDetails",
+      inUse: panel.displaySetting("showAstro", true) === true ? "NASA GSFC · ESPENAK & MEEUS" : "",
+      links: [["NASA: Five Millennium Catalog of Solar Eclipses", "https://eclipse.gsfc.nasa.gov/SEcat5/"],
+        ["NASA: Five Millennium Catalog of Lunar Eclipses", "https://eclipse.gsfc.nasa.gov/LEcat5/"]],
+      notice: "Eclipse Predictions by Fred Espenak (NASA's GSFC)"
+    },
+    {
       title: "sourceGroupMoonView", details: "sourceGroupMoonViewDetails",
       inUse: "MEEUS",
       links: [["PyMeeus (tables 47.A, 47.B)", "https://github.com/architest/pymeeus"],

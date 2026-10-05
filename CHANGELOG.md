@@ -4,6 +4,27 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Astro: time lapse.** The timeline's three speeds make way for a time
+  lapse from real time to a year in a minute, chosen from a list; the
+  shown date and time stay in view and count. "Play on opening" starts it
+  with the tab.
+- **World: a timeline under the map** (on by default in the app): a day in
+  a minute, a day in ten seconds or the seasons (a year in a minute at the
+  same clock time); the night, the twilight, the Sun and the Moon follow
+  it, a label on the map names the instant, the city list keeps the real
+  time. `,` `.` a day, `Space` play, `⌫` now.
+- **Astro: sky events** (`e`, on by default in the app): eclipses from
+  NASA's five-millennium catalogues (with whether they can be seen from the
+  current place), the Moon's phases, the seasons, oppositions,
+  conjunctions, greatest elongations, close planet pairs, perihelion and
+  aphelion around the shown moment, filtered and paged; a click travels
+  there. A solar eclipse shows the Moon's shadow on Earth, a lunar one a
+  copper Moon. The info names the next eclipses, the hovers the zodiac
+  constellation.
+- **Astro: more room for the model:** the info folds to one line (`i`
+  unfolds it), the events sit behind a button beside it, and the model
+  keeps at least 55 % of the visible height. Hovering a constellation
+  figure highlights and names it.
 - **Astro: the stars behind everything** (on by default): the stars to
   magnitude 5 from the Yale Bright Star Catalogue where they stand on the
   sky, turning with the view; a bright star under the pointer is named with

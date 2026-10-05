@@ -70,7 +70,10 @@ Column {
         { keys: ["x", "Del"], action: "shortcutCityRemove" },
         { keys: ["Ctrl ← → ↑ ↓"], action: "shortcutGlobeTurn" },
         { keys: ["+", "−"], action: "shortcutGlobeZoom" },
-        { keys: ["0"], action: "shortcutGlobeCenter" }
+        { keys: ["0"], action: "shortcutGlobeCenter" },
+        { keys: [",", "."], action: "shortcutWorldStep" },
+        { keys: ["Space"], action: "shortcutWorldPlay" },
+        { keys: ["⌫"], action: "shortcutWorldNow" }
       ]
     },
     {
@@ -83,7 +86,10 @@ Column {
         { keys: [",", "."], action: "shortcutAstroStep" },
         { keys: ["Space"], action: "shortcutAstroPlay" },
         { keys: ["n", "⌫"], action: "shortcutAstroNow" },
-        { keys: ["g"], action: "shortcutAstroGoTo" }
+        { keys: ["g"], action: "shortcutAstroGoTo" },
+        { keys: ["i"], action: "shortcutAstroInfo" },
+        { keys: ["e"], action: "shortcutAstroEvents" },
+        { keys: ["↑ ↓", "Enter"], action: "shortcutAstroEventPick" }
       ]
     },
     {

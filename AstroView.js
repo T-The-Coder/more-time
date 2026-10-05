@@ -178,10 +178,18 @@ function figureAnchor(stars, projection) {
   return { x: sx / on, y: sy / on }
 }
 
+// The distance in px from (x, y) to the segment (ax, ay)–(bx, by).
+function segmentDistance(x, y, ax, ay, bx, by) {
+  var dx = bx - ax, dy = by - ay
+  var len = dx * dx + dy * dy
+  var t = len > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / len)) : 0
+  return Math.hypot(x - ax - t * dx, y - ay - t * dy)
+}
+
 if (typeof module !== "undefined") module.exports = {
   EXPONENT: EXPONENT, ELEVATION_MIN: ELEVATION_MIN, ELEVATION_MAX: ELEVATION_MAX, ELEVATION_DEFAULT: ELEVATION_DEFAULT,
   ZOOMS: ZOOMS, modelDistance: modelDistance, modelPoint: modelPoint, bodyRadius: bodyRadius,
   clampElevation: clampElevation, camera: camera, view: view, project: project, depthSorted: depthSorted,
   shortestTurn: shortestTurn, hitTest: hitTest, scaleFor: scaleFor,
-  SKY_FIELD: SKY_FIELD, skyProjection: skyProjection, figureStars: figureStars, figureAnchor: figureAnchor
+  SKY_FIELD: SKY_FIELD, skyProjection: skyProjection, figureStars: figureStars, figureAnchor: figureAnchor, segmentDistance: segmentDistance
 }

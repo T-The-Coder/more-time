@@ -580,7 +580,7 @@ ShellRoot {
       var a = astro()
       a.finishTravel()
       a.zoomIndex = 1
-      a.speedIndex = 2
+      display("astroLapse", "yearInMinute")
       a.paintStats = { count: 0, total: 0, max: 0 }
       a.togglePlay()
     },
@@ -588,7 +588,7 @@ ShellRoot {
     function() {
       var a = astro()
       var st = a.paintStats
-      console.log("ASTRO playback frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(1), "max", st.max)
+      console.log("ASTRO playback", new Date(a.minuteMs).toISOString(), "frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(1), "max", st.max)
       a.togglePlay()
       a.finishTravel()
       a.backToNow()
@@ -694,8 +694,106 @@ ShellRoot {
     function() { shot("44a-astro-constellations") },
     function() { var a = astro(); a.pointer = null; a.updateHover(); a.zoomIndex = 2 },
     function() { shot("44b-astro-earth-stars") },
+    // A constellation under the pointer, highlighted and named.
+    function() {
+      var a = astro()
+      a.zoomIndex = 0
+      display("astroConstellations", true)
+    },
+    function() {
+      var a = astro()
+      var p = a.starProjection, f = null
+      for (var k = 0; a.figures && p && k < a.figures.length && !f; k++) {
+        var seg = a.figures[k].segments[0]
+        if (seg && p.on[seg[0]] && p.on[seg[1]]) {
+          var mx = (p.x[seg[0]] + p.x[seg[1]]) / 2, my = (p.y[seg[0]] + p.y[seg[1]]) / 2
+          if (mx > 200 && mx < a.width - 60 && my > 40 && my < a.height - 40) f = { x: mx, y: my }
+        }
+      }
+      if (f) { a.pointer = f; a.updateHover() }
+      console.log("ASTRO figure", a.hoverFigure, JSON.stringify(a.hover ? a.hover.text : null))
+    },
+    function() { shot("44c-astro-figure-hover") },
+    // Sky events: the panel open, all kinds; the eclipses; a solar eclipse
+    // (2026-08-12) and a lunar one (2026-03-03) in the Earth–Moon view; the
+    // info unfolded; the time lapse's speeds.
+    function() { var a = astro(); a.pointer = null; a.updateHover(); display("astroConstellations", false); astroView().eventsOpen = true },
+    function() {
+      var v = astroView()
+      v.computeEvents()
+      console.log("EVENTS all", JSON.stringify(v.eventRows.map(function(r) { return r.when + " | " + r.text })))
+      console.log("ASTRO layout sky", Math.round(astro().height), "viewport", Math.round(panel.viewportHeight - panel.tabContentTop))
+    },
+    function() { shot("45a-astro-events") },
+    function() { astroView().eventsFilter = "eclipses" },
+    function() {
+      var v = astroView()
+      v.computeEvents()
+      console.log("EVENTS eclipses", JSON.stringify(v.eventRows.map(function(r) { return r.when + " | " + r.text })))
+      shot("45b-astro-events-eclipses")
+    },
+    function() { var a = astro(); a.showAt(Date.UTC(2026, 7, 12, 17, 46)); a.zoomIndex = 2 },
+    function() {
+      var a = astro()
+      var earth = a.hits.filter(function(h) { return h.key === "earth" })[0]
+      if (earth) { a.pointer = { x: earth.x, y: earth.y }; a.updateHover() }
+      console.log("ECLIPSE solar", JSON.stringify(a.eclipseNow ? { type: a.eclipseNow.e.type, lat: a.eclipseNow.e.lat, lon: a.eclipseNow.e.lon } : null),
+        JSON.stringify(a.hover ? a.hover.text : null))
+    },
+    function() { var a = astro(); a.pointer = null; a.updateHover(); a.elevation = 55 },
+    function() { shot("45c-astro-solar-eclipse") },
+    function() { var a = astro(); a.elevation = 30; a.showAt(Date.UTC(2026, 2, 3, 11, 33)) },
+    function() {
+      var a = astro()
+      console.log("ECLIPSE lunar", JSON.stringify(a.eclipseNow ? { type: a.eclipseNow.e.type, fade: a.eclipseNow.fade.toFixed(2) } : null))
+      shot("45d-astro-lunar-eclipse")
+    },
+    function() { var v = astroView(); v.eventsOpen = false; v.infoExpanded = true; astro().zoomIndex = 0 },
+    function() { console.log("ASTRO info expanded", JSON.stringify(astroView().infoText)); shot("45e-astro-info") },
+    function() { var v = astroView(); v.infoExpanded = false; v.lapseMenuOpen = true },
+    function() { shot("45f-astro-lapse-menu") },
+    function() { var v = astroView(); v.lapseMenuOpen = false; v.eventsFilter = "all"; astro().backToNow(); astro().finishTravel() },
     function() { var a = astro(); a.zoomIndex = 0; a.azimuth = a.startAzimuth; a.elevation = 30; display("astroConstellations", false) },
     function() { console.log("ASTRO info here", JSON.stringify(astroView().infoText)); panel.activeTab = "world" },
+    // The World timeline: the seasons on the globe (21 June 12:00 UTC),
+    // then the flat map playing a day in ten seconds; the Moon as seen
+    // from here as a thin crescent with earthshine (2026-10-12 16:30 UTC).
+    function() { panel.activeTab = "world"; display("worldStyle", "globe"); display("worldMoon", true); display("worldMoonStyle", "earth") },
+    function() {
+      var w = findNamed(panel.contentRoot, "timeWorld")
+      w.showAt(Date.UTC(2026, 5, 21, 12, 0))
+      display("worldLapse", "seasonsInMinute")
+    },
+    function() { shot("46a-world-shown-june") },
+    function() {
+      var w = findNamed(panel.contentRoot, "timeWorld")
+      display("worldLapse", "dayIn10Seconds")
+      display("worldStyle", "map")
+      w.showAt(Date.UTC(2026, 9, 12, 16, 30))
+    },
+    function() {
+      var c = panel.currentCoordinates
+      var v = MoonView.view(Number(c.lat), Number(c.lon), panel.worldMinuteMs)
+      console.log("MOON crescent lit", (v.illuminated * 100).toFixed(1) + "%", "earthshine", v.earthshine, "alt", v.apparentAltitude.toFixed(1))
+      shot("46b-world-crescent")
+    },
+    function() {
+      var w = findNamed(panel.contentRoot, "timeWorld")
+      var m = findMap(panel.contentRoot)
+      if (m) m.paintStats = { count: 0, total: 0, max: 0 }
+      w.togglePlay()
+    },
+    function() {},
+    function() {
+      var w = findNamed(panel.contentRoot, "timeWorld")
+      var m = findMap(panel.contentRoot)
+      var st = m ? m.paintStats : null
+      console.log("WORLD lapse", new Date(panel.worldMinuteMs).toISOString(), "playing", w.playing,
+        st ? "map frames " + st.count + " ms/frame " + (st.total / Math.max(1, st.count)).toFixed(1) : "")
+      shot("46c-world-lapse-playing")
+      w.backToNow()
+      display("worldMoon", false); display("worldMoonStyle", "space"); display("worldLapse", "dayInMinute")
+    },
     // Deleting a city before the current one keeps the same city current.
     function() {
       panel.setCurrentPlace(2)

@@ -263,7 +263,9 @@ Panel {
     var p = Model.zonedParts(utcMs, offset)
     if (style === "weekday") return interfaceLocale.dayName(p.weekday, Locale.LongFormat)
     if (style === "weekdayShort") return interfaceLocale.dayName(p.weekday, Locale.ShortFormat)
-    var noon = new Date(p.year, p.month, p.day, 12)
+    // setFullYear: new Date() reads the years 0–99 as 1900–1999.
+    var noon = new Date(2000, 0, 1, 12)
+    noon.setFullYear(p.year, p.month, p.day)
     var format = style === "long" ? interfaceLocale.dateFormat(Locale.LongFormat) : i18n("dateShortFormat")
     return latinDigits(interfaceLocale.toString(noon, format))
   }
@@ -432,6 +434,8 @@ Panel {
       globeAutoRotate: false,
       worldMoon: false,
       worldMoonStyle: "space",
+      worldTimeline: true,
+      worldLapse: "dayInMinute",
       worldList: true,
       worldDifference: true,
       worldDials: true,
@@ -456,6 +460,9 @@ Panel {
       astroSpacecraft: false,
       astroIss: false,
       astroStars: true,
+      astroEvents: true,
+      astroAutoplay: false,
+      astroLapse: "yearInMinute",
       astroConstellations: false,
       astroInfo: true,
       astroEarthInset: true,
@@ -475,6 +482,8 @@ Panel {
     options.heroGoldenHour = false
     options.heroBlueHour = false
     options.worldRuler = false
+    options.worldTimeline = false
+    options.astroEvents = false
     // The solar system wants room: the app shows it, the widget not.
     options.showAstro = false
     return options
@@ -1162,6 +1171,13 @@ Panel {
   // rises 6:42 PM · sets 7:10 AM" or "…: below the horizon · rises …", the
   // times in that place's clock; "" without a place. Kept per minute (the
   // rise and set search costs a few milliseconds).
+  // ---- The World tab's time lapse (TimeWorld.qml): the instant the map
+  //      and the globe draw (night, twilight, Sun, Moon); the city list
+  //      keeps the real time ----
+  property bool worldTimePinned: false
+  property double worldShownMs: 0
+  readonly property double worldMinuteMs: worldTimePinned ? worldShownMs : Math.floor(nowMs / 60000) * 60000
+
   readonly property var moonPlaceCache: ({ key: "", text: "" })
   // quick: without rise and set (while time runs, a frame at a time).
   function moonPlaceLine(ms, quick) {
@@ -1584,6 +1600,15 @@ Panel {
       if (area.wantsWheel(wheel)) return true
     }
     return false
+  }
+
+  // Scrolls the tab so `item` is in view (as much of it as fits).
+  function revealItem(item) {
+    if (!item || !contentScroll) return
+    var top = item.mapToItem(contentScroll, 0, 0).y
+    var bottom = top + item.height
+    if (bottom > contentScroll.height) scrollBy(Math.min(top, bottom - contentScroll.height + Style.space(8)))
+    else if (top < 0) scrollBy(top)
   }
 
   function scrollBy(delta) {

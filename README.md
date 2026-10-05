@@ -113,6 +113,13 @@ control.
     as you see it there, a thin crescent's dark side faintly lit by
     earthshine, and dimmed while it is below the horizon (Meeus'
     formulas, `MoonView.js`, checked against JPL Horizons and USNO).
+  - A timeline under the map (on by default in the app): ▶ or `Space`
+    plays a time lapse (a day in a minute, a day in ten seconds, or the
+    seasons: a year in a minute, each day at the same clock time), `,` `.`
+    step a day, `⌫` or **Now** go back. The night, the twilight bands, the
+    Sun and the Moon follow the shown instant, which a label on the map
+    names; the city list keeps the real time. On the GPU surface a frame
+    of it changes only the Sun's direction.
   - Below the map, your place (the location pin and its name, as in More
     Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
@@ -234,28 +241,45 @@ control.
     93 min". Propagated with SGP4 on this computer; with the timeline more
     than a week from the data's date it is hidden and the info line says
     why.
-  - Under the model a timeline plays the year either side of today (a day,
-    a week or a month a second; `,` `.` a day, `Space` play, `n` or `⌫` back
-    to now, a click or a drag on the track), and **Go to date** (`g`) travels
-    in a 2.5-second time lapse to any date from 3000 BC to 3000 AD (typed
-    as `1969-07-20 20:17`, `20.07.1969 20:17`, `07/20/1969` where the
-    language writes it so, or a bare year; this computer's local time); the
-    planets run along their orbits, the Earth spins and the Moon circles on
-    the way, and the view stays at that moment until **Now** travels back.
-    Outside 1800–2050 the planets come from JPL's long-range elements and
-    are marked approximate. Everything follows the shown moment: the bodies,
-    Earth's lit side, the Moon, the month ring's hand and the hover values.
-  - An info line under it: the shown moment when it is not now, the Moon's
-    phase with the next new and full moon, the Moon at the current place
-    (height and direction or below the horizon, rise and set), the next
-    equinox or solstice and
-    the next opposition, and which planets are in the evening and the
-    morning sky.
+  - Under the model a timeline: the year either side of today on a track
+    (a click or a drag picks a day; `,` `.` a day, `n` or `⌫` back to now)
+    and a **time lapse** (`Space` or ▶) at a speed from the list beside the
+    date: real time, a day, a month in a minute, a year in an hour, in ten
+    minutes or in a minute. The shown date and time stand beside it and
+    count while it runs. **Play on opening** (Settings) starts it whenever
+    the tab opens. **Go to date** (`g`) travels in a 2.5-second time lapse
+    to any date from 3000 BC to 3000 AD (typed as `1969-07-20 20:17`,
+    `20.07.1969 20:17`, `07/20/1969` where the language writes it so, or a
+    bare year; this computer's local time); the planets run along their
+    orbits, the Earth spins and the Moon circles on the way, and the view
+    stays at that moment until **Now** travels back. Outside 1800–2050 the
+    planets come from JPL's long-range elements and are marked approximate.
+    Everything follows the shown moment: the bodies, Earth's lit side, the
+    Moon, the month ring's hand and the hover values.
+  - **Info** under it, one line unless unfolded (a click or `i`): the
+    Moon's phase with the next new and full moon, the Moon at the current
+    place (height and direction or below the horizon, rise and set), the
+    next equinox or solstice and opposition, the next solar and lunar
+    eclipse, and which planets are in the evening and the morning sky. The
+    pointer on the Sun, a planet or the Moon also names the zodiac
+    constellation it stands in ("in Leo").
+  - **Events** beside it (`e`, on by default in the app): the 3 sky events
+    before and the 6 after the shown moment: solar and lunar eclipses with
+    their type and whether they can be seen from the current place, the
+    Moon's phases, equinoxes and solstices, oppositions, conjunctions,
+    greatest elongations, close planet pairs, perihelion and aphelion. A
+    filter (all, eclipses, planets, Moon, seasons), **Earlier** and
+    **Later** page through them; a click (or `↑` `↓` and `Enter`) travels
+    there. Eclipses come from NASA's catalogues (2000 BC to AD 3000, read
+    only for the years shown); before 1600 and after 2100 their times are
+    marked ≈. At a solar eclipse the Earth and Moon view shows the Moon's
+    shadow on Earth, at a lunar eclipse the Moon turns copper.
   - Settings → Display → Astro: orbits, names, the month ring, rotation and
-    tilt, the Earth and Moon inset, the timeline, the belts, the dwarf
-    planets, Halley's Comet, the large moons, the spacecraft, the ISS, the
-    stars, the constellations, the info line,
-    turning by itself (delay, speed and frames per second).
+    tilt, the Earth and Moon inset, the info, the events, the belts, the
+    dwarf planets, Halley's Comet, the large moons, the spacecraft, the
+    ISS, the stars, the constellations (hovering a figure highlights and
+    names it), the timeline, its speed and play on opening, turning by
+    itself (delay, speed and frames per second).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
     sounds, with a volume setting.

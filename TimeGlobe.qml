@@ -190,7 +190,8 @@ Item {
   }
 
   // The minute, not the second: the night side and the labels move slowly.
-  readonly property double minuteMs: Math.floor(panel.nowMs / 60000) * 60000
+  // The instant drawn: now, or the World timeline's (Panel.worldMinuteMs).
+  readonly property double minuteMs: panel.worldMinuteMs
   readonly property var cities: panel.cityList
   // Here (TimeHere: the weather location, IP or the zone's city), else
   // this computer's zone city: the home ring and where "here" turns to.
@@ -211,7 +212,9 @@ Item {
       panel.rgbOf(Color.popups.background))
     var shapes = {}
     var elevations = WorldMap.twilightElevations(layers)
-    for (var i = 0; i < elevations.length; i++)
+    // On the GPU surface the shader draws them from the Sun alone, so a
+    // time lapse costs only the uniforms.
+    for (var i = 0; i < (surfaceOn ? 0 : elevations.length); i++)
       shapes[elevations[i]] = WorldMap.twilightRings(ms, elevations[i], rotating ? 4 : 2).map(function(r) { return Globe.prepareLatLon(r) })
     return { layers: layers, shapes: shapes, sun: WorldMap.subsolarPoint(ms) }
   }

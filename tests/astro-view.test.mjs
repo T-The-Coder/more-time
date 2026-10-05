@@ -125,3 +125,10 @@ test("sky projection: the stars behind the model, fixed to the camera", () => {
   assert.equal(again, p)
   near(again.x[0], 300, 1e-9)
 })
+
+test("segment distance: the pointer near a figure's line", () => {
+  near(V.segmentDistance(5, 3, 0, 0, 10, 0), 3)
+  near(V.segmentDistance(-4, 3, 0, 0, 10, 0), 5)
+  near(V.segmentDistance(13, 4, 0, 0, 10, 0), 5)
+  near(V.segmentDistance(1, 1, 2, 2, 2, 2), Math.SQRT2)
+})

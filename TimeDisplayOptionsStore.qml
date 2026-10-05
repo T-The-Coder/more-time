@@ -208,6 +208,9 @@ Item {
     menubarAccents: ["off", "hover", "always"],
     worldStyle: ["map", "globe"],
     worldMoonStyle: ["space", "earth"],
+    // The time lapses' speeds (AstroLapse.js ids offered in each view).
+    astroLapse: ["realTime", "dayInMinute", "monthInMinute", "yearInHour", "yearIn10Minutes", "yearInMinute"],
+    worldLapse: ["realTime", "dayInMinute", "dayIn10Seconds", "seasonsInMinute"],
     heroDial: ["place", "classic", "minimal", "roman", "twentyFour", "dots"]
   })
 

@@ -29,7 +29,8 @@ Item {
       panel.rgbOf(Color.popups.background))
     var shapes = {}
     var elevations = WorldMap.twilightElevations(layers)
-    for (var i = 0; i < elevations.length; i++) shapes[elevations[i]] = WorldMap.twilightPolygon(minuteMs, elevations[i])
+    // On the GPU surface the shader draws them from the Sun alone.
+    for (var i = 0; i < (gpuSurface ? 0 : elevations.length); i++) shapes[elevations[i]] = WorldMap.twilightPolygon(minuteMs, elevations[i])
     return { layers: layers, shapes: shapes }
   }
   onTwilightChanged: canvas.requestPaint()
@@ -145,7 +146,8 @@ Item {
   }
 
   // The minute, not the second: the night side and the labels move slowly.
-  readonly property double minuteMs: Math.floor(panel.nowMs / 60000) * 60000
+  // The instant drawn: now, or the World timeline's (Panel.worldMinuteMs).
+  readonly property double minuteMs: panel.worldMinuteMs
   readonly property var cities: panel.cityList
   readonly property var home: panel.zoneTable.home
   readonly property int homeZone: mapData && home ? (function() {
@@ -209,6 +211,8 @@ Item {
     baseColor: Qt.rgba(map.panel.foreground.r, map.panel.foreground.g, map.panel.foreground.b, 0.03)
     textureSource: surfaceTexture
   }
+  // What painting costs (the screenshot harness measures a time lapse).
+  property var paintStats: ({ count: 0, total: 0, max: 0 })
   property var perf: ({ surface: gpuSurface, fps: 0, cpuMsPerFrame: 0, cpuPercent: 0, textureMs: surfaceTexture.lastMs })
   Component.onCompleted: map.panel.globeItem = map
   Component.onDestruction: if (map.panel.globeItem === map) map.panel.globeItem = null
@@ -247,6 +251,7 @@ Item {
     }
 
     onPaint: {
+      var started = Date.now()
       var ctx = getContext("2d")
       ctx.reset()
       if (!map.mapData || width <= 0) return
@@ -362,6 +367,9 @@ Item {
 
       if (map.rulerShown) paintRuler(ctx)
       paintPlaces(ctx)
+      var spent = Date.now() - started
+      var st = map.paintStats
+      map.paintStats = { count: st.count + 1, total: st.total + spent, max: Math.max(st.max, spent) }
     }
 
     // Above: the hour in each whole-hour zone at its meridian; below: the
