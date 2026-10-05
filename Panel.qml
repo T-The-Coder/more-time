@@ -5,6 +5,8 @@ import qs.Commons
 import qs.Ui
 import "Model.js" as Model
 import "WorldMap.js" as WorldMap
+import "Moon.js" as Moon
+import "MoonView.js" as MoonView
 import "I18n.js" as I18n
 
 // Controller and view of More Time, in two places: the bar's popup
@@ -74,7 +76,7 @@ Panel {
   // The Sun wherever it is drawn (the maps' sun marker, the Astro tab): the
   // golden hour's gold, softened towards the text and kept at 3:1 on the
   // background like the sky-coloured time (WorldMap.skyColor at 0°).
-  readonly property color sunColor: WorldMap.skyColor(0, rgbOf(foreground), rgbOf(Color.popups.background))
+  readonly property color sunColor: WorldMap.sunColor(rgbOf(foreground), rgbOf(Color.popups.background))
   readonly property color subtleText: Qt.darker(foreground, 1.7)
   // Key hints: the text colour faded towards the background.
   readonly property color hintText: Qt.tint(foreground,
@@ -453,6 +455,8 @@ Panel {
       astroMoons: false,
       astroSpacecraft: false,
       astroIss: false,
+      astroStars: true,
+      astroConstellations: false,
       astroInfo: true,
       astroEarthInset: true,
       astroAutoRotate: false,
@@ -1132,16 +1136,62 @@ Panel {
     if (editingId === id) editingId = ""
   }
 
-  // The Moon's tooltip on the map and the globe: "Moon · 61 % · waxing".
-  function moonText(moon) {
-    return i18n(moon.waxing ? "moonWaxing" : "moonWaning", { percent: Math.round(moon.illuminated * 100) })
+  // The Moon's tooltip on the map and the globe: "Moon · 61 % · waxing",
+  // and under it how it stands at the current place at that moment (ms).
+  function moonText(moon, ms) {
+    var line = i18n(moon.waxing ? "moonWaxing" : "moonWaning", { percent: Math.round(moon.illuminated * 100) })
+    var place = moonPlaceLine(ms === undefined ? nowMs : ms)
+    return place ? line + "\n" + place : line
+  }
+
+  // How the map and the globe draw the Moon (Display → Moon view):
+  // "space" lit towards the Sun (spaceAngle, Moon.moonLitAngle); "earth" as
+  // it stands in the sky of the current place at ms (MoonView.js): the true
+  // tilt of its lit limb, earthshine on a thin crescent, dimmed while below
+  // the horizon. { angle, illuminated, earthshine, alpha }
+  function moonLook(style, moon, spaceAngle, ms) {
+    var c = currentCoordinates
+    if (style !== "earth" || !c)
+      return { angle: Moon.moonLitAngleFor(style, moon, spaceAngle, c ? Number(c.lat) : 0), illuminated: moon.illuminated,
+        earthshine: false, alpha: 1 }
+    var v = MoonView.view(Number(c.lat), Number(c.lon), ms, { riseSet: false })
+    return { angle: v.litAngle, illuminated: v.illuminated, earthshine: v.earthshine, alpha: v.aboveHorizon ? 1 : 0.4 }
+  }
+
+  // The Moon at the current place at ms, worded: "Berlin: 23° high · SE ·
+  // rises 6:42 PM · sets 7:10 AM" or "…: below the horizon · rises …", the
+  // times in that place's clock; "" without a place. Kept per minute (the
+  // rise and set search costs a few milliseconds).
+  readonly property var moonPlaceCache: ({ key: "", text: "" })
+  // quick: without rise and set (while time runs, a frame at a time).
+  function moonPlaceLine(ms, quick) {
+    var c = currentCoordinates
+    if (!c) return ""
+    var minute = Math.floor(ms / 60000) * 60000
+    var key = minute + "|" + c.lat + "|" + c.lon + "|" + interfaceLanguage + "|" + currentName + "|" + !!quick
+    if (moonPlaceCache.key === key) return moonPlaceCache.text
+    var v = MoonView.view(Number(c.lat), Number(c.lon), minute, { riseSet: !quick })
+    var offset = currentCity ? currentOffset : Model.localOffsetSeconds(minute)
+    var parts = [v.aboveHorizon
+      ? i18n("moonAboveHorizon", { altitude: Math.max(0, Math.round(v.apparentAltitude)), direction: i18n("compass_" + Moon.compassPoint(v.azimuth)) })
+      : i18n("moonBelowHorizon")]
+    var events = []
+    if (v.rise) events.push({ at: v.rise, key: "moonRises" })
+    if (v.set) events.push({ at: v.set, key: "moonSets" })
+    events.sort(function(a, b) { return a.at - b.at })
+    for (var i = 0; i < events.length; i++) parts.push(i18n(events[i].key, { time: clockFor(events[i].at, offset, false) }))
+    var text = i18n("moonFromPlace", { place: currentName, details: parts.join(" · ") })
+    // Changed in place: no binding hears of it.
+    moonPlaceCache.key = key
+    moonPlaceCache.text = text
+    return text
   }
 
   // The label of the flat map and the globe (TimeMapHoverLabel.qml).
   function mapHoverText(hover) {
     if (!hover) return ""
     if (hover.text) return hover.text
-    if (hover.moon) return moonText(hover.moon)
+    if (hover.moon) return moonText(hover.moon, hover.ms)
     return Model.utcOffsetLabel(hover.minutes * 60) + "  ·  " + clockFor(nowMs, hover.minutes * 60, false)
       + "  " + i18n("standardTime")
   }
@@ -1149,7 +1199,7 @@ Panel {
   // What the pointer at (x, y) rests on over a map: the Moon where it was
   // drawn (moonHit), else the zone zoneAt(x, y) gives (minutes or null).
   function mapHoverAt(moonHit, x, y, zoneAt) {
-    if (moonHit && Math.hypot(moonHit.x - x, moonHit.y - y) <= Style.space(8)) return { moon: moonHit.moon, x: x, y: y }
+    if (moonHit && Math.hypot(moonHit.x - x, moonHit.y - y) <= Style.space(8)) return { moon: moonHit.moon, ms: moonHit.ms, x: x, y: y }
     var minutes = zoneAt(x, y)
     return minutes === null ? null : { minutes: minutes, x: x, y: y }
   }

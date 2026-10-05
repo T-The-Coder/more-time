@@ -93,3 +93,35 @@ test("zoom steps: whole system, inner system, Earth; the extent fits", () => {
   assert.ok(5 * s <= 300 + 1e-9)
   assert.ok(5 * s * (Math.sin(Math.PI / 6) + 0.12 * Math.cos(Math.PI / 6)) <= 150 + 1e-9)
 })
+
+test("sky projection: the stars behind the model, fixed to the camera", () => {
+  const cam = V.camera(-60, 30)
+  // The camera's axes (as AstroRotation.cameraAxes gives them).
+  const right = [cam.ca, cam.sa, 0]
+  const up = [-cam.sa * cam.se, cam.ca * cam.se, cam.ce]
+  const toward = [cam.sa * cam.ce, -cam.ca * cam.ce, cam.se]
+  const w = 600, h = 400, half = Math.hypot(w, h) / 2
+  const along = (a, b, deg) => a.map((v, i) => v * Math.cos(deg * Math.PI / 180) + b[i] * Math.sin(deg * Math.PI / 180))
+  const ahead = toward.map((v) => -v)
+  const dirs = [ahead, along(ahead, right, V.SKY_FIELD / 2), along(ahead, up, 20), toward, along(ahead, right, -30)]
+  const p = V.skyProjection(dirs.map((d) => d[0]), dirs.map((d) => d[1]), dirs.map((d) => d[2]), dirs.length, cam, w, h, 4)
+  // Straight ahead: the middle; half the field to the right: the half diagonal.
+  near(p.x[0], 300, 1e-9)
+  near(p.y[0], 200, 1e-9)
+  near(p.x[1], 300 + half, 1e-6)
+  near(p.y[1], 200, 1e-6)
+  assert.equal(p.on[1], false)
+  // Up is up (y falls), left is left, behind the viewer is off.
+  assert.ok(p.y[2] < 200 && Math.abs(p.x[2] - 300) < 1e-6 && p.on[2])
+  assert.ok(p.x[4] < 300 && p.on[4])
+  assert.equal(p.on[3], false)
+  // A figure's name: the mean of its stars on the canvas, none when most are off.
+  assert.deepEqual(V.figureStars([[0, 2], [2, 4]]), [0, 2, 4])
+  const anchor = V.figureAnchor(V.figureStars([[0, 2], [2, 4]]), p)
+  near(anchor.x, (p.x[0] + p.x[2] + p.x[4]) / 3, 1e-9)
+  assert.equal(V.figureAnchor(V.figureStars([[1, 3], [3, 0]]), p), null)
+  // Filling an earlier result again gives the same places.
+  const again = V.skyProjection(dirs.map((d) => d[0]), dirs.map((d) => d[1]), dirs.map((d) => d[2]), dirs.length, cam, w, h, 4, p)
+  assert.equal(again, p)
+  near(again.x[0], 300, 1e-9)
+})

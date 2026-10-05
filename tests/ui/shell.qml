@@ -3,6 +3,7 @@ import Quickshell
 import "Time" as Time
 import "Time/WorldMap.js" as WorldMap
 import "Time/Moon.js" as Moon
+import "Time/MoonView.js" as MoonView
 import qs.Commons
 
 // Screenshot run for tests/ui-shots.sh: the app view with sample items, every
@@ -171,9 +172,13 @@ ShellRoot {
     // The Moon as seen from here (its phase in the sky), then from space again.
     function() { var g = globe(); g.hover = null; display("worldMoonStyle", "earth") },
     function() {
-      var m = Moon.moonPosition(Date.now())
-      console.log("MOON style earth", m.waxing ? "waxing" : "waning", "observer", globe().observerLat.toFixed(1),
-        "lit", Moon.moonLitAngleFor("earth", m, 0, globe().observerLat) === 0 ? "right" : "left")
+      var g = globe()
+      var c = panel.currentCoordinates
+      var v = MoonView.view(Number(c.lat), Number(c.lon), g.minuteMs)
+      console.log("MOON view", panel.currentName, "tilt", v.tilt.toFixed(1), "lit", (v.illuminated * 100).toFixed(0) + "%",
+        "alt", v.apparentAltitude.toFixed(1), "az", v.azimuth.toFixed(0), "earthshine", v.earthshine)
+      g.hover = g.moonHit ? { moon: g.moonHit.moon, ms: g.moonHit.ms, x: g.moonHit.x, y: g.moonHit.y } : null
+      console.log("MOON hover", JSON.stringify(panel.mapHoverText(g.hover)))
     },
     function() { shot("01l-globe-moon-earth") },
     function() { display("worldMoonStyle", "space") },
@@ -331,6 +336,11 @@ ShellRoot {
     function() { shot("11-settings-shortcuts") },
     function() { panel.settingsPage = "sources" },
     function() { shot("12-settings-sources") },
+    function() { panel.settingsItem.scrollBy(1500) },
+    function() { shot("12b-settings-sources-stars") },
+    function() { panel.settingsItem.scrollBy(1000) },
+    function() { shot("12c-settings-sources-licence") },
+    function() { panel.settingsItem.scrollBy(-10000) },
     function() { panel.settingsOpen = false; general("language", "de"); panel.activeTab = "alarms"; panel.editingId = panel.itemsStore.items.alarms[0].id },
     function() { shot("13-alarm-editor-de") },
     function() { panel.editingId = ""; panel.activeTab = "timers" },
@@ -641,7 +651,7 @@ ShellRoot {
     },
     function() { console.log("ASTRO iss far", astro().iss === null ? "hidden" : "SHOWN", JSON.stringify(astroView().infoText.split("\n").slice(-1)[0])) },
     function() { var a = astro(); a.backToNow(); a.finishTravel(); display("astroIss", false) },
-    function() { var a = astro(); a.zoomIndex = 0; a.pinned = "jupiter" },
+    function() { var a = astro(); a.zoomIndex = 0; a.pinned = "jupiter"; display("astroConstellations", true) },
     function() {
       var a = astro()
       a.pointer = null
@@ -649,18 +659,43 @@ ShellRoot {
       a.zoomIndex = 0
       display("astroAutoRotate", true)
       a.paintStats = { count: 0, total: 0, max: 0 }
+      a.starStats = { count: 0, total: 0, max: 0 }
       a.rotating = true
     },
     function() {},
     function() {},
     function() {
       var a = astro()
-      var st = a.paintStats
+      var st = a.paintStats, ss = a.starStats
       console.log("ASTRO frames", st.count, "ms/frame", (st.total / Math.max(1, st.count)).toFixed(1), "max", st.max,
+        "stars frames", ss.count, "ms/frame", (ss.total / Math.max(1, ss.count)).toFixed(1), "max", ss.max,
+        "proj", ((ss.proj || 0) / Math.max(1, ss.count)).toFixed(1), "figs", ((ss.figs || 0) / Math.max(1, ss.count)).toFixed(1),
+        "dots", ((ss.dots || 0) / Math.max(1, ss.count)).toFixed(1), "labels", ((ss.labels || 0) / Math.max(1, ss.count)).toFixed(1),
         "size", Math.round(a.width) + "x" + Math.round(a.height))
       display("astroAutoRotate", false)
-      panel.activeTab = "world"
+      a.rotating = false
+      a.pinned = ""
+      a.azimuth = -100
+      a.elevation = 25
     },
+    // The stars and the constellations behind the system; a bright star's
+    // name under the pointer; the Earth–Moon view with the stars.
+    function() {
+      var a = astro()
+      var s = a.starData, p = a.starProjection
+      var hit = null
+      for (var i = 0; s && p && i < s.nameList.length && !hit; i++) {
+        var k = s.nameList[i].index
+        if (p.on[k] && p.x[k] > 60 && p.x[k] < a.width - 200 && p.y[k] > 40 && p.y[k] < a.height - 40) hit = { x: p.x[k], y: p.y[k] }
+      }
+      if (hit) { a.pointer = hit; a.updateHover() }
+      console.log("ASTRO star", JSON.stringify(a.hover ? a.hover.text : null), "stars", s ? s.count : 0)
+    },
+    function() { shot("44a-astro-constellations") },
+    function() { var a = astro(); a.pointer = null; a.updateHover(); a.zoomIndex = 2 },
+    function() { shot("44b-astro-earth-stars") },
+    function() { var a = astro(); a.zoomIndex = 0; a.azimuth = a.startAzimuth; a.elevation = 30; display("astroConstellations", false) },
+    function() { console.log("ASTRO info here", JSON.stringify(astroView().infoText)); panel.activeTab = "world" },
     // Deleting a city before the current one keeps the same city current.
     function() {
       panel.setCurrentPlace(2)

@@ -4,6 +4,22 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Astro: the stars behind everything** (on by default): the stars to
+  magnitude 5 from the Yale Bright Star Catalogue where they stand on the
+  sky, turning with the view; a bright star under the pointer is named with
+  its constellation. **Constellations** (off by default): the stick figures
+  with their Latin names (d3-celestial, BSD licence, shown on the Sources
+  page). Both have chips under the view.
+- **The Moon as seen from here, for real:** Display → Moon view (formerly
+  "Moon") "As seen from here" now tilts the lit side as the Moon stands in
+  the sky of the current place at that moment, lights a thin crescent's
+  dark side with earthshine and dims the Moon while it is below the
+  horizon. Its hover, the Astro Moon label and the info line add its
+  height and direction and when it rises and sets there.
+- **One Sun colour:** the map, the globe (also on the GPU), Astro and the
+  sunrise and sunset icons in the city list draw the Sun in the same gold,
+  softened towards the text colour until it reads at 3:1 (shared with More
+  Weather).
 - **Settings, reorganised:** a search across every page (`/`), finding
   settings in the interface language or in English; General in sections
   (language and format, location, defaults for new items, motion, app, back

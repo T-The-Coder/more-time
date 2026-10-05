@@ -29,6 +29,7 @@ function sunElevation(lat, lon, utcMs) { return Sky.sunElevation(lat, lon, utcMs
 function sunTimes(lat, lon, utcMs, offsetSeconds) { return Sky.sunTimes(lat, lon, utcMs, offsetSeconds) }
 function skyMix(elevationDeg) { return Sky.skyMix(elevationDeg) }
 function skyColor(elevationDeg, foreground, background) { return Sky.skyColor(elevationDeg, foreground, background) }
+function sunColor(foreground, background) { return Sky.sunColor(foreground, background) }
 function hexRgb(hex) { return Sky.hexRgb(hex) }
 function rgbHex(rgb) { return Sky.rgbHex(rgb) }
 function contrast(a, b) { return Sky.contrast(a, b) }
@@ -77,6 +78,6 @@ if (typeof module !== "undefined") module.exports = {
   project: project, unproject: unproject, outline: outline, graticule: graticule,
   subsolarPoint: subsolarPoint, nightPolygon: nightPolygon, twilightPolygon: twilightPolygon, twilightRings: twilightRings, ringContains: ringContains,
   zoneAt: zoneAt, zebraBand: zebraBand, X_MAX: X_MAX, Y_MAX: Y_MAX,
-  sunElevation: sunElevation, sunTimes: sunTimes, nightFill: nightFill, bandFill: bandFill, twilightLayers: twilightLayers, twilightElevations: twilightElevations,  skyMix: skyMix, skyColor: skyColor, contrast: contrast,
+  sunElevation: sunElevation, sunTimes: sunTimes, nightFill: nightFill, bandFill: bandFill, twilightLayers: twilightLayers, twilightElevations: twilightElevations,  skyMix: skyMix, skyColor: skyColor, sunColor: sunColor, contrast: contrast,
   hexRgb: hexRgb, rgbHex: rgbHex
 }

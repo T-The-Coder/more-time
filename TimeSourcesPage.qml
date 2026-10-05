@@ -16,6 +16,16 @@ Column {
 
   function label(key) { return panel.i18n(key) }
 
+  // The licence of the constellation figures and names (BSD 3-Clause),
+  // which asks for its notice to be shown with them.
+  readonly property string d3CelestialLicence: "Constellation figures and names: d3-celestial\n"
+    + "Copyright (c) 2015, Olaf Frohn\nAll rights reserved.\n\n"
+    + "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n"
+    + "1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n"
+    + "2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n"
+    + "3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\n"
+    + "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+
   readonly property var groups: [
     {
       title: "sourceGroupZones", details: "sourceGroupZonesDetails",
@@ -58,6 +68,22 @@ Column {
       links: [["NAIF pck00010.tpc", "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc"],
         ["JPL Horizons", "https://ssd.jpl.nasa.gov/horizons/"], ["JPL SBDB", "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html"],
         ["NSSDCA: Saturn's rings", "https://nssdc.gsfc.nasa.gov/planetary/factsheet/satringfact.html"]]
+    },
+    {
+      title: "sourceGroupStars", details: "sourceGroupStarsDetails",
+      inUse: panel.displaySetting("astroStars", true) === true || panel.displaySetting("astroConstellations", false) === true
+        ? "BSC5 · IAU WGSN · D3-CELESTIAL" : "",
+      links: [["Yale Bright Star Catalogue (CDS V/50)", "https://cdsarc.cds.unistra.fr/ftp/V/50/"],
+        ["IAU WGSN Catalog of Star Names", "https://www.pas.rochester.edu/~emamajek/WGSN/IAU-CSN.txt"],
+        ["d3-celestial", "https://github.com/ofrohn/d3-celestial"],
+        ["Roman 1987 (CDS VI/42)", "https://cdsarc.cds.unistra.fr/viz-bin/cat/VI/42"]],
+      notice: sourcesPage.d3CelestialLicence
+    },
+    {
+      title: "sourceGroupMoonView", details: "sourceGroupMoonViewDetails",
+      inUse: "MEEUS",
+      links: [["PyMeeus (tables 47.A, 47.B)", "https://github.com/architest/pymeeus"],
+        ["JPL Horizons", "https://ssd.jpl.nasa.gov/horizons/"]]
     },
     {
       title: "sourceGroupLocation", details: "sourceGroupLocationDetails",
@@ -139,6 +165,18 @@ Column {
           color: sourcesPage.panel.mutedText
           font.family: sourcesPage.panel.fontFamily
           font.pixelSize: Style.font.caption
+          wrapMode: Text.WordWrap
+        }
+
+        // A licence notice to show with the data, as it is (English).
+        Text {
+          textFormat: Text.PlainText
+          visible: !!sourceCard.modelData.notice
+          width: parent.width
+          text: sourceCard.modelData.notice || ""
+          color: sourcesPage.panel.subtleText
+          font.family: sourcesPage.panel.fontFamily
+          font.pixelSize: Math.max(9, Style.font.caption - 2)
           wrapMode: Text.WordWrap
         }
 

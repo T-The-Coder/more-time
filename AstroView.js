@@ -112,9 +112,76 @@ function scaleFor(extent, width, height, elevation) {
   return Math.max(1, Math.min(width / 2 / extent, height / 2 / (extent * vertical)))
 }
 
+// ---- The sky behind the model: directions on a sphere at infinity ----
+// The view of the stars spans SKY_FIELD degrees across the canvas
+// diagonal, at every zoom step.
+var SKY_FIELD = 110
+
+// Directions (unit vectors in the ecliptic J2000, arrays xs, ys, zs of
+// length n) on a canvas w × h for the camera alone: no scale, no shift, so
+// the stars turn with the view but never move with the zoom or the time.
+// The camera looks along −toward (depth < 0 is ahead), so this is the sky
+// behind the model as seen from the viewer, in a stereographic projection
+// (shapes stay true near the edges). Returns { x, y, on }: canvas points
+// and whether each is ahead and on the canvas (with `margin` px around).
+// reuse: an earlier result whose arrays are filled again (no new garbage
+// while the view turns).
+function skyProjection(xs, ys, zs, n, cam, w, h, margin, reuse) {
+  var half = Math.sqrt(w * w + h * h) / 2
+  var k = half / Math.tan(SKY_FIELD / 4 * RAD)
+  var cx = w / 2, cy = h / 2
+  var m = margin || 0
+  var out = reuse && reuse.x.length === n ? reuse : { x: new Array(n), y: new Array(n), on: new Array(n) }
+  for (var i = 0; i < n; i++) {
+    var x1 = xs[i] * cam.ca + ys[i] * cam.sa
+    var y1 = -xs[i] * cam.sa + ys[i] * cam.ca
+    var vy = y1 * cam.se + zs[i] * cam.ce
+    var ahead = y1 * cam.ce - zs[i] * cam.se
+    var f = k / (1 + ahead)
+    var px = cx + x1 * f, py = cy - vy * f
+    out.x[i] = px
+    out.y[i] = py
+    out.on[i] = ahead > -0.2 && px >= -m && px <= w + m && py >= -m && py <= h + m
+  }
+  return out
+}
+
+// The stars a figure uses, each once: [i, ...] from its segments [[i, j],
+// ...] (AstroStars.figureSegments); worked out once per figure.
+function figureStars(segments) {
+  var seen = {}
+  var out = []
+  for (var s = 0; s < segments.length; s++) {
+    for (var e = 0; e < 2; e++) {
+      var i = segments[s][e]
+      if (seen[i]) continue
+      seen[i] = true
+      out.push(i)
+    }
+  }
+  return out
+}
+
+// Where a constellation's name goes: the mean of its stars (figureStars)
+// that are on the canvas (projection from skyProjection), or null when
+// fewer than half of them are.
+function figureAnchor(stars, projection) {
+  var sx = 0, sy = 0, on = 0
+  for (var k = 0; k < stars.length; k++) {
+    var i = stars[k]
+    if (!projection.on[i]) continue
+    sx += projection.x[i]
+    sy += projection.y[i]
+    on++
+  }
+  if (!on || on * 2 < stars.length) return null
+  return { x: sx / on, y: sy / on }
+}
+
 if (typeof module !== "undefined") module.exports = {
   EXPONENT: EXPONENT, ELEVATION_MIN: ELEVATION_MIN, ELEVATION_MAX: ELEVATION_MAX, ELEVATION_DEFAULT: ELEVATION_DEFAULT,
   ZOOMS: ZOOMS, modelDistance: modelDistance, modelPoint: modelPoint, bodyRadius: bodyRadius,
   clampElevation: clampElevation, camera: camera, view: view, project: project, depthSorted: depthSorted,
-  shortestTurn: shortestTurn, hitTest: hitTest, scaleFor: scaleFor
+  shortestTurn: shortestTurn, hitTest: hitTest, scaleFor: scaleFor,
+  SKY_FIELD: SKY_FIELD, skyProjection: skyProjection, figureStars: figureStars, figureAnchor: figureAnchor
 }

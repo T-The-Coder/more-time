@@ -14,6 +14,8 @@ import "Globe.js" as Globe
 import "Moon.js" as Moon
 import "AstroView.js" as AstroView
 import "Sky.js" as Sky
+import "AstroStars.js" as AstroStars
+import "MoonView.js" as MoonView
 
 // The Astro tab: the solar system as a clock. The Sun and the eight planets
 // where they stand now (Astro.js, JPL's approximate elements), seen at a
@@ -485,6 +487,90 @@ Column {
       return Qt.rgba(mixed[0], mixed[1], mixed[2], 1)
     }
 
+    // ---- The stars behind everything (AstroStars.js): directions on the
+    //      sky, fixed in J2000, so they turn with the camera only ----
+    readonly property bool showStars: panel.displaySetting("astroStars", true) === true
+    readonly property bool showConstellations: panel.displaySetting("astroConstellations", false) === true
+    readonly property bool skyShown: showStars || showConstellations
+    property var starData: null
+    property var constellations: null
+    // Each figure's segments, once the files are read.
+    property var figures: null
+    function dataPath(name) { return String(Qt.resolvedUrl("data/" + name)).replace(/^file:\/\//, "") }
+    property FileView starFile: FileView {
+      path: sky.skyShown ? sky.dataPath("astro-stars.json") : ""
+      printErrors: false
+      onLoaded: {
+        try { sky.starData = AstroStars.stars(JSON.parse(text())) } catch (e) { console.warn("more-time: star data unreadable:", e) }
+      }
+    }
+    // The constellation names also serve the hover ("Mars · in Leo").
+    property FileView constellationFile: FileView {
+      path: sky.dataPath("astro-constellations.json")
+      printErrors: false
+      onLoaded: {
+        try {
+          var cons = JSON.parse(text())
+          var figures = AstroStars.allFigures(cons)
+          for (var f = 0; f < figures.length; f++) figures[f].stars = AstroView.figureStars(figures[f].segments)
+          sky.figures = figures
+          sky.constellations = cons
+        } catch (e) { console.warn("more-time: constellation data unreadable:", e) }
+      }
+    }
+    // The stars to magnitude 5 by colour class and brightness step
+    // (class × 3 + step: brighter than 2, than 3.5, the rest), and each
+    // star's drawn radius; worked out once.
+    property var starBuckets: null
+    onStarDataChanged: {
+      var s = starData
+      if (s) {
+        var buckets = []
+        for (var b = 0; b < 15; b++) buckets.push([])
+        s.size = []
+        for (var i = 0; i < s.count; i++) {
+          var m = s.mag[i]
+          s.size.push(AstroStars.starSize(m) * 0.8)
+          if (m > 5) continue
+          buckets[Math.max(0, Math.min(4, s.color[i])) * 3 + (m < 2 ? 0 : m < 3.5 ? 1 : 2)].push(i)
+        }
+        starBuckets = buckets
+      }
+      starCanvas.requestPaint()
+    }
+    onFiguresChanged: starCanvas.requestPaint()
+    onShowStarsChanged: starCanvas.requestPaint()
+    onShowConstellationsChanged: starCanvas.requestPaint()
+    // The Latin name of a constellation by its IAU abbreviation.
+    function constellationName(abbr) {
+      if (!constellations) return abbr
+      var k = AstroStars.constellationIndex(constellations, abbr)
+      return k >= 0 ? constellations.latin[k] : abbr
+    }
+    // The stars' places on the canvas, kept until the camera or the size
+    // changes (starCanvas); the named ones answer the pointer.
+    property var starProjection: null
+    // Where the constellations' names stand: [{ text, x, y }].
+    property var constellationPlaces: []
+    // What drawing the stars costs (the screenshot harness).
+    property alias starStats: starCanvas.paintStats
+    function starHover(x, y) {
+      var p = starProjection, s = starData
+      if (!p || !s || !showStars) return null
+      var best = -1, bestD = Style.space(6)
+      for (var i = 0; i < s.nameList.length; i++) {
+        var k = s.nameList[i].index
+        if (!p.on[k]) continue
+        var d = Math.hypot(p.x[k] - x, p.y[k] - y)
+        if (d < bestD) { best = k; bestD = d }
+      }
+      if (best < 0) return null
+      var abbr = constellations ? AstroStars.constellationOf(constellations, s.ra[best], s.dec[best]) : ""
+      var mag = panel.latinDigits(Number(s.mag[best]).toLocaleString(panel.interfaceLocale, "f", 1))
+      return { key: "star:" + best, text: s.names[best] + "\n" + panel.i18n("astroStarInfo",
+        { constellation: constellationName(abbr), mag: mag }), x: x, y: y }
+    }
+
     // ---- What the pointer rests on ----
     property var pointer: null
     property var hover: null
@@ -521,6 +607,8 @@ Column {
         lines.push(panel.i18n("astroMoonDistance", { km: number(Math.round(info.distanceKm), 0),
           seconds: number(info.distanceKm / 299792.458, 2) }))
         lines.push(panel.i18n("astroMoonAge", { days: number(info.ageDays, 1) }))
+        var place = panel.moonPlaceLine(minuteMs, playing || traveling)
+        if (place) lines.push(place)
         return lines.join("\n")
       }
       if (key === "sun") {
@@ -578,7 +666,7 @@ Column {
         return
       }
       var hit = AstroView.hitTest(hits, p.x, p.y, Style.space(6))
-      hover = hit ? { key: hit.key, text: infoText(hit.key), x: p.x, y: p.y } : pinnedHover()
+      hover = hit ? { key: hit.key, text: infoText(hit.key), x: p.x, y: p.y } : (starHover(p.x, p.y) || pinnedHover())
     }
     function pinnedHover() {
       if (pinned === "") return null
@@ -621,6 +709,161 @@ Column {
         var elapsed = Math.min(500, now - last)
         last = now
         if (!turnAnimation.running) sky.azimuth += elapsed * 360 / (sky.rotateTurnMinutes * 60000)
+      }
+    }
+
+    // The stars and the constellation figures, behind the model: redrawn
+    // only when the camera, the size or the options change, not when time
+    // runs.
+    Canvas {
+      id: starCanvas
+      anchors.fill: parent
+      visible: sky.skyShown
+      property color ink: sky.panel.foreground
+      onInkChanged: requestPaint()
+      readonly property string cameraKey: sky.azimuth.toFixed(3) + "|" + sky.elevation.toFixed(3) + "|" + width + "|" + height
+      onCameraKeyChanged: cameraMoved()
+      // Faint colour classes (AstroStars.COLOR_KEYS) mixed towards the text
+      // colour, so they read on light and dark themes.
+      readonly property var classColors: [[0.62, 0.72, 1], [0.92, 0.94, 1], [1, 0.96, 0.84], [1, 0.88, 0.66], [1, 0.74, 0.52]]
+      function tone(k) {
+        var c = Sky.mixRgb(classColors[k] || classColors[1], [ink.r, ink.g, ink.b], 0.45)
+        return c
+      }
+      property var paintStats: ({ count: 0, total: 0, max: 0 })
+      // The names' widths per font, measured once.
+      readonly property var labelWidths: ({})
+      // While the view turns by itself (slowly), the stars follow four
+      // times a second; a drag or a key moves them at once.
+      Timer {
+        id: starThrottle
+        interval: 250
+        onTriggered: starCanvas.requestPaint()
+      }
+      function cameraMoved() {
+        if (!sky.rotating) requestPaint()
+        else if (!starThrottle.running) starThrottle.start()
+      }
+
+      onPaint: {
+        var started = Date.now()
+        var ctx = getContext("2d")
+        ctx.reset()
+        var s = sky.starData
+        var w = width, h = height
+        if (!s || w <= 0 || h <= 0 || !sky.skyShown) {
+          sky.starProjection = null
+          sky.constellationPlaces = []
+          return
+        }
+        var cam = AstroView.camera(sky.azimuth, sky.elevation)
+        var p = AstroView.skyProjection(s.x, s.y, s.z, s.count, cam, w, h, 4, sky.starProjection)
+        sky.starProjection = p
+        var tProj = Date.now()
+        if (sky.showConstellations && sky.figures) {
+          ctx.strokeStyle = Qt.rgba(ink.r, ink.g, ink.b, 0.16)
+          ctx.lineWidth = 0.8
+          ctx.beginPath()
+          for (var f = 0; f < sky.figures.length; f++) {
+            var segs = sky.figures[f].segments
+            for (var g = 0; g < segs.length; g++) {
+              var a = segs[g][0], b = segs[g][1]
+              if (!p.on[a] || !p.on[b]) continue
+              ctx.moveTo(p.x[a], p.y[a])
+              ctx.lineTo(p.x[b], p.y[b])
+            }
+          }
+          ctx.stroke()
+        }
+        var tFig = Date.now()
+        if (sky.showStars && sky.starBuckets) {
+          // One path per colour class and brightness step (starBuckets);
+          // the bright ones round, the rest tiny squares.
+          for (var bucket = 0; bucket < sky.starBuckets.length; bucket++) {
+            var list = sky.starBuckets[bucket]
+            var step = bucket % 3
+            ctx.beginPath()
+            var any = false
+            for (var j = 0; j < list.length; j++) {
+              var i = list[j]
+              if (!p.on[i]) continue
+              var r = s.size[i]
+              if (step === 0) {
+                ctx.moveTo(p.x[i] + r, p.y[i])
+                ctx.arc(p.x[i], p.y[i], r, 0, Math.PI * 2)
+              } else {
+                ctx.rect(p.x[i] - r, p.y[i] - r, r * 2, r * 2)
+              }
+              any = true
+            }
+            if (!any) continue
+            var c = tone(Math.floor(bucket / 3))
+            ctx.fillStyle = Qt.rgba(c[0], c[1], c[2], [0.85, 0.6, 0.38][step])
+            ctx.fill()
+          }
+        }
+        var tDots = Date.now()
+        // Latin names in the middle of each figure (constellationLabels
+        // draws them as text items); the IAU abbreviation where the name
+        // would touch another, nothing where both would.
+        var places = []
+        if (sky.showConstellations && sky.figures && sky.constellations) {
+          var fontPx = constellationLabels.fontPx
+          ctx.font = sky.panel.canvasFont(fontPx, false, true)
+          var taken = []
+          function free(x, y, tw) {
+            for (var t = 0; t < taken.length; t++) {
+              var o = taken[t]
+              if (Math.abs(o.x - x) * 2 < o.w + tw + 4 && Math.abs(o.y - y) < fontPx + 2) return false
+            }
+            return true
+          }
+          for (var k = 0; k < sky.figures.length; k++) {
+            var at = AstroView.figureAnchor(sky.figures[k].stars, p)
+            if (!at) continue
+            var names = [sky.constellations.latin[k], sky.figures[k].abbr]
+            for (var q = 0; q < names.length; q++) {
+              var widthKey = ctx.font + "|" + names[q]
+              var tw = labelWidths[widthKey]
+              if (tw === undefined) tw = labelWidths[widthKey] = ctx.measureText(names[q]).width
+              if (at.x - tw / 2 < 2 || at.x + tw / 2 > w - 2 || !free(at.x, at.y, tw)) continue
+              taken.push({ x: at.x, y: at.y, w: tw })
+              places.push({ text: names[q], x: at.x, y: at.y })
+              break
+            }
+          }
+        }
+        sky.constellationPlaces = places
+        var spent = Date.now() - started
+        var st = paintStats
+        paintStats = { count: st.count + 1, total: st.total + spent, max: Math.max(st.max, spent),
+          proj: (st.proj || 0) + tProj - started, figs: (st.figs || 0) + tFig - tProj, dots: (st.dots || 0) + tDots - tFig,
+          labels: (st.labels || 0) + Date.now() - tDots }
+      }
+    }
+
+    // The constellations' names over their figures, as text (cheaper than
+    // drawing them on the canvas each time the stars move).
+    Item {
+      id: constellationLabels
+      anchors.fill: parent
+      visible: sky.showConstellations && starCanvas.visible
+      readonly property real fontPx: Math.max(9, Style.font.caption - 2)
+      Repeater {
+        model: sky.constellationPlaces.length
+        Text {
+          required property int index
+          readonly property var place: sky.constellationPlaces[index] || null
+          textFormat: Text.PlainText
+          visible: place !== null
+          text: place ? place.text : ""
+          x: place ? place.x - implicitWidth / 2 : 0
+          y: place ? place.y - implicitHeight / 2 : 0
+          color: Qt.rgba(starCanvas.ink.r, starCanvas.ink.g, starCanvas.ink.b, 0.38)
+          font.family: sky.panel.fontFamily
+          font.pixelSize: constellationLabels.fontPx
+          font.italic: true
+        }
       }
     }
 
@@ -1492,6 +1735,8 @@ Column {
     if (info.moon.nextNew && info.moon.nextFull)
       moonLine += " · " + panel.i18n("astroMoonNext", { newMoon: shortMoment(info.moon.nextNew), fullMoon: shortMoment(info.moon.nextFull) })
     lines.push(moonLine)
+    var moonHere = panel.moonPlaceLine(sky.minuteMs, sky.playing || sky.traveling)
+    if (moonHere) lines.push(moonHere)
     var yearLine = []
     if (info.season) yearLine.push(panel.i18n("astroSeason_" + info.season.key) + " " + shortMoment(info.season.utcMs))
     if (info.opposition) yearLine.push(panel.i18n("astroOpposition", { planet: panel.i18n("astroBody_" + info.opposition.key),
@@ -1519,9 +1764,9 @@ Column {
     panel: view.panel
     readonly property var keys: ({ orbits: "astroOrbits", names: "astroNames", monthRing: "astroMonthRing",
       rotation: "astroRotation", belts: "astroBelts", dwarfs: "astroDwarfs", comets: "astroComets", moons: "astroMoons",
-      spacecraft: "astroSpacecraft", iss: "astroIss" })
+      spacecraft: "astroSpacecraft", iss: "astroIss", stars: "astroStars", constellations: "astroConstellations" })
     readonly property var defaults: ({ orbits: true, names: true, monthRing: true, rotation: true, belts: true, dwarfs: true,
-      comets: false, moons: false, spacecraft: false, iss: false })
+      comets: false, moons: false, spacecraft: false, iss: false, stars: true, constellations: false })
     function on(id) { return view.panel.displaySetting(keys[id], defaults[id]) === true }
     chips: [
       { id: "orbits", glyph: "\u{f0018}", label: "chip_orbits", on: on("orbits") },
@@ -1533,7 +1778,9 @@ Column {
       { id: "comets", glyph: "\u{f1741}", label: "chip_comets", on: on("comets") },
       { id: "moons", glyph: "\u{f0f62}", label: "chip_moons", on: on("moons") },
       { id: "spacecraft", glyph: "\u{f14de}", label: "chip_spacecraft", on: on("spacecraft") },
-      { id: "iss", glyph: "\u{f1383}", label: "chip_iss", on: on("iss") }
+      { id: "iss", glyph: "\u{f1383}", label: "chip_iss", on: on("iss") },
+      { id: "stars", glyph: "\u{f04ce}", label: "chip_stars", on: on("stars"), divider: true },
+      { id: "constellations", glyph: "\u{f0559}", label: "chip_constellations", on: on("constellations") }
     ]
     onToggled: function(id) { view.panel.setViewDisplaySetting(keys[id], !on(id)) }
   }

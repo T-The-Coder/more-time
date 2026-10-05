@@ -27,13 +27,13 @@ Item {
 
   readonly property bool showNight: panel.displaySetting("worldNight", true)
   readonly property bool showMoon: panel.displaySetting("worldMoon", false)
-  // "space": lit as from above; "earth": the phase as seen from the
-  // current place (here or the selected city), by its hemisphere.
+  // "space": lit as from above; "earth": as it stands in the sky of the
+  // current place (here or the selected city), Panel.moonLook.
   readonly property string moonStyle: panel.displaySetting("worldMoonStyle", "space")
-  readonly property real observerLat: panel.currentCoordinates ? Number(panel.currentCoordinates.lat) || 0 : 0
+  readonly property var observer: panel.currentCoordinates
   onShowMoonChanged: canvas.requestPaint()
   onMoonStyleChanged: canvas.requestPaint()
-  onObserverLatChanged: canvas.requestPaint()
+  onObserverChanged: canvas.requestPaint()
   // Where the Moon was drawn on the front side, for the hover, or null.
   property var moonHit: null
   readonly property real moonRadius: Style.space(6)
@@ -645,11 +645,13 @@ Item {
       if (moon && moonAt.visible) {
         var mx = globe.centerX + (moonAt.x - globe.centerX) * 1.15
         var my = globe.centerY + (moonAt.y - globe.centerY) * 1.15
-        var angle = Moon.moonLitAngleFor(globe.moonStyle, moon,
-          Moon.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) }), globe.observerLat)
-        Moon.paintMoon(ctx, mx, my, globe.moonRadius, angle, moon.illuminated, "238,236,226",
-          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
-        globe.moonHit = { x: mx, y: my, moon: moon }
+        var look = globe.panel.moonLook(globe.moonStyle, moon,
+          Moon.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) }), globe.minuteMs)
+        ctx.globalAlpha = look.alpha
+        Moon.paintMoon(ctx, mx, my, globe.moonRadius, look.angle, look.illuminated, "238,236,226",
+          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
+        ctx.globalAlpha = 1
+        globe.moonHit = { x: mx, y: my, moon: moon, ms: globe.minuteMs }
       }
 
       ctx.strokeStyle = rgba(ink, 0.35)
@@ -769,10 +771,12 @@ Item {
       if (moon && moonAt.visible) {
         var mx = cx + (moonAt.x - cx) * (1 + 0.15 / Math.pow(2, globe.zoom))
         var my = cy + (moonAt.y - cy) * (1 + 0.15 / Math.pow(2, globe.zoom))
-        var angle = Moon.moonLitAngleFor(globe.moonStyle, moon, Moon.moonLitAngle(moon, tw.sun, toScreen), globe.observerLat)
-        Moon.paintMoon(ctx, mx, my, globe.moonRadius, angle, moon.illuminated, "238,236,226",
-          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
-        globe.moonHit = { x: mx, y: my, moon: moon }
+        var look = globe.panel.moonLook(globe.moonStyle, moon, Moon.moonLitAngle(moon, tw.sun, toScreen), globe.minuteMs)
+        ctx.globalAlpha = look.alpha
+        Moon.paintMoon(ctx, mx, my, globe.moonRadius, look.angle, look.illuminated, "238,236,226",
+          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
+        ctx.globalAlpha = 1
+        globe.moonHit = { x: mx, y: my, moon: moon, ms: globe.minuteMs }
       }
       ctx.strokeStyle = rgba(ink, 0.35)
       ctx.lineWidth = 1

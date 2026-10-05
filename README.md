@@ -105,11 +105,14 @@ control.
   - Optionally the Moon on the map and the globe, where it stands at the
     zenith right now: a small shaded sphere floating above its shadow, its
     phase lit towards the Sun (the same phase numbers as More Weather);
-    hovering it names the phase ("Moon · 61 % · waxing"). Display → Moon
-    switches it to "As seen from here": the phase as you see it in the sky
-    from the current place (here or the selected city), lit on the right
-    while waxing and on the left while waning, mirrored south of the
-    equator.
+    hovering it names the phase ("Moon · 61 % · waxing") and how it stands
+    at the current place ("Berlin: 23° high · SE · sets 7:10 AM · rises
+    6:42 PM", or "below the horizon"). Display → Moon view switches it to
+    "As seen from here": the Moon as it stands in the sky of the current
+    place (here or the selected city) at that moment, its lit side tilted
+    as you see it there, a thin crescent's dark side faintly lit by
+    earthshine, and dimmed while it is below the horizon (Meeus'
+    formulas, `MoonView.js`, checked against JPL Horizons and USNO).
   - Below the map, your place (the location pin and its name, as in More
     Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
@@ -185,6 +188,15 @@ control.
     system and Earth's neighbourhood, `0` returns to the start. Like the
     globe it can turn by itself after a few idle seconds. The far halves of
     the orbits are fainter.
+  - The stars behind everything (on by default): the 1,630 stars to
+    magnitude 5 of the Yale Bright Star Catalogue where they stand on the
+    sky, sized by brightness in faint colours from blue-white to orange;
+    they turn with the view, never with the zoom or the time. The pointer on
+    a bright star names it with its constellation and magnitude ("Sirius ·
+    Canis Major · magnitude −1.5"). **Constellations** (off by default) adds
+    the stick figures and their Latin names, the IAU abbreviation where
+    names crowd. The stars are drawn on a layer of their own, redrawn only
+    when the view turns.
   - The month ring around Earth's orbit: the months' starts and initials, the
     equinoxes and solstices in the accent colour, and a line from the Sun
     through Earth as the hand of the year; a dashed arrow (γ) points to the
@@ -204,7 +216,8 @@ control.
     from the Sun and from Earth in au and light-minutes, its orbital period,
     its day and the tilt of its axis (≈ where the rotation is known only
     roughly); on the Moon its phase, the lit part, its distance in km and
-    light-seconds and its age since the new moon.
+    light-seconds, its age since the new moon and how it stands at the
+    current place (height, direction, rise and set).
   - More bodies, each group with its own switch: the asteroid and Kuiper
     belts as faint point bands and the dwarf planets Ceres, Pluto and Eris
     (on by default); Halley's Comet with its tail pointing away from the Sun;
@@ -233,12 +246,15 @@ control.
     are marked approximate. Everything follows the shown moment: the bodies,
     Earth's lit side, the Moon, the month ring's hand and the hover values.
   - An info line under it: the shown moment when it is not now, the Moon's
-    phase with the next new and full moon, the next equinox or solstice and
+    phase with the next new and full moon, the Moon at the current place
+    (height and direction or below the horizon, rise and set), the next
+    equinox or solstice and
     the next opposition, and which planets are in the evening and the
     morning sky.
   - Settings → Display → Astro: orbits, names, the month ring, rotation and
     tilt, the Earth and Moon inset, the timeline, the belts, the dwarf
-    planets, Halley's Comet, the large moons, the spacecraft, the info line,
+    planets, Halley's Comet, the large moons, the spacecraft, the ISS, the
+    stars, the constellations, the info line,
     turning by itself (delay, speed and frames per second).
 - **Ringing:**
   - Sound through PipeWire (`pw-play`), chosen per kind from the freedesktop
@@ -596,8 +612,11 @@ the flat map's projection (`project`, `unproject`, `X_MAX`, `Y_MAX`,
 `outline`, `graticule`), the flat twilight polygons (`twilightPolygon`,
 `nightPolygon`) and `ringToMap`, which puts a ring of `data/globe-land.json`
 on the map, cut at ±180° for strokes. `WorldMap.js` keeps the time zones and
-the old names as thin wrappers over both. `Moon.js` draws the Moon either way
-(`moonLitAngleFor`: from space or as seen from a latitude).
+the old names as thin wrappers over both. `Moon.js` draws the Moon (from
+space, its earthshine, the compass point of an azimuth); `MoonView.js`
+(Meeus, chapters 47 and 48) gives it as seen from a place at an instant:
+altitude, azimuth, the tilt of its lit limb, the lit part, rise and set.
+`Sky.sunColor` is the one gold every Sun is drawn in.
 `Globe.js` holds the World tab's globe and, for More Weather's globe, a view
 that can tilt to any latitude and zoom (`viewMatrix`, `prepareVectors`,
 `prepareLand`, `projectView`, `unprojectView`, `frontPolygonsView`,
@@ -628,11 +647,17 @@ depth order, zoom steps and hit testing). `tests/astro.test.mjs` checks the
 positions against references derived independently (the Sun's longitude from
 the Astronomical Almanac's formula, the 2026 seasons, Earth's perihelion, the
 Mars opposition of February 2027), `tests/astro-view.test.mjs` the view.
+The stars come from `AstroStars.js` with `data/astro-stars.json` and
+`data/astro-constellations.json`; `AstroView.skyProjection` puts them on a
+sphere at infinity for the camera alone (stereographic, 110° across the
+diagonal), drawn on their own Canvas that repaints only when the view turns.
+`ASTRO-SKY.md` describes the sky modules (stars, eclipses, the almanac, the
+Moon from here, time lapses) and their sources.
 
 Some files are shared with [More Weather](https://github.com/T-The-Coder/more-weather)
 (the switches, buttons, bar placement, app launcher entry, the request helper,
 the place search with `PlaceSearch.js` and its test, the Moon with `Moon.js`,
-its test and the `MoonSphere` component, `Sky.js`, `EqualEarth.js`, `Globe.js`
+`MoonView.js`, their tests and the `MoonSphere` component, `Sky.js`, `EqualEarth.js`, `Globe.js`
 and `data/globe-land.json` with their tests, and parts of the test setup). With both repositories side by side,
 `tests/shared-files.test.mjs` checks that the copies match, and
 `tools/sync-shared.sh from-sibling` or `to-sibling` copies them across with the
@@ -640,4 +665,7 @@ names changed.
 
 ## License
 
-MIT, see [LICENSE](LICENSE). Map data: Natural Earth, public domain.
+MIT, see [LICENSE](LICENSE). Map data: Natural Earth, public domain. Stars:
+Yale Bright Star Catalogue, public domain; star names: IAU WGSN. Constellation
+figures and names: d3-celestial, © 2015 Olaf Frohn, BSD 3-Clause (its notice
+is on the Sources page).

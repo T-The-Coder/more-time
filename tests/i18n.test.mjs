@@ -58,6 +58,7 @@ test("every key used in the QML exists", () => {
     dial_: ["classic", "minimal", "roman", "twentyFour", "dots"],
     astroSpeed_: ["day", "week", "month"],
     astroSeason_: ["marchEquinox", "juneSolstice", "septemberEquinox", "decemberSolstice"],
+    compass_: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
     moonPhase_: ["new", "waxingCrescent", "firstQuarter", "waxingGibbous", "full", "waningGibbous", "lastQuarter", "waningCrescent"],
     astroBody_: ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "moon",
       "ceres", "pluto", "eris", "halley", "io", "europa", "ganymede", "callisto", "titan", "voyager1", "voyager2", "newhorizons", "jwst", "iss"]

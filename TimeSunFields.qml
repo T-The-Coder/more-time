@@ -42,7 +42,7 @@ Row {
       width: Math.round(fields.fontSize * 0.95)
       height: width
       rising: parent.rising
-      iconColor: fields.textColor
+      iconColor: fields.panel.sunColor
     }
 
     Text {
