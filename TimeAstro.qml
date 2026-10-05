@@ -2109,6 +2109,7 @@ Column {
         panel: view.panel
         glyph: sky.playing ? "\u{f03e4}" : "\u{f040a}"
         glyphSize: Style.font.body
+        tooltip: view.panel.i18n("shortcutAstroPlay")
         active: sky.playing
         onActivated: sky.togglePlay()
       }
@@ -2366,21 +2367,26 @@ Column {
         chips: view.eventFilters.map(function(f) { return { id: f.id, glyph: f.glyph, label: "eventsFilter_" + f.id, on: view.eventsFilter === f.id } })
         onToggled: function(id) { view.eventsFilter = id }
       }
-      TimeButton {
+      // A page earlier and later: chevrons, their names as tooltips.
+      TimeIconButton {
         id: earlierButton
         anchors.right: laterButton.left
-        anchors.rightMargin: Style.space(6)
+        anchors.rightMargin: Style.space(4)
         anchors.verticalCenter: parent.verticalCenter
         panel: view.panel
-        label: view.panel.i18n("eventsEarlier")
+        glyph: "\u{f0141}"
+        glyphSize: Style.font.body
+        tooltip: view.panel.i18n("eventsEarlier")
         onActivated: view.pageEvents(-1)
       }
-      TimeButton {
+      TimeIconButton {
         id: laterButton
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         panel: view.panel
-        label: view.panel.i18n("eventsLater")
+        glyph: "\u{f0142}"
+        glyphSize: Style.font.body
+        tooltip: view.panel.i18n("eventsLater")
         onActivated: view.pageEvents(1)
       }
     }

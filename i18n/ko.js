@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "천문 현상 켜기 또는 끄기",
   shortcutAstroEventPick: "현상 선택; Enter로 이동",
   sourceGroupEclipses: "일식·월식과 천문 현상",
-  sourceGroupEclipsesDetails: "기원전 2000년부터 3000년까지의 일식·월식은 NASA의 Five Millennium Catalogs(Espenak, Meeus)에서 가져와 플러그인에 저장하고 표시되는 해만 읽습니다. 달의 위상, 계절, 행성 현상은 이 컴퓨터에서 계산합니다. 1600년 이전과 2100년 이후의 시각은 불확실하며(지구 자전을 외삽) ≈로 표시합니다."
+  sourceGroupEclipsesDetails: "기원전 2000년부터 3000년까지의 일식·월식은 NASA의 Five Millennium Catalogs(Espenak, Meeus)에서 가져와 플러그인에 저장하고 표시되는 해만 읽습니다. 달의 위상, 계절, 행성 현상은 이 컴퓨터에서 계산합니다. 1600년 이전과 2100년 이후의 시각은 불확실하며(지구 자전을 외삽) ≈로 표시합니다.",
+  showHints: "조작 안내",
+  showHintsHint: "↑↓나 Alt 1–9처럼 키와 동작을 설명하는 줄.",
+  zoomRecenter: "가운데로",
+  zoomOut: "축소",
+  zoomIn: "확대"
 }

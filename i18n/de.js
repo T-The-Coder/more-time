@@ -590,5 +590,10 @@ var catalog = {
   shortcutAstroEvents: "Himmelsereignisse ein oder aus",
   shortcutAstroEventPick: "Ereignis wählen; Enter reist dorthin",
   sourceGroupEclipses: "Finsternisse und Himmelsereignisse",
-  sourceGroupEclipsesDetails: "Finsternisse von 2000 v. Chr. bis 3000 n. Chr. aus den Five Millennium Catalogs der NASA (Espenak und Meeus), im Plugin gespeichert und nur für die gezeigten Jahre gelesen; Mondphasen, Jahreszeiten und Planetenereignisse auf diesem Rechner berechnet. Vor 1600 und nach 2100 sind die Zeiten unsicher (die Erddrehung ist hochgerechnet) und mit ≈ markiert."
+  sourceGroupEclipsesDetails: "Finsternisse von 2000 v. Chr. bis 3000 n. Chr. aus den Five Millennium Catalogs der NASA (Espenak und Meeus), im Plugin gespeichert und nur für die gezeigten Jahre gelesen; Mondphasen, Jahreszeiten und Planetenereignisse auf diesem Rechner berechnet. Vor 1600 und nach 2100 sind die Zeiten unsicher (die Erddrehung ist hochgerechnet) und mit ≈ markiert.",
+  showHints: "Bedienhinweise",
+  showHintsHint: "Die Zeilen, die Tasten und Gesten erklären, etwa ↑↓ oder Alt 1–9.",
+  zoomRecenter: "Zurück zur Mitte",
+  zoomOut: "Verkleinern",
+  zoomIn: "Vergrößern"
 }

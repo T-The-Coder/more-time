@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Evenimente pe cer pornite sau oprite",
   shortcutAstroEventPick: "Alege un eveniment; Enter călătorește acolo",
   sourceGroupEclipses: "Eclipse și evenimente pe cer",
-  sourceGroupEclipsesDetails: "Eclipse din 2000 î.Hr. până în 3000 d.Hr. din Five Millennium Catalogs ale NASA (Espenak și Meeus), stocate în plugin și citite pentru anii afișați; fazele Lunii, anotimpurile și evenimentele planetelor calculate pe acest calculator. Înainte de 1600 și după 2100 orele sunt nesigure (rotația Pământului este extrapolată) și marcate cu ≈."
+  sourceGroupEclipsesDetails: "Eclipse din 2000 î.Hr. până în 3000 d.Hr. din Five Millennium Catalogs ale NASA (Espenak și Meeus), stocate în plugin și citite pentru anii afișați; fazele Lunii, anotimpurile și evenimentele planetelor calculate pe acest calculator. Înainte de 1600 și după 2100 orele sunt nesigure (rotația Pământului este extrapolată) și marcate cu ≈.",
+  showHints: "Indicii de control",
+  showHintsHint: "Rândurile care explică tastele și gesturile, precum ↑↓ sau Alt 1–9.",
+  zoomRecenter: "Înapoi la mijloc",
+  zoomOut: "Micșorează",
+  zoomIn: "Mărește"
 }

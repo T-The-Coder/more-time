@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Peristiwa langit nyala atau mati",
   shortcutAstroEventPick: "Pilih peristiwa; Enter menuju ke sana",
   sourceGroupEclipses: "Gerhana dan peristiwa langit",
-  sourceGroupEclipsesDetails: "Gerhana dari 2000 SM hingga 3000 M dari Five Millennium Catalogs NASA (Espenak dan Meeus), disimpan di plugin dan dibaca untuk tahun yang ditampilkan; fase Bulan, musim, dan peristiwa planet dihitung di komputer ini. Sebelum 1600 dan setelah 2100 waktunya tidak pasti (rotasi Bumi diekstrapolasi) dan ditandai ≈."
+  sourceGroupEclipsesDetails: "Gerhana dari 2000 SM hingga 3000 M dari Five Millennium Catalogs NASA (Espenak dan Meeus), disimpan di plugin dan dibaca untuk tahun yang ditampilkan; fase Bulan, musim, dan peristiwa planet dihitung di komputer ini. Sebelum 1600 dan setelah 2100 waktunya tidak pasti (rotasi Bumi diekstrapolasi) dan ditandai ≈.",
+  showHints: "Petunjuk kontrol",
+  showHintsHint: "Baris yang menjelaskan tombol dan gerakan, seperti ↑↓ atau Alt 1–9.",
+  zoomRecenter: "Kembali ke tengah",
+  zoomOut: "Perkecil",
+  zoomIn: "Perbesar"
 }

@@ -202,22 +202,72 @@ Item {
       elide: Text.ElideRight
     }
 
-    // Sunrise and sunset, the golden and the blue hour, at the current place.
-    Text {
-      textFormat: Text.PlainText
-      readonly property string line: hero.panel.sunLine(hero.panel.currentCoordinates, hero.panel.currentOffset,
+    // Sunrise and sunset, the golden and the blue hour, at the current
+    // place: More Weather's drawn arrows in the Sun's gold, the hours with
+    // their glyphs; a line breaks between the pieces, never inside one.
+    Flow {
+      id: sunFlow
+      readonly property var pieces: hero.panel.sunPieces(hero.panel.currentCoordinates, hero.panel.currentOffset,
         hero.panel.displaySetting("heroSun", true), hero.panel.displaySetting("heroGoldenHour", false),
         hero.panel.displaySetting("heroBlueHour", false), hero.panel.displaySetting("heroSunNext", false))
-      visible: line !== ""
+      visible: pieces.length > 0
       width: parent.width
-      text: line
-      color: hero.panel.mutedText
-      font.family: hero.panel.fontFamily
-      font.pixelSize: Style.font.bodySmall
-      // Long with 12-hour times: a second line rather than a cut.
-      wrapMode: Text.WordWrap
-      maximumLineCount: 2
-      elide: Text.ElideRight
+      spacing: Style.space(4)
+
+      Repeater {
+        model: sunFlow.pieces
+        Row {
+          id: sunPiece
+          required property var modelData
+          required property int index
+          spacing: Style.space(4)
+          Repeater {
+            model: sunPiece.modelData
+            Row {
+              id: sunPart
+              required property var modelData
+              anchors.verticalCenter: parent.verticalCenter
+              spacing: Style.space(2)
+              TimeSunIcon {
+                visible: sunPart.modelData.icon === "rise" || sunPart.modelData.icon === "set"
+                anchors.verticalCenter: parent.verticalCenter
+                width: Style.space(11)
+                height: Style.space(11)
+                rising: sunPart.modelData.icon === "rise"
+                iconColor: hero.panel.sunColor
+              }
+              Text {
+                textFormat: Text.PlainText
+                visible: !!sunPart.modelData.icon && !(sunPart.modelData.icon === "rise" || sunPart.modelData.icon === "set")
+                anchors.verticalCenter: parent.verticalCenter
+                text: hero.panel.sunGlyphs[sunPart.modelData.icon] || ""
+                color: sunPart.modelData.icon === "golden" || sunPart.modelData.icon === "day" ? hero.panel.sunColor : hero.panel.mutedText
+                font.family: hero.panel.fontFamily
+                font.pixelSize: Style.font.bodySmall
+              }
+              Text {
+                textFormat: Text.PlainText
+                anchors.verticalCenter: parent.verticalCenter
+                text: sunPart.modelData.text
+                color: hero.panel.mutedText
+                font.family: hero.panel.fontFamily
+                font.pixelSize: Style.font.bodySmall
+              }
+            }
+          }
+          // The separator stays with the piece before it, so a wrapped
+          // line never starts with it.
+          Text {
+            textFormat: Text.PlainText
+            visible: sunPiece.index < sunFlow.pieces.length - 1
+            anchors.verticalCenter: parent.verticalCenter
+            text: "·"
+            color: hero.panel.mutedText
+            font.family: hero.panel.fontFamily
+            font.pixelSize: Style.font.bodySmall
+          }
+        }
+      }
     }
 
     Text {

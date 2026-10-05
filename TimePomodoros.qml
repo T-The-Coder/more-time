@@ -314,6 +314,7 @@ Column {
 
         Text {
           textFormat: Text.PlainText
+          visible: view.panel.showHints
           width: parent.width
           text: view.panel.i18n("editorKeysHint")
           color: view.panel.hintText

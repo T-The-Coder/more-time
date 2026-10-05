@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Eventi del cielo sì o no",
   shortcutAstroEventPick: "Scegli un evento; Invio ci viaggia",
   sourceGroupEclipses: "Eclissi ed eventi del cielo",
-  sourceGroupEclipsesDetails: "Eclissi dal 2000 a.C. al 3000 d.C. dai Five Millennium Catalogs della NASA (Espenak e Meeus), salvate nel plugin e lette per gli anni mostrati; fasi lunari, stagioni ed eventi dei pianeti calcolati su questo computer. Prima del 1600 e dopo il 2100 gli orari sono incerti (la rotazione terrestre è estrapolata) e segnati con ≈."
+  sourceGroupEclipsesDetails: "Eclissi dal 2000 a.C. al 3000 d.C. dai Five Millennium Catalogs della NASA (Espenak e Meeus), salvate nel plugin e lette per gli anni mostrati; fasi lunari, stagioni ed eventi dei pianeti calcolati su questo computer. Prima del 1600 e dopo il 2100 gli orari sono incerti (la rotazione terrestre è estrapolata) e segnati con ≈.",
+  showHints: "Suggerimenti dei comandi",
+  showHintsHint: "Le righe che spiegano tasti e gesti, come ↑↓ o Alt 1–9.",
+  zoomRecenter: "Torna al centro",
+  zoomOut: "Riduci",
+  zoomIn: "Ingrandisci"
 }

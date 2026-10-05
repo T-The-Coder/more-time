@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Hemelgebeurtenissen aan of uit",
   shortcutAstroEventPick: "Kies een gebeurtenis; Enter reist erheen",
   sourceGroupEclipses: "Verduisteringen en hemelgebeurtenissen",
-  sourceGroupEclipsesDetails: "Verduisteringen van 2000 v.Chr. tot 3000 n.Chr. uit NASA's Five Millennium Catalogs (Espenak en Meeus), opgeslagen in de plugin en gelezen voor de getoonde jaren; maanfasen, seizoenen en planeetgebeurtenissen berekend op deze computer. Vóór 1600 en na 2100 zijn de tijden onzeker (de aardrotatie is geëxtrapoleerd) en gemarkeerd met ≈."
+  sourceGroupEclipsesDetails: "Verduisteringen van 2000 v.Chr. tot 3000 n.Chr. uit NASA's Five Millennium Catalogs (Espenak en Meeus), opgeslagen in de plugin en gelezen voor de getoonde jaren; maanfasen, seizoenen en planeetgebeurtenissen berekend op deze computer. Vóór 1600 en na 2100 zijn de tijden onzeker (de aardrotatie is geëxtrapoleerd) en gemarkeerd met ≈.",
+  showHints: "Bedieningstips",
+  showHintsHint: "De regels die toetsen en gebaren uitleggen, zoals ↑↓ of Alt 1–9.",
+  zoomRecenter: "Terug naar het midden",
+  zoomOut: "Uitzoomen",
+  zoomIn: "Inzoomen"
 }

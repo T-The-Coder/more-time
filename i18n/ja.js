@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "天文現象の表示オン／オフ",
   shortcutAstroEventPick: "現象を選ぶ。Enter でそこへ移動",
   sourceGroupEclipses: "日食・月食と天文現象",
-  sourceGroupEclipsesDetails: "紀元前 2000 年から 3000 年までの日食・月食は NASA の Five Millennium Catalogs（Espenak と Meeus）から。プラグインに保存され、表示する年の分だけ読み込みます。月相、季節、惑星の現象はこのコンピューターで計算します。1600 年以前と 2100 年以降は時刻が不確か（地球の自転を外挿）で ≈ が付きます。"
+  sourceGroupEclipsesDetails: "紀元前 2000 年から 3000 年までの日食・月食は NASA の Five Millennium Catalogs（Espenak と Meeus）から。プラグインに保存され、表示する年の分だけ読み込みます。月相、季節、惑星の現象はこのコンピューターで計算します。1600 年以前と 2100 年以降は時刻が不確か（地球の自転を外挿）で ≈ が付きます。",
+  showHints: "操作のヒント",
+  showHintsHint: "↑↓ や Alt 1–9 など、キーと操作を説明する行。",
+  zoomRecenter: "中央に戻る",
+  zoomOut: "縮小",
+  zoomIn: "拡大"
 }

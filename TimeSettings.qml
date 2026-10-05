@@ -109,6 +109,7 @@ Rectangle {
       { value: "right", label: panel.i18n(panel.barPlacement.verticalBar ? "barPositionBottom" : "barPositionRight") }] })
     list.push({ id: "launcher", title: panel.i18n("appLauncherEntry"), kind: "launcher", hint: "appLauncherEntryHint",
       section: barPositionUsable ? undefined : "app" })
+    list.push({ id: "showHints", title: panel.i18n("showHints"), kind: "switch", hint: "showHintsHint" })
     return list
   }
   readonly property var generalPageEntries: generalDropdowns.filter(function(e) { return e.page !== "sounds" })
@@ -979,6 +980,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
+        visible: panel.showHints
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
         text: panel.i18n("settingsPagesKeysHint")
@@ -1077,7 +1079,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: settingsView.page === "general" || settingsView.page === "sounds"
+        visible: panel.showHints && (settingsView.page === "general" || settingsView.page === "sounds")
         width: parent.width
         text: panel.i18n("settingsGeneralKeysHint")
         color: panel.hintText
@@ -1276,7 +1278,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: settingsView.page === "display"
+        visible: panel.showHints && settingsView.page === "display"
         width: parent.width
         text: panel.i18n("settingsKeysHint")
         color: panel.hintText

@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Úkazy na obloze zap. nebo vyp.",
   shortcutAstroEventPick: "Vyberte úkaz; Enter tam cestuje",
   sourceGroupEclipses: "Zatmění a úkazy na obloze",
-  sourceGroupEclipsesDetails: "Zatmění od roku 2000 př. n. l. do 3000 n. l. z katalogů NASA Five Millennium Catalogs (Espenak a Meeus), uložená v pluginu a čtená pro zobrazené roky; fáze Měsíce, roční období a úkazy planet počítané na tomto počítači. Před rokem 1600 a po roce 2100 jsou časy nejisté (rotace Země je extrapolovaná) a označené ≈."
+  sourceGroupEclipsesDetails: "Zatmění od roku 2000 př. n. l. do 3000 n. l. z katalogů NASA Five Millennium Catalogs (Espenak a Meeus), uložená v pluginu a čtená pro zobrazené roky; fáze Měsíce, roční období a úkazy planet počítané na tomto počítači. Před rokem 1600 a po roce 2100 jsou časy nejisté (rotace Země je extrapolovaná) a označené ≈.",
+  showHints: "Nápověda k ovládání",
+  showHintsHint: "Řádky, které vysvětlují klávesy a gesta, třeba ↑↓ nebo Alt 1–9.",
+  zoomRecenter: "Zpět na střed",
+  zoomOut: "Oddálit",
+  zoomIn: "Přiblížit"
 }

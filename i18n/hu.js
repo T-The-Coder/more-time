@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Égi események be vagy ki",
   shortcutAstroEventPick: "Válasszon eseményt; az Enter odautazik",
   sourceGroupEclipses: "Fogyatkozások és égi események",
-  sourceGroupEclipsesDetails: "Fogyatkozások i. e. 2000-től i. sz. 3000-ig a NASA Five Millennium Catalogs katalógusaiból (Espenak és Meeus), a bővítményben tárolva és a mutatott évekre beolvasva; holdfázisok, évszakok és bolygóesemények ezen a gépen számolva. 1600 előtt és 2100 után az időpontok bizonytalanok (a Föld forgása extrapolált), jelük ≈."
+  sourceGroupEclipsesDetails: "Fogyatkozások i. e. 2000-től i. sz. 3000-ig a NASA Five Millennium Catalogs katalógusaiból (Espenak és Meeus), a bővítményben tárolva és a mutatott évekre beolvasva; holdfázisok, évszakok és bolygóesemények ezen a gépen számolva. 1600 előtt és 2100 után az időpontok bizonytalanok (a Föld forgása extrapolált), jelük ≈.",
+  showHints: "Kezelési tippek",
+  showHintsHint: "A billentyűket és mozdulatokat magyarázó sorok, például ↑↓ vagy Alt 1–9.",
+  zoomRecenter: "Vissza a közepére",
+  zoomOut: "Kicsinyítés",
+  zoomIn: "Nagyítás"
 }

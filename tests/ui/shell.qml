@@ -794,6 +794,17 @@ ShellRoot {
       w.backToNow()
       display("worldMoon", false); display("worldMoonStyle", "space"); display("worldLapse", "dayInMinute")
     },
+    // Control hints on and off (General › App), World and Astro; the "+"
+    // button with its tooltip name.
+    function() { panel.activeTab = "world" },
+    function() { shot("47a-world-hints-on") },
+    function() { general("showHints", false) },
+    function() { console.log("HINTS off", panel.showHints); shot("47b-world-hints-off") },
+    function() { panel.activeTab = "astro"; panel.scrollBy(-10000) },
+    function() { shot("47d-astro-hints-off") },
+    function() { general("showHints", true); panel.scrollBy(-10000) },
+    function() { shot("47c-astro-hints-on") },
+    function() { panel.activeTab = "world" },
     // Deleting a city before the current one keeps the same city current.
     function() {
       panel.setCurrentPlace(2)

@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Taivaan tapahtumat päälle tai pois",
   shortcutAstroEventPick: "Valitse tapahtuma; Enter matkaa sinne",
   sourceGroupEclipses: "Pimennykset ja taivaan tapahtumat",
-  sourceGroupEclipsesDetails: "Pimennykset vuodesta 2000 eaa. vuoteen 3000 NASAn Five Millennium Catalogs -luetteloista (Espenak ja Meeus), tallennettu lisäosaan ja luettu näytetyille vuosille; kuun vaiheet, vuodenajat ja planeettojen tapahtumat lasketaan tällä tietokoneella. Ennen vuotta 1600 ja vuoden 2100 jälkeen ajat ovat epävarmoja (Maan pyöriminen on ekstrapoloitu) ja merkitty ≈."
+  sourceGroupEclipsesDetails: "Pimennykset vuodesta 2000 eaa. vuoteen 3000 NASAn Five Millennium Catalogs -luetteloista (Espenak ja Meeus), tallennettu lisäosaan ja luettu näytetyille vuosille; kuun vaiheet, vuodenajat ja planeettojen tapahtumat lasketaan tällä tietokoneella. Ennen vuotta 1600 ja vuoden 2100 jälkeen ajat ovat epävarmoja (Maan pyöriminen on ekstrapoloitu) ja merkitty ≈.",
+  showHints: "Ohjausvihjeet",
+  showHintsHint: "Rivit, jotka selittävät näppäimet ja eleet, kuten ↑↓ tai Alt 1–9.",
+  zoomRecenter: "Takaisin keskelle",
+  zoomOut: "Loitonna",
+  zoomIn: "Lähennä"
 }

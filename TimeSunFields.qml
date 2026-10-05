@@ -35,11 +35,13 @@ Row {
   component Field: Row {
     property bool rising: true
     property string time: ""
-    spacing: Style.space(3)
+    // As More Weather's daily rows: an 11-point drawing, 2 points from
+    // the time.
+    spacing: Style.space(2)
 
     TimeSunIcon {
       anchors.verticalCenter: parent.verticalCenter
-      width: Math.round(fields.fontSize * 0.95)
+      width: Style.space(11)
       height: width
       rising: parent.rising
       iconColor: fields.panel.sunColor

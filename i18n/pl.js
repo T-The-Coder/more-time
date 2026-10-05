@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Zjawiska na niebie wł. lub wył.",
   shortcutAstroEventPick: "Wybierz zjawisko; Enter przenosi tam",
   sourceGroupEclipses: "Zaćmienia i zjawiska na niebie",
-  sourceGroupEclipsesDetails: "Zaćmienia od 2000 p.n.e. do 3000 n.e. z katalogów Five Millennium Catalogs NASA (Espenak i Meeus), zapisane we wtyczce i czytane dla pokazanych lat; fazy Księżyca, pory roku i zjawiska planet liczone na tym komputerze. Przed 1600 i po 2100 czasy są niepewne (obrót Ziemi jest ekstrapolowany) i oznaczone ≈."
+  sourceGroupEclipsesDetails: "Zaćmienia od 2000 p.n.e. do 3000 n.e. z katalogów Five Millennium Catalogs NASA (Espenak i Meeus), zapisane we wtyczce i czytane dla pokazanych lat; fazy Księżyca, pory roku i zjawiska planet liczone na tym komputerze. Przed 1600 i po 2100 czasy są niepewne (obrót Ziemi jest ekstrapolowany) i oznaczone ≈.",
+  showHints: "Podpowiedzi sterowania",
+  showHintsHint: "Wiersze objaśniające klawisze i gesty, takie jak ↑↓ czy Alt 1–9.",
+  zoomRecenter: "Z powrotem na środek",
+  zoomOut: "Oddal",
+  zoomIn: "Przybliż"
 }

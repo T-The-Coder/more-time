@@ -79,6 +79,9 @@ Panel {
   readonly property color sunColor: WorldMap.sunColor(rgbOf(foreground), rgbOf(Color.popups.background))
   readonly property color subtleText: Qt.darker(foreground, 1.7)
   // Key hints: the text colour faded towards the background.
+  // The lines that explain keys and gestures (General › App › Control
+  // hints); off, they leave their room to the content.
+  readonly property bool showHints: generalSetting("showHints", true) !== false
   readonly property color hintText: Qt.tint(foreground,
     Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.55))
 
@@ -1290,46 +1293,51 @@ Panel {
     return sunCache[key]
   }
 
-  // The sun line: "󰖜 07:10 – 󰖛 18:50 · 󰖙 Golden 18:12–18:50 · 󰖔 Blue …",
-  // the morning's golden and blue hour before noon there, the evening's
-  // after. Which pieces show: sun, golden, blue. "" when there is nothing.
-  // `next`: the next sunrise or sunset alone (tomorrow's sunrise once
-  // today's are over).
-  function sunLine(coordinates, offset, sun, golden, blue, next) {
-    if (!coordinates || !(sun || golden || blue || next)) return ""
+  // The sun line as pieces, each a few parts { icon, text }: icon "rise"
+  // or "set" (More Weather's drawn arrows, TimeSunIcon), "golden" or
+  // "blue" (the hours), "day" or "night" (the polar day or night), or "".
+  // The morning's golden and blue hour before noon there, the evening's
+  // after. Which pieces show: sun, golden, blue. `next`: the next sunrise or
+  // sunset alone (tomorrow's sunrise once today's are over). [] when there
+  // is nothing.
+  function sunPieces(coordinates, offset, sun, golden, blue, next) {
+    if (!coordinates || !(sun || golden || blue || next)) return []
     var times = sunTimesFor(coordinates, offset, nowMs)
-    if (!times) return ""
+    if (!times) return []
     var pieces = []
-    var at = function(ms) { return clockFor(ms, offset, false) }
+    var at = function(ms) { return ms ? clockFor(ms, offset, false) : "–" }
     if (sun) {
-      if (times.polar === "day") pieces.push("\u{f0599} " + i18n("sunUpAllDay"))
-      else if (times.polar === "night") pieces.push("\u{f0594} " + i18n("sunDownAllDay"))
+      if (times.polar === "day") pieces.push([{ icon: "day", text: i18n("sunUpAllDay") }])
+      else if (times.polar === "night") pieces.push([{ icon: "night", text: i18n("sunDownAllDay") }])
       else if (times.sunrise || times.sunset)
-        pieces.push("\u{f059c} " + (times.sunrise ? at(times.sunrise) : "–") + " – \u{f059b} " + (times.sunset ? at(times.sunset) : "–"))
+        pieces.push([{ icon: "rise", text: at(times.sunrise) + " –" }, { icon: "set", text: at(times.sunset) }])
     }
     if (next && !(sun && times.polar !== "")) {
       var event = null
-      if (times.sunrise && nowMs < times.sunrise) event = { glyph: "\u{f059c}", at: times.sunrise }
-      else if (times.sunset && nowMs < times.sunset) event = { glyph: "\u{f059b}", at: times.sunset }
+      if (times.sunrise && nowMs < times.sunrise) event = { icon: "rise", at: times.sunrise }
+      else if (times.sunset && nowMs < times.sunset) event = { icon: "set", at: times.sunset }
       else {
         var tomorrow = sunTimesFor(coordinates, offset, nowMs + 86400000)
-        event = { glyph: "\u{f059c}", at: tomorrow ? tomorrow.sunrise : 0 }
+        event = { icon: "rise", at: tomorrow ? tomorrow.sunrise : 0 }
       }
-      pieces.push(event.glyph + " " + (event.at ? at(event.at) : "—"))
+      pieces.push([{ icon: event.icon, text: event.at ? at(event.at) : "—" }])
     }
     var morning = Model.zonedParts(nowMs, offset).hour < 12
     var goldenRange = morning ? times.goldenMorning : times.goldenEvening
     var blueRange = morning ? times.blueMorning : times.blueEvening
     var ranges = []
     if (golden && goldenRange[0]) ranges.push({ at: goldenRange[0],
-      text: "\u{f0599} " + i18n("goldenHourRange", { from: at(goldenRange[0]), to: at(goldenRange[1]) }) })
+      part: { icon: "golden", text: i18n("goldenHourRange", { from: at(goldenRange[0]), to: at(goldenRange[1]) }) } })
     if (blue && blueRange[0]) ranges.push({ at: blueRange[0],
-      text: "\u{f0594} " + i18n("blueHourRange", { from: at(blueRange[0]), to: at(blueRange[1]) }) })
+      part: { icon: "blue", text: i18n("blueHourRange", { from: at(blueRange[0]), to: at(blueRange[1]) }) } })
     ranges.sort(function(a, b) { return a.at - b.at })
-    for (var i = 0; i < ranges.length; i++) pieces.push(ranges[i].text)
-    // A line breaks between the pieces, never inside one.
-    return pieces.map(function(p) { return p.replace(/ /g, "\u00a0") }).join("  ·  ")
+    for (var i = 0; i < ranges.length; i++) pieces.push([ranges[i].part])
+    return pieces
   }
+  // The glyphs of the icons that are not drawn (the hours, polar day and
+  // night).
+  readonly property var sunGlyphs: ({ rise: "\u{f059c}", set: "\u{f059b}", golden: "\u{f0599}", blue: "\u{f0594}",
+    day: "\u{f0599}", night: "\u{f0594}" })
 
   function cityDeleteId(index) {
     return "city:" + index

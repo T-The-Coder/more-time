@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Himlahändelser på eller av",
   shortcutAstroEventPick: "Välj en händelse; Enter reser dit",
   sourceGroupEclipses: "Förmörkelser och himlahändelser",
-  sourceGroupEclipsesDetails: "Förmörkelser från 2000 f.Kr. till 3000 e.Kr. ur NASA:s Five Millennium Catalogs (Espenak och Meeus), sparade i tillägget och lästa för de visade åren; månfaser, årstider och planethändelser beräknade på den här datorn. Före 1600 och efter 2100 är tiderna osäkra (jordens rotation är extrapolerad) och märkta ≈."
+  sourceGroupEclipsesDetails: "Förmörkelser från 2000 f.Kr. till 3000 e.Kr. ur NASA:s Five Millennium Catalogs (Espenak och Meeus), sparade i tillägget och lästa för de visade åren; månfaser, årstider och planethändelser beräknade på den här datorn. Före 1600 och efter 2100 är tiderna osäkra (jordens rotation är extrapolerad) och märkta ≈.",
+  showHints: "Kontrolltips",
+  showHintsHint: "Raderna som förklarar tangenter och gester, som ↑↓ eller Alt 1–9.",
+  zoomRecenter: "Tillbaka till mitten",
+  zoomOut: "Zooma ut",
+  zoomIn: "Zooma in"
 }

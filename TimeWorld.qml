@@ -402,6 +402,7 @@ Column {
       panel: view.panel
       glyph: view.playing ? "\u{f03e4}" : "\u{f040a}"
       glyphSize: Style.font.body
+      tooltip: view.panel.i18n("shortcutWorldPlay")
       active: view.playing
       onActivated: view.togglePlay()
     }
@@ -678,7 +679,7 @@ Column {
           anchors.leftMargin: Style.space(10)
           anchors.verticalCenter: parent.verticalCenter
           text: row.parts === null ? "" : (row.daytime ? "\u{f0599}" : "\u{f0594}")
-          color: row.daytime ? Color.accent : view.panel.mutedText
+          color: row.daytime ? view.panel.sunColor : view.panel.mutedText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.title
         }

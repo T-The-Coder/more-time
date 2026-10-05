@@ -27,9 +27,9 @@ BorderSurface {
 
     Repeater {
       model: [
-        { glyph: "\u{f01a4}", action: "recenter", enabled: true },
-        { glyph: "−", action: "out", enabled: controls.canZoomOut },
-        { glyph: "+", action: "in", enabled: controls.canZoomIn }
+        { glyph: "\u{f01a4}", action: "recenter", tip: "zoomRecenter", enabled: true },
+        { glyph: "−", action: "out", tip: "zoomOut", enabled: controls.canZoomOut },
+        { glyph: "+", action: "in", tip: "zoomIn", enabled: controls.canZoomIn }
       ]
 
       BorderSurface {
@@ -39,6 +39,8 @@ BorderSurface {
         height: Style.space(20)
         radius: Style.cornerRadius
         enabled: modelData.enabled
+        Accessible.role: Accessible.Button
+        Accessible.name: controls.panel.i18n(modelData.tip)
         opacity: enabled ? 1 : 0.38
         color: Style.controlFill(false, buttonMouse.containsMouse, Color.popups.text, Color.accent)
         borderSpec: Border.controlSpec(buttonMouse.containsMouse ? "hover-cursor" : "normal", Color.popups.text, Color.accent)
@@ -64,6 +66,12 @@ BorderSurface {
             if (action === "recenter") controls.recenter()
             else if (action === "in") controls.zoomIn()
             else controls.zoomOut()
+          }
+
+          PanelToolTip {
+            visible: buttonMouse.containsMouse
+            text: controls.panel.i18n(zoomButton.modelData.tip)
+            fontFamily: controls.panel.fontFamily
           }
         }
       }

@@ -4,6 +4,16 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Sunrise and sunset as in More Weather:** the clock's sun line now draws
+  them like More Weather's daily rows (a horizon with an arrow, 11 points,
+  2 from the time) in the Sun's gold, as the city list does; the golden and
+  blue hour keep their glyphs, the golden one in gold.
+- **Fewer words on buttons:** "+" for a new city, alarm, stopwatch or
+  pomodoro and ‹ › for the sky events' pages, with their full names as
+  tooltips (also on ▶ and the zoom buttons) and for screen readers.
+- **Control hints** (Settings › General › App, on by default): off, the
+  lines that explain keys and gestures disappear and leave their room to
+  the content; the Shortcuts page stays.
 - **Astro: time lapse.** The timeline's three speeds make way for a time
   lapse from real time to a year in a minute, chosen from a list; the
   shown date and time stay in view and count. "Play on opening" starts it

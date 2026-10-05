@@ -95,6 +95,7 @@ Column {
 
   Text {
     textFormat: Text.PlainText
+    visible: banner.panel.showHints
     width: parent.width
     horizontalAlignment: Text.AlignHCenter
     text: banner.panel.i18n("ringingKeysHint")

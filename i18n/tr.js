@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Gök olayları açık veya kapalı",
   shortcutAstroEventPick: "Bir olay seçin; Enter oraya gider",
   sourceGroupEclipses: "Tutulmalar ve gök olayları",
-  sourceGroupEclipsesDetails: "MÖ 2000'den MS 3000'e tutulmalar NASA'nın Five Millennium Catalogs kataloglarından (Espenak ve Meeus), eklentide saklanır ve gösterilen yıllar için okunur; Ay evreleri, mevsimler ve gezegen olayları bu bilgisayarda hesaplanır. 1600'den önce ve 2100'den sonra saatler belirsizdir (Dünya'nın dönüşü tahmin edilir) ve ≈ ile işaretlenir."
+  sourceGroupEclipsesDetails: "MÖ 2000'den MS 3000'e tutulmalar NASA'nın Five Millennium Catalogs kataloglarından (Espenak ve Meeus), eklentide saklanır ve gösterilen yıllar için okunur; Ay evreleri, mevsimler ve gezegen olayları bu bilgisayarda hesaplanır. 1600'den önce ve 2100'den sonra saatler belirsizdir (Dünya'nın dönüşü tahmin edilir) ve ≈ ile işaretlenir.",
+  showHints: "Kontrol ipuçları",
+  showHintsHint: "Tuşları ve hareketleri açıklayan satırlar, örneğin ↑↓ ya da Alt 1–9.",
+  zoomRecenter: "Ortaya dön",
+  zoomOut: "Uzaklaştır",
+  zoomIn: "Yakınlaştır"
 }

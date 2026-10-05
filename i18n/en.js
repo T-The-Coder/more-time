@@ -590,5 +590,10 @@ var catalog = {
   shortcutAstroEvents: "Sky events on or off",
   shortcutAstroEventPick: "Pick an event; Enter travels there",
   sourceGroupEclipses: "Eclipses and sky events",
-  sourceGroupEclipsesDetails: "Eclipses from 2000 BC to AD 3000 from NASA's Five Millennium Catalogs (Espenak and Meeus), stored in the plugin and read for the years shown; moon phases, seasons and planet events computed on this computer. Before 1600 and after 2100 the times are uncertain (Earth's rotation is extrapolated) and marked ≈."
+  sourceGroupEclipsesDetails: "Eclipses from 2000 BC to AD 3000 from NASA's Five Millennium Catalogs (Espenak and Meeus), stored in the plugin and read for the years shown; moon phases, seasons and planet events computed on this computer. Before 1600 and after 2100 the times are uncertain (Earth's rotation is extrapolated) and marked ≈.",
+  showHints: "Control hints",
+  showHintsHint: "The lines that explain keys and gestures, such as ↑↓ or Alt 1–9.",
+  zoomRecenter: "Back to the middle",
+  zoomOut: "Zoom out",
+  zoomIn: "Zoom in"
 }

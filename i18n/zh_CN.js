@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "开关天象",
   shortcutAstroEventPick: "选择天象；Enter 前往",
   sourceGroupEclipses: "日月食与天象",
-  sourceGroupEclipsesDetails: "公元前 2000 年至公元 3000 年的日月食取自 NASA 的 Five Millennium Catalogs（Espenak 与 Meeus），存于插件内，只读取显示的年份；月相、季节和行星天象在本机计算。1600 年以前和 2100 年以后时刻不确定（地球自转为外推），以 ≈ 标记。"
+  sourceGroupEclipsesDetails: "公元前 2000 年至公元 3000 年的日月食取自 NASA 的 Five Millennium Catalogs（Espenak 与 Meeus），存于插件内，只读取显示的年份；月相、季节和行星天象在本机计算。1600 年以前和 2100 年以后时刻不确定（地球自转为外推），以 ≈ 标记。",
+  showHints: "操作提示",
+  showHintsHint: "说明按键和手势的行，例如 ↑↓ 或 Alt 1–9。",
+  zoomRecenter: "回到中央",
+  zoomOut: "缩小",
+  zoomIn: "放大"
 }

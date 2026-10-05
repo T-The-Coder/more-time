@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Événements du ciel affichés ou non",
   shortcutAstroEventPick: "Choisir un événement ; Entrée y voyage",
   sourceGroupEclipses: "Éclipses et événements du ciel",
-  sourceGroupEclipsesDetails: "Éclipses de 2000 av. J.-C. à 3000 apr. J.-C. tirées des Five Millennium Catalogs de la NASA (Espenak et Meeus), stockées dans le plugin et lues pour les années affichées ; phases de la Lune, saisons et événements des planètes calculés sur cet ordinateur. Avant 1600 et après 2100, les heures sont incertaines (la rotation de la Terre est extrapolée) et marquées ≈."
+  sourceGroupEclipsesDetails: "Éclipses de 2000 av. J.-C. à 3000 apr. J.-C. tirées des Five Millennium Catalogs de la NASA (Espenak et Meeus), stockées dans le plugin et lues pour les années affichées ; phases de la Lune, saisons et événements des planètes calculés sur cet ordinateur. Avant 1600 et après 2100, les heures sont incertaines (la rotation de la Terre est extrapolée) et marquées ≈.",
+  showHints: "Aide aux commandes",
+  showHintsHint: "Les lignes qui expliquent les touches et les gestes, comme ↑↓ ou Alt 1–9.",
+  zoomRecenter: "Retour au centre",
+  zoomOut: "Zoom arrière",
+  zoomIn: "Zoom avant"
 }

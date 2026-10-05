@@ -120,6 +120,12 @@ control.
     Sun and the Moon follow the shown instant, which a label on the map
     names; the city list keeps the real time. On the GPU surface a frame
     of it changes only the Sun's direction.
+  - Buttons whose glyph says it all show only the glyph, their name as a
+    tooltip after a moment (and to screen readers): "+" for a new city,
+    alarm, stopwatch or pomodoro, ‹ › to page the sky events, ▶ for the
+    time lapses, the zoom buttons. Sunrise and sunset are drawn as in More
+    Weather (a horizon with an arrow up or down), in the Sun's gold, in the
+    clock's sun line and the city list.
   - Below the map, your place (the location pin and its name, as in More
     Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
@@ -319,7 +325,10 @@ control.
     (snooze, timer presets, pomodoro lengths and whether the next phase
     starts by itself); motion (for every view that turns by itself: the
     delay, one turn in how many minutes, frames per second); app (position
-    in the bar, app launcher entry); back up and restore (export and import
+    in the bar, app launcher entry, **Control hints**: the lines that
+    explain keys and gestures above each tab, in the editors, the ringing
+    banner and the settings; off, they go and leave their room to the
+    content, the Shortcuts page stays); back up and restore (export and import
     of everything, More Weather's places, reset).
   - **Display:** separately for the menu bar, the widget and the app.
     - Menu bar: which entries show, when, and in what order; bold while

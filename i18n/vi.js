@@ -449,5 +449,10 @@ var catalog = {
   shortcutAstroEvents: "Bật hoặc tắt sự kiện trên trời",
   shortcutAstroEventPick: "Chọn sự kiện; Enter để đến đó",
   sourceGroupEclipses: "Thực và sự kiện trên trời",
-  sourceGroupEclipsesDetails: "Nhật thực và nguyệt thực từ năm 2000 TCN đến 3000 từ Five Millennium Catalogs của NASA (Espenak và Meeus), lưu trong plugin và đọc cho các năm đang hiện; tuần trăng, các mùa và sự kiện hành tinh được tính trên máy này. Trước 1600 và sau 2100 thời gian không chắc chắn (vòng quay Trái Đất được ngoại suy) và đánh dấu ≈."
+  sourceGroupEclipsesDetails: "Nhật thực và nguyệt thực từ năm 2000 TCN đến 3000 từ Five Millennium Catalogs của NASA (Espenak và Meeus), lưu trong plugin và đọc cho các năm đang hiện; tuần trăng, các mùa và sự kiện hành tinh được tính trên máy này. Trước 1600 và sau 2100 thời gian không chắc chắn (vòng quay Trái Đất được ngoại suy) và đánh dấu ≈.",
+  showHints: "Gợi ý điều khiển",
+  showHintsHint: "Các dòng giải thích phím và cử chỉ, như ↑↓ hoặc Alt 1–9.",
+  zoomRecenter: "Về giữa",
+  zoomOut: "Thu nhỏ",
+  zoomIn: "Phóng to"
 }

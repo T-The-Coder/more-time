@@ -407,6 +407,7 @@ Column {
 
         Text {
           textFormat: Text.PlainText
+          visible: view.panel.showHints
           width: parent.width
           text: view.panel.i18n("alarmEditorKeysHint")
           color: view.panel.hintText
