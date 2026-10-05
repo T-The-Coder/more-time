@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km a Földtől",
   astroSpeedAway: "évente {speed} CsE-vel távolodik",
   sourceGroupAstroBodies: "Kis égitestek, holdak és szondák",
-  sourceGroupAstroBodiesDetails: "A Ceres, a Plútó és az Erisz a JPL kisbolygó-adatbázisából, a Halley-üstökös a JPL Horizons pályaelemeiből, a nagy holdak a JPL közepes holdelemeiből, a Voyagerek és a New Horizons a Horizons állapotvektoraiból egyenesen továbbvezetve; az övek véletlen mintapályák. Ezen a gépen számolva; semmi sem töltődik le."
+  sourceGroupAstroBodiesDetails: "A Ceres, a Plútó és az Erisz a JPL kisbolygó-adatbázisából, a Halley-üstökös a JPL Horizons pályaelemeiből, a nagy holdak a JPL közepes holdelemeiből, a Voyagerek és a New Horizons a Horizons állapotvektoraiból egyenesen továbbvezetve; az övek véletlen mintapályák. Ezen a gépen számolva; semmi sem töltődik le.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Hálózaton letölti az állomás pályaadatait a CelesTrakról, naponta legfeljebb kétszer és csak amíg ez a lap látszik; a Föld–Hold nézetben és a betétben látható.",
+  astroIssInfo: "{place} felett · {km} km · egy keringés {minutes} perc",
+  astroLatNorth: "é. sz. {deg}°",
+  astroLatSouth: "d. sz. {deg}°",
+  astroLonEast: "k. h. {deg}°",
+  astroLonWest: "ny. h. {deg}°",
+  astroIssHidden: "ISS elrejtve: pályaadatai ekkoriak: {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Az űrállomás pályaadatai (kétsoros elemkészlet) a CelesTrakról, csak bekapcsolt ISS-beállítás és látható Astro lap mellett letöltve, naponta legfeljebb kétszer; SGP4-gyel számolva ezen a gépen."
 }

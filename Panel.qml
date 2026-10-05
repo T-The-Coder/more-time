@@ -455,6 +455,7 @@ Panel {
       astroComets: false,
       astroMoons: false,
       astroSpacecraft: false,
+      astroIss: false,
       astroInfo: true,
       astroEarthInset: true,
       astroAutoRotate: false,
@@ -842,6 +843,12 @@ Panel {
   property TimeHere here: TimeHere { panel: root }
   property TimePlacesImport placesImport: TimePlacesImport { panel: root }
   property TimePlaceStore placeStore: TimePlaceStore { panel: root }
+  // The ISS's orbit data (Astro tab, option astroIss): fetched only while
+  // the option is on and the tab shows.
+  property TimeIssStore issStore: TimeIssStore {
+    panel: root
+    wanted: root.displaySetting("astroIss", false) === true && root.opened && root.currentTab === "astro"
+  }
 
   readonly property var cityList: citiesStore.list
   readonly property var wantedZones: cityList.map(function(c) { return c.tz })

@@ -463,5 +463,16 @@ var catalog = {
   astroFromEarthKm: "{km} km von der Erde",
   astroSpeedAway: "entfernt sich um {speed} AE im Jahr",
   sourceGroupAstroBodies: "Kleinkörper, Monde und Raumsonden",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto und Eris aus der Small-Body Database des JPL, der Halleysche Komet aus Bahnelementen von JPL Horizons, die großen Monde aus den mittleren Satellitenelementen des JPL, Voyager 1 und 2 und New Horizons aus Zustandsvektoren von Horizons auf geraden Bahnen fortgeschrieben; die Gürtel sind zufällige Beispielbahnen. Auf diesem Rechner berechnet; nichts wird geladen."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto und Eris aus der Small-Body Database des JPL, der Halleysche Komet aus Bahnelementen von JPL Horizons, die großen Monde aus den mittleren Satellitenelementen des JPL, Voyager 1 und 2 und New Horizons aus Zustandsvektoren von Horizons auf geraden Bahnen fortgeschrieben; die Gürtel sind zufällige Beispielbahnen. Auf diesem Rechner berechnet; nichts wird geladen.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Lädt die Bahndaten der Station über das Netz von CelesTrak, höchstens zweimal am Tag und nur, solange dieser Tab zu sehen ist; gezeigt in der Ansicht von Erde und Mond und im Eck.",
+  astroIssInfo: "über {place} · {km} km · ein Umlauf in {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° O",
+  astroLonWest: "{deg}° W",
+  astroIssHidden: "ISS ausgeblendet: ihre Bahndaten stammen vom {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Die Bahndaten der Raumstation (ein Two-Line-Elementsatz) von CelesTrak, nur geladen, solange die ISS-Option an ist und der Astro-Tab zu sehen ist, höchstens zweimal am Tag; mit SGP4 auf diesem Rechner fortgerechnet."
 }

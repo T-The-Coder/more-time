@@ -463,5 +463,16 @@ var catalog = {
   astroFromEarthKm: "{km} km from Earth",
   astroSpeedAway: "moving away at {speed} au a year",
   sourceGroupAstroBodies: "Small bodies, moons and spacecraft",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto and Eris from JPL's Small-Body Database, Halley's Comet from JPL Horizons' elements, the large moons from JPL's satellite mean elements, Voyager 1 and 2 and New Horizons from Horizons' state vectors moved on straight lines; the belts are random sample orbits. Computed on this computer; nothing is downloaded."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto and Eris from JPL's Small-Body Database, Halley's Comet from JPL Horizons' elements, the large moons from JPL's satellite mean elements, Voyager 1 and 2 and New Horizons from Horizons' state vectors moved on straight lines; the belts are random sample orbits. Computed on this computer; nothing is downloaded.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Fetches the station's orbit data from CelesTrak over the network, at most twice a day and only while this tab shows; shown in the Earth and Moon view and the inset.",
+  astroIssInfo: "over {place} · {km} km · one orbit in {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° E",
+  astroLonWest: "{deg}° W",
+  astroIssHidden: "ISS hidden: its orbit data are from {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "The space station's orbit data (a two-line element set) from CelesTrak, fetched only while the ISS option is on and the Astro tab shows, at most twice a day; propagated with SGP4 on this computer."
 }

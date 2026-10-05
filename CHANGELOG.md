@@ -4,6 +4,11 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Astro: the ISS** (an option, off by default): the space station over
+  its place in the Earth and Moon view and the inset, with its ground track
+  and on hover where it is, its height and its orbit. Its orbit data come
+  from CelesTrak (at most twice a day, only while the option is on and the
+  tab shows) and are propagated with SGP4 on this computer.
 - **Astro: belts, dwarf planets, Halley, moons and spacecraft.** The
   asteroid and Kuiper belts and Ceres, Pluto and Eris (on by default),
   Halley's Comet with its tail, the large moons of Jupiter and Saturn close

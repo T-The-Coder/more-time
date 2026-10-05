@@ -7,6 +7,7 @@ import "AstroRotation.js" as AstroRotation
 import "AstroEvents.js" as AstroEvents
 import "AstroClock.js" as AstroClock
 import "AstroBodies.js" as AstroBodies
+import "AstroIss.js" as AstroIss
 import "AstroDate.js" as AstroDate
 import "Model.js" as Model
 import "Globe.js" as Globe
@@ -418,6 +419,36 @@ Column {
     }
     onBeltsChanged: canvas.requestPaint()
     onExtrasChanged: canvas.requestPaint()
+    // ---- The ISS (option astroIss; orbit data from Panel.issStore) ----
+    readonly property bool showIss: panel.displaySetting("astroIss", false) === true
+    readonly property var issElements: panel.issStore.elements
+    // Its moment: the shown one, or (live) now to the second, refreshed
+    // every five seconds while it can be seen: it moves 4° a minute.
+    property double issNowMs: Date.now()
+    readonly property double issMs: timePinned ? minuteMs : issNowMs
+    readonly property bool issSeen: showIss && !!issElements && (earthView || showInset)
+    Timer {
+      interval: 5000
+      repeat: true
+      running: sky.issSeen && !sky.timePinned && sky.panel.motionAllowed && sky.panel.currentTab === "astro"
+      onTriggered: sky.issNowMs = Date.now()
+    }
+    // How far the shown moment is from the data's epoch (days): beyond 7
+    // days the place is only a guess, so the station is hidden while the
+    // timeline shows another time, and marked ≈ when live.
+    readonly property real issAgeDays: issElements ? Math.abs(issMs - issElements.epochMs) / 86400000 : 0
+    readonly property bool issHidden: !issElements || (timePinned && issAgeDays > 7)
+    readonly property var iss: {
+      if (!issSeen || issHidden) return null
+      var el = issElements
+      var state = AstroIss.init(el)
+      var at = AstroIss.stationAt(el, issMs, state)
+      if (!at) return null
+      return { at: at, track: AstroIss.groundTrack(el, issMs, 96, state),
+        dir: AstroRotation.surfaceVector("earth", at.lat, at.lon, issMs), approximate: issAgeDays > 7 }
+    }
+    onIssChanged: canvas.requestPaint()
+
     // The planet whose moons show close up: the one under the pointer or
     // the one clicked (Jupiter, Saturn).
     readonly property string moonHost: !showMoons ? "" : (hover && hover.key === "jupiter" || hover && hover.key === "saturn" ? hover.key
@@ -501,6 +532,14 @@ Column {
         var mm = AstroBodies.MOONS[key]
         lines.push(panel.i18n("astroFromPlanet", { km: number(mm.aKm, 0), planet: panel.i18n("astroBody_" + mm.planet) }))
         lines.push(panel.i18n("astroOrbitDays", { days: number(AstroBodies.moonPeriodDays(key), 2) }))
+        return lines.join("\n")
+      }
+      if (key === "iss" && sky.iss) {
+        var at = sky.iss.at
+        var latText = panel.i18n(at.lat >= 0 ? "astroLatNorth" : "astroLatSouth", { deg: number(Math.abs(at.lat), 0) })
+        var lonText = panel.i18n(at.lon >= 0 ? "astroLonEast" : "astroLonWest", { deg: number(Math.abs(at.lon), 0) })
+        lines.push((sky.iss.approximate ? "≈ " : "") + panel.i18n("astroIssInfo", { place: latText + " " + lonText,
+          km: number(at.altitude, 0), minutes: number(at.periodMinutes, 0) }))
         return lines.join("\n")
       }
       if (key === "jwst") {
@@ -881,6 +920,54 @@ Column {
           if (order[i].key === "earth") paintEarthGlobe(ctx, cx, cy, R, axes)
           else paintMoonBody(ctx, moon.x, moon.y, moon.r, axes)
         }
+        // The ISS: its ground track for one orbit and the place under it on
+        // the globe, the station above it (its height enlarged).
+        var hits = [earth, moon]
+        if (sky.iss) {
+          var vmI = AstroRotation.bodyViewMatrix(sky.earthMoon.earthMatrix, axes)
+          var track = sky.iss.track
+          ctx.strokeStyle = rgba(accent, 0.45)
+          ctx.lineWidth = 1
+          ctx.beginPath()
+          var penDown = false
+          for (var ti = 0; ti < track.length; ti++) {
+            var tp = Globe.projectView(track[ti].lat, track[ti].lon, vmI, R)
+            if (!tp.visible) { penDown = false; continue }
+            if (penDown) ctx.lineTo(cx + tp.x, cy - tp.y)
+            else ctx.moveTo(cx + tp.x, cy - tp.y)
+            penDown = true
+          }
+          ctx.stroke()
+          var subP = Globe.projectView(sky.iss.at.lat, sky.iss.at.lon, vmI, R)
+          if (subP.visible) {
+            ctx.fillStyle = accent
+            ctx.beginPath()
+            ctx.arc(cx + subP.x, cy - subP.y, small ? 1.5 : 2.2, 0, Math.PI * 2)
+            ctx.fill()
+          }
+          var lift = R * 1.3
+          var d = sky.iss.dir
+          var ix = cx + dot(d, axes.right) * lift, iy = cy - dot(d, axes.up) * lift
+          var hiddenBehind = dot(d, axes.toward) < 0 && Math.hypot(ix - cx, iy - cy) < R
+          if (!hiddenBehind) {
+            ctx.strokeStyle = rgba(accent, 0.5)
+            ctx.beginPath()
+            if (subP.visible) {
+              ctx.moveTo(cx + subP.x, cy - subP.y)
+              ctx.lineTo(ix, iy)
+              ctx.stroke()
+            }
+            ctx.fillStyle = accent
+            ctx.beginPath()
+            ctx.moveTo(ix, iy - 3.5)
+            ctx.lineTo(ix + 3.5, iy)
+            ctx.lineTo(ix, iy + 3.5)
+            ctx.lineTo(ix - 3.5, iy)
+            ctx.closePath()
+            ctx.fill()
+            hits.push({ key: "iss", x: ix, y: iy, depth: 1, r: 4 })
+          }
+        }
         // JWST near L2, four times the Moon's distance away from the Sun:
         // beyond this view, so a small mark at its edge, opposite the Sun.
         if (sky.showSpacecraft && !small && sl > 0.05) {
@@ -889,9 +976,9 @@ Column {
           ctx.beginPath()
           ctx.rect(jx - 2.5, jy - 2.5, 5, 5)
           ctx.fill()
-          return [earth, moon, { key: "jwst", x: jx, y: jy, depth: 0, r: 4 }]
+          return hits.concat([{ key: "jwst", x: jx, y: jy, depth: 0, r: 4 }])
         }
-        return [earth, moon]
+        return hits
       }
 
       // When the view is not now: the shown moment, bottom left.
@@ -1250,7 +1337,7 @@ Column {
           var insetHits = paintEarthMoon(ctx, ix + insetSize / 2, iy + insetSize / 2, insetSize, cam, axes, true)
           ctx.restore()
           // The inset's Moon answers the pointer too.
-          sky.hits = sky.hits.concat(insetHits.filter(function(item) { return item.key === "moon" }))
+          sky.hits = sky.hits.concat(insetHits.filter(function(item) { return item.key === "moon" || item.key === "iss" }))
           sky.insetRect = { x: ix, y: iy, w: insetSize, h: insetSize }
         }
 
@@ -1418,6 +1505,8 @@ Column {
     if (evening.length) skyLine.push(panel.i18n("astroEvening", { planets: evening.join(", ") }))
     if (morning.length) skyLine.push(panel.i18n("astroMorning", { planets: morning.join(", ") }))
     if (skyLine.length) lines.push(skyLine.join(" · "))
+    if (sky.showIss && sky.issElements && sky.issHidden)
+      lines.push(panel.i18n("astroIssHidden", { date: shortMoment(sky.issElements.epochMs) }))
     return lines.join("\n")
   }
 

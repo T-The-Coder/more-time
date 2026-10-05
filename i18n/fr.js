@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km de la Terre",
   astroSpeedAway: "s’éloigne de {speed} ua par an",
   sourceGroupAstroBodies: "Petits corps, lunes et sondes",
-  sourceGroupAstroBodiesDetails: "Cérès, Pluton et Éris d’après la Small-Body Database du JPL, la comète de Halley d’après les éléments de JPL Horizons, les grandes lunes d’après les éléments moyens des satellites du JPL, Voyager 1 et 2 et New Horizons d’après les vecteurs d’état de Horizons prolongés en ligne droite ; les ceintures sont des orbites d’exemple au hasard. Calculé sur cet ordinateur ; rien n’est téléchargé."
+  sourceGroupAstroBodiesDetails: "Cérès, Pluton et Éris d’après la Small-Body Database du JPL, la comète de Halley d’après les éléments de JPL Horizons, les grandes lunes d’après les éléments moyens des satellites du JPL, Voyager 1 et 2 et New Horizons d’après les vecteurs d’état de Horizons prolongés en ligne droite ; les ceintures sont des orbites d’exemple au hasard. Calculé sur cet ordinateur ; rien n’est téléchargé.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Charge les données d’orbite de la station depuis CelesTrak par le réseau, au plus deux fois par jour et seulement quand cet onglet est visible ; affichée dans la vue Terre et Lune et dans l’encart.",
+  astroIssInfo: "au-dessus de {place} · {km} km · une orbite en {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° E",
+  astroLonWest: "{deg}° O",
+  astroIssHidden: "ISS masquée : ses données d’orbite datent du {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Les données d’orbite de la station spatiale (un jeu d’éléments à deux lignes) de CelesTrak, chargées seulement quand l’option ISS est active et l’onglet Astro visible, au plus deux fois par jour ; propagées avec SGP4 sur cet ordinateur."
 }

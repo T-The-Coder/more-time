@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "地球から {km} km",
   astroSpeedAway: "毎年 {speed} au 遠ざかる",
   sourceGroupAstroBodies: "小天体・衛星・探査機",
-  sourceGroupAstroBodiesDetails: "ケレス・冥王星・エリスは JPL 小天体データベース、ハレー彗星は JPL Horizons の軌道要素、大きな衛星は JPL の衛星平均要素、ボイジャーとニュー・ホライズンズは Horizons の状態ベクトルを直線で延長。ベルトはランダムな例示軌道です。このコンピューターで計算し、何もダウンロードしません。"
+  sourceGroupAstroBodiesDetails: "ケレス・冥王星・エリスは JPL 小天体データベース、ハレー彗星は JPL Horizons の軌道要素、大きな衛星は JPL の衛星平均要素、ボイジャーとニュー・ホライズンズは Horizons の状態ベクトルを直線で延長。ベルトはランダムな例示軌道です。このコンピューターで計算し、何もダウンロードしません。",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "ステーションの軌道データをネット経由で CelesTrak から取得します（1 日最大 2 回、このタブを表示中のみ）。地球と月の表示と小窓に表示。",
+  astroIssInfo: "{place}上空 · {km} km · 1 周 {minutes} 分",
+  astroLatNorth: "北緯 {deg}°",
+  astroLatSouth: "南緯 {deg}°",
+  astroLonEast: "東経 {deg}°",
+  astroLonWest: "西経 {deg}°",
+  astroIssHidden: "ISS を非表示：軌道データは {date} のもの",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "宇宙ステーションの軌道データ（2 行軌道要素）を CelesTrak から、ISS オプションがオンで天体タブ表示中にのみ、1 日最大 2 回取得し、このコンピューターで SGP4 により計算します。"
 }

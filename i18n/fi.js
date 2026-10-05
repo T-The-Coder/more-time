@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km Maasta",
   astroSpeedAway: "loittonee {speed} AU vuodessa",
   sourceGroupAstroBodies: "Pienkappaleet, kuut ja luotaimet",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto ja Eris JPL:n pienkappaletietokannasta, Halleyn komeetta JPL Horizonsin rataelementeistä, suuret kuut JPL:n keskimääräisistä satelliittielementeistä, Voyagerit ja New Horizons Horizonsin tilavektoreista suoraviivaisesti jatkettuina; vyöhykkeet ovat satunnaisia esimerkkiratoja. Lasketaan tällä tietokoneella; mitään ei ladata."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto ja Eris JPL:n pienkappaletietokannasta, Halleyn komeetta JPL Horizonsin rataelementeistä, suuret kuut JPL:n keskimääräisistä satelliittielementeistä, Voyagerit ja New Horizons Horizonsin tilavektoreista suoraviivaisesti jatkettuina; vyöhykkeet ovat satunnaisia esimerkkiratoja. Lasketaan tällä tietokoneella; mitään ei ladata.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Hakee aseman ratatiedot CelesTrakista verkon yli, enintään kahdesti päivässä ja vain kun tämä välilehti näkyy; näytetään Maan ja Kuun näkymässä ja kulmakuvassa.",
+  astroIssInfo: "{place} yllä · {km} km · yksi kierros {minutes} min",
+  astroLatNorth: "{deg}° P",
+  astroLatSouth: "{deg}° E",
+  astroLonEast: "{deg}° I",
+  astroLonWest: "{deg}° L",
+  astroIssHidden: "ISS piilotettu: sen ratatiedot ovat ajalta {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Avaruusaseman ratatiedot (kaksirivinen elementtijoukko) CelesTrakista, haetaan vain kun ISS-valinta on päällä ja Astro-välilehti näkyy, enintään kahdesti päivässä; lasketaan eteenpäin SGP4:llä tällä tietokoneella."
 }

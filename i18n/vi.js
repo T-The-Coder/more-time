@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "cách Trái Đất {km} km",
   astroSpeedAway: "ra xa {speed} AU mỗi năm",
   sourceGroupAstroBodies: "Thiên thể nhỏ, vệ tinh và tàu",
-  sourceGroupAstroBodiesDetails: "Ceres, Sao Diêm Vương và Eris từ Small-Body Database của JPL, sao chổi Halley từ phần tử JPL Horizons, các vệ tinh lớn từ phần tử trung bình vệ tinh của JPL, Voyager và New Horizons từ vectơ trạng thái Horizons kéo dài theo đường thẳng; các vành đai là quỹ đạo mẫu ngẫu nhiên. Tính trên máy này; không tải gì xuống."
+  sourceGroupAstroBodiesDetails: "Ceres, Sao Diêm Vương và Eris từ Small-Body Database của JPL, sao chổi Halley từ phần tử JPL Horizons, các vệ tinh lớn từ phần tử trung bình vệ tinh của JPL, Voyager và New Horizons từ vectơ trạng thái Horizons kéo dài theo đường thẳng; các vành đai là quỹ đạo mẫu ngẫu nhiên. Tính trên máy này; không tải gì xuống.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Tải dữ liệu quỹ đạo của trạm từ CelesTrak qua mạng, tối đa hai lần mỗi ngày và chỉ khi tab này hiển thị; hiện trong khung Trái Đất và Mặt Trăng và khung nhỏ.",
+  astroIssInfo: "trên {place} · {km} km · một vòng {minutes} phút",
+  astroLatNorth: "{deg}° B",
+  astroLatSouth: "{deg}° N",
+  astroLonEast: "{deg}° Đ",
+  astroLonWest: "{deg}° T",
+  astroIssHidden: "ISS bị ẩn: dữ liệu quỹ đạo từ {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Dữ liệu quỹ đạo của trạm vũ trụ (bộ phần tử hai dòng) từ CelesTrak, chỉ tải khi bật tùy chọn ISS và tab Thiên văn hiển thị, tối đa hai lần mỗi ngày; tính bằng SGP4 trên máy này."
 }

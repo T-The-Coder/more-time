@@ -594,6 +594,37 @@ ShellRoot {
     function() { shot("42b-astro-halley") },
     function() { var a = astro(); a.pointer = null; a.pinned = ""; a.updateHover(); a.zoomIndex = 2 },
     function() { console.log("ASTRO jwst", JSON.stringify(astro().infoText("jwst"))); shot("42c-astro-jwst") },
+    // The ISS from a fixture TLE (tests/fixtures/iss-tle.json), shown at
+    // 2026-10-05 18:32 UTC (over Canada) in the Earth–Moon view, with its
+    // label.
+    function() {
+      panel.issStore.adoptTle("ISS (ZARYA)\n1 25544U 98067A   26278.04655461  .00004924  00000+0  98343-4 0  9995\n"
+        + "2 25544  51.6316 116.4131 0006856 223.9771 136.0673 15.48738655588781", Date.now())
+      display("astroIss", true)
+      var a = astro()
+      a.showAt(1791225155000)
+      a.zoomIndex = 2
+    },
+    function() {
+      var a = astro()
+      var st = a.hits.filter(function(h) { return h.key === "iss" })[0]
+      if (st) { a.pointer = { x: st.x, y: st.y }; a.updateHover() }
+      console.log("ASTRO iss", JSON.stringify(a.hover ? a.hover.text : null), a.iss ? a.iss.at.lat.toFixed(2) + " " + a.iss.at.lon.toFixed(2) : "none",
+        new Date(a.minuteMs).toISOString(), new Date(a.issMs).toISOString(), a.timePinned)
+    },
+    function() {
+      var a = astro()
+      console.log("ASTRO iss shot", a.timePinned, new Date(a.minuteMs).toISOString(), a.traveling, a.playing)
+      shot("43a-astro-iss")
+    },
+    function() {
+      var a = astro()
+      a.pointer = null
+      a.updateHover()
+      a.showAt(1791225155000 + 30 * 86400000)
+    },
+    function() { console.log("ASTRO iss far", astro().iss === null ? "hidden" : "SHOWN", JSON.stringify(astroView().infoText.split("\n").slice(-1)[0])) },
+    function() { var a = astro(); a.backToNow(); a.finishTravel(); display("astroIss", false) },
     function() { var a = astro(); a.zoomIndex = 0; a.pinned = "jupiter" },
     function() {
       var a = astro()

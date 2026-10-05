@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km od Země",
   astroSpeedAway: "vzdaluje se o {speed} au ročně",
   sourceGroupAstroBodies: "Malá tělesa, měsíce a sondy",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto a Eris z databáze malých těles JPL, Halleyova kometa z elementů JPL Horizons, velké měsíce ze středních elementů satelitů JPL, Voyagery a New Horizons ze stavových vektorů Horizons prodloužených po přímce; pásy jsou náhodné vzorové dráhy. Počítáno na tomto počítači; nic se nestahuje."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto a Eris z databáze malých těles JPL, Halleyova kometa z elementů JPL Horizons, velké měsíce ze středních elementů satelitů JPL, Voyagery a New Horizons ze stavových vektorů Horizons prodloužených po přímce; pásy jsou náhodné vzorové dráhy. Počítáno na tomto počítači; nic se nestahuje.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Stahuje dráhová data stanice z CelesTrak přes síť, nejvýše dvakrát denně a jen když je tato karta vidět; zobrazena v pohledu na Zemi a Měsíc a ve výřezu.",
+  astroIssInfo: "nad {place} · {km} km · jeden oběh za {minutes} min",
+  astroLatNorth: "{deg}° s. š.",
+  astroLatSouth: "{deg}° j. š.",
+  astroLonEast: "{deg}° v. d.",
+  astroLonWest: "{deg}° z. d.",
+  astroIssHidden: "ISS skryta: její dráhová data jsou z {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Dráhová data vesmírné stanice (dvouřádková sada elementů) z CelesTrak, stahovaná jen se zapnutou volbou ISS a viditelnou kartou Astro, nejvýše dvakrát denně; propočítaná SGP4 na tomto počítači."
 }

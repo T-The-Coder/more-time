@@ -235,6 +235,7 @@ Rectangle {
       { key: "astroComets", title: panel.i18n("optionAstroComets") },
       { key: "astroMoons", title: panel.i18n("optionAstroMoons"), hint: panel.i18n("optionAstroMoonsHint") },
       { key: "astroSpacecraft", title: panel.i18n("optionAstroSpacecraft"), hint: panel.i18n("optionAstroSpacecraftHint") },
+      { key: "astroIss", title: panel.i18n("optionAstroIss"), hint: panel.i18n("optionAstroIssHint") },
       { key: "astroInfo", title: panel.i18n("optionAstroInfo"), hint: panel.i18n("optionAstroInfoHint") },
       { key: "astroAutoRotate", title: panel.i18n("optionAstroAutoRotate"), hint: panel.i18n("optionGlobeAutoRotateHint") },
       { key: "astroRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "astroAutoRotate",

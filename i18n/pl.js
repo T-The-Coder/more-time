@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km od Ziemi",
   astroSpeedAway: "oddala się o {speed} au rocznie",
   sourceGroupAstroBodies: "Małe ciała, księżyce i sondy",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluton i Eris z bazy małych ciał JPL, kometa Halleya z elementów JPL Horizons, duże księżyce ze średnich elementów satelitów JPL, Voyagery i New Horizons z wektorów stanu Horizons przedłużonych po prostej; pasy to losowe przykładowe orbity. Liczone na tym komputerze; nic nie jest pobierane."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluton i Eris z bazy małych ciał JPL, kometa Halleya z elementów JPL Horizons, duże księżyce ze średnich elementów satelitów JPL, Voyagery i New Horizons z wektorów stanu Horizons przedłużonych po prostej; pasy to losowe przykładowe orbity. Liczone na tym komputerze; nic nie jest pobierane.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Pobiera dane orbity stacji z CelesTrak przez sieć, najwyżej dwa razy dziennie i tylko gdy ta karta jest widoczna; pokazywana w widoku Ziemi i Księżyca oraz we wstawce.",
+  astroIssInfo: "nad {place} · {km} km · jedno okrążenie w {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° E",
+  astroLonWest: "{deg}° W",
+  astroIssHidden: "ISS ukryta: jej dane orbity są z {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Dane orbity stacji kosmicznej (zestaw elementów dwuwierszowych) z CelesTrak, pobierane tylko przy włączonej opcji ISS i widocznej karcie Astro, najwyżej dwa razy dziennie; propagowane SGP4 na tym komputerze."
 }

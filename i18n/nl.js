@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km van de aarde",
   astroSpeedAway: "verwijdert zich {speed} AE per jaar",
   sourceGroupAstroBodies: "Kleine hemellichamen, manen en sondes",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto en Eris uit JPL's Small-Body Database, de komeet van Halley uit elementen van JPL Horizons, de grote manen uit JPL's gemiddelde satellietelementen, Voyager 1 en 2 en New Horizons uit toestandsvectoren van Horizons rechtdoor doorgetrokken; de gordels zijn willekeurige voorbeeldbanen. Op deze computer berekend; er wordt niets gedownload."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto en Eris uit JPL's Small-Body Database, de komeet van Halley uit elementen van JPL Horizons, de grote manen uit JPL's gemiddelde satellietelementen, Voyager 1 en 2 en New Horizons uit toestandsvectoren van Horizons rechtdoor doorgetrokken; de gordels zijn willekeurige voorbeeldbanen. Op deze computer berekend; er wordt niets gedownload.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Haalt de baangegevens van het station via het netwerk op bij CelesTrak, hoogstens twee keer per dag en alleen zolang dit tabblad zichtbaar is; getoond in het beeld van aarde en maan en in de inzet.",
+  astroIssInfo: "boven {place} · {km} km · één omloop in {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° Z",
+  astroLonEast: "{deg}° O",
+  astroLonWest: "{deg}° W",
+  astroIssHidden: "ISS verborgen: de baangegevens zijn van {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "De baangegevens van het ruimtestation (een two-line element set) van CelesTrak, alleen opgehaald met de ISS-optie aan en het Astro-tabblad zichtbaar, hoogstens twee keer per dag; met SGP4 op deze computer doorgerekend."
 }

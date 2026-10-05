@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km da Terra",
   astroSpeedAway: "afasta-se {speed} ua por ano",
   sourceGroupAstroBodies: "Corpos menores, luas e sondas",
-  sourceGroupAstroBodiesDetails: "Ceres, Plutão e Éris da Small-Body Database do JPL, o cometa Halley de elementos do JPL Horizons, as luas grandes dos elementos médios de satélites do JPL, Voyager 1 e 2 e New Horizons de vetores de estado do Horizons em linha reta; as cinturas são órbitas de amostra aleatórias. Calculado neste computador; nada é transferido."
+  sourceGroupAstroBodiesDetails: "Ceres, Plutão e Éris da Small-Body Database do JPL, o cometa Halley de elementos do JPL Horizons, as luas grandes dos elementos médios de satélites do JPL, Voyager 1 e 2 e New Horizons de vetores de estado do Horizons em linha reta; as cinturas são órbitas de amostra aleatórias. Calculado neste computador; nada é transferido.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Obtém os dados orbitais da estação da CelesTrak pela rede, no máximo duas vezes por dia e só enquanto este separador está visível; mostrada na vista da Terra e da Lua e no destaque.",
+  astroIssInfo: "sobre {place} · {km} km · uma órbita em {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° E",
+  astroLonWest: "{deg}° O",
+  astroIssHidden: "ISS oculta: os dados orbitais são de {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Os dados orbitais da estação espacial (um conjunto de elementos de duas linhas) da CelesTrak, obtidos só com a opção ISS ligada e o separador Astro visível, no máximo duas vezes por dia; propagados com SGP4 neste computador."
 }

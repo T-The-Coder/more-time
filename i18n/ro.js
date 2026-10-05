@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km de Pământ",
   astroSpeedAway: "se depărtează cu {speed} UA pe an",
   sourceGroupAstroBodies: "Corpuri mici, sateliți și sonde",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto și Eris din Small-Body Database a JPL, cometa Halley din elementele JPL Horizons, sateliții mari din elementele medii ale sateliților JPL, Voyager 1 și 2 și New Horizons din vectorii de stare Horizons prelungiți în linie dreaptă; centurile sunt orbite exemplu aleatoare. Calculat pe acest calculator; nu se descarcă nimic."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto și Eris din Small-Body Database a JPL, cometa Halley din elementele JPL Horizons, sateliții mari din elementele medii ale sateliților JPL, Voyager 1 și 2 și New Horizons din vectorii de stare Horizons prelungiți în linie dreaptă; centurile sunt orbite exemplu aleatoare. Calculat pe acest calculator; nu se descarcă nimic.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Descarcă din rețea datele orbitale ale stației de la CelesTrak, cel mult de două ori pe zi și doar cât această filă e afișată; arătată în vederea Pământului și a Lunii și în medalion.",
+  astroIssInfo: "deasupra {place} · {km} km · o orbită în {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° E",
+  astroLonWest: "{deg}° V",
+  astroIssHidden: "ISS ascunsă: datele orbitale sunt din {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Datele orbitale ale stației spațiale (un set de elemente pe două rânduri) de la CelesTrak, descărcate doar cu opțiunea ISS pornită și fila Astro afișată, cel mult de două ori pe zi; propagate cu SGP4 pe acest calculator."
 }

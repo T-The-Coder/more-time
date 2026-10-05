@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "距地球 {km} 千米",
   astroSpeedAway: "每年远离 {speed} 天文单位",
   sourceGroupAstroBodies: "小天体、卫星与探测器",
-  sourceGroupAstroBodiesDetails: "谷神星、冥王星和阋神星来自 JPL 小天体数据库，哈雷彗星来自 JPL Horizons 根数，大卫星来自 JPL 卫星平均根数，旅行者号和新视野号来自 Horizons 状态矢量并沿直线外推；小行星带为随机示例轨道。在本机计算，不下载任何数据。"
+  sourceGroupAstroBodiesDetails: "谷神星、冥王星和阋神星来自 JPL 小天体数据库，哈雷彗星来自 JPL Horizons 根数，大卫星来自 JPL 卫星平均根数，旅行者号和新视野号来自 Horizons 状态矢量并沿直线外推；小行星带为随机示例轨道。在本机计算，不下载任何数据。",
+  astroBody_iss: "国际空间站",
+  optionAstroIss: "国际空间站",
+  optionAstroIssHint: "通过网络从 CelesTrak 获取空间站的轨道数据，每天最多两次，且仅在此标签页显示时；显示在地月视图和小窗中。",
+  astroIssInfo: "位于 {place} 上空 · {km} 千米 · 每圈 {minutes} 分钟",
+  astroLatNorth: "北纬 {deg}°",
+  astroLatSouth: "南纬 {deg}°",
+  astroLonEast: "东经 {deg}°",
+  astroLonWest: "西经 {deg}°",
+  astroIssHidden: "国际空间站已隐藏：其轨道数据来自 {date}",
+  sourceGroupIss: "国际空间站",
+  sourceGroupIssDetails: "空间站的轨道数据（两行根数）来自 CelesTrak，仅在开启国际空间站选项且显示天文标签页时获取，每天最多两次；在本机用 SGP4 推算。"
 }

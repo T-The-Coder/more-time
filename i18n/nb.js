@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km fra jorden",
   astroSpeedAway: "fjerner seg {speed} AU i året",
   sourceGroupAstroBodies: "Småkropper, måner og sonder",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto og Eris fra JPLs Small-Body Database, Halleys komet fra elementer i JPL Horizons, de store månene fra JPLs middelelementer for satellitter, Voyager 1 og 2 og New Horizons fra Horizons' tilstandsvektorer videreført i rett linje; beltene er tilfeldige eksempelbaner. Beregnet på denne maskinen; ingenting lastes ned."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto og Eris fra JPLs Small-Body Database, Halleys komet fra elementer i JPL Horizons, de store månene fra JPLs middelelementer for satellitter, Voyager 1 og 2 og New Horizons fra Horizons' tilstandsvektorer videreført i rett linje; beltene er tilfeldige eksempelbaner. Beregnet på denne maskinen; ingenting lastes ned.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Henter stasjonens banedata fra CelesTrak over nettet, høyst to ganger om dagen og bare mens denne fanen vises; vist i visningen av jorden og månen og i hjørnet.",
+  astroIssInfo: "over {place} · {km} km · én runde på {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° Ø",
+  astroLonWest: "{deg}° V",
+  astroIssHidden: "ISS skjult: banedataene er fra {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Romstasjonens banedata (et tolinjers elementsett) fra CelesTrak, hentet bare mens ISS-valget er på og Astro-fanen vises, høyst to ganger om dagen; framskrevet med SGP4 på denne maskinen."
 }

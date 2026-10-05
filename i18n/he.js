@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} ק״מ מכדור הארץ",
   astroSpeedAway: "מתרחקת {speed} יח״א בשנה",
   sourceGroupAstroBodies: "גופים קטנים, ירחים וחלליות",
-  sourceGroupAstroBodiesDetails: "קרס, פלוטו ואריס ממאגר הגופים הקטנים של JPL, השביט של האלי מיסודות JPL Horizons, הירחים הגדולים מיסודות הממוצע של הירחים של JPL, וויאג'ר וניו הורייזנס מווקטורי מצב של Horizons שהומשכו בקו ישר; החגורות הן מסלולי דוגמה אקראיים. מחושב במחשב הזה; שום דבר אינו מורד."
+  sourceGroupAstroBodiesDetails: "קרס, פלוטו ואריס ממאגר הגופים הקטנים של JPL, השביט של האלי מיסודות JPL Horizons, הירחים הגדולים מיסודות הממוצע של הירחים של JPL, וויאג'ר וניו הורייזנס מווקטורי מצב של Horizons שהומשכו בקו ישר; החגורות הן מסלולי דוגמה אקראיים. מחושב במחשב הזה; שום דבר אינו מורד.",
+  astroBody_iss: "תחנת החלל",
+  optionAstroIss: "תחנת החלל",
+  optionAstroIssHint: "מורידה את נתוני המסלול של התחנה מ־CelesTrak דרך הרשת, לכל היותר פעמיים ביום ורק כשהלשונית מוצגת; מוצגת בתצוגת כדור הארץ והירח ובחלונית.",
+  astroIssInfo: "מעל {place} · {km} ק״מ · הקפה ב־{minutes} דק׳",
+  astroLatNorth: "{deg}° צ׳",
+  astroLatSouth: "{deg}° ד׳",
+  astroLonEast: "{deg}° מז׳",
+  astroLonWest: "{deg}° מע׳",
+  astroIssHidden: "התחנה מוסתרת: נתוני המסלול שלה מ־{date}",
+  sourceGroupIss: "תחנת החלל",
+  sourceGroupIssDetails: "נתוני המסלול של תחנת החלל (סט יסודות בשתי שורות) מ־CelesTrak, מורדים רק כשאפשרות התחנה פעילה ולשונית האסטרו מוצגת, לכל היותר פעמיים ביום; מחושבים ב־SGP4 במחשב הזה."
 }

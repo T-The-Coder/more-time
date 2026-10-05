@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km från jorden",
   astroSpeedAway: "fjärmar sig {speed} AE om året",
   sourceGroupAstroBodies: "Småkroppar, månar och sonder",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto och Eris från JPL:s Small-Body Database, Halleys komet från element i JPL Horizons, de stora månarna från JPL:s medelelement för satelliter, Voyager 1 och 2 och New Horizons från Horizons tillståndsvektorer framskrivna i rät linje; bältena är slumpade exempelbanor. Beräknas på den här datorn; inget laddas ner."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto och Eris från JPL:s Small-Body Database, Halleys komet från element i JPL Horizons, de stora månarna från JPL:s medelelement för satelliter, Voyager 1 och 2 och New Horizons från Horizons tillståndsvektorer framskrivna i rät linje; bältena är slumpade exempelbanor. Beräknas på den här datorn; inget laddas ner.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Hämtar stationens banuppgifter från CelesTrak över nätet, högst två gånger om dagen och bara medan den här fliken syns; visas i vyn med jorden och månen och i hörnet.",
+  astroIssInfo: "över {place} · {km} km · ett varv på {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° O",
+  astroLonWest: "{deg}° V",
+  astroIssHidden: "ISS dold: dess banuppgifter är från {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Rymdstationens banuppgifter (en tvåradig elementuppsättning) från CelesTrak, hämtade bara när ISS-valet är på och Astro-fliken syns, högst två gånger om dagen; framräknade med SGP4 på den här datorn."
 }

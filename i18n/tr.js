@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "Dünya'dan {km} km",
   astroSpeedAway: "yılda {speed} AB uzaklaşıyor",
   sourceGroupAstroBodies: "Küçük cisimler, uydular ve uzay araçları",
-  sourceGroupAstroBodiesDetails: "Ceres, Plüton ve Eris JPL Küçük Cisim Veritabanı'ndan, Halley Kuyrukluyıldızı JPL Horizons öğelerinden, büyük uydular JPL'nin ortalama uydu öğelerinden, Voyager 1 ve 2 ile New Horizons Horizons durum vektörlerinden düz çizgide sürdürülerek; kuşaklar rastgele örnek yörüngelerdir. Bu bilgisayarda hesaplanır; hiçbir şey indirilmez."
+  sourceGroupAstroBodiesDetails: "Ceres, Plüton ve Eris JPL Küçük Cisim Veritabanı'ndan, Halley Kuyrukluyıldızı JPL Horizons öğelerinden, büyük uydular JPL'nin ortalama uydu öğelerinden, Voyager 1 ve 2 ile New Horizons Horizons durum vektörlerinden düz çizgide sürdürülerek; kuşaklar rastgele örnek yörüngelerdir. Bu bilgisayarda hesaplanır; hiçbir şey indirilmez.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "İstasyonun yörünge verilerini ağ üzerinden CelesTrak'tan alır, günde en çok iki kez ve yalnızca bu sekme görünürken; Dünya ve Ay görünümünde ve küçük kutuda gösterilir.",
+  astroIssInfo: "{place} üzerinde · {km} km · bir tur {minutes} dk",
+  astroLatNorth: "{deg}° K",
+  astroLatSouth: "{deg}° G",
+  astroLonEast: "{deg}° D",
+  astroLonWest: "{deg}° B",
+  astroIssHidden: "ISS gizlendi: yörünge verileri {date} tarihli",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Uzay istasyonunun yörünge verileri (iki satırlık öğe takımı) CelesTrak'tan, yalnızca ISS seçeneği açık ve Astro sekmesi görünürken, günde en çok iki kez alınır; bu bilgisayarda SGP4 ile ilerletilir."
 }

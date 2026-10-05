@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km dari Bumi",
   astroSpeedAway: "menjauh {speed} SA per tahun",
   sourceGroupAstroBodies: "Benda kecil, bulan, dan wahana",
-  sourceGroupAstroBodiesDetails: "Ceres, Pluto, dan Eris dari Small-Body Database JPL, Komet Halley dari elemen JPL Horizons, bulan besar dari elemen rata-rata satelit JPL, Voyager dan New Horizons dari vektor keadaan Horizons diteruskan lurus; sabuk adalah orbit contoh acak. Dihitung di komputer ini; tidak ada yang diunduh."
+  sourceGroupAstroBodiesDetails: "Ceres, Pluto, dan Eris dari Small-Body Database JPL, Komet Halley dari elemen JPL Horizons, bulan besar dari elemen rata-rata satelit JPL, Voyager dan New Horizons dari vektor keadaan Horizons diteruskan lurus; sabuk adalah orbit contoh acak. Dihitung di komputer ini; tidak ada yang diunduh.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Mengambil data orbit stasiun dari CelesTrak lewat jaringan, paling banyak dua kali sehari dan hanya selama tab ini tampil; ditampilkan di tampilan Bumi dan Bulan serta sisipan.",
+  astroIssInfo: "di atas {place} · {km} km · satu orbit {minutes} menit",
+  astroLatNorth: "{deg}° LU",
+  astroLatSouth: "{deg}° LS",
+  astroLonEast: "{deg}° BT",
+  astroLonWest: "{deg}° BB",
+  astroIssHidden: "ISS disembunyikan: data orbitnya dari {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "Data orbit stasiun antariksa (set elemen dua baris) dari CelesTrak, diambil hanya saat opsi ISS aktif dan tab Astro tampil, paling banyak dua kali sehari; dihitung dengan SGP4 di komputer ini."
 }

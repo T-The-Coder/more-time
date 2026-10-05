@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "{km} km dalla Terra",
   astroSpeedAway: "si allontana di {speed} UA l’anno",
   sourceGroupAstroBodies: "Corpi minori, lune e sonde",
-  sourceGroupAstroBodiesDetails: "Cerere, Plutone ed Eris dalla Small-Body Database del JPL, la cometa di Halley dagli elementi di JPL Horizons, le lune grandi dagli elementi medi dei satelliti del JPL, Voyager 1 e 2 e New Horizons dai vettori di stato di Horizons proseguiti in linea retta; le fasce sono orbite campione casuali. Calcolato su questo computer; nulla viene scaricato."
+  sourceGroupAstroBodiesDetails: "Cerere, Plutone ed Eris dalla Small-Body Database del JPL, la cometa di Halley dagli elementi di JPL Horizons, le lune grandi dagli elementi medi dei satelliti del JPL, Voyager 1 e 2 e New Horizons dai vettori di stato di Horizons proseguiti in linea retta; le fasce sono orbite campione casuali. Calcolato su questo computer; nulla viene scaricato.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "Scarica dalla rete i dati orbitali della stazione da CelesTrak, al massimo due volte al giorno e solo mentre questa scheda è visibile; mostrata nella vista Terra e Luna e nel riquadro.",
+  astroIssInfo: "sopra {place} · {km} km · un’orbita in {minutes} min",
+  astroLatNorth: "{deg}° N",
+  astroLatSouth: "{deg}° S",
+  astroLonEast: "{deg}° E",
+  astroLonWest: "{deg}° O",
+  astroIssHidden: "ISS nascosta: i suoi dati orbitali sono del {date}",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "I dati orbitali della stazione spaziale (un set di elementi a due righe) da CelesTrak, scaricati solo con l’opzione ISS attiva e la scheda Astro visibile, al massimo due volte al giorno; propagati con SGP4 su questo computer."
 }

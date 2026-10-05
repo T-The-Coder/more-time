@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "지구에서 {km} km",
   astroSpeedAway: "해마다 {speed} AU 멀어짐",
   sourceGroupAstroBodies: "소천체, 위성, 탐사선",
-  sourceGroupAstroBodiesDetails: "세레스·명왕성·에리스는 JPL 소천체 데이터베이스, 핼리 혜성은 JPL Horizons 궤도 요소, 큰 위성은 JPL 위성 평균 요소, 보이저와 뉴호라이즌스는 Horizons 상태 벡터를 직선으로 연장. 띠는 무작위 예시 궤도입니다. 이 컴퓨터에서 계산하며 아무것도 내려받지 않습니다."
+  sourceGroupAstroBodiesDetails: "세레스·명왕성·에리스는 JPL 소천체 데이터베이스, 핼리 혜성은 JPL Horizons 궤도 요소, 큰 위성은 JPL 위성 평균 요소, 보이저와 뉴호라이즌스는 Horizons 상태 벡터를 직선으로 연장. 띠는 무작위 예시 궤도입니다. 이 컴퓨터에서 계산하며 아무것도 내려받지 않습니다.",
+  astroBody_iss: "ISS",
+  optionAstroIss: "ISS",
+  optionAstroIssHint: "정거장의 궤도 데이터를 네트워크로 CelesTrak에서 가져옵니다. 하루 최대 두 번, 이 탭이 보일 때만. 지구와 달 보기와 작은 창에 표시.",
+  astroIssInfo: "{place} 상공 · {km} km · 한 바퀴 {minutes}분",
+  astroLatNorth: "북위 {deg}°",
+  astroLatSouth: "남위 {deg}°",
+  astroLonEast: "동경 {deg}°",
+  astroLonWest: "서경 {deg}°",
+  astroIssHidden: "ISS 숨김: 궤도 데이터가 {date} 것입니다",
+  sourceGroupIss: "ISS",
+  sourceGroupIssDetails: "우주정거장의 궤도 데이터(2행 궤도 요소)를 CelesTrak에서, ISS 옵션이 켜져 있고 천체 탭이 보일 때만 하루 최대 두 번 가져와 이 컴퓨터에서 SGP4로 계산합니다."
 }

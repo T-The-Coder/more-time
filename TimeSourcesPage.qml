@@ -47,6 +47,12 @@ Column {
         ["JPL: Planetary Satellite Mean Elements", "https://ssd.jpl.nasa.gov/sats/elem/sep.html"]]
     },
     {
+      title: "sourceGroupIss", details: "sourceGroupIssDetails",
+      inUse: panel.displaySetting("astroIss", false) === true ? "CELESTRAK · SGP4" : "",
+      links: [["CelesTrak", "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE"],
+        ["Revisiting Spacetrack Report #3", "https://celestrak.org/publications/AIAA/2006-6753/"]]
+    },
+    {
       title: "sourceGroupAstroRotation", details: "sourceGroupAstroRotationDetails",
       inUse: "IAU WGCCRE · NAIF PCK00010",
       links: [["NAIF pck00010.tpc", "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00010.tpc"],

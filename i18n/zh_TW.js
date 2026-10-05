@@ -322,5 +322,16 @@ var catalog = {
   astroFromEarthKm: "距地球 {km} 公里",
   astroSpeedAway: "每年遠離 {speed} 天文單位",
   sourceGroupAstroBodies: "小天體、衛星與探測器",
-  sourceGroupAstroBodiesDetails: "穀神星、冥王星和鬩神星來自 JPL 小天體資料庫，哈雷彗星來自 JPL Horizons 根數，大衛星來自 JPL 衛星平均根數，航海家號和新視野號來自 Horizons 狀態向量並沿直線外推；小行星帶為隨機示例軌道。在本機計算，不下載任何資料。"
+  sourceGroupAstroBodiesDetails: "穀神星、冥王星和鬩神星來自 JPL 小天體資料庫，哈雷彗星來自 JPL Horizons 根數，大衛星來自 JPL 衛星平均根數，航海家號和新視野號來自 Horizons 狀態向量並沿直線外推；小行星帶為隨機示例軌道。在本機計算，不下載任何資料。",
+  astroBody_iss: "國際太空站",
+  optionAstroIss: "國際太空站",
+  optionAstroIssHint: "透過網路從 CelesTrak 取得太空站的軌道資料，每天最多兩次，且僅在此分頁顯示時；顯示在地月視圖和小窗中。",
+  astroIssInfo: "位於 {place} 上空 · {km} 公里 · 每圈 {minutes} 分鐘",
+  astroLatNorth: "北緯 {deg}°",
+  astroLatSouth: "南緯 {deg}°",
+  astroLonEast: "東經 {deg}°",
+  astroLonWest: "西經 {deg}°",
+  astroIssHidden: "國際太空站已隱藏：其軌道資料來自 {date}",
+  sourceGroupIss: "國際太空站",
+  sourceGroupIssDetails: "太空站的軌道資料（兩行根數）來自 CelesTrak，僅在開啟國際太空站選項且顯示天文分頁時取得，每天最多兩次；在本機用 SGP4 推算。"
 }

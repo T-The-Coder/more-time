@@ -213,6 +213,14 @@ control.
     click on it; Voyager 1 and 2 and New Horizons as arrows at the edge with
     their distance, and JWST near L2 in the Earth and Moon view. The pointer
     on any of them names it with its distances, period or speed.
+  - The ISS (off by default; it fetches the station's orbit data from
+    CelesTrak, at most twice a day and only while the option is on and the
+    tab shows): in the Earth and Moon view and the inset, a marker above the
+    place it is over (its height enlarged), its ground track for one orbit
+    on the globe, and on hover "over 52° N 88° W · 430 km · one orbit in
+    93 min". Propagated with SGP4 on this computer; with the timeline more
+    than a week from the data's date it is hidden and the info line says
+    why.
   - Under the model a timeline plays the year either side of today (a day,
     a week or a month a second; `,` `.` a day, `Space` play, `n` or `⌫` back
     to now, a click or a drag on the track), and **Go to date** (`g`) travels
@@ -412,6 +420,12 @@ too.
   Small-Body Database, Halley from JPL Horizons' elements, the large moons from
   JPL's satellite mean elements, the spacecraft from Horizons' state vectors
   (`AstroBodies.js`).
+- **ISS:** one two-line element set (NORAD 25544) from
+  [CelesTrak](https://celestrak.org/), only while the Astro option ISS is on and
+  the tab shows, at most every 12 hours; checked (checksums, catalogue number)
+  and propagated with SGP4 (`AstroIss.js`, after Vallado et al., "Revisiting
+  Spacetrack Report #3", tested against its test case and against
+  api.wheretheiss.at).
 - **Sounds:** the freedesktop sound theme (`/usr/share/sounds/freedesktop`).
   The five chime tones are synthesized once by `python3`
   (`data/chime-tones.py`) into `~/.cache/more-time`; nothing is downloaded.
@@ -495,6 +509,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release notes.
 | `~/.local/state/omarchy/settings/more-time-place.json` | The current place (`here` or a city), shared by the bar and the app, and here's clock face style |
 | `~/.local/state/omarchy/settings/more-weather-locations.json` | More Weather's saved places; only read, by **Import places from More Weather** |
 | `~/.local/state/omarchy/settings/more-time-items.json` | Alarms, timers, stopwatches, pomodoros, and the pomodoro rounds per day (60 days) |
+| `~/.local/state/omarchy/settings/more-time-iss.json` | The ISS's orbit data (TLE) and when they were fetched, only with the Astro option ISS |
 | `~/.local/state/omarchy/settings/more-time-ringer.json` | When the last check for due alarms ran and what already rang, so alarms missed while the computer was off are reported after a reboot |
 | `~/.local/state/omarchy/settings/more-time-settings-backup.json` | The settings from before the last import |
 | `$XDG_RUNTIME_DIR/more-time/runtime.json` | Which instance rings, what rings now and the minute that last chimed (gone after a reboot) |
