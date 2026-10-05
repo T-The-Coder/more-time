@@ -113,6 +113,7 @@ Column {
     // Style.space(240).
     readonly property real fitHeight: view.panel.viewportHeight - view.panel.tabContentTop - view.y - y - Style.space(16)
       - (timeline.visible ? timeline.height + view.spacing : 0) - (infoLine.visible ? infoLine.height + view.spacing : 0)
+      - astroChips.height - view.spacing
     height: Math.max(Style.space(240), Math.min(width * 0.9, fitHeight))
 
     // Pictures are never mirrored, whatever the language.
@@ -591,8 +592,8 @@ Column {
     readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "astro"
       && visible && !mouse.pressed && !playing && !traveling
     onCanRotateChanged: if (!canRotate) rotating = false
-    readonly property int rotateDelaySeconds: Number(panel.displaySetting("astroRotateDelay", "10")) || 10
-    readonly property int rotateTurnMinutes: Number(panel.displaySetting("astroRotateSpeed", "4")) || 4
+    readonly property int rotateDelaySeconds: Number(panel.generalSetting("motionDelay", "10")) || 10
+    readonly property int rotateTurnMinutes: Number(panel.generalSetting("motionSpeed", "4")) || 4
 
     function touched() {
       rotating = false
@@ -605,9 +606,9 @@ Column {
       running: sky.canRotate && !sky.rotating
       onTriggered: sky.rotating = true
     }
-    // Frames a second as set (astroRotateFps, 15 unless changed); the turn
+    // Frames a second as set (General → Motion, 15 unless changed); the turn
     // advances by the time elapsed.
-    readonly property int rotateFps: Number(panel.displaySetting("astroRotateFps", "15")) || 15
+    readonly property int rotateFps: Number(panel.generalSetting("motionFps", "15")) || 15
     Timer {
       id: rotateTimer
       interval: Math.round(1000 / Math.max(1, sky.rotateFps))
@@ -1508,6 +1509,33 @@ Column {
     if (sky.showIss && sky.issElements && sky.issHidden)
       lines.push(panel.i18n("astroIssHidden", { date: shortMoment(sky.issElements.epochMs) }))
     return lines.join("\n")
+  }
+
+  // ---- The chips under the model: what it shows (the same options as the
+  //      Astro card, for the surface shown) ----
+  TimeChipBar {
+    id: astroChips
+    width: parent.width
+    panel: view.panel
+    readonly property var keys: ({ orbits: "astroOrbits", names: "astroNames", monthRing: "astroMonthRing",
+      rotation: "astroRotation", belts: "astroBelts", dwarfs: "astroDwarfs", comets: "astroComets", moons: "astroMoons",
+      spacecraft: "astroSpacecraft", iss: "astroIss" })
+    readonly property var defaults: ({ orbits: true, names: true, monthRing: true, rotation: true, belts: true, dwarfs: true,
+      comets: false, moons: false, spacecraft: false, iss: false })
+    function on(id) { return view.panel.displaySetting(keys[id], defaults[id]) === true }
+    chips: [
+      { id: "orbits", glyph: "\u{f0018}", label: "chip_orbits", on: on("orbits") },
+      { id: "names", glyph: "\u{f0284}", label: "chip_names", on: on("names") },
+      { id: "monthRing", glyph: "\u{f0e17}", label: "chip_monthRing", on: on("monthRing") },
+      { id: "rotation", glyph: "\u{f0464}", label: "chip_rotation", on: on("rotation") },
+      { id: "belts", glyph: "\u{f1978}", label: "chip_belts", on: on("belts"), divider: true },
+      { id: "dwarfs", glyph: "\u{f09df}", label: "chip_dwarfs", on: on("dwarfs") },
+      { id: "comets", glyph: "\u{f1741}", label: "chip_comets", on: on("comets") },
+      { id: "moons", glyph: "\u{f0f62}", label: "chip_moons", on: on("moons") },
+      { id: "spacecraft", glyph: "\u{f14de}", label: "chip_spacecraft", on: on("spacecraft") },
+      { id: "iss", glyph: "\u{f1383}", label: "chip_iss", on: on("iss") }
+    ]
+    onToggled: function(id) { view.panel.setViewDisplaySetting(keys[id], !on(id)) }
   }
 
   // ---- The timeline: play, the year either side, speed, now; Go to date ----

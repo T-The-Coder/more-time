@@ -31,7 +31,11 @@ Item {
     chimeDailyHour: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
     hourChime: ["off", "12", "24"],
     chimeTone: panel.ringer.chimeTones,
-    chimeVolume: [25, 50, 75, 100]
+    chimeVolume: [25, 50, 75, 100],
+    // Motion (a view turning by itself: the World globe, the Astro tab).
+    motionDelay: ["5", "10", "30"],
+    motionSpeed: ["1", "2", "4", "8"],
+    motionFps: ["8", "15", "24", "30"]
   })
   readonly property var generalDefaults: ({
     language: "auto",
@@ -54,7 +58,10 @@ Item {
     chimeVolume: 50,
     chimesMuted: false,
     detectLocation: false,
-    timerPresets: "1,3,5,10,15,25,60"
+    timerPresets: "1,3,5,10,15,25,60",
+    motionDelay: "10",
+    motionSpeed: "4",
+    motionFps: "15"
   })
   // Read once: until then the chimes stay quiet, so a start does not beep
   // with the defaults before the chosen settings are known.
@@ -118,6 +125,26 @@ Item {
     try { parsed = JSON.parse(String(raw || "{}")) || ({}) } catch (e) { parsed = ({}) }
     panel.generalOptions = sanitizedGeneral(parsed)
     generalLoaded = true
+    if (!("motionDelay" in parsed) && !("motionSpeed" in parsed) && !("motionFps" in parsed)) motionToMigrate = true
+    migrateMotion()
+  }
+
+  // Once: the turning's delay, speed and frames per second were display
+  // options per surface (globeRotate* / astroRotate*); they are general
+  // now. The app profile's globe values come over when the general file
+  // has none yet.
+  property bool motionToMigrate: false
+  property var appRawMotion: null
+  function migrateMotion() {
+    if (!motionToMigrate || !generalLoaded || !panel.appDisplayOptionsLoaded) return
+    motionToMigrate = false
+    var old = appRawMotion
+    if (!old || (old.delay === undefined && old.speed === undefined && old.fps === undefined)) return
+    var next = sanitizedGeneral(panel.generalOptions)
+    if (old.delay !== undefined) next.motionDelay = normalizedGeneral("motionDelay", old.delay)
+    if (old.speed !== undefined) next.motionSpeed = normalizedGeneral("motionSpeed", old.speed)
+    if (old.fps !== undefined) next.motionFps = normalizedGeneral("motionFps", old.fps)
+    writeGeneral(next)
   }
 
   function setGeneralSetting(key, value) {
@@ -181,12 +208,6 @@ Item {
     menubarAccents: ["off", "hover", "always"],
     worldStyle: ["map", "globe"],
     worldMoonStyle: ["space", "earth"],
-    globeRotateDelay: ["5", "10", "30"],
-    globeRotateSpeed: ["1", "2", "4", "8"],
-    globeRotateFps: ["8", "15", "24", "30"],
-    astroRotateDelay: ["5", "10", "30"],
-    astroRotateSpeed: ["1", "2", "4", "8"],
-    astroRotateFps: ["8", "15", "24", "30"],
     heroDial: ["place", "classic", "minimal", "roman", "twentyFour", "dots"]
   })
 
@@ -243,11 +264,14 @@ Item {
     var next = sanitizedDisplayOptions(parsed, surface)
     var firstLoad = surface === "app" ? !panel.appDisplayOptionsLoaded
       : (surface === "widget" ? !panel.widgetDisplayOptionsLoaded : !panel.menubarDisplayOptionsLoaded)
+    if (surface === "app" && firstLoad)
+      appRawMotion = { delay: parsed.globeRotateDelay, speed: parsed.globeRotateSpeed, fps: parsed.globeRotateFps }
     assign(surface, next, false)
     if (surface === "app") panel.appDisplayOptionsLoaded = true
     else if (surface === "widget") panel.widgetDisplayOptionsLoaded = true
     else panel.menubarDisplayOptionsLoaded = true
     if (firstLoad && panel.opened && surface === panel.activeSurface) panel.activeTab = next.defaultTab
+    if (surface === "app") migrateMotion()
   }
 
   function setSettingsDisplaySetting(key, value) {
@@ -267,6 +291,17 @@ Item {
     }
     assign(surface, next, true)
     if (key === "defaultTab" && surface === panel.activeSurface) panel.activeTab = next.defaultTab
+  }
+
+  // "Copy to": every display option of the profile being edited (widget or
+  // app) to the other one; options only the other has keep their value.
+  function copySettingsDisplayTo(target) {
+    var source = panel.settingsTargetSurface
+    if (source === "menubar" || target === "menubar" || target === source) return
+    var from = optionsFor(source)
+    var next = sanitizedDisplayOptions(optionsFor(target), target)
+    for (var key in from) if (key in next) next[key] = from[key]
+    assign(target, sanitizedDisplayOptions(next, target), true)
   }
 
   function restoreSettingsDisplayDefaults() {

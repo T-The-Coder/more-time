@@ -310,6 +310,22 @@ ShellRoot {
     function() { shot("10a-settings-clock-face") },
     function() { panel.settingsItem.focusId = "worldStyle"; panel.settingsItem.scrollBy(420) },
     function() { shot("10b-settings-world-globe") },
+    function() { panel.settingsItem.focusId = ""; panel.settingsItem.scrollBy(4000) },
+    function() { shot("10c-settings-astro") },
+    // The search: across every page, grouped, the rows working as on the
+    // pages; "Mond" in German finds the Moon rows, "night" in English too.
+    function() { panel.settingsItem.scrollBy(-10000); panel.settingsItem.search("moon") },
+    function() {
+      var s = panel.settingsItem
+      console.log("SEARCH moon", s.searchResults.length, JSON.stringify(s.searchGroups.map(function(g) { return g.heading })))
+      s.moveFocus(1)
+    },
+    function() { shot("10d-settings-search") },
+    function() { panel.settingsItem.search("xyzzy") },
+    function() { console.log("SEARCH none", panel.settingsItem.searchResults.length); shot("10e-settings-search-none") },
+    function() { panel.settingsItem.search(""); panel.openSettings("general") },
+    function() { panel.settingsItem.scrollBy(560) },
+    function() { shot("08f-settings-general-motion") },
     function() { display("worldStyle", "map"); display("globeAutoRotate", false); panel.settingsItem.focusId = ""; panel.settingsOpen = false },
     function() { panel.openSettings("shortcuts") },
     function() { shot("11-settings-shortcuts") },

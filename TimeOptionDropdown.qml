@@ -11,6 +11,8 @@ Item {
   required property var settings
   property var option: ({})
   property bool rowEnabled: true
+  // A row of the settings' search results (its own registration).
+  property bool searchResult: false
   readonly property string key: option.key || ""
 
   width: parent ? parent.width : 0
@@ -47,9 +49,7 @@ Item {
     onChanged: function(value) { optionDropdown.panel.displayOptionsStore.setSettingsDisplaySetting(optionDropdown.key, value) }
     Component.onCompleted: {
       if (optionDropdown.key === "" || !optionDropdown.option.choices) return
-      var items = Object.assign({}, optionDropdown.settings.dropdownItems)
-      items[optionDropdown.key] = dropdown
-      optionDropdown.settings.dropdownItems = items
+      optionDropdown.settings.registerDropdown(optionDropdown.key, dropdown, optionDropdown.searchResult)
     }
   }
 }

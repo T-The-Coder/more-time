@@ -270,20 +270,27 @@ control.
 - Everything keeps running with the popup closed and across restarts: running
   things are stored as moments (when a timer ends, when a stopwatch started),
   not as counters.
-- **Settings** (`Ctrl ,` or the gear):
-  - **General:** language (automatic or one of 30), 24 or 12 hours, the
-    position in the bar, the snooze length, the timer presets, detecting
-    your location, the lengths of new pomodoros, the app launcher entry, and
-    export and import of everything.
+- **Settings** (`Ctrl ,` or the gear), with a **search** across every page
+  at the top (`/`): it lists every matching setting, in the interface
+  language or in English, under "Page › Card › Section", each one working as
+  on its page.
+  - **General**, in sections: language and format (language, 24 or 12
+    hours); location (detecting your location); defaults for new items
+    (snooze, timer presets, pomodoro lengths and whether the next phase
+    starts by itself); motion (for every view that turns by itself: the
+    delay, one turn in how many minutes, frames per second); app (position
+    in the bar, app launcher entry); back up and restore (export and import
+    of everything, More Weather's places, reset).
   - **Display:** separately for the menu bar, the widget and the app.
     - Menu bar: which entries show, when, and in what order; bold while
-      hovered; coloured values; open the widget on hover.
-    - Widget and app: what the clock shows (sunrise and sunset on in the app,
-      off in the widget; golden and blue hour off), which tabs there are, their
-      order and the tab on opening; for the World tab the map style (flat map
-      or globe), the night side, the ruler (flat map), city names, the Moon
-      (lit as from space or as seen from here) and whether the globe turns by
-      itself.
+      hovered; coloured values; the bar's tooltip; open the widget on hover.
+    - Widget and app: the clock (clock, sun, more), which tabs there are,
+      their order and the tab on opening; for the World tab the map (shape:
+      flat map or globe, ruler, labels, turning by itself), the sky (night,
+      Moon) and the city list; for the Astro tab what is shown, the objects
+      and the time. The chips under the World and Astro views switch the
+      same things for the view shown. "Copy to the widget" / "Copy to the
+      app" copies one profile to the other (pressed twice).
   - **Sounds:** the sound for alarms, timers and pomodoro phases and their
     volume; the chimes (interval, tone, hour chime, volume, mute).
   - **Shortcuts:** every key and click, listed.
@@ -371,6 +378,7 @@ too.
 | **Settings** | |
 | `Tab` / `⇧ Tab` | Previous / next settings page |
 | `1` `2` `3` | Menu bar / widget / app settings (Display) |
+| `/` | Search the settings (`Esc` clears, `↓` to the results) |
 | `↑ ↓` / `j k` | Previous / next setting |
 | `← →` / `h l` | Change the value or pick the switch column |
 | `Space` / `Enter` | Switch, open the list or press the button |

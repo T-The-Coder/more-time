@@ -3,6 +3,7 @@ import qs.Commons
 import qs.Ui
 import "I18n.js" as I18n
 import "Model.js" as Model
+import "SettingsSearch.js" as SettingsSearch
 
 // The settings, over the panel while open: General (language, time format,
 // snooze, pomodoro lengths, app launcher, export and import), Display (per
@@ -42,19 +43,19 @@ Rectangle {
   readonly property string chimeIntervalValue: String(panel.generalSetting("chimeInterval", "quarter"))
   readonly property var generalDropdowns: {
     var list = [
-      { id: "language", title: panel.i18n("language"), options: [{ value: "auto", label: panel.i18n("languageAuto",
+      { id: "language", title: panel.i18n("language"), section: "language", options: [{ value: "auto", label: panel.i18n("languageAuto",
           { language: I18n.languageName(I18n.languageForLocale(panel.localeName)) }) }]
         .concat(I18n.supportedLanguages().map(function(code) { return { value: code, label: I18n.languageName(code) } })) },
       { id: "timeFormat", title: panel.i18n("timeFormat"), options: [
         { value: "auto", label: panel.i18n("timeFormatAuto", { example: panel.wallClock(14, 30) }) },
         { value: "24", label: panel.i18n("timeFormat24") },
         { value: "12", label: panel.i18n("timeFormat12") }] },
-      { id: "snoozeMinutes", title: panel.i18n("snoozeDefault"), options: minuteOptions(choices.snoozeMinutes) },
-      { id: "timerPresets", title: panel.i18n("timerPresets"), kind: "field", section: "timers",
-        hint: "timerPresetsHint", fieldWidth: Style.space(260),
-        parse: function(text) { var list = Model.parseTimerPresets(text); return list ? list.join(",") : null } },
       { id: "detectLocation", title: panel.i18n("detectLocation"), kind: "switch", section: "location",
         hint: "detectLocationHint" },
+      { id: "snoozeMinutes", title: panel.i18n("snoozeDefault"), options: minuteOptions(choices.snoozeMinutes), section: "defaults" },
+      { id: "timerPresets", title: panel.i18n("timerPresets"), kind: "field",
+        hint: "timerPresetsHint", fieldWidth: Style.space(260),
+        parse: function(text) { var list = Model.parseTimerPresets(text); return list ? list.join(",") : null } },
       { id: "alarmSound", page: "sounds", title: panel.i18n("alarmSound"), options: soundOptions, test: true, section: "sounds" },
       { id: "timerSound", page: "sounds", title: panel.i18n("timerSound"), options: soundOptions, test: true },
       { id: "pomodoroSound", page: "sounds", title: panel.i18n("pomodoroSound"), options: soundOptions, test: true },
@@ -85,16 +86,29 @@ Rectangle {
         { value: "24", label: panel.i18n("hourChime24") }] },
       { id: "chimeVolume", page: "sounds", title: panel.i18n("chimeVolume"), options: choices.chimeVolume.map(function(v) { return { value: String(v), label: v + " %" } }) },
       { id: "chimesMuted", page: "sounds", title: panel.i18n("chimesMute"), kind: "switch" },
-      { id: "pomodoroWork", title: panel.i18n("focusPhase"), options: minuteOptions(choices.pomodoroWork), section: "pomodoro" },
+      { id: "pomodoroWork", title: panel.i18n("focusPhase"), options: minuteOptions(choices.pomodoroWork) },
       { id: "pomodoroBreak", title: panel.i18n("breakPhase"), options: minuteOptions(choices.pomodoroBreak) },
       { id: "pomodoroLongBreak", title: panel.i18n("longBreakPhase"), options: minuteOptions(choices.pomodoroLongBreak) },
-      { id: "pomodoroLongEvery", title: panel.i18n("longBreakEvery"), options: choices.pomodoroLongEvery.map(function(n) {
-        return { value: String(n), label: n > 0 ? panel.i18n("everyRounds", { count: n }) : panel.i18n("never") } }) }
+      { id: "pomodoroLongEvery", title: panel.i18n("longBreakEvery"), hint: "pomodoroDefaultsHint",
+        options: choices.pomodoroLongEvery.map(function(n) {
+          return { value: String(n), label: n > 0 ? panel.i18n("everyRounds", { count: n }) : panel.i18n("never") } }) },
+      { id: "pomodoroAuto", title: panel.i18n("autoContinue"), kind: "switch", hint: "autoContinueHint" },
+      // Wherever a view turns by itself (the World globe, the Astro tab).
+      { id: "motionDelay", title: panel.i18n("motionDelay"), section: "motion",
+        options: choices.motionDelay.map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
+      { id: "motionSpeed", title: panel.i18n("motionSpeed"),
+        options: choices.motionSpeed.map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) },
+      { id: "motionFps", title: panel.i18n("motionFps"), hint: "optionRotateFpsHint",
+        options: choices.motionFps.map(function(n) { return { value: n, label: n } }) }
     ])
-    if (barPositionUsable) list.splice(2, 0, { id: "barPosition", title: panel.i18n("barPosition"), options: [
+    // App: the position in the bar (when the widget is in one) and the
+    // launcher entry.
+    if (barPositionUsable) list.push({ id: "barPosition", title: panel.i18n("barPosition"), section: "app", options: [
       { value: "left", label: panel.i18n(panel.barPlacement.verticalBar ? "barPositionTop" : "barPositionLeft") },
       { value: "center", label: panel.i18n("barPositionCenter") },
       { value: "right", label: panel.i18n(panel.barPlacement.verticalBar ? "barPositionBottom" : "barPositionRight") }] })
+    list.push({ id: "launcher", title: panel.i18n("appLauncherEntry"), kind: "launcher", hint: "appLauncherEntryHint",
+      section: barPositionUsable ? undefined : "app" })
     return list
   }
   readonly property var generalPageEntries: generalDropdowns.filter(function(e) { return e.page !== "sounds" })
@@ -102,10 +116,9 @@ Rectangle {
   readonly property bool barPositionUsable: panel.barPlacement.section !== "" && !panel.barPlacement.busy
   property var dropdownItems: ({})
   property var fieldItems: ({})
-  readonly property var sectionTitles: ({ sounds: "sounds", chimes: "chimes", pomodoro: "pomodoroDefaults",
-    location: "location", timers: "timersTab" })
-  readonly property var sectionHints: ({ chimes: "chimesHint", pomodoro: "pomodoroDefaultsHint",
-    location: "locationHint" })
+  readonly property var sectionTitles: ({ sounds: "sounds", chimes: "chimes", language: "generalSectionLanguage",
+    location: "generalSectionLocation", defaults: "generalSectionDefaults", motion: "motionSection", app: "generalSectionApp" })
+  readonly property var sectionHints: ({ chimes: "chimesHint", location: "locationHint", motion: "motionHint" })
 
   // The test buttons: an alarm, timer or pomodoro sound, one interval beep
   // (interval and tone), or the hour chime of this hour, in the chosen tone.
@@ -175,8 +188,10 @@ Rectangle {
       choices: ["1", "2", "3", "4"].map(function(n) { return { value: n, label: n } }) }
   ]
 
+  // The options of the clock and the tab cards; `section` starts a
+  // sub-heading in the card (the keyboard walks them in this order).
   readonly property var heroOptions: [
-    { key: "heroSeconds", title: panel.i18n("optionSeconds") },
+    { key: "heroSeconds", title: panel.i18n("optionSeconds"), section: "sectionClock" },
     { key: "heroDate", title: panel.i18n("optionDate") },
     { key: "heroWeek", title: panel.i18n("optionWeek") },
     { key: "heroDayOfYear", title: panel.i18n("optionDayOfYear") },
@@ -186,33 +201,28 @@ Rectangle {
       { value: "place", label: panel.i18n("heroDialPlace") }, { value: "classic", label: panel.i18n("dial_classic") },
       { value: "minimal", label: panel.i18n("dial_minimal") }, { value: "roman", label: panel.i18n("dial_roman") },
       { value: "twentyFour", label: panel.i18n("dial_twentyFour") }, { value: "dots", label: panel.i18n("dial_dots") }] },
-    { key: "heroSun", title: panel.i18n("optionSun") },
+    { key: "heroSun", title: panel.i18n("optionSun"), section: "sectionSun" },
     { key: "heroSunNext", title: panel.i18n("sunNext") },
-    { key: "heroGoldenHour", title: panel.i18n("optionGoldenHour"), hint: "optionGoldenHourHint" },
-    { key: "heroBlueHour", title: panel.i18n("optionBlueHour"), hint: "optionBlueHourHint" },
-    { key: "heroNextAlarm", title: panel.i18n("optionNextAlarm") },
+    { key: "heroGoldenHour", title: panel.i18n("optionGoldenHour"), hint: panel.i18n("optionGoldenHourHint") },
+    { key: "heroBlueHour", title: panel.i18n("optionBlueHour"), hint: panel.i18n("optionBlueHourHint") },
+    { key: "heroNextAlarm", title: panel.i18n("optionNextAlarm"), section: "sectionMore" },
     { key: "heroPomodoroTally", title: panel.i18n("optionPomodoroTally") }
   ]
   readonly property var tabOptions: ({
     world: [
-      { key: "worldMap", title: panel.i18n("optionMap") },
+      { key: "worldMap", title: panel.i18n("optionMap"), section: "sectionMap" },
       { key: "worldStyle", title: panel.i18n("optionMapStyle"), dependsOn: "worldMap", choices: [
         { value: "map", label: panel.i18n("mapStyleFlat") }, { value: "globe", label: panel.i18n("mapStyleGlobe") }] },
-      { key: "worldNight", title: panel.i18n("optionNight"), dependsOn: "worldMap", hint: panel.i18n("optionNightHint") },
       { key: "worldRuler", title: panel.i18n("optionRuler"), dependsOn: "worldMap", style: "map" },
       { key: "worldMapLabels", title: panel.i18n("optionMapLabels"), dependsOn: "worldMap" },
+      { key: "globeAutoRotate", title: panel.i18n("optionGlobeAutoRotate"), dependsOn: "worldMap", style: "globe",
+        hint: panel.i18n("optionGlobeAutoRotateHint") },
+      { key: "worldNight", title: panel.i18n("optionNight"), dependsOn: "worldMap", hint: panel.i18n("optionNightHint"),
+        section: "sectionSky" },
       { key: "worldMoon", title: panel.i18n("moon"), dependsOn: "worldMap" },
       { key: "worldMoonStyle", title: panel.i18n("optionMoonStyle"), dependsOn: "worldMoon", choices: [
         { value: "space", label: panel.i18n("moonStyleSpace") }, { value: "earth", label: panel.i18n("moonStyleEarth") }] },
-      { key: "globeAutoRotate", title: panel.i18n("optionGlobeAutoRotate"), dependsOn: "worldMap", style: "globe",
-        hint: panel.i18n("optionGlobeAutoRotateHint") },
-      { key: "globeRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "globeAutoRotate", style: "globe",
-        choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
-      { key: "globeRotateSpeed", title: panel.i18n("optionGlobeRotateSpeed"), dependsOn: "globeAutoRotate", style: "globe",
-        choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) },
-      { key: "globeRotateFps", title: panel.i18n("optionRotateFps"), dependsOn: "globeAutoRotate", style: "globe",
-        hint: panel.i18n("optionRotateFpsHint"), choices: ["8", "15", "24", "30"].map(function(n) { return { value: n, label: n } }) },
-      { key: "worldList", title: panel.i18n("optionCityList") },
+      { key: "worldList", title: panel.i18n("optionCityList"), section: "sectionCityList" },
       { key: "worldDifference", title: panel.i18n("optionDifference"), dependsOn: "worldList" },
       { key: "worldDials", title: panel.i18n("optionWorldDials"), dependsOn: "worldList" },
       { key: "worldSunrise", title: panel.i18n("sunrise"), dependsOn: "worldList" },
@@ -224,28 +234,25 @@ Rectangle {
     stopwatches: [{ key: "stopwatchHundredths", title: panel.i18n("optionHundredths") }],
     pomodoros: [],
     astro: [
-      { key: "astroOrbits", title: panel.i18n("optionAstroOrbits") },
+      { key: "astroOrbits", title: panel.i18n("optionAstroOrbits"), section: "sectionShown" },
       { key: "astroNames", title: panel.i18n("optionAstroNames") },
       { key: "astroMonthRing", title: panel.i18n("optionAstroMonthRing"), hint: panel.i18n("optionAstroMonthRingHint") },
       { key: "astroRotation", title: panel.i18n("optionAstroRotation"), hint: panel.i18n("optionAstroRotationHint") },
       { key: "astroEarthInset", title: panel.i18n("optionAstroEarthInset"), hint: panel.i18n("optionAstroEarthInsetHint") },
-      { key: "astroTimeline", title: panel.i18n("optionAstroTimeline"), hint: panel.i18n("optionAstroTimelineHint") },
-      { key: "astroBelts", title: panel.i18n("optionAstroBelts") },
+      { key: "astroInfo", title: panel.i18n("optionAstroInfo"), hint: panel.i18n("optionAstroInfoHint") },
+      { key: "astroBelts", title: panel.i18n("optionAstroBelts"), section: "sectionObjects" },
       { key: "astroDwarfs", title: panel.i18n("optionAstroDwarfs") },
       { key: "astroComets", title: panel.i18n("optionAstroComets") },
       { key: "astroMoons", title: panel.i18n("optionAstroMoons"), hint: panel.i18n("optionAstroMoonsHint") },
       { key: "astroSpacecraft", title: panel.i18n("optionAstroSpacecraft"), hint: panel.i18n("optionAstroSpacecraftHint") },
       { key: "astroIss", title: panel.i18n("optionAstroIss"), hint: panel.i18n("optionAstroIssHint") },
-      { key: "astroInfo", title: panel.i18n("optionAstroInfo"), hint: panel.i18n("optionAstroInfoHint") },
-      { key: "astroAutoRotate", title: panel.i18n("optionAstroAutoRotate"), hint: panel.i18n("optionGlobeAutoRotateHint") },
-      { key: "astroRotateDelay", title: panel.i18n("optionGlobeRotateDelay"), dependsOn: "astroAutoRotate",
-        choices: ["5", "10", "30"].map(function(n) { return { value: n, label: panel.i18n("secondsShort", { seconds: n }) } }) },
-      { key: "astroRotateSpeed", title: panel.i18n("optionGlobeRotateSpeed"), dependsOn: "astroAutoRotate",
-        choices: ["1", "2", "4", "8"].map(function(n) { return { value: n, label: panel.i18n("minutesShort", { minutes: n }) } }) },
-      { key: "astroRotateFps", title: panel.i18n("optionRotateFps"), dependsOn: "astroAutoRotate",
-        hint: panel.i18n("optionRotateFpsHint"), choices: ["8", "15", "24", "30"].map(function(n) { return { value: n, label: n } }) }
+      { key: "astroTimeline", title: panel.i18n("optionAstroTimeline"), hint: panel.i18n("optionAstroTimelineHint"),
+        section: "sectionTime" },
+      { key: "astroAutoRotate", title: panel.i18n("optionAstroAutoRotate"), hint: panel.i18n("optionGlobeAutoRotateHint") }
     ]
   })
+  // Cards with chips under their view (TimeChipBar): they say so.
+  readonly property var chipCards: ["world", "astro"]
   // A tab option can be set when its switch (dependsOn) is on and, with
   // `style`, the map is drawn in that style.
   function optionAvailable(option) {
@@ -264,6 +271,139 @@ Rectangle {
     return list
   }
 
+  // ---- Search: one index of every row the pages draw, from the same
+  //      tables (the General and Sounds list, the menu bar's rows, the
+  //      clock's and the tabs' options), matched in the interface language
+  //      and in English (SettingsSearch.js) ----
+  property string searchQuery: ""
+  readonly property bool searching: searchQuery.trim() !== ""
+  // The page drawn: none while the results show.
+  readonly property string page: searching ? "" : panel.settingsPage
+  onSearchingChanged: focusId = ""
+
+  // English for a text shown in the interface language (a translated
+  // title), from the catalogue: the search finds rows by both.
+  readonly property var englishTexts: {
+    var map = ({})
+    var language = panel.interfaceLanguage
+    var en = I18n.catalog.en
+    for (var key in en) {
+      var shown = I18n.text(language, key)
+      if (shown !== en[key] && !(shown in map)) map[shown] = en[key]
+    }
+    return map
+  }
+  function textsFor(list) {
+    var out = []
+    for (var i = 0; i < list.length; i++) {
+      var t = list[i]
+      if (!t) continue
+      out.push(t)
+      if (englishTexts[t]) out.push(englishTexts[t])
+    }
+    return out
+  }
+  readonly property var searchIndex: {
+    var entries = []
+    var self = settingsView
+    function general(list, pageKey) {
+      var pageName = panel.i18n("settingsPage_" + pageKey)
+      var section = ""
+      for (var i = 0; i < list.length; i++) {
+        var e = list[i]
+        if (e.section) section = panel.i18n(self.sectionTitles[e.section])
+        var hint = e.hint ? panel.i18n(e.hint) : ""
+        entries.push({ kind: "general", entry: e, heading: pageName + (section ? " › " + section : ""),
+          texts: self.textsFor([e.title, hint, pageName, section]) })
+      }
+    }
+    general(generalPageEntries, "general")
+    general(soundsPageEntries, "sounds")
+    var displayName = panel.i18n("settingsPage_display")
+    var surfaceName = panel.i18n(panel.settingsTargetSurface)
+    function display(option, card, section, extra) {
+      var heading = displayName + " › " + card + (section ? " › " + section : "") + " · " + surfaceName
+      var e = Object.assign({ kind: "display", option: option, heading: heading,
+        texts: self.textsFor([option.title, option.hint || "", displayName, card, section]) }, extra || {})
+      entries.push(e)
+    }
+    if (panel.settingsTargetSurface === "menubar") {
+      var bar = panel.i18n("menubar")
+      display({ key: "showClock", title: bar }, bar, "", { master: true })
+      for (var m = 0; m < menubarOptions.length; m++) display(menubarOptions[m], bar, "", { menubar: true })
+      display({ key: "boldOnHover", title: panel.i18n("boldOnHover") }, bar, "")
+      display(Object.assign({ hint: panel.i18n("menubarAccentsHint") }, menubarChoices[0]), bar, "")
+      display({ key: "hoverTooltip", title: panel.i18n("hoverTooltip"), hint: panel.i18n("hoverTooltipHint") }, bar, "")
+      display({ key: "openWidgetOnHover", title: panel.i18n("openWidgetOnHover") }, bar, "")
+      display(menubarChoices[1], bar, "")
+    } else {
+      var clock = panel.i18n("clockSection")
+      var heroSection = ""
+      for (var h = 0; h < heroOptions.length; h++) {
+        if (heroOptions[h].section) heroSection = panel.i18n(heroOptions[h].section)
+        display(heroOptions[h], clock, heroSection)
+      }
+      var tabs = panel.settingsOrderFor("tabOrder")
+      for (var t = 0; t < tabs.length; t++) {
+        var card = panel.i18n(tabs[t] + "Tab")
+        display({ key: panel.tabMasterKeys[tabs[t]], title: card, hint: panel.i18n(tabs[t] + "TabHint") }, card, "", { master: true })
+        var options = tabOptions[tabs[t]]
+        var tabSection = ""
+        for (var o = 0; o < options.length; o++) {
+          if (options[o].section) tabSection = panel.i18n(options[o].section)
+          display(options[o], card, tabSection)
+        }
+      }
+    }
+    return entries
+  }
+  readonly property var searchResults: searching ? SettingsSearch.matches(searchQuery, searchIndex) : []
+  // Per heading: the General/Sounds rows and the Display rows found.
+  readonly property var searchGroups: SettingsSearch.grouped(searchResults).map(function(group) {
+    return { heading: group.heading,
+      general: group.items.filter(function(e) { return e.kind === "general" }).map(function(e) {
+        return Object.assign({ searchResult: true }, e.entry) }),
+      display: group.items.filter(function(e) { return e.kind === "display" }) }
+  })
+  // The keyboard's rows while searching, in the results' order.
+  function searchFocusItems() {
+    var items = []
+    for (var i = 0; i < searchResults.length; i++) {
+      var e = searchResults[i]
+      if (e.kind === "general") {
+        items = items.concat(entryFocusItems([e.entry]))
+        continue
+      }
+      var o = e.option
+      if (e.master) items.push({ id: "master:" + o.key, type: "switch", key: o.key })
+      else if (o.choices) items.push({ id: o.key, type: "dropdown" })
+      else if (e.menubar) items.push({ id: "switch:" + o.key, type: "switch", key: o.key,
+        relevantKey: o.relevant ? o.key + "WhenRelevant" : "", hoverKey: o.key + "OnHover" })
+      else items.push({ id: "switch:" + o.key, type: "switch", key: o.key })
+    }
+    return items
+  }
+  // Types a search (the screenshot harness).
+  function search(text) {
+    searchField.text = text
+  }
+  // Esc in the settings: a search is cleared first (true when it was).
+  function clearSearch() {
+    if (searchQuery === "") return false
+    searchQuery = ""
+    searchField.text = ""
+    return true
+  }
+  // Dropdowns of the results register here, apart from the pages' own.
+  property var searchDropdownItems: ({})
+  property var searchFieldItems: ({})
+  function registerDropdown(id, item, search) {
+    var items = Object.assign({}, search ? searchDropdownItems : dropdownItems)
+    items[id] = item
+    if (search) searchDropdownItems = items
+    else dropdownItems = items
+  }
+
   // ---- Keyboard: one flat list of what can be set on the page, in the
   //      order it is drawn; ↑↓ walk it, ←→ change the value or the column,
   //      Space / Enter switch or open, ⇧↑↓ move an entry.
@@ -275,7 +415,8 @@ Rectangle {
     var items = []
     for (var i = 0; i < entries.length; i++) {
       var kind = entries[i].kind
-      items.push({ id: entries[i].id, type: kind === "field" ? "field" : (kind === "switch" ? "general" : "dropdown") })
+      items.push({ id: entries[i].id, type: kind === "field" ? "field" : (kind === "switch" ? "general"
+        : (kind === "launcher" ? "launcher" : "dropdown")) })
       if (entries[i].test) items.push({ id: "test:" + entries[i].id, type: "test" })
     }
     return items
@@ -283,11 +424,11 @@ Rectangle {
 
   readonly property var focusItems: {
     var items = []
+    if (searching) return searchFocusItems()
     if (panel.settingsPage === "sounds") return entryFocusItems(soundsPageEntries)
     if (panel.settingsPage === "general") {
       items = entryFocusItems(generalPageEntries)
-      items.push({ id: "pomodoroAuto", type: "general" }, { id: "launcher", type: "launcher" },
-        { id: "transferPath", type: "path" }, { id: "exportSettings", type: "button" },
+      items.push({ id: "transferPath", type: "path" }, { id: "exportSettings", type: "button" },
         { id: "importSettings", type: "button" })
       if (panel.placesImport.available) items.push({ id: "importPlaces", type: "button" })
       if (!panel.displayOptionsStore.generalIsDefault()) items.push({ id: "restoreGeneral", type: "button" })
@@ -330,6 +471,7 @@ Rectangle {
       if (panel.settingsTabs.length > 1) items.push({ id: "defaultTab", type: "dropdown" })
     }
     if (!panel.settingsOrderIsDefault) items.push({ id: "restoreOrder", type: "button" })
+    if (panel.settingsTargetSurface !== "menubar") items.push({ id: "copyTo", type: "button" })
     if (!panel.displayOptionsStore.settingsDisplayIsDefault()) items.push({ id: "restoreDefaults", type: "button" })
     return items
   }
@@ -377,7 +519,7 @@ Rectangle {
 
   function activate(item) {
     if (item.type === "dropdown") {
-      var dropdown = dropdownItems[item.id]
+      var dropdown = (searching ? searchDropdownItems : dropdownItems)[item.id]
       if (dropdown) dropdown.open()
     } else if (item.type === "test") {
       runTest(item.id.slice(5))
@@ -385,7 +527,8 @@ Rectangle {
       panel.displayOptionsStore.setGeneralSetting(item.id,
         !panel.generalSetting(item.id, panel.displayOptionsStore.generalDefaults[item.id]))
     } else if (item.type === "field") {
-      if (fieldItems[item.id]) fieldItems[item.id].forceActiveFocus()
+      var field = (searching ? searchFieldItems : fieldItems)[item.id]
+      if (field) field.forceActiveFocus()
     } else if (item.type === "launcher") {
       if (!panel.appLauncherEntry.busy) panel.appLauncherEntry.setInstalled(!panel.appLauncherEntry.installed)
     } else if (item.type === "switch") {
@@ -401,6 +544,7 @@ Rectangle {
     else if (item.id === "restoreGeneral") restoreGeneralButton.press()
     else if (item.id === "restoreOrder") restoreOrderButton.press()
     else if (item.id === "restoreDefaults") restoreDefaultsButton.press()
+    else if (item.id === "copyTo") copyButton.press()
   }
 
   function reorder(item, delta) {
@@ -448,9 +592,15 @@ Rectangle {
       scrollBy(key === Qt.Key_Home ? -settingsFlick.contentHeight : settingsFlick.contentHeight)
       return true
     }
+    // / : the search.
+    if (text === "/") {
+      searchField.forceActiveFocus()
+      searchField.selectAll()
+      return true
+    }
     var down = key === Qt.Key_Down || text === "j" || text === "J"
     var up = key === Qt.Key_Up || text === "k" || text === "K"
-    if (panel.settingsPage !== "display" && panel.settingsPage !== "general" && panel.settingsPage !== "sounds") {
+    if (!searching && panel.settingsPage !== "display" && panel.settingsPage !== "general" && panel.settingsPage !== "sounds") {
       if (down || up) {
         scrollBy((down ? 1 : -1) * Style.space(48))
         return true
@@ -487,6 +637,20 @@ Rectangle {
     font.family: settingsView.panel.fontFamily
     font.pixelSize: Style.font.bodySmall
     font.bold: true
+    font.letterSpacing: 1
+  }
+
+  // A sub-heading inside a card (muted caption, like More Weather's).
+  component CardSection: Text {
+    property string section: ""
+    visible: section !== ""
+    textFormat: Text.PlainText
+    topPadding: Style.space(10)
+    bottomPadding: Style.space(2)
+    text: section !== "" ? settingsView.panel.upperLabel(settingsView.panel.i18n(section)) : ""
+    color: settingsView.panel.mutedText
+    font.family: settingsView.panel.fontFamily
+    font.pixelSize: Style.font.caption
     font.letterSpacing: 1
   }
 
@@ -531,19 +695,19 @@ Rectangle {
       spacing: Style.space(4)
 
       SectionTitle {
-        visible: !!dropdownRow.modelData.section
+        visible: !!dropdownRow.modelData.section && !dropdownRow.modelData.searchResult
         topPadding: dropdownRow.index > 0 ? Style.space(10) : 0
         text: dropdownRow.modelData.section
           ? panel.upperLabel(panel.i18n(settingsView.sectionTitles[dropdownRow.modelData.section])) : ""
       }
       Hint {
-        visible: !!settingsView.sectionHints[dropdownRow.modelData.section || ""]
+        visible: !!settingsView.sectionHints[dropdownRow.modelData.section || ""] && !dropdownRow.modelData.searchResult
         text: visible ? panel.i18n(settingsView.sectionHints[dropdownRow.modelData.section]) : ""
       }
 
       Text {
         textFormat: Text.PlainText
-        visible: dropdownRow.kind !== "switch"
+        visible: dropdownRow.kind !== "switch" && dropdownRow.kind !== "launcher"
         text: dropdownRow.modelData.title
         color: panel.mutedText
         font.family: panel.fontFamily
@@ -551,7 +715,7 @@ Rectangle {
       }
 
       Row {
-        visible: dropdownRow.kind !== "switch"
+        visible: dropdownRow.kind !== "switch" && dropdownRow.kind !== "launcher"
         spacing: Style.space(8)
 
         Dropdown {
@@ -568,9 +732,7 @@ Rectangle {
           onChanged: function(value) { settingsView.setDropdown(dropdownRow.modelData.id, value) }
           Component.onCompleted: {
             if (dropdownRow.kind !== "dropdown") return
-            var items = Object.assign({}, settingsView.dropdownItems)
-            items[dropdownRow.modelData.id] = dropdown
-            settingsView.dropdownItems = items
+            settingsView.registerDropdown(dropdownRow.modelData.id, dropdown, !!dropdownRow.modelData.searchResult)
           }
         }
 
@@ -597,9 +759,11 @@ Rectangle {
           }
           Component.onCompleted: {
             if (dropdownRow.kind !== "field") return
-            var items = Object.assign({}, settingsView.fieldItems)
+            var search = !!dropdownRow.modelData.searchResult
+            var items = Object.assign({}, search ? settingsView.searchFieldItems : settingsView.fieldItems)
             items[dropdownRow.modelData.id] = numberField
-            settingsView.fieldItems = items
+            if (search) settingsView.searchFieldItems = items
+            else settingsView.fieldItems = items
           }
         }
 
@@ -615,16 +779,23 @@ Rectangle {
       }
 
 
+      // A switch: a general setting, or the app launcher entry (written
+      // only with consent: off by default).
       TimeSwitchRow {
-        visible: dropdownRow.kind === "switch"
+        readonly property bool launcher: dropdownRow.kind === "launcher"
+        visible: dropdownRow.kind === "switch" || launcher
         panel: settingsView.panel
         title: dropdownRow.modelData.title
         indented: false
-        switchState: visible && panel.generalSetting(dropdownRow.modelData.id,
-          panel.displayOptionsStore.generalDefaults[dropdownRow.modelData.id]) === true
+        rowEnabled: !launcher || !panel.appLauncherEntry.busy
+        switchState: visible && (launcher ? panel.appLauncherEntry.installed
+          : panel.generalSetting(dropdownRow.modelData.id, panel.displayOptionsStore.generalDefaults[dropdownRow.modelData.id]) === true)
         kbFocused: settingsView.focusId === dropdownRow.modelData.id
         onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
-        onToggled: function(value) { panel.displayOptionsStore.setGeneralSetting(dropdownRow.modelData.id, value) }
+        onToggled: function(value) {
+          if (launcher) panel.appLauncherEntry.setInstalled(value)
+          else panel.displayOptionsStore.setGeneralSetting(dropdownRow.modelData.id, value)
+        }
       }
 
       // Red while a typed value is not one the field takes.
@@ -632,6 +803,49 @@ Rectangle {
         visible: !!dropdownRow.modelData.hint
         text: visible ? panel.i18n(dropdownRow.modelData.hint) : ""
         color: numberField.valid ? panel.mutedText : Color.urgent
+      }
+    }
+  }
+
+  // One Display row found by the search: the same switch (with the menu
+  // bar's three columns) or dropdown as on the page.
+  Component {
+    id: displayResultRow
+
+    Column {
+      id: resultRow
+      required property var modelData
+      readonly property var option: modelData.option
+      readonly property bool menubar: !!modelData.menubar
+      width: parent ? parent.width : 0
+
+      TimeSwitchRow {
+        visible: !resultRow.option.choices
+        panel: settingsView.panel
+        settingKey: resultRow.option.key
+        title: resultRow.option.title
+        emphasized: !!resultRow.modelData.master
+        relevantKey: resultRow.menubar && resultRow.option.relevant ? resultRow.option.key + "WhenRelevant" : ""
+        hoverKey: resultRow.menubar ? resultRow.option.key + "OnHover" : ""
+        columnWidth: settingsView.switchColumnWidth
+        kbFocused: settingsView.focusId === (resultRow.modelData.master ? "master:" : "switch:") + resultRow.option.key
+        kbColumn: settingsView.focusColumn
+        onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
+        rowEnabled: settingsView.optionAvailable(resultRow.option)
+      }
+      TimeOptionDropdown {
+        visible: !!resultRow.option.choices
+        panel: settingsView.panel
+        settings: settingsView
+        option: resultRow.option
+        searchResult: true
+        rowEnabled: settingsView.optionAvailable(resultRow.option)
+      }
+      Hint {
+        visible: !!resultRow.option.hint && !resultRow.modelData.master
+        text: resultRow.option.hint || ""
+        leftPadding: Style.space(12)
+        bottomPadding: Style.space(6)
       }
     }
   }
@@ -762,14 +976,87 @@ Rectangle {
         wrapMode: Text.WordWrap
       }
 
+      // Search across every page (/ focuses it, Esc clears, ↓ goes to the
+      // results).
+      TextField {
+        id: searchField
+        width: parent.width
+        foreground: panel.foreground
+        font.family: panel.fontFamily
+        font.pixelSize: Style.font.bodySmall
+        placeholderText: panel.i18n("settingsSearch")
+        onTextChanged: settingsView.searchQuery = text
+        onActiveFocusChanged: {
+          if (activeFocus) panel.activeTextField = searchField
+          else if (panel.activeTextField === searchField) panel.activeTextField = null
+        }
+        onAccepted: {
+          panel.restoreKeyFocus()
+          settingsView.moveFocus(1)
+        }
+        Keys.onDownPressed: {
+          panel.restoreKeyFocus()
+          settingsView.moveFocus(1)
+        }
+        Keys.onEscapePressed: {
+          if (text !== "") text = ""
+          else panel.restoreKeyFocus()
+        }
+      }
+
+      // The results: grouped under "Page › Card › Section".
+      Text {
+        textFormat: Text.PlainText
+        visible: settingsView.searching && settingsView.searchResults.length === 0
+        width: parent.width
+        text: panel.i18n("settingsSearchNone")
+        color: panel.mutedText
+        font.family: panel.fontFamily
+        font.pixelSize: Style.font.bodySmall
+        font.italic: true
+      }
+
+      Repeater {
+        model: settingsView.searching ? settingsView.searchGroups : []
+
+        Card {
+          id: resultCard
+          required property var modelData
+
+          Text {
+            textFormat: Text.PlainText
+            width: parent.width
+            text: resultCard.modelData.heading
+            color: panel.mutedText
+            font.family: panel.fontFamily
+            font.pixelSize: Style.font.caption
+            font.letterSpacing: 1
+            wrapMode: Text.WordWrap
+            bottomPadding: Style.space(6)
+          }
+          Column {
+            width: parent.width
+            spacing: Style.space(6)
+            Repeater {
+              model: resultCard.modelData.general
+              delegate: settingRow
+            }
+          }
+          Repeater {
+            model: resultCard.modelData.display
+            delegate: displayResultRow
+          }
+        }
+      }
+
       TimeShortcutsPage {
-        visible: panel.settingsPage === "shortcuts"
+        visible: settingsView.page === "shortcuts"
         width: parent.width
         panel: settingsView.panel
       }
 
       TimeSourcesPage {
-        visible: panel.settingsPage === "sources"
+        visible: settingsView.page === "sources"
         width: parent.width
         panel: settingsView.panel
       }
@@ -778,7 +1065,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: panel.settingsPage === "general" || panel.settingsPage === "sounds"
+        visible: settingsView.page === "general" || settingsView.page === "sounds"
         width: parent.width
         text: panel.i18n("settingsGeneralKeysHint")
         color: panel.hintText
@@ -788,47 +1075,18 @@ Rectangle {
       }
 
       Card {
-        visible: panel.settingsPage === "general"
+        visible: settingsView.page === "general"
 
         Column {
           width: parent.width
           spacing: Style.space(6)
-
-          SectionTitle { text: panel.upperLabel(panel.i18n("general")) }
 
           Repeater {
             model: settingsView.generalPageEntries
             delegate: settingRow
           }
 
-          TimeSwitchRow {
-            panel: settingsView.panel
-            title: panel.i18n("autoContinue")
-            indented: false
-            switchState: panel.generalSetting("pomodoroAuto", true)
-            kbFocused: settingsView.focusId === "pomodoroAuto"
-            onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
-            onToggled: function(value) { panel.displayOptionsStore.setGeneralSetting("pomodoroAuto", value) }
-          }
-          Hint { text: panel.i18n("autoContinueHint") }
-
-          SectionTitle { topPadding: Style.space(10); text: panel.upperLabel(panel.i18n("app")) }
-
-          // Adds the standalone app to the app launcher. Off by default: the
-          // plugin writes nothing outside its own settings without consent.
-          TimeSwitchRow {
-            panel: settingsView.panel
-            kbFocused: settingsView.focusId === "launcher"
-            onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
-            title: panel.i18n("appLauncherEntry")
-            switchState: panel.appLauncherEntry.installed
-            indented: false
-            rowEnabled: !panel.appLauncherEntry.busy
-            onToggled: function(value) { panel.appLauncherEntry.setInstalled(value) }
-          }
-          Hint { text: panel.i18n("appLauncherEntryHint") }
-
-          SectionTitle { topPadding: Style.space(10); text: panel.upperLabel(panel.i18n("settingsTransfer")) }
+          SectionTitle { topPadding: Style.space(10); text: panel.upperLabel(panel.i18n("generalSectionBackup")) }
 
           Text {
             textFormat: Text.PlainText
@@ -892,8 +1150,6 @@ Rectangle {
           Hint { text: panel.i18n("settingsTransferHint", { backup: panel.settingsTransfer.shown(panel.settingsTransfer.backupPath) }) }
 
           // Places: More Weather's saved places as cities.
-          SectionTitle { topPadding: Style.space(10); text: panel.upperLabel(panel.i18n("placesSettings")) }
-
           TimeButton {
             id: importPlacesButton
             panel: settingsView.panel
@@ -937,7 +1193,7 @@ Rectangle {
       // ================= Sounds =================
 
       Card {
-        visible: panel.settingsPage === "sounds"
+        visible: settingsView.page === "sounds"
 
         Column {
           width: parent.width
@@ -952,9 +1208,10 @@ Rectangle {
 
       // ================= Display =================
 
-      // Menu bar, widget, app: the profile these cards edit.
+      // Menu bar, widget, app: the profile these cards edit (also while
+      // searching: the Display rows found are this profile's).
       Item {
-        visible: panel.settingsPage === "display"
+        visible: settingsView.page === "display" || settingsView.searching
         width: parent.width
         height: Style.space(30)
 
@@ -1007,7 +1264,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: panel.settingsPage === "display"
+        visible: settingsView.page === "display"
         width: parent.width
         text: panel.i18n("settingsKeysHint")
         color: panel.hintText
@@ -1018,7 +1275,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: panel.settingsPage === "display"
+        visible: settingsView.page === "display"
         width: parent.width
         text: panel.i18n("displaySettingsHint") + " " + panel.i18n(panel.settingsTargetSurface === "menubar"
           ? "menubarHoverHint" : "displayTabsHint")
@@ -1030,7 +1287,7 @@ Rectangle {
 
       // Menu bar: one card with the entries in the bar's order.
       Card {
-        visible: panel.settingsPage === "display" && panel.settingsTargetSurface === "menubar"
+        visible: settingsView.page === "display" && panel.settingsTargetSurface === "menubar"
         readonly property bool rowsEnabled: panel.settingsDisplaySetting("showClock", true)
 
         TimeSwitchRow {
@@ -1154,7 +1411,7 @@ Rectangle {
 
       // Widget and app: the clock on top, then a card per tab in tab order.
       Card {
-        visible: panel.settingsPage === "display" && panel.settingsTargetSurface !== "menubar"
+        visible: settingsView.page === "display" && panel.settingsTargetSurface !== "menubar"
 
         SectionTitle {
           height: Style.space(34)
@@ -1171,6 +1428,8 @@ Rectangle {
             id: heroOptionRow
             required property var modelData
             width: parent.width
+
+            CardSection { section: heroOptionRow.modelData.section || "" }
 
             TimeSwitchRow {
               visible: !heroOptionRow.modelData.choices
@@ -1192,14 +1451,14 @@ Rectangle {
               visible: !!heroOptionRow.modelData.hint
               leftPadding: Style.space(12)
               bottomPadding: Style.space(4)
-              text: visible ? panel.i18n(heroOptionRow.modelData.hint) : ""
+              text: heroOptionRow.modelData.hint || ""
             }
           }
         }
       }
 
       Repeater {
-        model: panel.settingsPage === "display" && panel.settingsTargetSurface !== "menubar"
+        model: settingsView.page === "display" && panel.settingsTargetSurface !== "menubar"
           ? panel.settingsOrderFor("tabOrder") : []
 
         Card {
@@ -1221,6 +1480,7 @@ Rectangle {
 
           Hint {
             text: panel.i18n(tabCard.modelData + "TabHint")
+              + (settingsView.chipCards.indexOf(tabCard.modelData) >= 0 ? " " + panel.i18n("chipsHint") : "")
             bottomPadding: settingsView.tabOptions[tabCard.modelData].length ? Style.space(8) : 0
           }
 
@@ -1240,6 +1500,8 @@ Rectangle {
               required property var modelData
               readonly property bool available: tabCard.shown && settingsView.optionAvailable(modelData)
               width: parent.width
+
+              CardSection { section: optionRow.modelData.section || ""; opacity: tabCard.shown ? 1 : 0.42 }
 
               TimeSwitchRow {
                 visible: !optionRow.modelData.choices
@@ -1270,7 +1532,7 @@ Rectangle {
       }
 
       Item {
-        visible: panel.settingsPage === "display" && panel.settingsTargetSurface !== "menubar" && panel.settingsTabs.length > 1
+        visible: settingsView.page === "display" && panel.settingsTargetSurface !== "menubar" && panel.settingsTabs.length > 1
         width: parent.width
         height: Style.space(40)
 
@@ -1306,7 +1568,7 @@ Rectangle {
       }
 
       Row {
-        visible: panel.settingsPage === "display"
+        visible: settingsView.page === "display"
         spacing: Style.space(10)
 
         TimeButton {
@@ -1317,6 +1579,19 @@ Rectangle {
           kbFocused: settingsView.focusId === "restoreOrder"
           onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
           onActivated: panel.displayOptionsStore.restoreSettingsDisplayOrder()
+        }
+
+        // The widget's settings to the app or back (not the menu bar's,
+        // which are of another kind).
+        TimeButton {
+          id: copyButton
+          visible: panel.settingsTargetSurface !== "menubar"
+          panel: settingsView.panel
+          label: panel.i18n(panel.settingsTargetSurface === "app" ? "copyToWidget" : "copyToApp")
+          confirmLabel: panel.i18n("copyConfirm")
+          kbFocused: settingsView.focusId === "copyTo"
+          onKbFocusedChanged: if (kbFocused) settingsView.ensureVisible(this)
+          onActivated: panel.displayOptionsStore.copySettingsDisplayTo(panel.settingsTargetSurface === "app" ? "widget" : "app")
         }
 
         TimeButton {

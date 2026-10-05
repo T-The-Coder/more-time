@@ -247,11 +247,44 @@ Column {
     // the popup, less a margin: the globe and the map fit into it, down to
     // a minimum below which the page scrolls.
     readonly property real fitHeight: view.panel.viewportHeight - view.panel.tabContentTop - y - Style.space(16)
+      - (worldChips.visible ? worldChips.height + view.spacing : 0)
     visible: view.panel.displaySetting("worldMap", true)
     active: visible
     width: parent.width
     height: item ? item.implicitHeight : 0
     sourceComponent: view.panel.displaySetting("worldStyle", "map") === "globe" ? globeView : flatMapView
+  }
+  // The chips under the map: its shape, the night, the twilight bands, the
+  // Moon, the labels, the ruler (flat map); the same options as the World
+  // card, for the surface shown.
+  TimeChipBar {
+    id: worldChips
+    visible: worldMapSlot.visible
+    width: parent.width
+    panel: view.panel
+    readonly property bool globeShape: view.panel.displaySetting("worldStyle", "map") === "globe"
+    readonly property bool twilightOn: view.panel.displaySetting("heroGoldenHour", false) === true
+      || view.panel.displaySetting("heroBlueHour", false) === true
+    chips: [
+      { id: "map", glyph: "\u{f034d}", label: "mapStyleFlat", on: !globeShape },
+      { id: "globe", glyph: "\u{f01e7}", label: "mapStyleGlobe", on: globeShape },
+      { id: "night", glyph: "\u{f0594}", label: "chip_night", on: view.panel.displaySetting("worldNight", true) === true, divider: true },
+      { id: "twilight", glyph: "\u{f059a}", label: "chip_twilight", on: twilightOn },
+      { id: "moon", glyph: "\u{f0f65}", label: "moon", on: view.panel.displaySetting("worldMoon", false) === true },
+      { id: "labels", glyph: "\u{f04fc}", label: "chip_labels", on: view.panel.displaySetting("worldMapLabels", true) === true }
+    ].concat(globeShape ? [] : [{ id: "ruler", glyph: "\u{f046d}", label: "chip_ruler",
+      on: view.panel.displaySetting("worldRuler", true) === true }])
+    onToggled: function(id) {
+      var p = view.panel
+      if (id === "map" || id === "globe") p.setViewDisplaySetting("worldStyle", id === "map" ? "map" : "globe")
+      else if (id === "twilight") {
+        p.setViewDisplaySetting("heroGoldenHour", !twilightOn)
+        p.setViewDisplaySetting("heroBlueHour", !twilightOn)
+      } else {
+        var key = { night: "worldNight", moon: "worldMoon", labels: "worldMapLabels", ruler: "worldRuler" }[id]
+        p.setViewDisplaySetting(key, !(p.displaySetting(key, key !== "worldMoon") === true))
+      }
+    }
   }
   Component {
     id: flatMapView

@@ -103,6 +103,7 @@ Column {
         { keys: ["Space", "Enter"], action: "shortcutSettingsToggle" },
         { keys: ["⇧ ↑ ↓", "J K"], action: "shortcutSettingsReorder" },
         { keys: ["PgUp", "PgDn"], action: "shortcutPage" },
+        { keys: ["/"], action: "shortcutSettingsSearch" },
         { keys: ["Esc"], action: "shortcutSettingsClose" }
       ]
     },

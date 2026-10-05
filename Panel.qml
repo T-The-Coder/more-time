@@ -430,9 +430,6 @@ Panel {
       globeAutoRotate: false,
       worldMoon: false,
       worldMoonStyle: "space",
-      globeRotateDelay: "10",
-      globeRotateSpeed: "4",
-      globeRotateFps: "15",
       worldList: true,
       worldDifference: true,
       worldDials: true,
@@ -459,9 +456,6 @@ Panel {
       astroInfo: true,
       astroEarthInset: true,
       astroAutoRotate: false,
-      astroRotateDelay: "10",
-      astroRotateSpeed: "4",
-      astroRotateFps: "15",
       tabOrder: defaultTabOrder(),
       defaultTab: "world"
     }
@@ -585,6 +579,15 @@ Panel {
     return key === "world" ? "\u{f01e7}" : (key === "alarms" ? "\u{f0020}"
       : (key === "timers" ? "\u{f051f}" : (key === "stopwatches" ? "\u{f13ab}"
       : (key === "astro" ? "\u{f15db}" : "\u{f0996}"))))
+  }
+
+  // A display option of the surface shown now (the chips under the views),
+  // as the Display cards would set it for that surface.
+  function setViewDisplaySetting(key, value) {
+    var surface = settingsTargetSurface
+    settingsTargetSurface = activeSurface
+    displayOptionsStore.setSettingsDisplaySetting(key, value)
+    settingsTargetSurface = surface
   }
 
   function showTab(key) {
@@ -1319,6 +1322,7 @@ Panel {
       else if (editingId !== "") editingId = ""
       else if (searchOpen) searchOpen = false
       else if (newTimerOpen) newTimerOpen = false
+      else if (settingsOpen && settingsLoader.item && settingsLoader.item.clearSearch()) {}
       else if (settingsOpen) settingsOpen = false
       else close()
       restoreKeyFocus()

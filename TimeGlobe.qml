@@ -248,8 +248,8 @@ Item {
   }
 
   // ---- Turning by itself ----
-  // After the set delay (globeRotateDelay) it turns east, one turn in the set
-  // minutes (globeRotateSpeed), only while it can be seen (popup open, World
+  // After the set delay (General → Motion) it turns east, one turn in the set
+  // minutes (General → Motion), only while it can be seen (popup open, World
   // tab). A press, drag, wheel or selection change stops it and restarts the
   // wait; a pointer resting on it does not, and the tooltip follows the turn.
   property bool rotating: false
@@ -264,8 +264,8 @@ Item {
 
   // Settings → Display → World: after how many idle seconds it starts, and
   // in how many minutes it makes one turn.
-  readonly property int rotateDelaySeconds: Number(panel.displaySetting("globeRotateDelay", "10")) || 10
-  readonly property int rotateTurnMinutes: Number(panel.displaySetting("globeRotateSpeed", "4")) || 4
+  readonly property int rotateDelaySeconds: Number(panel.generalSetting("motionDelay", "10")) || 10
+  readonly property int rotateTurnMinutes: Number(panel.generalSetting("motionSpeed", "4")) || 4
 
   Timer {
     id: idleTimer
@@ -274,10 +274,10 @@ Item {
     onTriggered: globe.rotating = true
   }
 
-  // Frames a second as set (globeRotateFps, 15 unless changed); the turn
+  // Frames a second as set (General → Motion, 15 unless changed); the turn
   // advances by the time elapsed. While turning it is drawn the cheap way
   // (cheapFrames).
-  readonly property int rotateFps: Number(panel.displaySetting("globeRotateFps", "15")) || 15
+  readonly property int rotateFps: Number(panel.generalSetting("motionFps", "15")) || 15
   Timer {
     id: rotateTimer
     interval: Math.round(1000 / Math.max(1, globe.rotateFps))

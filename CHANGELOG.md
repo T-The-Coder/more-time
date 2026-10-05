@@ -4,6 +4,18 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Settings, reorganised:** a search across every page (`/`), finding
+  settings in the interface language or in English; General in sections
+  (language and format, location, defaults for new items, motion, app, back
+  up and restore); sub-headings in the long cards (World: map, sky, city
+  list; Astro: shown, objects, time; Clock: clock, sun, more); one Motion
+  group in General for every view that turns by itself (the delay, the speed
+  and the frames per second were set per surface and per view; the app's
+  globe values come over once); "Copy to the widget / app" in Display; the
+  map's choice is now called Shape.
+- **Chips under the World and Astro views** switch the map's shape, the
+  night, the twilight bands, the Moon, the labels and the ruler, and what
+  the solar system shows, for the view shown.
 - **Astro: the ISS** (an option, off by default): the space station over
   its place in the Earth and Moon view and the inset, with its ground track
   and on hover where it is, its height and its orbit. Its orbit data come
