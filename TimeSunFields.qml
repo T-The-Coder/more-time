@@ -69,8 +69,13 @@ Row {
     time: fields.today ? fields.at(fields.today.sunset) : "—"
   }
 
+  // The next event, unless it is one already shown (today's sunrise or
+  // sunset); tomorrow's sunrise still shows.
   Field {
-    visible: fields.showNext
+    readonly property bool repeated: !!fields.next && !!fields.today
+      && (fields.next.rising ? fields.showSunrise && fields.next.at === fields.today.sunrise
+        : fields.showSunset && fields.next.at === fields.today.sunset)
+    visible: fields.showNext && !repeated
     rising: fields.next ? fields.next.rising : true
     time: fields.next ? fields.at(fields.next.at) : "—"
   }

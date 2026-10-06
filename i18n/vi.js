@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "sau {hours} giờ {minutes} phút", sameTime: "cùng giờ", today: "Hôm nay", tomorrow: "Ngày mai", yesterday: "Hôm qua",
   standardTime: "(giờ chuẩn)", alarm: "Báo thức", stopwatch: "Bấm giờ", pomodoro: "Pomodoro", timerNamed: "Hẹn giờ {duration}",
   once: "Một lần", everyDay: "Hằng ngày", weekdays: "Ngày thường", weekends: "Cuối tuần",
-  focusPhase: "Tập trung", breakPhase: "Nghỉ", longBreakPhase: "Nghỉ dài", longBreakEvery: "Nghỉ dài",
+  focusPhase: "Tập trung", breakPhase: "Nghỉ", longBreakPhase: "Nghỉ dài", longBreakEvery: "Bao lâu một lần",
   everyRounds: "mỗi {count}", never: "không bao giờ", autoContinue: "Giai đoạn tiếp theo tự bắt đầu",
   autoContinueHint: "Tắt: sau mỗi giai đoạn pomodoro chờ phím Cách hoặc ▶.",
   pomodoroRunsFor: "Đang {minutes} phút · xong {count}", pomodoroWaits: "Sẵn sàng {minutes} phút · xong {count}",

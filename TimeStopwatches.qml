@@ -148,9 +148,11 @@ Column {
               font.family: view.panel.fontFamily
               font.pixelSize: Style.font.bodySmall
             }
+            // The times right-aligned in their columns, so the digits line up.
             Text {
               textFormat: Text.PlainText
               width: Style.space(90)
+              horizontalAlignment: Text.AlignRight
               text: view.panel.durationText(parent.modelData.split, { hundredths: view.hundredths })
               color: parent.modelData.fastest ? Color.accent
                 : (parent.modelData.slowest ? Color.urgent : view.panel.foreground)
@@ -160,6 +162,8 @@ Column {
             }
             Text {
               textFormat: Text.PlainText
+              width: Style.space(90)
+              horizontalAlignment: Text.AlignRight
               text: view.panel.durationText(parent.modelData.total, { hundredths: view.hundredths })
               color: view.panel.mutedText
               font.family: view.panel.fontFamily

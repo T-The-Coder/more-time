@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours} 小時 {minutes} 分鐘後", sameTime: "時間相同", today: "今天", tomorrow: "明天", yesterday: "昨天",
   standardTime: "（標準時間）", alarm: "鬧鐘", stopwatch: "碼錶", pomodoro: "番茄鐘", timerNamed: "計時器 {duration}",
   once: "一次", everyDay: "每天", weekdays: "平日", weekends: "週末",
-  focusPhase: "專注", breakPhase: "休息", longBreakPhase: "長休息", longBreakEvery: "長休息",
+  focusPhase: "專注", breakPhase: "休息", longBreakPhase: "長休息", longBreakEvery: "頻率",
   everyRounds: "每 {count} 輪", never: "從不", autoContinue: "下一階段自動開始",
   autoContinueHint: "關閉時：每個階段結束後番茄鐘會等待空白鍵或 ▶。",
   pomodoroRunsFor: "目前 {minutes} 分鐘 · 已完成 {count}", pomodoroWaits: "準備 {minutes} 分鐘 · 已完成 {count}",

@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "بعد {hours} س {minutes} د", sameTime: "الوقت نفسه", today: "اليوم", tomorrow: "غدًا", yesterday: "أمس",
   standardTime: "(التوقيت القياسي)", alarm: "منبه", stopwatch: "ساعة إيقاف", pomodoro: "بومودورو", timerNamed: "مؤقت {duration}",
   once: "مرة واحدة", everyDay: "كل يوم", weekdays: "أيام العمل", weekends: "نهاية الأسبوع",
-  focusPhase: "تركيز", breakPhase: "استراحة", longBreakPhase: "استراحة طويلة", longBreakEvery: "استراحة طويلة",
+  focusPhase: "تركيز", breakPhase: "استراحة", longBreakPhase: "استراحة طويلة", longBreakEvery: "كم مرة",
   everyRounds: "كل {count}", never: "أبدًا", autoContinue: "تبدأ المرحلة التالية تلقائيًا",
   autoContinueHint: "عند الإيقاف: ينتظر بومودورو بعد كل مرحلة مفتاح المسافة أو ▶.",
   pomodoroRunsFor: "الآن {minutes} د · أُنجز {count}", pomodoroWaits: "جاهز لـ {minutes} د · أُنجز {count}",

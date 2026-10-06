@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "za {hours} h {minutes} min", sameTime: "stejný čas", today: "Dnes", tomorrow: "Zítra", yesterday: "Včera",
   standardTime: "(standardní čas)", alarm: "Budík", stopwatch: "Stopky", pomodoro: "Pomodoro", timerNamed: "Časovač {duration}",
   once: "Jednou", everyDay: "Každý den", weekdays: "Pracovní dny", weekends: "Víkendy",
-  focusPhase: "Soustředění", breakPhase: "Přestávka", longBreakPhase: "Dlouhá přestávka", longBreakEvery: "Dlouhá přestávka",
+  focusPhase: "Soustředění", breakPhase: "Přestávka", longBreakPhase: "Dlouhá přestávka", longBreakEvery: "Jak často",
   everyRounds: "každé {count}", never: "nikdy", autoContinue: "Další fáze začne sama",
   autoContinueHint: "Vypnuto: po každé fázi čeká pomodoro na mezerník nebo ▶.",
   pomodoroRunsFor: "Teď {minutes} min · hotovo {count}", pomodoroWaits: "Připraveno na {minutes} min · hotovo {count}",

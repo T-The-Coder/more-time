@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours} h {minutes} min päästä", sameTime: "sama aika", today: "Tänään", tomorrow: "Huomenna", yesterday: "Eilen",
   standardTime: "(normaaliaika)", alarm: "Herätys", stopwatch: "Sekuntikello", pomodoro: "Pomodoro", timerNamed: "Ajastin {duration}",
   once: "Kerran", everyDay: "Joka päivä", weekdays: "Arkisin", weekends: "Viikonloppuisin",
-  focusPhase: "Keskittyminen", breakPhase: "Tauko", longBreakPhase: "Pitkä tauko", longBreakEvery: "Pitkä tauko",
+  focusPhase: "Keskittyminen", breakPhase: "Tauko", longBreakPhase: "Pitkä tauko", longBreakEvery: "Kuinka usein",
   everyRounds: "joka {count}.", never: "ei koskaan", autoContinue: "Seuraava vaihe alkaa itsestään",
   autoContinueHint: "Pois: jokaisen vaiheen jälkeen pomodoro odottaa välilyöntiä tai ▶.",
   pomodoroRunsFor: "Nyt {minutes} min · {count} valmiina", pomodoroWaits: "Valmiina {minutes} min · {count} valmiina",

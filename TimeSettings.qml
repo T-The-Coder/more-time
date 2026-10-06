@@ -56,7 +56,7 @@ Rectangle {
         hint: "detectLocationHint" },
       { id: "snoozeMinutes", title: panel.i18n("snoozeDefault"), options: minuteOptions(choices.snoozeMinutes), section: "defaults" },
       { id: "timerPresets", title: panel.i18n("timerPresets"), kind: "field",
-        hint: "timerPresetsHint", fieldWidth: Style.space(260),
+        hint: "timerPresetsHint", fieldWidth: Style.space(280),
         parse: function(text) { var list = Model.parseTimerPresets(text); return list ? list.join(",") : null } },
       { id: "alarmSound", page: "sounds", title: panel.i18n("alarmSound"), options: soundOptions, test: true, section: "sounds" },
       { id: "timerSound", page: "sounds", title: panel.i18n("timerSound"), options: soundOptions, test: true },
@@ -1061,7 +1061,7 @@ Rectangle {
         visible: panel.showHints
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
-        text: panel.i18n("settingsPagesKeysHint")
+        text: panel.keepSeparators(panel.i18n("settingsPagesKeysHint"))
         color: panel.hintText
         font.family: panel.fontFamily
         font.pixelSize: Style.font.caption
@@ -1166,7 +1166,7 @@ Rectangle {
         textFormat: Text.PlainText
         visible: panel.showHints && (settingsView.page === "general" || settingsView.page === "sounds")
         width: parent.width
-        text: panel.i18n("settingsGeneralKeysHint")
+        text: panel.keepSeparators(panel.i18n("settingsGeneralKeysHint"))
         color: panel.hintText
         font.family: panel.fontFamily
         font.pixelSize: Style.font.caption
@@ -1365,7 +1365,7 @@ Rectangle {
         textFormat: Text.PlainText
         visible: panel.showHints && settingsView.page === "display"
         width: parent.width
-        text: panel.i18n("settingsKeysHint")
+        text: panel.keepSeparators(panel.i18n("settingsKeysHint"))
         color: panel.hintText
         font.family: panel.fontFamily
         font.pixelSize: Style.font.caption

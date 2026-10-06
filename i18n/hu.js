@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours} óra {minutes} perc múlva", sameTime: "azonos idő", today: "Ma", tomorrow: "Holnap", yesterday: "Tegnap",
   standardTime: "(téli idő)", alarm: "Ébresztő", stopwatch: "Stopper", pomodoro: "Pomodoro", timerNamed: "Időzítő {duration}",
   once: "Egyszer", everyDay: "Minden nap", weekdays: "Hétköznap", weekends: "Hétvégén",
-  focusPhase: "Fókusz", breakPhase: "Szünet", longBreakPhase: "Hosszú szünet", longBreakEvery: "Hosszú szünet",
+  focusPhase: "Fókusz", breakPhase: "Szünet", longBreakPhase: "Hosszú szünet", longBreakEvery: "Milyen gyakran",
   everyRounds: "{count} körönként", never: "soha", autoContinue: "A következő szakasz magától indul",
   autoContinueHint: "Ki: minden szakasz után a pomodoro Szóközre vagy ▶-re vár.",
   pomodoroRunsFor: "Most {minutes} perc · {count} kész", pomodoroWaits: "Kész {minutes} percre · {count} kész",

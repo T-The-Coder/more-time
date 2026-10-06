@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "อีก {hours} ชม. {minutes} นาที", sameTime: "เวลาเดียวกัน", today: "วันนี้", tomorrow: "พรุ่งนี้", yesterday: "เมื่อวาน",
   standardTime: "(เวลามาตรฐาน)", alarm: "นาฬิกาปลุก", stopwatch: "นาฬิกาจับเวลา", pomodoro: "โพโมโดโร", timerNamed: "ตัวจับเวลา {duration}",
   once: "ครั้งเดียว", everyDay: "ทุกวัน", weekdays: "วันทำงาน", weekends: "วันหยุดสุดสัปดาห์",
-  focusPhase: "โฟกัส", breakPhase: "พัก", longBreakPhase: "พักยาว", longBreakEvery: "พักยาว",
+  focusPhase: "โฟกัส", breakPhase: "พัก", longBreakPhase: "พักยาว", longBreakEvery: "บ่อยแค่ไหน",
   everyRounds: "ทุก {count} รอบ", never: "ไม่เลย", autoContinue: "ช่วงถัดไปเริ่มเอง",
   autoContinueHint: "ปิด: หลังแต่ละช่วง โพโมโดโรจะรอ Space หรือ ▶",
   pomodoroRunsFor: "ตอนนี้ {minutes} นาที · เสร็จ {count}", pomodoroWaits: "พร้อมสำหรับ {minutes} นาที · เสร็จ {count}",

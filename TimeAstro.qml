@@ -2008,12 +2008,7 @@ Column {
   // A moment with its year, for the events and the next eclipses: "Wed 12
   // Aug 2026 7:46 PM" (this computer's local time; years before 1 as the
   // astronomers count, 0 = 1 BC).
-  function eventWhen(ms) {
-    var offset = Model.localOffsetSeconds(ms)
-    var year = Model.zonedParts(ms, offset).year
-    return panel.dateFor(ms, offset, "short") + " " + (year < 0 ? "−" + (-year) : year)
-      + " " + panel.clockFor(ms, offset, false)
-  }
+  function eventWhen(ms) { return panel.momentWithYear(ms) }
   function shortMoment(ms) {
     var offset = Model.localOffsetSeconds(ms)
     return panel.dateFor(ms, offset, "short") + " " + panel.clockFor(ms, offset, false)
@@ -2195,23 +2190,26 @@ Column {
       Rectangle {
         id: lapseChip
         anchors.verticalCenter: parent.verticalCenter
+        // The chips' look (TimeChipBar): filled while its list is open.
         width: lapseText.implicitWidth + Style.space(14)
-        height: Style.space(22)
+        height: Style.space(24)
         radius: Style.cornerRadius
-        color: view.lapseMenuOpen ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22) : "transparent"
-        border.color: view.lapseMenuOpen ? Color.accent : view.panel.subtleText
+        color: view.lapseMenuOpen || lapseMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
+        border.color: view.lapseMenuOpen ? "transparent" : Qt.rgba(view.panel.foreground.r, view.panel.foreground.g, view.panel.foreground.b, 0.18)
         border.width: Style.spacing.hairline
         Text {
           id: lapseText
           textFormat: Text.PlainText
           anchors.centerIn: parent
           text: view.panel.i18n("lapse_" + sky.lapseId) + " ▾"
-          color: view.lapseMenuOpen ? Color.accent : view.panel.mutedText
+          color: view.lapseMenuOpen ? Style.hoverStateColor(view.panel.foreground, Color.accent) : view.panel.mutedText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.caption
         }
         MouseArea {
+          id: lapseMouse
           anchors.fill: parent
+          hoverEnabled: true
           cursorShape: Qt.PointingHandCursor
           onClicked: view.lapseMenuOpen = !view.lapseMenuOpen
         }
@@ -2276,7 +2274,7 @@ Column {
           ? (dateField.parsed.ok ? "= " + sky.momentText(dateField.parsed.ms)
             + (Astro.isApproximate(dateField.parsed.ms) ? " · " + view.panel.i18n("astroApproximate") : "")
             : view.panel.i18n(dateField.parsed.reason === "range" ? "astroOutOfRange" : "astroNotADate"))
-          : sky.momentText(sky.minuteMs) + (sky.approximate ? " · " + view.panel.i18n("astroApproximate") : "")
+          : view.panel.momentWithYear(sky.minuteMs) + (sky.approximate ? " · " + view.panel.i18n("astroApproximate") : "")
         color: dateField.text !== "" && !dateField.parsed.ok ? Color.urgent
           : (dateField.text === "" && sky.timePinned ? Color.accent : view.panel.mutedText)
         font.family: view.panel.fontFamily
@@ -2315,7 +2313,7 @@ Column {
       anchors.right: view.showEvents ? eventsButton.left : parent.right
       anchors.rightMargin: view.showEvents ? Style.space(8) : 0
       anchors.top: parent.top
-      text: view.infoExpanded ? view.infoText : view.infoText.split("\n")[0]
+      text: view.infoExpanded ? view.panel.keepSeparators(view.infoText) : view.infoText.split("\n")[0]
       color: view.panel.mutedText
       font.family: view.panel.fontFamily
       font.pixelSize: Style.font.caption

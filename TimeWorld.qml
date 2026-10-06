@@ -375,9 +375,7 @@ Column {
   }
   // The shown instant in this computer's local time.
   function shownText() {
-    var ms = panel.worldMinuteMs
-    var offset = Model.localOffsetSeconds(ms)
-    return panel.dateFor(ms, offset, "long") + " · " + panel.clockFor(ms, offset, false)
+    return panel.momentWithYear(panel.worldMinuteMs)
   }
 
   Row {
@@ -405,24 +403,28 @@ Column {
         model: ["dayInMinute", "dayIn10Seconds", "seasonsInMinute"]
         Rectangle {
           required property string modelData
+          // The chips' look (TimeChipBar): filled when picked.
           readonly property bool picked: view.lapseId === modelData
-          width: speedLabel.implicitWidth + Style.space(10)
-          height: Style.space(20)
+          width: speedLabel.implicitWidth + Style.space(14)
+          height: Style.space(24)
           radius: Style.cornerRadius
-          color: picked ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22) : "transparent"
-          border.color: picked ? Color.accent : view.panel.subtleText
+          color: picked || speedMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
+          border.color: picked ? "transparent" : Qt.rgba(view.panel.foreground.r, view.panel.foreground.g, view.panel.foreground.b, 0.18)
           border.width: Style.spacing.hairline
           Text {
             id: speedLabel
             textFormat: Text.PlainText
             anchors.centerIn: parent
             text: view.panel.i18n("lapseShort_" + parent.modelData)
-            color: parent.picked ? Color.accent : view.panel.mutedText
+            color: parent.picked ? Style.hoverStateColor(view.panel.foreground, Color.accent) : view.panel.mutedText
             font.family: view.panel.fontFamily
             font.pixelSize: Style.font.caption
+            font.bold: parent.picked
           }
           MouseArea {
+            id: speedMouse
             anchors.fill: parent
+            hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: view.panel.setViewDisplaySetting("worldLapse", parent.modelData)
           }

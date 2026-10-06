@@ -293,6 +293,21 @@ Panel {
     return latinDigits(Model.durationText(ms, options))
   }
 
+  // A moment with its year in this computer's local time, short enough for
+  // the timelines at the popup's width: "Wed 12 Aug 2026 7:46 PM" (years
+  // before 1 as the astronomers count, 0 = 1 BC).
+  function momentWithYear(ms) {
+    var offset = Model.localOffsetSeconds(ms)
+    var year = Model.zonedParts(ms, offset).year
+    return dateFor(ms, offset, "short") + " " + (year < 0 ? "−" + (-year) : year) + " " + clockFor(ms, offset, false)
+  }
+
+  // A line of pieces joined by " · " for a wrapping Text: the separator
+  // stays at the end of a line, never starts one.
+  function keepSeparators(text) {
+    return String(text).replace(/ · /g, "\u00a0· ")
+  }
+
   // A number in the interface language with `decimals` places, Latin digits.
   function formatNumber(value, decimals) {
     return latinDigits(Number(value).toLocaleString(interfaceLocale, "f", decimals || 0))

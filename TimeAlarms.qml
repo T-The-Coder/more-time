@@ -289,7 +289,10 @@ Column {
           TimeStepper {
             panel: view.panel
             title: view.panel.i18n("hourField")
-            valueText: Model.pad2(card.modelData.hour)
+            // In the clock's format: "3 PM" with a 12-hour clock.
+            valueText: view.panel.hour12
+              ? view.panel.latinDigits(((card.modelData.hour % 12) || 12) + " " + view.panel.amPm[card.modelData.hour < 12 ? 0 : 1])
+              : Model.pad2(card.modelData.hour)
             kbFocused: view.panel.editField === 0
             onFocusRequested: view.panel.editField = 0
             onStep: function(delta) { view.stepTime(0, delta) }
@@ -409,7 +412,7 @@ Column {
           textFormat: Text.PlainText
           visible: view.panel.showHints
           width: parent.width
-          text: view.panel.i18n("alarmEditorKeysHint")
+          text: view.panel.keepSeparators(view.panel.i18n("alarmEditorKeysHint"))
           color: view.panel.hintText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.caption

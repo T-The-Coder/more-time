@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "în {hours} h {minutes} min", sameTime: "aceeași oră", today: "Azi", tomorrow: "Mâine", yesterday: "Ieri",
   standardTime: "(ora standard)", alarm: "Alarmă", stopwatch: "Cronometru", pomodoro: "Pomodoro", timerNamed: "Temporizator {duration}",
   once: "O dată", everyDay: "Zilnic", weekdays: "Zile lucrătoare", weekends: "Weekenduri",
-  focusPhase: "Concentrare", breakPhase: "Pauză", longBreakPhase: "Pauză lungă", longBreakEvery: "Pauză lungă",
+  focusPhase: "Concentrare", breakPhase: "Pauză", longBreakPhase: "Pauză lungă", longBreakEvery: "Cât de des",
   everyRounds: "la fiecare {count}", never: "niciodată", autoContinue: "Faza următoare pornește singură",
   autoContinueHint: "Oprit: după fiecare fază pomodoro așteaptă Spațiu sau ▶.",
   pomodoroRunsFor: "Acum {minutes} min · {count} gata", pomodoroWaits: "Gata pentru {minutes} min · {count} gata",

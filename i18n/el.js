@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "σε {hours} ώ {minutes} λεπ.", sameTime: "ίδια ώρα", today: "Σήμερα", tomorrow: "Αύριο", yesterday: "Χθες",
   standardTime: "(χειμερινή ώρα)", alarm: "Ξυπνητήρι", stopwatch: "Χρονόμετρο", pomodoro: "Pomodoro", timerNamed: "Αντίστροφη {duration}",
   once: "Μία φορά", everyDay: "Κάθε μέρα", weekdays: "Καθημερινές", weekends: "Σαββατοκύριακα",
-  focusPhase: "Συγκέντρωση", breakPhase: "Διάλειμμα", longBreakPhase: "Μεγάλο διάλειμμα", longBreakEvery: "Μεγάλο διάλειμμα",
+  focusPhase: "Συγκέντρωση", breakPhase: "Διάλειμμα", longBreakPhase: "Μεγάλο διάλειμμα", longBreakEvery: "Πόσο συχνά",
   everyRounds: "κάθε {count}", never: "ποτέ", autoContinue: "Η επόμενη φάση ξεκινά μόνη της",
   autoContinueHint: "Ανενεργό: μετά από κάθε φάση το pomodoro περιμένει Διάστημα ή ▶.",
   pomodoroRunsFor: "Τώρα {minutes} λεπ. · {count} έτοιμα", pomodoroWaits: "Έτοιμο για {minutes} λεπ. · {count} έτοιμα",

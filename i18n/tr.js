@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours} sa {minutes} dk içinde", sameTime: "aynı saat", today: "Bugün", tomorrow: "Yarın", yesterday: "Dün",
   standardTime: "(standart saat)", alarm: "Alarm", stopwatch: "Kronometre", pomodoro: "Pomodoro", timerNamed: "Zamanlayıcı {duration}",
   once: "Bir kez", everyDay: "Her gün", weekdays: "Hafta içi", weekends: "Hafta sonu",
-  focusPhase: "Odak", breakPhase: "Mola", longBreakPhase: "Uzun mola", longBreakEvery: "Uzun mola",
+  focusPhase: "Odak", breakPhase: "Mola", longBreakPhase: "Uzun mola", longBreakEvery: "Ne sıklıkla",
   everyRounds: "her {count}", never: "hiç", autoContinue: "Sonraki evre kendiliğinden başlar",
   autoContinueHint: "Kapalı: her evreden sonra pomodoro Boşluk ya da ▶ bekler.",
   pomodoroRunsFor: "Şimdi {minutes} dk · {count} tamam", pomodoroWaits: "{minutes} dk için hazır · {count} tamam",

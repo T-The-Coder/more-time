@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours}時間{minutes}分後", sameTime: "同じ時刻", today: "今日", tomorrow: "明日", yesterday: "昨日",
   standardTime: "（標準時）", alarm: "アラーム", stopwatch: "ストップウォッチ", pomodoro: "ポモドーロ", timerNamed: "タイマー {duration}",
   once: "1回", everyDay: "毎日", weekdays: "平日", weekends: "週末",
-  focusPhase: "集中", breakPhase: "休憩", longBreakPhase: "長い休憩", longBreakEvery: "長い休憩",
+  focusPhase: "集中", breakPhase: "休憩", longBreakPhase: "長い休憩", longBreakEvery: "頻度",
   everyRounds: "{count}回ごと", never: "なし", autoContinue: "次のフェーズを自動で開始",
   autoContinueHint: "オフ: 各フェーズの後、ポモドーロはスペースか ▶ を待ちます。",
   pomodoroRunsFor: "現在 {minutes}分 · {count}回完了", pomodoroWaits: "{minutes}分の準備完了 · {count}回完了",

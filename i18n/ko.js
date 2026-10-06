@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours}시간 {minutes}분 후", sameTime: "같은 시각", today: "오늘", tomorrow: "내일", yesterday: "어제",
   standardTime: "(표준시)", alarm: "알람", stopwatch: "스톱워치", pomodoro: "뽀모도로", timerNamed: "타이머 {duration}",
   once: "한 번", everyDay: "매일", weekdays: "평일", weekends: "주말",
-  focusPhase: "집중", breakPhase: "휴식", longBreakPhase: "긴 휴식", longBreakEvery: "긴 휴식",
+  focusPhase: "집중", breakPhase: "휴식", longBreakPhase: "긴 휴식", longBreakEvery: "빈도",
   everyRounds: "{count}회마다", never: "안 함", autoContinue: "다음 단계 자동 시작",
   autoContinueHint: "끄면: 각 단계 후 뽀모도로가 스페이스나 ▶를 기다립니다.",
   pomodoroRunsFor: "지금 {minutes}분 · {count}회 완료", pomodoroWaits: "{minutes}분 준비 · {count}회 완료",

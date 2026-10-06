@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "בעוד {hours} שע׳ {minutes} דק׳", sameTime: "אותה שעה", today: "היום", tomorrow: "מחר", yesterday: "אתמול",
   standardTime: "(שעון חורף)", alarm: "מעורר", stopwatch: "סטופר", pomodoro: "פומודורו", timerNamed: "טיימר {duration}",
   once: "פעם אחת", everyDay: "כל יום", weekdays: "ימי חול", weekends: "סופי שבוע",
-  focusPhase: "ריכוז", breakPhase: "הפסקה", longBreakPhase: "הפסקה ארוכה", longBreakEvery: "הפסקה ארוכה",
+  focusPhase: "ריכוז", breakPhase: "הפסקה", longBreakPhase: "הפסקה ארוכה", longBreakEvery: "באיזו תדירות",
   everyRounds: "כל {count}", never: "אף פעם", autoContinue: "השלב הבא מתחיל מעצמו",
   autoContinueHint: "כבוי: אחרי כל שלב הפומודורו ממתין לרווח או ל־▶.",
   pomodoroRunsFor: "עכשיו {minutes} דק׳ · הושלמו {count}", pomodoroWaits: "מוכן ל־{minutes} דק׳ · הושלמו {count}",

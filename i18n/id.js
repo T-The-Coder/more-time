@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "dalam {hours} jam {minutes} mnt", sameTime: "jam sama", today: "Hari ini", tomorrow: "Besok", yesterday: "Kemarin",
   standardTime: "(waktu standar)", alarm: "Alarm", stopwatch: "Stopwatch", pomodoro: "Pomodoro", timerNamed: "Timer {duration}",
   once: "Sekali", everyDay: "Setiap hari", weekdays: "Hari kerja", weekends: "Akhir pekan",
-  focusPhase: "Fokus", breakPhase: "Istirahat", longBreakPhase: "Istirahat panjang", longBreakEvery: "Istirahat panjang",
+  focusPhase: "Fokus", breakPhase: "Istirahat", longBreakPhase: "Istirahat panjang", longBreakEvery: "Seberapa sering",
   everyRounds: "setiap {count}", never: "tidak pernah", autoContinue: "Fase berikutnya mulai sendiri",
   autoContinueHint: "Mati: setelah tiap fase pomodoro menunggu Spasi atau ▶.",
   pomodoroRunsFor: "Sekarang {minutes} mnt · {count} selesai", pomodoroWaits: "Siap untuk {minutes} mnt · {count} selesai",

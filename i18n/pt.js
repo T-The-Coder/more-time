@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "em {hours} h {minutes} min", sameTime: "mesma hora", today: "Hoje", tomorrow: "Amanhã", yesterday: "Ontem",
   standardTime: "(hora padrão)", alarm: "Alarme", stopwatch: "Cronômetro", pomodoro: "Pomodoro", timerNamed: "Timer {duration}",
   once: "Uma vez", everyDay: "Todos os dias", weekdays: "Dias úteis", weekends: "Fins de semana",
-  focusPhase: "Foco", breakPhase: "Pausa", longBreakPhase: "Pausa longa", longBreakEvery: "Pausa longa",
+  focusPhase: "Foco", breakPhase: "Pausa", longBreakPhase: "Pausa longa", longBreakEvery: "Com que frequência",
   everyRounds: "a cada {count}", never: "nunca", autoContinue: "A próxima fase começa sozinha",
   autoContinueHint: "Desligado: após cada fase o pomodoro espera Espaço ou ▶.",
   pomodoroRunsFor: "Agora {minutes} min · {count} feitos", pomodoroWaits: "Pronto para {minutes} min · {count} feitos",

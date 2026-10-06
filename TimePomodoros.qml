@@ -316,7 +316,7 @@ Column {
           textFormat: Text.PlainText
           visible: view.panel.showHints
           width: parent.width
-          text: view.panel.i18n("editorKeysHint")
+          text: view.panel.keepSeparators(view.panel.i18n("editorKeysHint"))
           color: view.panel.hintText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.caption

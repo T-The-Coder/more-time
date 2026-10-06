@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours} ساعت و {minutes} دقیقه دیگر", sameTime: "همان ساعت", today: "امروز", tomorrow: "فردا", yesterday: "دیروز",
   standardTime: "(وقت استاندارد)", alarm: "زنگ", stopwatch: "کرنومتر", pomodoro: "پومودورو", timerNamed: "تایمر {duration}",
   once: "یک بار", everyDay: "هر روز", weekdays: "روزهای کاری", weekends: "آخر هفته‌ها",
-  focusPhase: "تمرکز", breakPhase: "استراحت", longBreakPhase: "استراحت بلند", longBreakEvery: "استراحت بلند",
+  focusPhase: "تمرکز", breakPhase: "استراحت", longBreakPhase: "استراحت بلند", longBreakEvery: "هر چند وقت",
   everyRounds: "هر {count}", never: "هرگز", autoContinue: "مرحلهٔ بعد خودکار شروع شود",
   autoContinueHint: "خاموش: پس از هر مرحله پومودورو منتظر فاصله یا ▶ می‌ماند.",
   pomodoroRunsFor: "اکنون {minutes} دقیقه · {count} انجام شد", pomodoroWaits: "آماده برای {minutes} دقیقه · {count} انجام شد",

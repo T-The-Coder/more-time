@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "через {hours} год {minutes} хв", sameTime: "той самий час", today: "Сьогодні", tomorrow: "Завтра", yesterday: "Учора",
   standardTime: "(стандартний час)", alarm: "Будильник", stopwatch: "Секундомір", pomodoro: "Помодоро", timerNamed: "Таймер {duration}",
   once: "Один раз", everyDay: "Щодня", weekdays: "Будні", weekends: "Вихідні",
-  focusPhase: "Робота", breakPhase: "Перерва", longBreakPhase: "Довга перерва", longBreakEvery: "Довга перерва",
+  focusPhase: "Робота", breakPhase: "Перерва", longBreakPhase: "Довга перерва", longBreakEvery: "Як часто",
   everyRounds: "кожні {count}", never: "ніколи", autoContinue: "Наступна фаза починається сама",
   autoContinueHint: "Вимкн.: після кожної фази помодоро чекає на Пробіл або ▶.",
   pomodoroRunsFor: "Зараз {minutes} хв · виконано {count}", pomodoroWaits: "Готово до {minutes} хв · виконано {count}",

@@ -39,7 +39,7 @@ var catalog = {
   focusPhase: "Fokus",
   breakPhase: "Pause",
   longBreakPhase: "Lange Pause",
-  longBreakEvery: "Lange Pause",
+  longBreakEvery: "Wie oft",
   everyRounds: "alle {count}",
   never: "nie",
   autoContinue: "Nächste Phase startet von selbst",

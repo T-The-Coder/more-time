@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "{hours} घं. {minutes} मि. में", sameTime: "एक ही समय", today: "आज", tomorrow: "कल", yesterday: "बीता कल",
   standardTime: "(मानक समय)", alarm: "अलार्म", stopwatch: "स्टॉपवॉच", pomodoro: "पोमोडोरो", timerNamed: "टाइमर {duration}",
   once: "एक बार", everyDay: "हर दिन", weekdays: "कार्यदिवस", weekends: "सप्ताहांत",
-  focusPhase: "ध्यान", breakPhase: "विराम", longBreakPhase: "लंबा विराम", longBreakEvery: "लंबा विराम",
+  focusPhase: "ध्यान", breakPhase: "विराम", longBreakPhase: "लंबा विराम", longBreakEvery: "कितनी बार",
   everyRounds: "हर {count}", never: "कभी नहीं", autoContinue: "अगला चरण अपने आप शुरू हो",
   autoContinueHint: "बंद: हर चरण के बाद पोमोडोरो स्पेस या ▶ का इंतज़ार करता है।",
   pomodoroRunsFor: "अभी {minutes} मि. · {count} पूरे", pomodoroWaits: "{minutes} मि. के लिए तैयार · {count} पूरे",

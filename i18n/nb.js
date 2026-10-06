@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "om {hours} t {minutes} min", sameTime: "samme tid", today: "I dag", tomorrow: "I morgen", yesterday: "I går",
   standardTime: "(normaltid)", alarm: "Alarm", stopwatch: "Stoppeklokke", pomodoro: "Pomodoro", timerNamed: "Tidtaker {duration}",
   once: "Én gang", everyDay: "Hver dag", weekdays: "Hverdager", weekends: "Helger",
-  focusPhase: "Fokus", breakPhase: "Pause", longBreakPhase: "Lang pause", longBreakEvery: "Lang pause",
+  focusPhase: "Fokus", breakPhase: "Pause", longBreakPhase: "Lang pause", longBreakEvery: "Hvor ofte",
   everyRounds: "hver {count}.", never: "aldri", autoContinue: "Neste fase starter av seg selv",
   autoContinueHint: "Av: etter hver fase venter pomodoroen på mellomrom eller ▶.",
   pomodoroRunsFor: "Nå {minutes} min · {count} ferdige", pomodoroWaits: "Klar for {minutes} min · {count} ferdige",

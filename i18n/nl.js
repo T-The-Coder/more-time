@@ -14,7 +14,7 @@ var catalog = {
   inHoursMinutes: "over {hours} u {minutes} min", sameTime: "zelfde tijd", today: "Vandaag", tomorrow: "Morgen", yesterday: "Gisteren",
   standardTime: "(standaardtijd)", alarm: "Wekker", stopwatch: "Stopwatch", pomodoro: "Pomodoro", timerNamed: "Timer {duration}",
   once: "Eenmalig", everyDay: "Elke dag", weekdays: "Werkdagen", weekends: "Weekend",
-  focusPhase: "Focus", breakPhase: "Pauze", longBreakPhase: "Lange pauze", longBreakEvery: "Lange pauze",
+  focusPhase: "Focus", breakPhase: "Pauze", longBreakPhase: "Lange pauze", longBreakEvery: "Hoe vaak",
   everyRounds: "elke {count}", never: "nooit", autoContinue: "Volgende fase start vanzelf",
   autoContinueHint: "Uit: na elke fase wacht de pomodoro op Spatie of ▶.",
   pomodoroRunsFor: "Nu {minutes} min · {count} klaar", pomodoroWaits: "Klaar voor {minutes} min · {count} klaar",
