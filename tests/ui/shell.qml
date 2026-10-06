@@ -580,7 +580,7 @@ ShellRoot {
     },
     function() { shot("40h-astro-saturn-high") },
     // The timeline: 90 days ahead; 1969-07-20 20:17 UTC; a travel half
-    // way; what a frame costs while playing a month a second.
+    // way; what a frame costs while playing a year in a minute.
     function() { var a = astro(); a.pointer = null; a.updateHover(); a.elevation = 30; a.zoomIndex = 1; a.scrubTo(366 + 90) },
     function() { console.log("ASTRO info", JSON.stringify(astroView().infoText)); shot("41a-astro-timeline-90") },
     function() { astro().showAt(Date.UTC(1969, 6, 20, 20, 17)) },

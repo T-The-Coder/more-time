@@ -648,13 +648,8 @@ Item {
       if (moon && moonAt.visible) {
         var mx = globe.centerX + (moonAt.x - globe.centerX) * 1.15
         var my = globe.centerY + (moonAt.y - globe.centerY) * 1.15
-        var look = globe.panel.moonLook(globe.moonStyle, moon,
-          Moon.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) }), globe.minuteMs)
-        ctx.globalAlpha = look.alpha
-        Moon.paintMoon(ctx, mx, my, globe.moonRadius, look.angle, look.illuminated, "238,236,226",
-          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
-        ctx.globalAlpha = 1
-        globe.moonHit = { x: mx, y: my, moon: moon, ms: globe.minuteMs }
+        globe.moonHit = globe.panel.paintMapMoon(ctx, mx, my, globe.moonRadius, globe.moonStyle, moon,
+          Moon.moonLitAngle(moon, tw.sun, function(lat, lon2) { return screenPoint(lat, lon2, lon) }), globe.minuteMs, ink)
       }
 
       ctx.strokeStyle = rgba(ink, 0.35)
@@ -774,12 +769,8 @@ Item {
       if (moon && moonAt.visible) {
         var mx = cx + (moonAt.x - cx) * (1 + 0.15 / Math.pow(2, globe.zoom))
         var my = cy + (moonAt.y - cy) * (1 + 0.15 / Math.pow(2, globe.zoom))
-        var look = globe.panel.moonLook(globe.moonStyle, moon, Moon.moonLitAngle(moon, tw.sun, toScreen), globe.minuteMs)
-        ctx.globalAlpha = look.alpha
-        Moon.paintMoon(ctx, mx, my, globe.moonRadius, look.angle, look.illuminated, "238,236,226",
-          Moon.rgbText(WorldMap.nightFill(globe.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
-        ctx.globalAlpha = 1
-        globe.moonHit = { x: mx, y: my, moon: moon, ms: globe.minuteMs }
+        globe.moonHit = globe.panel.paintMapMoon(ctx, mx, my, globe.moonRadius, globe.moonStyle, moon,
+          Moon.moonLitAngle(moon, tw.sun, toScreen), globe.minuteMs, ink)
       }
       ctx.strokeStyle = rgba(ink, 0.35)
       ctx.lineWidth = 1

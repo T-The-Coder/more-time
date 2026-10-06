@@ -245,8 +245,7 @@ control.
     place it is over (its height enlarged), its ground track for one orbit
     on the globe, and on hover "over 52° N 88° W · 430 km · one orbit in
     93 min". Propagated with SGP4 on this computer; with the timeline more
-    than a week from the data's date it is hidden and the info line says
-    why.
+    than a week from the data's date it is hidden and the info says why.
   - Under the model a timeline: the year either side of today on a track
     (a click or a drag picks a day; `,` `.` a day, `n` or `⌫` back to now)
     and a **time lapse** (`Space` or ▶) at a speed from the list beside the
@@ -274,8 +273,8 @@ control.
     their type and whether they can be seen from the current place, the
     Moon's phases, equinoxes and solstices, oppositions, conjunctions,
     greatest elongations, close planet pairs, perihelion and aphelion. A
-    filter (all, eclipses, planets, Moon, seasons), **Earlier** and
-    **Later** page through them; a click (or `↑` `↓` and `Enter`) travels
+    filter (all, eclipses, planets, Moon, seasons) and ‹ › (earlier,
+    later) page through them; a click (or `↑` `↓` and `Enter`) travels
     there. Eclipses come from NASA's catalogues (2000 BC to AD 3000, read
     only for the years shown); before 1600 and after 2100 their times are
     marked ≈. At a solar eclipse the Earth and Moon view shows the Moon's

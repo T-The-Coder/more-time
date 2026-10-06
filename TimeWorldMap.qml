@@ -45,8 +45,6 @@ Item {
   // Where the Moon was drawn, for the hover: { x, y, moon } or null.
   property var moonHit: null
   readonly property real moonRadius: Style.space(6)
-  // The Moon's lit colour, pale on any theme.
-  readonly property string moonLit: "238,236,226"
   // The golden and the blue hour as bands along the day/night line, with
   // the clock's options of the same name.
   readonly property bool showGolden: panel.displaySetting("heroGoldenHour", false)
@@ -350,13 +348,8 @@ Item {
       map.moonHit = null
       if (moon) {
         var lift = Style.space(4)
-        var look = map.panel.moonLook(map.moonStyle, moon,
-          Moon.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) }), map.minuteMs)
-        ctx.globalAlpha = look.alpha
-        Moon.paintMoon(ctx, moonAt.x - lift, moonAt.y - lift, map.moonRadius, look.angle, look.illuminated,
-          map.moonLit, Moon.rgbText(WorldMap.nightFill(map.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
-        ctx.globalAlpha = 1
-        map.moonHit = { x: moonAt.x - lift, y: moonAt.y - lift, moon: moon, ms: map.minuteMs }
+        map.moonHit = map.panel.paintMapMoon(ctx, moonAt.x - lift, moonAt.y - lift, map.moonRadius, map.moonStyle, moon,
+          Moon.moonLitAngle(moon, sunNow, function(lat, lon) { return map.px(WorldMap.project(lat, lon)) }), map.minuteMs, ink)
       }
 
       ctx.strokeStyle = rgba(ink, 0.35)

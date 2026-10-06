@@ -293,8 +293,9 @@ Panel {
     return latinDigits(Model.durationText(ms, options))
   }
 
-  function localizedNumber(value) {
-    return latinDigits(interfaceLocale.toString(Number(value), "f", 0))
+  // A number in the interface language with `decimals` places, Latin digits.
+  function formatNumber(value, decimals) {
+    return latinDigits(Number(value).toLocaleString(interfaceLocale, "f", decimals || 0))
   }
 
   // Arabic and Persian locales format numbers with their own digits; keep
@@ -1175,6 +1176,18 @@ Panel {
     return { angle: v.litAngle, illuminated: v.illuminated, earthshine: v.earthshine, alpha: v.aboveHorizon ? 1 : 0.4 }
   }
 
+  // The floating Moon of the map and the globe at (x, y), radius r, drawn
+  // as moonLook says, in the pale lit tone over the night colour; returns
+  // its hit spot { x, y, moon, ms } for the hover.
+  function paintMapMoon(ctx, x, y, r, style, moon, spaceAngle, ms, ink) {
+    var look = moonLook(style, moon, spaceAngle, ms)
+    ctx.globalAlpha = look.alpha
+    Moon.paintMoon(ctx, x, y, r, look.angle, look.illuminated, "238,236,226",
+      Moon.rgbText(WorldMap.nightFill(rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
+    ctx.globalAlpha = 1
+    return { x: x, y: y, moon: moon, ms: ms }
+  }
+
   // The Moon at the current place at ms, worded: "Berlin: 23° high · SE ·
   // rises 6:42 PM · sets 7:10 AM" or "…: below the horizon · rises …", the
   // times in that place's clock; "" without a place. Kept per minute (the
@@ -1195,7 +1208,6 @@ Panel {
     var key = minute + "|" + c.lat + "|" + c.lon + "|" + interfaceLanguage + "|" + currentName + "|" + !!quick
     if (moonPlaceCache.key === key) return moonPlaceCache.text
     var v = MoonView.view(Number(c.lat), Number(c.lon), minute, { riseSet: !quick })
-    var offset = currentCity ? currentOffset : Model.localOffsetSeconds(minute)
     var parts = [v.aboveHorizon
       ? i18n("moonAboveHorizon", { altitude: Math.max(0, Math.round(v.apparentAltitude)), direction: i18n("compass_" + Moon.compassPoint(v.azimuth)) })
       : i18n("moonBelowHorizon")]
@@ -1203,7 +1215,8 @@ Panel {
     if (v.rise) events.push({ at: v.rise, key: "moonRises" })
     if (v.set) events.push({ at: v.set, key: "moonSets" })
     events.sort(function(a, b) { return a.at - b.at })
-    for (var i = 0; i < events.length; i++) parts.push(i18n(events[i].key, { time: clockFor(events[i].at, offset, false) }))
+    for (var i = 0; i < events.length; i++)
+      parts.push(i18n(events[i].key, { time: clockFor(events[i].at, currentOffsetAt(events[i].at), false) }))
     var text = i18n("moonFromPlace", { place: currentName, details: parts.join(" · ") })
     // Changed in place: no binding hears of it.
     moonPlaceCache.key = key
@@ -1266,6 +1279,13 @@ Panel {
   readonly property int currentOffset: {
     var offset = currentCity ? cityOffset(currentCity) : null
     return offset === null ? localOffset : offset
+  }
+  // The current place's offset at another moment (its zone's rules, so a
+  // shown date across a clock change reads right); now's while unknown.
+  function currentOffsetAt(utcMs) {
+    if (!currentCity) return Model.localOffsetSeconds(utcMs)
+    var offset = zoneTable.offsetFor(currentCity.tz, utcMs)
+    return offset === null ? currentOffset : offset
   }
   readonly property var currentParts: currentCity ? Model.zonedParts(nowMs, currentOffset) : localParts
   readonly property string currentName: currentCity ? currentCity.name : here.name
@@ -1520,35 +1540,48 @@ Panel {
 
     var left = key === Qt.Key_Left || text === "h"
     var right = key === Qt.Key_Right || text === "l"
-    if (tab === "world") {
-      // The clock face chooser: ← → style, Enter / Space / Esc close.
-      if (dialChooserOpen) {
-        if (left || right) stepDialStyle((right ? 1 : -1) * (LayoutMirroring.enabled ? -1 : 1))
-        else if (key === Qt.Key_Return || key === Qt.Key_Enter || key === Qt.Key_Space || text === "e") dialChooserOpen = false
-        else if (key === Qt.Key_Up || key === Qt.Key_Down || text === "j" || text === "k") return
-        event.accepted = true
-        return
-      }
-      if (text === "e") {
-        dialChooserOpen = true
-        event.accepted = true
-        return
-      }
-      if (text === "/") {
-        openCitySearch()
-        event.accepted = true
-      } else if (left || right) {
-        stepSelection("world", (right ? 1 : -1) * (LayoutMirroring.enabled ? -1 : 1))
-        event.accepted = true
-      } else if (key === Qt.Key_Delete || text === "x") {
-        if (selectedCity >= 0 && selectedCity < cityList.length) deleteItem("world", cityDeleteId(selectedCity))
-        event.accepted = true
-      }
-      return
-    }
+    if (tab === "world" ? handleWorldListKey(event, left, right) : handleItemKey(tab, event, left, right)) event.accepted = true
+  }
 
+  // The World tab's list (from handlePanelKey): the clock face chooser
+  // (← → style; Enter, Space, e close), e opens it, / the search, ← → the
+  // current place, x or Delete removes the city. True when taken.
+  function handleWorldListKey(event, left, right) {
+    var key = event.key
+    var text = event.text
+    if (dialChooserOpen) {
+      if (left || right) stepDialStyle((right ? 1 : -1) * (LayoutMirroring.enabled ? -1 : 1))
+      else if (key === Qt.Key_Return || key === Qt.Key_Enter || key === Qt.Key_Space || text === "e") dialChooserOpen = false
+      else if (key === Qt.Key_Up || key === Qt.Key_Down || text === "j" || text === "k") return false
+      return true
+    }
+    if (text === "e") {
+      dialChooserOpen = true
+      return true
+    }
+    if (text === "/") {
+      openCitySearch()
+      return true
+    }
+    if (left || right) {
+      stepSelection("world", (right ? 1 : -1) * (LayoutMirroring.enabled ? -1 : 1))
+      return true
+    }
+    if (key === Qt.Key_Delete || text === "x") {
+      if (selectedCity >= 0 && selectedCity < cityList.length) deleteItem("world", cityDeleteId(selectedCity))
+      return true
+    }
+    return false
+  }
+
+  // An item tab's selected card (from handlePanelKey): Space or Enter
+  // start / stop, e edit, r reset, l lap, s skip, x delete, ← → a minute
+  // on a timer. True when taken.
+  function handleItemKey(tab, event, left, right) {
+    var key = event.key
+    var text = event.text
     var item = selectedItem(tab)
-    if (!item) return
+    if (!item) return false
     if (key === Qt.Key_Space || key === Qt.Key_Return || key === Qt.Key_Enter) {
       toggleItem(tab, item.id)
     } else if (text === "e") {
@@ -1565,9 +1598,9 @@ Panel {
     } else if ((left || right) && tab === "timers") {
       extendTimer(item.id, (right ? 1 : -1) * 60000)
     } else {
-      return
+      return false
     }
-    event.accepted = true
+    return true
   }
 
   // ---- Wheel and touchpad, as in More Weather (Panel.wheelPixels) ----
@@ -1586,11 +1619,6 @@ Panel {
     if (wheel.pixelDelta.x !== 0 || wheel.pixelDelta.y !== 0)
       return Math.abs(wheel.pixelDelta.x) > Math.abs(wheel.pixelDelta.y)
     return Math.abs(wheel.angleDelta.x) > Math.abs(wheel.angleDelta.y)
-  }
-  // Sideways distance of a wheel step: Shift turns a vertical wheel sideways.
-  function wheelSidewaysPixels(wheel) {
-    var sideways = wheelPixels(wheel, true)
-    return sideways !== 0 ? sideways : wheelPixels(wheel, false)
   }
   // Areas inside the page that take the wheel themselves (the steppers'
   // value, the globe sideways): each has wantsWheel(wheel).

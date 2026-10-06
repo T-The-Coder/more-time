@@ -142,11 +142,19 @@ Column {
   //      read one after another into AstroEclipses.js (shared by the
   //      almanac) ----
   property int eclipseRevision: 0
-  // Every file asked for (a FileView each, kept: AstroEclipses ignores a
-  // file added twice).
-  property var eclipseFiles: []
+  // Every file asked for, appended (a FileView each, kept; a ListModel,
+  // so adding one does not read the others again).
+  ListModel { id: eclipseFiles }
+  function eclipseFileAsked(file) {
+    for (var i = 0; i < eclipseFiles.count; i++) if (eclipseFiles.get(i).file === file) return true
+    return false
+  }
+  // Not while a travel sweeps through the years (each millennium passed
+  // would be read): when it ends.
   readonly property int eclipseYear: Math.floor(sky.minuteMs / (365.25 * 86400000))
-  onEclipseYearChanged: queueEclipses()
+  readonly property bool travelling: sky.traveling
+  onEclipseYearChanged: if (!travelling) queueEclipses()
+  onTravellingChanged: if (!travelling) queueEclipses()
   onEclipseRevisionChanged: {
     infoTimer.restart()
     eventsTimer.ask()
@@ -154,15 +162,13 @@ Column {
   function queueEclipses() {
     var span = 2 * 365.25 * 86400000
     var missing = AstroEclipses.missingChunks(sky.minuteMs - span, sky.minuteMs + span)
-    var files = eclipseFiles.slice()
-    for (var i = 0; i < missing.length; i++) if (files.indexOf(missing[i].file) < 0) files.push(missing[i].file)
-    if (files.length !== eclipseFiles.length) eclipseFiles = files
+    for (var i = 0; i < missing.length; i++) if (!eclipseFileAsked(missing[i].file)) eclipseFiles.append({ file: missing[i].file })
   }
   Instantiator {
-    model: view.eclipseFiles
+    model: eclipseFiles
     delegate: FileView {
-      required property string modelData
-      path: sky.dataPath(modelData)
+      required property string file
+      path: sky.dataPath(file)
       printErrors: false
       onLoaded: {
         try { AstroEclipses.addChunk(JSON.parse(text())) } catch (e) { console.warn("more-time: eclipse data unreadable:", e) }
@@ -256,7 +262,7 @@ Column {
     var w = AstroEventWords.words(e)
     var values = {}
     for (var b in w.bodies) values[b] = panel.i18n("astroBody_" + w.bodies[b])
-    for (var n in w.numbers) values[n] = panel.latinDigits(Number(w.numbers[n]).toLocaleString(panel.interfaceLocale, "f", 1))
+    for (var n in w.numbers) values[n] = panel.formatNumber(w.numbers[n], 1)
     var text = (w.approximate ? "≈ " : "") + (w.key ? panel.i18n(w.key, values) : e.kind)
     var c = panel.currentCoordinates
     var found = e.kind === "eclipse" && c ? AstroEclipses.between(e.utcMs - 1, e.utcMs + 1)[0] : null
@@ -366,13 +372,6 @@ Column {
       turnAnimation.to = azimuth + AstroView.shortestTurn(azimuth, startAzimuth)
       turnAnimation.start()
     }
-    // Ends running camera moves at once (the screenshot harness).
-    function finishMoves() {
-      if (turnAnimation.running) turnAnimation.complete()
-      if (tiltAnimation.running) tiltAnimation.complete()
-    }
-
-    // ---- The bodies, once a minute ----
     // ---- The shown instant: now (to the minute), or pinned by the
     //      timeline, playback or a travel ("Go to date") ----
     readonly property double liveMs: Math.floor(panel.nowMs / 60000) * 60000
@@ -422,24 +421,15 @@ Column {
       if (!playing && !timePinned) showAt(Date.now())
       playing = !playing
     }
-    Timer {
+    TimeLapseTimer {
       id: playTimer
-      interval: Math.max(16, Math.round(AstroLapse.frameInterval(sky.lapse, Math.max(15, sky.rotateFps))))
-      repeat: true
+      preset: sky.lapse
+      fps: Math.max(15, sky.rotateFps)
+      shownMs: sky.minuteMs
       running: sky.playing && sky.panel.opened && sky.panel.currentTab === "astro"
-      property double last: 0
-      property double carry: 0
-      onRunningChanged: {
-        last = Date.now()
-        carry = 0
-      }
-      onTriggered: {
-        var now = Date.now()
-        var r = AstroLapse.advance(sky.minuteMs, sky.lapse, Math.min(1000, now - last), carry, 1)
-        last = now
-        carry = r.carryMs
-        sky.showAt(r.shownMs)
-        if (r.stopped) sky.playing = false
+      onAdvanced: function(ms, stopped) {
+        sky.showAt(ms)
+        if (stopped) sky.playing = false
       }
     }
     // "Play on opening" (astroAutoplay): the lapse starts when the tab shows.
@@ -743,7 +733,7 @@ Column {
       }
       if (best < 0) return null
       var abbr = constellations ? AstroStars.constellationOf(constellations, s.ra[best], s.dec[best]) : ""
-      var mag = panel.latinDigits(Number(s.mag[best]).toLocaleString(panel.interfaceLocale, "f", 1))
+      var mag = panel.formatNumber(s.mag[best], 1)
       return { key: "star:" + best, text: s.names[best] + "\n" + panel.i18n("astroStarInfo",
         { constellation: constellationName(abbr), mag: mag }), x: x, y: y }
     }
@@ -783,7 +773,7 @@ Column {
       var earth = bodies.earth.au
       var lines = [panel.i18n("astroBody_" + key)]
       function number(value, decimals) {
-        return panel.latinDigits(Number(value).toLocaleString(panel.interfaceLocale, "f", decimals))
+        return panel.formatNumber(value, decimals)
       }
       function distanceLine(textKey, au) {
         return panel.i18n(textKey, { au: number(au, au < 10 ? 2 : 1),
@@ -1511,6 +1501,230 @@ Column {
         return hits
       }
 
+      // The month ring just outside Earth's orbit: the months' starts and
+      // initials, the equinoxes and solstices, the vernal point (γ) and
+      // Earth as the hand of the year.
+      function paintMonthRing(ctx, proj, scale, sun, smallFont, labelFont) {
+        var ringRadius = AstroView.modelDistance(1.0) * 1.075
+        var ring = []
+        for (var a = 0; a < 360; a += 3) {
+          var t = a * Math.PI / 180
+          ring.push(proj({ x: Math.cos(t) * ringRadius, y: Math.sin(t) * ringRadius, z: 0 }))
+        }
+        function ringPoint(lon, k) {
+          var t = lon * Math.PI / 180
+          return proj({ x: Math.cos(t) * ringRadius * k, y: Math.sin(t) * ringRadius * k, z: 0 })
+        }
+        strokeSplit(ctx, ring, true, ink, 0.18, 0.4, 1)
+        // Month starts: short ticks; equinoxes and solstices: longer, in
+        // the accent; the month's initial in its middle.
+        var months = sky.marks.months
+        ctx.lineWidth = 1
+        for (var m = 0; m < months.length; m++) {
+          var inner = ringPoint(months[m].lon, 0.975), outer = ringPoint(months[m].lon, 1.025)
+          ctx.strokeStyle = rgba(ink, inner.depth >= 0 ? 0.45 : 0.22)
+          ctx.beginPath()
+          ctx.moveTo(inner.x, inner.y)
+          ctx.lineTo(outer.x, outer.y)
+          ctx.stroke()
+          var next = months[(m + 1) % 12].lon
+          var mid = months[m].lon + (((next - months[m].lon) % 360) + 360) % 360 / 2
+          // Initials only where the ring is large enough to hold them.
+          if (ringRadius * scale < Style.space(80)) continue
+          var at = ringPoint(mid, 1.085)
+          ctx.font = smallFont
+          ctx.textAlign = "center"
+          ctx.textBaseline = "middle"
+          ctx.fillStyle = rgba(ink, at.depth >= 0 ? 0.62 : 0.32)
+          ctx.fillText(sky.panel.interfaceLocale.standaloneMonthName(months[m].month, Locale.NarrowFormat), at.x, at.y)
+        }
+        var seasons = sky.marks.seasons
+        ctx.lineWidth = 1.6
+        for (var s = 0; s < seasons.length; s++) {
+          var s0 = ringPoint(seasons[s].lon, 0.95), s1 = ringPoint(seasons[s].lon, 1.05)
+          ctx.strokeStyle = rgba(accent, s0.depth >= 0 ? 0.8 : 0.4)
+          ctx.beginPath()
+          ctx.moveTo(s0.x, s0.y)
+          ctx.lineTo(s1.x, s1.y)
+          ctx.stroke()
+        }
+        // The vernal point: a dashed line out from the ring towards +x.
+        var v0 = ringPoint(0, 1.13), v1 = ringPoint(0, 1.32)
+        ctx.strokeStyle = rgba(ink, 0.45)
+        ctx.lineWidth = 1
+        ctx.setLineDash([3, 3])
+        ctx.beginPath()
+        ctx.moveTo(v0.x, v0.y)
+        ctx.lineTo(v1.x, v1.y)
+        ctx.stroke()
+        ctx.setLineDash([])
+        // An arrowhead and γ, the vernal point's old sign.
+        var va = Math.atan2(v1.y - v0.y, v1.x - v0.x)
+        ctx.fillStyle = rgba(ink, 0.55)
+        ctx.beginPath()
+        ctx.moveTo(v1.x, v1.y)
+        ctx.lineTo(v1.x - Math.cos(va - 0.45) * 6, v1.y - Math.sin(va - 0.45) * 6)
+        ctx.lineTo(v1.x - Math.cos(va + 0.45) * 6, v1.y - Math.sin(va + 0.45) * 6)
+        ctx.closePath()
+        ctx.fill()
+        ctx.font = labelFont
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.fillText("\u03b3", v1.x + Math.cos(va) * 9, v1.y + Math.sin(va) * 9)
+        // Earth as the hand of the year: from the Sun out to the ring.
+        var hand = ringPoint(sky.bodies.earth.au.lon, 1.05)
+        ctx.strokeStyle = rgba(accent, 0.5)
+        ctx.lineWidth = 1.2
+        ctx.beginPath()
+        ctx.moveTo(sun.x, sun.y)
+        ctx.lineTo(hand.x, hand.y)
+        ctx.stroke()
+      }
+
+      // The large moons of the planet under the pointer or clicked, close
+      // up: their circles (radius by distance, 40 px for Callisto) in
+      // their true plane, the moons where they stand.
+      function paintLargeMoons(ctx, drawn, axes) {
+        var host = drawn.filter(function(item) { return item.key === sky.moonHost })[0]
+        if (host) {
+          var keysM = AstroBodies.MOON_KEYS.filter(function(k) { return AstroBodies.MOONS[k].planet === sky.moonHost })
+          for (var mk = 0; mk < keysM.length; mk++) {
+            var mkey = keysM[mk]
+            var spec = AstroBodies.MOONS[mkey]
+            var ringPx = host.r + 6 + spec.aKm / 1882700 * 40
+            var normal = AstroBodies.moonOrbitNormal(mkey)
+            var ua = AstroRotation.norm(AstroRotation.cross(normal, axes.toward))
+            var wa = AstroRotation.cross(normal, ua)
+            ctx.strokeStyle = rgba(ink, 0.25)
+            ctx.lineWidth = 0.8
+            ctx.beginPath()
+            for (var ti = 0; ti <= 48; ti++) {
+              var tt = 2 * Math.PI * ti / 48
+              var ox = (dot(ua, axes.right) * Math.cos(tt) + dot(wa, axes.right) * Math.sin(tt)) * ringPx
+              var oy = (dot(ua, axes.up) * Math.cos(tt) + dot(wa, axes.up) * Math.sin(tt)) * ringPx
+              if (ti === 0) ctx.moveTo(host.x + ox, host.y - oy)
+              else ctx.lineTo(host.x + ox, host.y - oy)
+            }
+            ctx.stroke()
+            var rel = sky.extras[mkey].rel
+            var rr = Math.sqrt(rel.x * rel.x + rel.y * rel.y + rel.z * rel.z) || 1
+            var dir = { x: rel.x / rr, y: rel.y / rr, z: rel.z / rr }
+            var mx = host.x + dot(dir, axes.right) * ringPx, my = host.y - dot(dir, axes.up) * ringPx
+            var behind = dot(dir, axes.toward) < 0 && Math.hypot(mx - host.x, my - host.y) < host.r
+            if (behind) continue
+            ctx.fillStyle = Qt.rgba(0.88, 0.86, 0.80, 1)
+            ctx.beginPath()
+            ctx.arc(mx, my, 2.4, 0, Math.PI * 2)
+            ctx.fill()
+            drawn.push({ key: mkey, x: mx, y: my, depth: host.depth + 0.001, r: 2.4 })
+          }
+        }
+      }
+
+      // The spacecraft far beyond the view: arrows at its edge in their
+      // direction from the Sun, with the distance.
+      function paintSpacecraft(ctx, drawn, cam, sun, w, h, smallFont) {
+        var craft = ["voyager1", "voyager2", "newhorizons"]
+        ctx.font = smallFont
+        for (var ci = 0; ci < craft.length; ci++) {
+          var ca = sky.extras[craft[ci]].au
+          var cv = AstroView.view(ca, cam)
+          var cl = Math.sqrt(cv.x * cv.x + cv.y * cv.y)
+          if (cl < 1e-6) continue
+          var ux = cv.x / cl, uy = -cv.y / cl
+          // Where the ray from the Sun leaves the canvas, a little inside.
+          var tx = ux > 0 ? (w - 14 - sun.x) / ux : (ux < 0 ? (14 - sun.x) / ux : Infinity)
+          var ty = uy > 0 ? (h - 14 - sun.y) / uy : (uy < 0 ? (14 - sun.y) / uy : Infinity)
+          var tEdge = Math.max(0, Math.min(tx, ty))
+          var ex = sun.x + ux * tEdge, ey = sun.y + uy * tEdge
+          var ang = Math.atan2(uy, ux)
+          ctx.fillStyle = rgba(ink, 0.75)
+          ctx.beginPath()
+          ctx.moveTo(ex + Math.cos(ang) * 7, ey + Math.sin(ang) * 7)
+          ctx.lineTo(ex + Math.cos(ang + 2.6) * 6, ey + Math.sin(ang + 2.6) * 6)
+          ctx.lineTo(ex + Math.cos(ang - 2.6) * 6, ey + Math.sin(ang - 2.6) * 6)
+          ctx.closePath()
+          ctx.fill()
+          var clabel = sky.panel.i18n("astroBody_" + craft[ci]) + " · " + Math.round(ca.r) + " au"
+          var cw = ctx.measureText(clabel).width
+          ctx.textBaseline = "middle"
+          ctx.textAlign = "left"
+          var lx2 = Math.max(2, Math.min(w - cw - 2, ex - Math.cos(ang) * 10 - (ux > 0 ? cw : 0)))
+          var ly2 = Math.max(8, Math.min(h - 8, ey - Math.sin(ang) * 10))
+          ctx.fillStyle = rgba(ink, 0.7)
+          ctx.fillText(clabel, lx2, ly2)
+          drawn.push({ key: craft[ci], x: ex, y: ey, depth: 0, r: 7 })
+        }
+      }
+
+      // Names: beside each body where there is room; the hovered or
+      // pinned one first.
+      function paintNames(ctx, drawn, order, w, h, fontPx, labelFont) {
+        var taken = drawn.map(function(item) { return { x: item.x - item.r, y: item.y - item.r, w: item.r * 2, h: item.r * 2 } })
+        function free(rect) {
+          for (var i = 0; i < taken.length; i++) {
+            var o = taken[i]
+            if (rect.x < o.x + o.w && rect.x + rect.w > o.x && rect.y < o.y + o.h && rect.y + rect.h > o.y) return false
+          }
+          return true
+        }
+        var labelled = order.slice().reverse()
+        ctx.font = labelFont
+        for (var l = 0; l < labelled.length; l++) {
+          var item = labelled[l]
+          var name = sky.panel.i18n("astroBody_" + item.key)
+          var tw = ctx.measureText(name).width + 6
+          var th = fontPx + 4
+          var gap = item.r + 3
+          var spots = [
+            { x: item.x + gap, y: item.y - th / 2 }, { x: item.x - gap - tw, y: item.y - th / 2 },
+            { x: item.x - tw / 2, y: item.y - gap - th }, { x: item.x - tw / 2, y: item.y + gap }
+          ]
+          for (var sp = 0; sp < spots.length; sp++) {
+            var rect = { x: spots[sp].x, y: spots[sp].y, w: tw, h: th }
+            if (rect.x < 0 || rect.x + tw > w || rect.y < 0 || rect.y + th > h || !free(rect)) continue
+            taken.push(rect)
+            ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.72)
+            ctx.fillRect(rect.x, rect.y, tw, th)
+            ctx.fillStyle = item.key === sky.pinned ? accent : rgba(ink, 0.9)
+            ctx.textAlign = "left"
+            ctx.textBaseline = "middle"
+            ctx.fillText(name, rect.x + 3, rect.y + th / 2 + 0.5)
+            break
+          }
+        }
+      }
+
+      // The Earth–Moon inset in the top left corner, joined to Earth.
+      function paintInset(ctx, drawn, cam, axes, w, h) {
+        var insetSize = Math.max(Style.space(110), Math.min(Style.space(180), Math.min(w, h) * 0.3))
+        var ix = Style.space(4), iy = Style.space(4)
+        var earthHit = drawn.filter(function(item) { return item.key === "earth" })[0]
+        if (earthHit) {
+          ctx.strokeStyle = rgba(ink, 0.3)
+          ctx.lineWidth = 1
+          ctx.setLineDash([2, 3])
+          ctx.beginPath()
+          ctx.moveTo(ix + insetSize, iy + insetSize)
+          ctx.lineTo(earthHit.x, earthHit.y)
+          ctx.stroke()
+          ctx.setLineDash([])
+        }
+        ctx.save()
+        ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.92)
+        ctx.fillRect(ix, iy, insetSize, insetSize)
+        ctx.strokeStyle = rgba(ink, 0.35)
+        ctx.strokeRect(ix + 0.5, iy + 0.5, insetSize - 1, insetSize - 1)
+        ctx.beginPath()
+        ctx.rect(ix, iy, insetSize, insetSize)
+        ctx.clip()
+        var insetHits = paintEarthMoon(ctx, ix + insetSize / 2, iy + insetSize / 2, insetSize, cam, axes, true)
+        ctx.restore()
+        // The inset's Moon answers the pointer too.
+        sky.hits = sky.hits.concat(insetHits.filter(function(item) { return item.key === "moon" || item.key === "iss" }))
+        sky.insetRect = { x: ix, y: iy, w: insetSize, h: insetSize }
+      }
+
       // When the view is not now: the shown moment, bottom left.
       function paintShownLabel(ctx) {
         if (!sky.timePinned || view.showTimeline) return
@@ -1571,93 +1785,10 @@ Column {
           return
         }
 
-        // The month ring just outside Earth's orbit, and the vernal point.
-        var ringRadius = AstroView.modelDistance(1.0) * 1.075
-        var ring = []
-        for (var a = 0; a < 360; a += 3) {
-          var t = a * Math.PI / 180
-          ring.push(proj({ x: Math.cos(t) * ringRadius, y: Math.sin(t) * ringRadius, z: 0 }))
-        }
-        function ringPoint(lon, k) {
-          var t = lon * Math.PI / 180
-          return proj({ x: Math.cos(t) * ringRadius * k, y: Math.sin(t) * ringRadius * k, z: 0 })
-        }
-
         // Back halves first: orbits, the ring.
-        var orbitPoints = {}
-        if (sky.showOrbits) {
-          for (var o = 0; o < keys.length; o++) {
-            orbitPoints[keys[o]] = sky.orbits[keys[o]].map(proj)
-            strokeSplit(ctx, orbitPoints[keys[o]], true, ink, 0.13, 0.32, 1)
-          }
-        }
-        if (sky.showMonthRing) {
-          strokeSplit(ctx, ring, true, ink, 0.18, 0.4, 1)
-          // Month starts: short ticks; equinoxes and solstices: longer, in
-          // the accent; the month's initial in its middle.
-          var months = sky.marks.months
-          ctx.lineWidth = 1
-          for (var m = 0; m < months.length; m++) {
-            var inner = ringPoint(months[m].lon, 0.975), outer = ringPoint(months[m].lon, 1.025)
-            ctx.strokeStyle = rgba(ink, inner.depth >= 0 ? 0.45 : 0.22)
-            ctx.beginPath()
-            ctx.moveTo(inner.x, inner.y)
-            ctx.lineTo(outer.x, outer.y)
-            ctx.stroke()
-            var next = months[(m + 1) % 12].lon
-            var mid = months[m].lon + (((next - months[m].lon) % 360) + 360) % 360 / 2
-            // Initials only where the ring is large enough to hold them.
-            if (ringRadius * scale < Style.space(80)) continue
-            var at = ringPoint(mid, 1.085)
-            ctx.font = smallFont
-            ctx.textAlign = "center"
-            ctx.textBaseline = "middle"
-            ctx.fillStyle = rgba(ink, at.depth >= 0 ? 0.62 : 0.32)
-            ctx.fillText(sky.panel.interfaceLocale.standaloneMonthName(months[m].month, Locale.NarrowFormat), at.x, at.y)
-          }
-          var seasons = sky.marks.seasons
-          ctx.lineWidth = 1.6
-          for (var s = 0; s < seasons.length; s++) {
-            var s0 = ringPoint(seasons[s].lon, 0.95), s1 = ringPoint(seasons[s].lon, 1.05)
-            ctx.strokeStyle = rgba(accent, s0.depth >= 0 ? 0.8 : 0.4)
-            ctx.beginPath()
-            ctx.moveTo(s0.x, s0.y)
-            ctx.lineTo(s1.x, s1.y)
-            ctx.stroke()
-          }
-          // The vernal point: a dashed line out from the ring towards +x.
-          var v0 = ringPoint(0, 1.13), v1 = ringPoint(0, 1.32)
-          ctx.strokeStyle = rgba(ink, 0.45)
-          ctx.lineWidth = 1
-          ctx.setLineDash([3, 3])
-          ctx.beginPath()
-          ctx.moveTo(v0.x, v0.y)
-          ctx.lineTo(v1.x, v1.y)
-          ctx.stroke()
-          ctx.setLineDash([])
-          // An arrowhead and γ, the vernal point's old sign.
-          var va = Math.atan2(v1.y - v0.y, v1.x - v0.x)
-          ctx.fillStyle = rgba(ink, 0.55)
-          ctx.beginPath()
-          ctx.moveTo(v1.x, v1.y)
-          ctx.lineTo(v1.x - Math.cos(va - 0.45) * 6, v1.y - Math.sin(va - 0.45) * 6)
-          ctx.lineTo(v1.x - Math.cos(va + 0.45) * 6, v1.y - Math.sin(va + 0.45) * 6)
-          ctx.closePath()
-          ctx.fill()
-          ctx.font = labelFont
-          ctx.textAlign = "center"
-          ctx.textBaseline = "middle"
-          ctx.fillText("\u03b3", v1.x + Math.cos(va) * 9, v1.y + Math.sin(va) * 9)
-          // Earth as the hand of the year: from the Sun out to the ring.
-          var hand = ringPoint(sky.bodies.earth.au.lon, 1.05)
-          ctx.strokeStyle = rgba(accent, 0.5)
-          ctx.lineWidth = 1.2
-          ctx.beginPath()
-          ctx.moveTo(sun.x, sun.y)
-          ctx.lineTo(hand.x, hand.y)
-          ctx.stroke()
-        }
-
+        if (sky.showOrbits)
+          for (var o = 0; o < keys.length; o++) strokeSplit(ctx, sky.orbits[keys[o]].map(proj), true, ink, 0.13, 0.32, 1)
+        if (sky.showMonthRing) paintMonthRing(ctx, proj, scale, sun, smallFont, labelFont)
         // The belts as faint points, the small bodies' orbits dashed.
         if (sky.belts) {
           // One path for all points, the view's arithmetic inline (a
@@ -1726,150 +1857,14 @@ Column {
             drawn.push({ key: "moon", x: tinyX, y: tinyY, depth: body.depth + gv.depth * 0.01, r: 2.2 })
           }
         }
-        // The large moons of the planet under the pointer or clicked, close
-        // up: their circles (radius by distance, 40 px for Callisto) in
-        // their true plane, the moons where they stand.
-        if (sky.moonHost !== "") {
-          var host = drawn.filter(function(item) { return item.key === sky.moonHost })[0]
-          if (host) {
-            var keysM = AstroBodies.MOON_KEYS.filter(function(k) { return AstroBodies.MOONS[k].planet === sky.moonHost })
-            for (var mk = 0; mk < keysM.length; mk++) {
-              var mkey = keysM[mk]
-              var spec = AstroBodies.MOONS[mkey]
-              var ringPx = host.r + 6 + spec.aKm / 1882700 * 40
-              var normal = AstroBodies.moonOrbitNormal(mkey)
-              var ua = AstroRotation.norm(AstroRotation.cross(normal, axes.toward))
-              var wa = AstroRotation.cross(normal, ua)
-              ctx.strokeStyle = rgba(ink, 0.25)
-              ctx.lineWidth = 0.8
-              ctx.beginPath()
-              for (var ti = 0; ti <= 48; ti++) {
-                var tt = 2 * Math.PI * ti / 48
-                var ox = (dot(ua, axes.right) * Math.cos(tt) + dot(wa, axes.right) * Math.sin(tt)) * ringPx
-                var oy = (dot(ua, axes.up) * Math.cos(tt) + dot(wa, axes.up) * Math.sin(tt)) * ringPx
-                if (ti === 0) ctx.moveTo(host.x + ox, host.y - oy)
-                else ctx.lineTo(host.x + ox, host.y - oy)
-              }
-              ctx.stroke()
-              var rel = sky.extras[mkey].rel
-              var rr = Math.sqrt(rel.x * rel.x + rel.y * rel.y + rel.z * rel.z) || 1
-              var dir = { x: rel.x / rr, y: rel.y / rr, z: rel.z / rr }
-              var mx = host.x + dot(dir, axes.right) * ringPx, my = host.y - dot(dir, axes.up) * ringPx
-              var behind = dot(dir, axes.toward) < 0 && Math.hypot(mx - host.x, my - host.y) < host.r
-              if (behind) continue
-              ctx.fillStyle = Qt.rgba(0.88, 0.86, 0.80, 1)
-              ctx.beginPath()
-              ctx.arc(mx, my, 2.4, 0, Math.PI * 2)
-              ctx.fill()
-              drawn.push({ key: mkey, x: mx, y: my, depth: host.depth + 0.001, r: 2.4 })
-            }
-          }
-        }
-        // The spacecraft far beyond the view: arrows at its edge in their
-        // direction from the Sun, with the distance.
-        if (sky.showSpacecraft) {
-          var craft = ["voyager1", "voyager2", "newhorizons"]
-          ctx.font = smallFont
-          for (var ci = 0; ci < craft.length; ci++) {
-            var ca = sky.extras[craft[ci]].au
-            var cv = AstroView.view(ca, cam)
-            var cl = Math.sqrt(cv.x * cv.x + cv.y * cv.y)
-            if (cl < 1e-6) continue
-            var ux = cv.x / cl, uy = -cv.y / cl
-            // Where the ray from the Sun leaves the canvas, a little inside.
-            var tx = ux > 0 ? (w - 14 - sun.x) / ux : (ux < 0 ? (14 - sun.x) / ux : Infinity)
-            var ty = uy > 0 ? (h - 14 - sun.y) / uy : (uy < 0 ? (14 - sun.y) / uy : Infinity)
-            var tEdge = Math.max(0, Math.min(tx, ty))
-            var ex = sun.x + ux * tEdge, ey = sun.y + uy * tEdge
-            var ang = Math.atan2(uy, ux)
-            ctx.fillStyle = rgba(ink, 0.75)
-            ctx.beginPath()
-            ctx.moveTo(ex + Math.cos(ang) * 7, ey + Math.sin(ang) * 7)
-            ctx.lineTo(ex + Math.cos(ang + 2.6) * 6, ey + Math.sin(ang + 2.6) * 6)
-            ctx.lineTo(ex + Math.cos(ang - 2.6) * 6, ey + Math.sin(ang - 2.6) * 6)
-            ctx.closePath()
-            ctx.fill()
-            var clabel = sky.panel.i18n("astroBody_" + craft[ci]) + " · " + Math.round(ca.r) + " au"
-            var cw = ctx.measureText(clabel).width
-            ctx.textBaseline = "middle"
-            ctx.textAlign = "left"
-            var lx2 = Math.max(2, Math.min(w - cw - 2, ex - Math.cos(ang) * 10 - (ux > 0 ? cw : 0)))
-            var ly2 = Math.max(8, Math.min(h - 8, ey - Math.sin(ang) * 10))
-            ctx.fillStyle = rgba(ink, 0.7)
-            ctx.fillText(clabel, lx2, ly2)
-            drawn.push({ key: craft[ci], x: ex, y: ey, depth: 0, r: 7 })
-          }
-        }
+        if (sky.moonHost !== "") paintLargeMoons(ctx, drawn, axes)
+        if (sky.showSpacecraft) paintSpacecraft(ctx, drawn, cam, sun, w, h, smallFont)
         sky.hits = drawn
 
-        // Names: beside each body where there is room; the hovered or
-        // pinned one first.
-        if (sky.showNames) {
-          var taken = drawn.map(function(item) { return { x: item.x - item.r, y: item.y - item.r, w: item.r * 2, h: item.r * 2 } })
-          function free(rect) {
-            for (var i = 0; i < taken.length; i++) {
-              var o = taken[i]
-              if (rect.x < o.x + o.w && rect.x + rect.w > o.x && rect.y < o.y + o.h && rect.y + rect.h > o.y) return false
-            }
-            return true
-          }
-          var labelled = order.slice().reverse()
-          ctx.font = labelFont
-          for (var l = 0; l < labelled.length; l++) {
-            var item = labelled[l]
-            var name = sky.panel.i18n("astroBody_" + item.key)
-            var tw = ctx.measureText(name).width + 6
-            var th = fontPx + 4
-            var gap = item.r + 3
-            var spots = [
-              { x: item.x + gap, y: item.y - th / 2 }, { x: item.x - gap - tw, y: item.y - th / 2 },
-              { x: item.x - tw / 2, y: item.y - gap - th }, { x: item.x - tw / 2, y: item.y + gap }
-            ]
-            for (var sp = 0; sp < spots.length; sp++) {
-              var rect = { x: spots[sp].x, y: spots[sp].y, w: tw, h: th }
-              if (rect.x < 0 || rect.x + tw > w || rect.y < 0 || rect.y + th > h || !free(rect)) continue
-              taken.push(rect)
-              ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.72)
-              ctx.fillRect(rect.x, rect.y, tw, th)
-              ctx.fillStyle = item.key === sky.pinned ? accent : rgba(ink, 0.9)
-              ctx.textAlign = "left"
-              ctx.textBaseline = "middle"
-              ctx.fillText(name, rect.x + 3, rect.y + th / 2 + 0.5)
-              break
-            }
-          }
-        }
+        if (sky.showNames) paintNames(ctx, drawn, order, w, h, fontPx, labelFont)
 
-        // The Earth–Moon inset in the top left corner, joined to Earth.
         sky.insetRect = null
-        if (sky.showInset) {
-          var insetSize = Math.max(Style.space(110), Math.min(Style.space(180), Math.min(w, h) * 0.3))
-          var ix = Style.space(4), iy = Style.space(4)
-          var earthHit = drawn.filter(function(item) { return item.key === "earth" })[0]
-          if (earthHit) {
-            ctx.strokeStyle = rgba(ink, 0.3)
-            ctx.lineWidth = 1
-            ctx.setLineDash([2, 3])
-            ctx.beginPath()
-            ctx.moveTo(ix + insetSize, iy + insetSize)
-            ctx.lineTo(earthHit.x, earthHit.y)
-            ctx.stroke()
-            ctx.setLineDash([])
-          }
-          ctx.save()
-          ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.92)
-          ctx.fillRect(ix, iy, insetSize, insetSize)
-          ctx.strokeStyle = rgba(ink, 0.35)
-          ctx.strokeRect(ix + 0.5, iy + 0.5, insetSize - 1, insetSize - 1)
-          ctx.beginPath()
-          ctx.rect(ix, iy, insetSize, insetSize)
-          ctx.clip()
-          var insetHits = paintEarthMoon(ctx, ix + insetSize / 2, iy + insetSize / 2, insetSize, cam, axes, true)
-          ctx.restore()
-          // The inset's Moon answers the pointer too.
-          sky.hits = sky.hits.concat(insetHits.filter(function(item) { return item.key === "moon" || item.key === "iss" }))
-          sky.insetRect = { x: ix, y: iy, w: insetSize, h: insetSize }
-        }
+        if (sky.showInset) paintInset(ctx, drawn, cam, axes, w, h)
 
         paintShownLabel(ctx)
         var spent = Date.now() - started

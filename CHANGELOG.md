@@ -18,10 +18,9 @@ All notable changes to More Time are documented here.
 - **Control hints** (Settings › General › App, on by default): off, the
   lines that explain keys and gestures disappear and leave their room to
   the content; the Shortcuts page stays.
-- **Astro: time lapse.** The timeline's three speeds make way for a time
-  lapse from real time to a year in a minute, chosen from a list; the
-  shown date and time stay in view and count. "Play on opening" starts it
-  with the tab.
+- **Astro: time lapse.** The timeline plays as a time lapse from real
+  time to a year in a minute, chosen from a list; the shown date and time
+  stay in view and count. "Play on opening" starts it with the tab.
 - **World: a timeline under the map** (on by default in the app): a day in
   a minute, a day in ten seconds or the seasons (a year in a minute at the
   same clock time); the night, the twilight, the Sun and the Moon follow
@@ -89,11 +88,11 @@ All notable changes to More Time are documented here.
   bands are part of the GPU picture too, so while the globe turns only the
   Sun, the Moon and the places are drawn per frame.
 - **Astro: timeline, Go to date and the info line.** A timeline under the
-  solar system plays the year either side of today at a day, a week or a
-  month a second, with a track to drag and `,` `.` `Space` `n` keys; **Go
+  solar system shows the year either side of today, with a track to drag
+  and `,` `.` `Space` `n` keys; **Go
   to date** (`g`) travels in a time lapse to any moment from 3000 BC to
   3000 AD and stays there until **Now** brings it back (outside 1800–2050
-  from JPL's long-range elements, marked approximate). An info line names
+  from JPL's long-range elements, marked approximate). The info names
   the Moon's phase and its next new and full moon, the next equinox or
   solstice, the next opposition and the planets in the evening and the
   morning sky. Everything in the view follows the shown moment.

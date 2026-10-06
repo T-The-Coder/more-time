@@ -363,24 +363,14 @@ Column {
   Component.onDestruction: {
     panel.worldTimePinned = false
   }
-  Timer {
-    id: worldLapseTimer
-    interval: Math.max(16, Math.round(AstroLapse.frameInterval(view.lapse, view.lapseFps)))
-    repeat: true
+  TimeLapseTimer {
+    preset: view.lapse
+    fps: view.lapseFps
+    shownMs: view.panel.worldShownMs
     running: view.playing && view.panel.opened && view.panel.currentTab === "world"
-    property double last: 0
-    property double carry: 0
-    onRunningChanged: {
-      last = Date.now()
-      carry = 0
-    }
-    onTriggered: {
-      var now = Date.now()
-      var r = AstroLapse.advance(view.panel.worldShownMs, view.lapse, Math.min(1000, now - last), carry, 1)
-      last = now
-      carry = r.carryMs
-      view.showAt(r.shownMs)
-      if (r.stopped) view.playing = false
+    onAdvanced: function(ms, stopped) {
+      view.showAt(ms)
+      if (stopped) view.playing = false
     }
   }
   // The shown instant in this computer's local time.

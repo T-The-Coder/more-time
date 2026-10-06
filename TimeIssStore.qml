@@ -6,9 +6,10 @@ import "AstroIss.js" as AstroIss
 // The ISS's orbit data for the Astro tab (option astroIss, off by default):
 // one two-line element set from CelesTrak, checked (checksums, catalogue
 // number 25544) and kept in more-time-iss.json with the time it was
-// fetched, which every instance reads. Only the leading instance asks, only
-// while the option is on and the Astro tab shows, at most every 12 hours
-// (an hour after a failure); a failed fetch keeps the old data.
+// fetched, which every instance reads. The instance that shows it asks
+// (the bar's popup or the app, whichever has the Astro tab open with the
+// option on), at most every 12 hours by the shared file's time (an hour
+// after a failure); a failed fetch keeps the old data.
 QtObject {
   id: store
   required property var panel
@@ -63,7 +64,7 @@ QtObject {
   onWantedChanged: if (wanted) panel.defer(maybeFetch)
 
   function maybeFetch() {
-    if (!wanted || !loaded || !panel.ringer.isLeader || request.running) return
+    if (!wanted || !loaded || request.running) return
     var now = Date.now()
     if (elements && now - fetchedAt < refreshMs && fetchedAt <= now) return
     if (now - failedAt < retryMs) return
