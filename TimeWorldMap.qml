@@ -336,7 +336,7 @@ Item {
       var sunNow = WorldMap.subsolarPoint(map.minuteMs)
       if (map.showNight) {
         var sun = map.px(WorldMap.project(sunNow.lat, sunNow.lon))
-        WorldMap.paintSun(ctx, sun.x, sun.y, map.panel.sunColor)
+        WorldMap.paintSun(ctx, sun.x, sun.y, map.panel.sunColor, map.panel.rgbOf(Color.popups.background))
       }
       // The Moon floats a little up-left of its sub-lunar point, where its
       // shadow falls; drawn after the clip so it may stand out of the map.

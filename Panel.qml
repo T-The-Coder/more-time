@@ -71,19 +71,27 @@ Panel {
   readonly property string fontFamily: root.bar && root.bar.fontFamily
     ? root.bar.fontFamily : Style.font.family
   // The two secondary text tones used everywhere: muted for labels and
-  // supporting values, subtle for tertiary hints and hairline borders.
-  readonly property color mutedText: Qt.darker(foreground, 1.35)
+  // supporting values, subtle for tertiary hints and hairline borders. On
+  // a dark background the text darkened; on a light one darkening made
+  // them darker than the text itself, so there it is faded towards the
+  // background instead (muted keeps 4.5:1, subtle about 3:1). The same
+  // rule as More Weather's.
+  readonly property bool lightBackground: (0.2126 * Color.popups.background.r + 0.7152 * Color.popups.background.g
+    + 0.0722 * Color.popups.background.b) > 0.5
+  function fadedText(share) {
+    return Qt.tint(foreground, Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, share))
+  }
+  readonly property color mutedText: lightBackground ? fadedText(0.18) : Qt.darker(foreground, 1.35)
+  readonly property color subtleText: lightBackground ? fadedText(0.34) : Qt.darker(foreground, 1.7)
+  // Key hints: the text colour faded towards the background.
+  readonly property color hintText: fadedText(0.55)
   // The Sun wherever it is drawn (the maps' sun marker, the Astro tab): the
   // golden hour's gold, softened towards the text and kept at 3:1 on the
   // background like the sky-coloured time (WorldMap.skyColor at 0°).
   readonly property color sunColor: WorldMap.sunColor(rgbOf(foreground), rgbOf(Color.popups.background))
-  readonly property color subtleText: Qt.darker(foreground, 1.7)
-  // Key hints: the text colour faded towards the background.
   // The lines that explain keys and gestures (General › App › Control
   // hints); off, they leave their room to the content.
   readonly property bool showHints: generalSetting("showHints", true) !== false
-  readonly property color hintText: Qt.tint(foreground,
-    Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.55))
 
   function canvasFont(pixelSize, bold, italic) {
     return (italic ? "italic " : "") + (bold ? "bold " : "")

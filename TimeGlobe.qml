@@ -634,7 +634,7 @@ Item {
       var tw = globe.twilight
       if (globe.showNight) {
         var sun = screenPoint(tw.sun.lat, tw.sun.lon, lon)
-        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor)
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor, globe.panel.rgbOf(Color.popups.background))
       }
       // The Moon floats above its sub-lunar point, lifted along the view
       // direction (1.15 of its distance from the centre), its shadow on the
@@ -759,7 +759,7 @@ Item {
       }
       if (globe.showNight) {
         var sun = toScreen(tw.sun.lat, tw.sun.lon)
-        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor)
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor, globe.panel.rgbOf(Color.popups.background))
       }
       var moon = globe.showMoon ? Moon.moonPosition(globe.minuteMs) : null
       var moonAt = moon ? toScreen(moon.lat, moon.lon) : null

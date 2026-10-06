@@ -37,7 +37,7 @@ function bandFill(name) { return Sky.bandFill(name) }
 function nightFill(background) { return Sky.nightFill(background) }
 function twilightLayers(options, background) { return Sky.twilightLayers(options, background) }
 function twilightElevations(layers) { return Sky.twilightElevations(layers) }
-function paintSun(ctx, x, y, color) { Sky.paintSun(ctx, x, y, color) }
+function paintSun(ctx, x, y, color, background) { Sky.paintSun(ctx, x, y, color, background) }
 
 // Whether a projected point lies inside a ring [x0, y0, x1, y1, ...] given in
 // projected units times `scale`.
