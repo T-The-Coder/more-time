@@ -358,6 +358,48 @@ ShellRoot {
     function() { shot("13b-timers-de") },
     function() { panel.openSettings("sounds") },
     function() { shot("13c-settings-sounds-de") },
+    // The page strip at the popup's width in long languages: shrunk, then
+    // in centred lines, nothing cut off.
+    function() {
+      var pad = Style.spacing.popupPadding
+      appSize(Style.space(500) + 2 * pad, Style.space(720) + 2 * pad)
+    },
+    function() { general("language", "de"); panel.openSettings("general") },
+    function() {
+      var lines = panel.settingsItem.settingsPageLines || []
+      console.log("PAGES de", lines.length, "lines", JSON.stringify(lines.map(function(l) { return l.map(function(p) { return Math.round(p.width) }) })),
+        "width", Math.round(panel.contentRoot.width))
+      shot("16-settings-pages-de")
+    },
+    function() { general("language", "fr"); panel.openSettings("general") },
+    function() {
+      var lines = panel.settingsItem.settingsPageLines || []
+      console.log("PAGES fr", lines.length, "lines", JSON.stringify(lines.map(function(l) { return l.map(function(p) { return Math.round(p.width) }) })),
+        "width", Math.round(panel.contentRoot.width))
+      shot("16-settings-pages-fr")
+    },
+    function() { general("language", "hu"); panel.openSettings("general") },
+    function() {
+      var lines = panel.settingsItem.settingsPageLines || []
+      console.log("PAGES hu", lines.length, "lines", JSON.stringify(lines.map(function(l) { return l.map(function(p) { return Math.round(p.width) }) })),
+        "width", Math.round(panel.contentRoot.width))
+      shot("16-settings-pages-hu")
+    },
+    function() { general("language", "fi"); panel.openSettings("general") },
+    function() {
+      var lines = panel.settingsItem.settingsPageLines || []
+      console.log("PAGES fi", lines.length, "lines", JSON.stringify(lines.map(function(l) { return l.map(function(p) { return Math.round(p.width) }) })),
+        "width", Math.round(panel.contentRoot.width))
+      shot("16-settings-pages-fi")
+    },
+    function() { general("language", "en"); panel.openSettings("general") },
+    function() {
+      var lines = panel.settingsItem.settingsPageLines || []
+      console.log("PAGES en", lines.length, "lines", JSON.stringify(lines.map(function(l) { return l.map(function(p) { return Math.round(p.width) }) })),
+        "width", Math.round(panel.contentRoot.width))
+      shot("16-settings-pages-en")
+    },
+    function() { appSizeReset(); general("language", "de") },
     function() { panel.settingsOpen = false },
     function() { panel.editingId = ""; panel.activeTab = "world"; general("language", "ar") },
     function() { shot("14-world-ar") },
