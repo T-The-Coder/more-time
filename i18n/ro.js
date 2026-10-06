@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Țărmuri și fusuri orare din Natural Earth (domeniu public), în proiecția Equal Earth. Fusurile arată ora standard; ora de vară nu e desenată.",
   sourceGroupSounds: "Sunete", sourceGroupSoundsDetails: "Tema de sunete freedesktop, redată cu pw-play. Semnalele orare au cinci timbruri (bip, clopot, lemn, ciripit, sticlă), sintetizate pe acest computer (~/.cache/more-time).",
   chimes: "Semnale orare",
-  chimesHint: "Implicit un bip la fiecare sfert de oră: unul la :15, două la :30, trei la :45 și patru la ora fixă. Bătaia orei spune apoi ora pe un ton mai grav. Le opriți sunetul cu comutatorul de mai jos, cu m sau cu clopoțelul de lângă ceas, pentru widget și aplicație deodată.",
+  chimesHint: "Oprite implicit. La fiecare sfert de oră înseamnă un bip la :15, două la :30, trei la :45, patru la ora fixă; apoi bătaia orei spune ora pe un ton mai jos. Oprește-le cu comutatorul de mai jos, cu m sau cu clopoțelul de lângă ceas, pentru widget și aplicație deodată.",
   chimeInterval: "Semnal orar",
   chimeOff: "Oprit",
   chimeEveryMinute: "În fiecare minut",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Rândurile care explică tastele și gesturile, precum ↑↓ sau Alt 1–9.",
   zoomRecenter: "Înapoi la mijloc",
   zoomOut: "Micșorează",
-  zoomIn: "Mărește"
+  zoomIn: "Mărește",
+  settingsPageChanges: "Noutăți",
+  changesSubtitle: "Ce s-a schimbat în fiecare versiune",
+  changesUnreleased: "Nepublicat, deja instalat",
+  changesCurrent: "instalată",
+  changesShowOlder: "Arată versiunile mai vechi",
+  changesEnglishNote: "Jurnalul este ținut în engleză.",
+  changesNone: "Nu s-a găsit jurnalul de modificări."
 }

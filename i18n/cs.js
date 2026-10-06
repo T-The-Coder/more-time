@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Pobřeží a časová pásma z Natural Earth (volné dílo) v projekci Equal Earth. Pásma ukazují standardní čas; letní čas se nekreslí.",
   sourceGroupSounds: "Zvuky", sourceGroupSoundsDetails: "Zvukový motiv freedesktop, přehrávaný přes pw-play. Časové signály mají pět zvuků (pípnutí, zvon, dřevo, cvrlikání, sklo), syntetizovaných na tomto počítači (~/.cache/more-time).",
   chimes: "Časové signály",
-  chimesHint: "Ve výchozím stavu pípnutí každou čtvrthodinu: jedno v :15, dvě v :30, tři v :45 a čtyři v celou. Odbíjení hodin pak odpípá hodinu nižším tónem. Ztlumíte je přepínačem níže, klávesou m nebo zvonkem vedle hodin, pro widget i aplikaci zároveň.",
+  chimesHint: "Ve výchozím stavu vypnuto. Každou čtvrthodinu znamená jedno pípnutí v :15, dvě v :30, tři v :45, čtyři v celou; hodinové odbíjení pak řekne hodinu nižším tónem. Ztlumte je přepínačem níže, klávesou m nebo zvonkem u hodin, pro widget i aplikaci zároveň.",
   chimeInterval: "Časový signál",
   chimeOff: "Vypnuto",
   chimeEveryMinute: "Každou minutu",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Řádky, které vysvětlují klávesy a gesta, třeba ↑↓ nebo Alt 1–9.",
   zoomRecenter: "Zpět na střed",
   zoomOut: "Oddálit",
-  zoomIn: "Přiblížit"
+  zoomIn: "Přiblížit",
+  settingsPageChanges: "Co je nového",
+  changesSubtitle: "Co se změnilo v každé verzi",
+  changesUnreleased: "Nevydáno, už nainstalováno",
+  changesCurrent: "nainstalováno",
+  changesShowOlder: "Zobrazit starší verze",
+  changesEnglishNote: "Záznam je veden anglicky.",
+  changesNone: "Záznam změn nebyl nalezen."
 }

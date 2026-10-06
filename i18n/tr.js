@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Natural Earth’ten (kamu malı) kıyılar ve saat dilimleri, Equal Earth projeksiyonunda. Dilimler standart saattir; yaz saati çizilmez.",
   sourceGroupSounds: "Sesler", sourceGroupSoundsDetails: "freedesktop ses teması, pw-play ile çalınır. Saat sinyallerinin beş tınısı (bip, çan, tahta, cıvıltı, cam) bu bilgisayarda üretilir (~/.cache/more-time).",
   chimes: "Saat sinyalleri",
-  chimesHint: "Varsayılan olarak her çeyrek saatte bir bip: :15’te bir, :30’da iki, :45’te üç, tam saatte dört. Saat vuruşu ardından saati daha pes bir tonla sayar. Aşağıdaki anahtarla, m tuşuyla ya da saatin yanındaki zille, widget ve uygulama için birlikte sessize alın.",
+  chimesHint: "Varsayılan olarak kapalı. Her çeyrek saat; :15'te bir, :30'da iki, :45'te üç, saat başında dört bip demektir; ardından saat sesi saati daha pes bir tonla söyler. Aşağıdaki anahtarla, m ile veya saatin yanındaki zille, widget ve uygulama için birlikte susturun.",
   chimeInterval: "Saat sinyali",
   chimeOff: "Kapalı",
   chimeEveryMinute: "Her dakika",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Tuşları ve hareketleri açıklayan satırlar, örneğin ↑↓ ya da Alt 1–9.",
   zoomRecenter: "Ortaya dön",
   zoomOut: "Uzaklaştır",
-  zoomIn: "Yakınlaştır"
+  zoomIn: "Yakınlaştır",
+  settingsPageChanges: "Yenilikler",
+  changesSubtitle: "Her sürümde neler değişti",
+  changesUnreleased: "Yayımlanmadı, zaten kurulu",
+  changesCurrent: "kurulu",
+  changesShowOlder: "Eski sürümleri göster",
+  changesEnglishNote: "Günlük İngilizce tutulur.",
+  changesNone: "Değişiklik günlüğü bulunamadı."
 }

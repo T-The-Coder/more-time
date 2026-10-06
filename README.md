@@ -296,11 +296,13 @@ control.
     reported as missed at the next start, and a once-alarm is switched off
     instead of ringing a day late.
 - **Chimes:**
-  - A short beep on the clock: every quarter hour by default (one beep at :15,
-    two at :30, three at :45, four on the hour), or every minute, every hour,
-    once a day at a chosen hour, every *N* minutes (1 to 1440; up to 60 counted
-    from each full hour, longer intervals from midnight), or off.
-  - An optional hour chime tells the hour in a lower tone after the interval
+  - A short beep on the clock, off by default (Settings → Sounds → Chime):
+    every quarter hour (one beep at :15, two at :30, three at :45, four on
+    the hour), every minute, every hour, once a day at a chosen hour, or
+    every *N* minutes (1 to 1440; up to 60 counted from each full hour,
+    longer intervals from midnight). Settings saved before keep their
+    chime.
+  - An optional hour chime (off by default) tells the hour in a lower tone after the interval
     beeps, on a 12- or 24-hour dial (midnight is 12 or 24 beeps).
   - Five tones to choose from: beep, bell, wood, chirp and glass, each with
     the hour tone a fifth lower. Its own volume, and test buttons.
@@ -344,6 +346,10 @@ control.
     volume; the chimes (interval, tone, hour chime, volume, mute).
   - **Shortcuts:** every key and click, listed.
   - **Sources:** where times, places and the map come from.
+  - **What's new:** this change log, read from the installed plugin (no
+    network): a card per version, newest first, the installed one marked,
+    the three newest open and the older ones behind "Show older versions"
+    (`Enter`). The log is in English.
 - 30 languages, right to left included.
 - Full keyboard control, settings included (see below), and an IPC interface.
 

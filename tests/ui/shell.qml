@@ -341,6 +341,17 @@ ShellRoot {
     function() { panel.settingsItem.scrollBy(1000) },
     function() { shot("12c-settings-sources-licence") },
     function() { panel.settingsItem.scrollBy(-10000) },
+    // What's new: the change log, newest first; the older versions too.
+    function() { panel.openSettings("changes") },
+    function() { shot("12d-settings-changes") },
+    function() {
+      var page = findNamed(panel.contentRoot, "timeChanges") || null
+      console.log("CHANGES page", panel.settingsPage)
+      panel.settingsItem.handleKey({ key: Qt.Key_Return, text: "\r", modifiers: 0 })
+      panel.settingsItem.scrollBy(100000)
+    },
+    function() { shot("12e-settings-changes-older") },
+    function() { panel.settingsItem.scrollBy(-100000); panel.openSettings("sources") },
     function() { panel.settingsOpen = false; general("language", "de"); panel.activeTab = "alarms"; panel.editingId = panel.itemsStore.items.alarms[0].id },
     function() { shot("13-alarm-editor-de") },
     function() { panel.editingId = ""; panel.activeTab = "timers" },

@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Đường bờ biển và múi giờ từ Natural Earth (phạm vi công cộng), theo phép chiếu Equal Earth. Các múi hiển thị giờ chuẩn; giờ mùa hè không được vẽ.",
   sourceGroupSounds: "Âm thanh", sourceGroupSoundsDetails: "Chủ đề âm thanh freedesktop, phát bằng pw-play. Báo giờ có năm âm sắc (bíp, chuông, gỗ, líu lo, thủy tinh), được tổng hợp trên máy tính này (~/.cache/more-time).",
   chimes: "Báo giờ",
-  chimesHint: "Mặc định kêu bíp mỗi mười lăm phút: một lần lúc :15, hai lúc :30, ba lúc :45 và bốn lúc tròn giờ. Sau đó tiếng điểm giờ báo số giờ bằng âm trầm hơn. Tắt tiếng bằng công tắc bên dưới, phím m hoặc chiếc chuông cạnh đồng hồ, cho cả widget và ứng dụng.",
+  chimesHint: "Mặc định tắt. Mỗi mười lăm phút nghĩa là một tiếng bíp lúc :15, hai lúc :30, ba lúc :45, bốn lúc tròn giờ; sau đó tiếng chuông giờ báo giờ bằng âm trầm hơn. Tắt tiếng bằng công tắc bên dưới, phím m hoặc chuông cạnh đồng hồ, cho cả widget và ứng dụng.",
   chimeInterval: "Báo giờ",
   chimeOff: "Tắt",
   chimeEveryMinute: "Mỗi phút",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Các dòng giải thích phím và cử chỉ, như ↑↓ hoặc Alt 1–9.",
   zoomRecenter: "Về giữa",
   zoomOut: "Thu nhỏ",
-  zoomIn: "Phóng to"
+  zoomIn: "Phóng to",
+  settingsPageChanges: "Có gì mới",
+  changesSubtitle: "Những thay đổi trong mỗi phiên bản",
+  changesUnreleased: "Chưa phát hành, đã cài đặt",
+  changesCurrent: "đã cài",
+  changesShowOlder: "Hiện các phiên bản cũ hơn",
+  changesEnglishNote: "Nhật ký được viết bằng tiếng Anh.",
+  changesNone: "Không tìm thấy nhật ký thay đổi."
 }

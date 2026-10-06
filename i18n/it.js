@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Coste e fusi orari da Natural Earth (pubblico dominio), in proiezione Equal Earth. I fusi sono ora solare; l’ora legale non è disegnata.",
   sourceGroupSounds: "Suoni", sourceGroupSoundsDetails: "Il tema sonoro freedesktop, riprodotto con pw-play. I segnali orari hanno cinque timbri (bip, campana, legno, cinguettio, vetro), sintetizzati su questo computer (~/.cache/more-time).",
   chimes: "Segnali orari",
-  chimesHint: "Per impostazione predefinita un bip ogni quarto d’ora: uno alle :15, due alle :30, tre alle :45 e quattro allo scoccare dell’ora. Il rintocco delle ore dice poi l’ora con un tono più basso. Silenziali con l’interruttore qui sotto, con m o con la campanella accanto all’orologio, per il widget e l’app insieme.",
+  chimesHint: "Disattivati di default. Ogni quarto d’ora significa un bip alle :15, due alle :30, tre alle :45, quattro allo scoccare dell’ora; poi il rintocco dell’ora la dice in un tono più basso. Silenziali con l’interruttore qui sotto, con m o con la campanella accanto all’orologio, per widget e app insieme.",
   chimeInterval: "Segnale orario",
   chimeOff: "Spento",
   chimeEveryMinute: "Ogni minuto",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Le righe che spiegano tasti e gesti, come ↑↓ o Alt 1–9.",
   zoomRecenter: "Torna al centro",
   zoomOut: "Riduci",
-  zoomIn: "Ingrandisci"
+  zoomIn: "Ingrandisci",
+  settingsPageChanges: "Novità",
+  changesSubtitle: "Cosa è cambiato in ogni versione",
+  changesUnreleased: "Non pubblicato, già installato",
+  changesCurrent: "installata",
+  changesShowOlder: "Mostra versioni precedenti",
+  changesEnglishNote: "Il registro è tenuto in inglese.",
+  changesNone: "Nessun registro delle modifiche trovato."
 }

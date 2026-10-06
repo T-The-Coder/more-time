@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Rannikot ja aikavyöhykkeet Natural Earthista (vapaa käyttö), Equal Earth -projektiossa. Vyöhykkeet näyttävät normaaliajan; kesäaikaa ei piirretä.",
   sourceGroupSounds: "Äänet", sourceGroupSoundsDetails: "freedesktop-ääniteema, toistetaan pw-playlla. Aikamerkeille on viisi sointia (piippaus, kello, puu, sirkutus, lasi), jotka tehdään tällä tietokoneella (~/.cache/more-time).",
   chimes: "Aikamerkit",
-  chimesHint: "Oletuksena piippaus joka vartti: yksi :15, kaksi :30, kolme :45 ja neljä tasatunnilla. Tuntilyönti kertoo sen jälkeen tunnin matalammalla äänellä. Mykistä ne alla olevalla kytkimellä, m-näppäimellä tai kellon vieressä olevalla kellokuvakkeella, widgetille ja sovellukselle yhtä aikaa.",
+  chimesHint: "Oletuksena pois. Joka vartti tarkoittaa yhtä piippausta :15, kahta :30, kolmea :45 ja neljää tasalta; tuntilyönti kertoo sitten tunnin matalammalla äänellä. Mykistä ne alla olevalla kytkimellä, m:llä tai kellon vieressä olevalla kellolla, widgetille ja sovellukselle kerralla.",
   chimeInterval: "Aikamerkki",
   chimeOff: "Pois",
   chimeEveryMinute: "Joka minuutti",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Rivit, jotka selittävät näppäimet ja eleet, kuten ↑↓ tai Alt 1–9.",
   zoomRecenter: "Takaisin keskelle",
   zoomOut: "Loitonna",
-  zoomIn: "Lähennä"
+  zoomIn: "Lähennä",
+  settingsPageChanges: "Uutta",
+  changesSubtitle: "Mikä muuttui kussakin versiossa",
+  changesUnreleased: "Julkaisematon, jo asennettu",
+  changesCurrent: "asennettu",
+  changesShowOlder: "Näytä vanhemmat versiot",
+  changesEnglishNote: "Lokia pidetään englanniksi.",
+  changesNone: "Muutoslokia ei löytynyt."
 }

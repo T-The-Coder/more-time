@@ -251,7 +251,7 @@ var catalog = {
   sourceGroupSounds: "Sounds",
   sourceGroupSoundsDetails: "The freedesktop sound theme, played with pw-play. The chimes come in five tones (beep, bell, wood, chirp, glass), synthesized on this computer (~/.cache/more-time).",
   chimes: "Chimes",
-  chimesHint: "By default a beep every quarter hour: one at :15, two at :30, three at :45, four on the hour. The hour chime then tells the hour in a lower tone. Mute them with the switch below, with m or with the bell next to the clock, for the widget and the app at once.",
+  chimesHint: "Off by default. Every quarter hour means one beep at :15, two at :30, three at :45, four on the hour; the hour chime then tells the hour in a lower tone. Mute them with the switch below, with m or with the bell next to the clock, for the widget and the app at once.",
   chimeInterval: "Chime",
   chimeOff: "Off",
   chimeEveryMinute: "Every minute",
@@ -595,5 +595,12 @@ var catalog = {
   showHintsHint: "The lines that explain keys and gestures, such as ↑↓ or Alt 1–9.",
   zoomRecenter: "Back to the middle",
   zoomOut: "Zoom out",
-  zoomIn: "Zoom in"
+  zoomIn: "Zoom in",
+  settingsPageChanges: "What's new",
+  changesSubtitle: "What changed in each version",
+  changesUnreleased: "Unreleased, already installed",
+  changesCurrent: "installed",
+  changesShowOlder: "Show older versions",
+  changesEnglishNote: "The log is kept in English.",
+  changesNone: "No change log found."
 }

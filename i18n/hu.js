@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Partvonalak és időzónák a Natural Earthből (közkincs), Equal Earth vetületben. A zónák téli időt mutatnak; a nyári idő nincs berajzolva.",
   sourceGroupSounds: "Hangok", sourceGroupSoundsDetails: "A freedesktop hangtéma, pw-play lejátszással. Az időjelzéseknek öt hangszíne van (sípszó, harang, fa, csiripelés, üveg), ezen a gépen előállítva (~/.cache/more-time).",
   chimes: "Időjelzések",
-  chimesHint: "Alapból negyedóránként egy sípszó: egy :15-kor, kettő :30-kor, három :45-kor és négy egész órakor. Az óraütés ezután mélyebb hangon jelzi az órát. Némítás az alábbi kapcsolóval, az m billentyűvel vagy az óra melletti csengővel, a widgetben és az appban egyszerre.",
+  chimesHint: "Alapból kikapcsolva. A negyedóránként egy sípolást jelent :15-kor, kettőt :30-kor, hármat :45-kor, négyet egészkor; az óraütés ezután mélyebb hangon mondja az órát. Némítsa őket a lenti kapcsolóval, az m billentyűvel vagy az óra melletti csengővel, a widgetben és az alkalmazásban egyszerre.",
   chimeInterval: "Időjelzés",
   chimeOff: "Ki",
   chimeEveryMinute: "Percenként",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "A billentyűket és mozdulatokat magyarázó sorok, például ↑↓ vagy Alt 1–9.",
   zoomRecenter: "Vissza a közepére",
   zoomOut: "Kicsinyítés",
-  zoomIn: "Nagyítás"
+  zoomIn: "Nagyítás",
+  settingsPageChanges: "Újdonságok",
+  changesSubtitle: "Mi változott az egyes verziókban",
+  changesUnreleased: "Kiadatlan, már telepítve",
+  changesCurrent: "telepítve",
+  changesShowOlder: "Régebbi verziók mutatása",
+  changesEnglishNote: "A napló angolul készül.",
+  changesNone: "Nem található változásnapló."
 }

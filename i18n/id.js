@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Garis pantai dan zona waktu dari Natural Earth (domain publik), dalam proyeksi Equal Earth. Zona menunjukkan waktu standar; waktu musim panas tidak digambar.",
   sourceGroupSounds: "Suara", sourceGroupSoundsDetails: "Tema suara freedesktop, diputar dengan pw-play. Tanda waktu punya lima nada (bip, lonceng, kayu, cicit, kaca) yang disintesis di komputer ini (~/.cache/more-time).",
   chimes: "Tanda waktu",
-  chimesHint: "Secara bawaan satu bip setiap seperempat jam: satu pada :15, dua pada :30, tiga pada :45, dan empat tepat pada jamnya. Dentang jam lalu menyebut jamnya dengan nada lebih rendah. Bisukan dengan sakelar di bawah, tombol m, atau lonceng di samping jam, untuk widget dan aplikasi sekaligus.",
+  chimesHint: "Mati secara bawaan. Tiap seperempat jam berarti satu bip pada :15, dua pada :30, tiga pada :45, empat tepat pada jamnya; lalu bunyi jam menyebut jam dengan nada lebih rendah. Bisukan dengan sakelar di bawah, dengan m atau lonceng di samping jam, untuk widget dan aplikasi sekaligus.",
   chimeInterval: "Tanda waktu",
   chimeOff: "Mati",
   chimeEveryMinute: "Setiap menit",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Baris yang menjelaskan tombol dan gerakan, seperti ↑↓ atau Alt 1–9.",
   zoomRecenter: "Kembali ke tengah",
   zoomOut: "Perkecil",
-  zoomIn: "Perbesar"
+  zoomIn: "Perbesar",
+  settingsPageChanges: "Yang baru",
+  changesSubtitle: "Apa yang berubah di setiap versi",
+  changesUnreleased: "Belum dirilis, sudah terpasang",
+  changesCurrent: "terpasang",
+  changesShowOlder: "Tampilkan versi lama",
+  changesEnglishNote: "Log ditulis dalam bahasa Inggris.",
+  changesNone: "Log perubahan tidak ditemukan."
 }

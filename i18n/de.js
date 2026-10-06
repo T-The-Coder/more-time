@@ -251,7 +251,7 @@ var catalog = {
   sourceGroupSounds: "Töne",
   sourceGroupSoundsDetails: "Das freedesktop-Klangthema, abgespielt mit pw-play. Die Zeitsignale gibt es in fünf Klängen (Piepton, Glocke, Holz, Zirpen, Glas), auf diesem Rechner erzeugt (~/.cache/more-time).",
   chimes: "Zeitsignale",
-  chimesHint: "Standardmäßig ein Piepton jede Viertelstunde: einer um :15, zwei um :30, drei um :45, vier zur vollen Stunde. Der Stundenschlag zählt danach die Stunde in tieferem Ton. Stumm schalten mit dem Schalter unten, mit m oder mit der Glocke neben der Uhr, für Widget und App zugleich.",
+  chimesHint: "Standardmäßig aus. Jede Viertelstunde heißt: ein Ton um :15, zwei um :30, drei um :45, vier zur vollen Stunde; der Stundenschlag nennt danach die Stunde in einem tieferen Ton. Stummschalten mit dem Schalter unten, mit m oder der Glocke neben der Uhr, für Widget und App zugleich.",
   chimeInterval: "Zeitsignal",
   chimeOff: "Aus",
   chimeEveryMinute: "Jede Minute",
@@ -595,5 +595,12 @@ var catalog = {
   showHintsHint: "Die Zeilen, die Tasten und Gesten erklären, etwa ↑↓ oder Alt 1–9.",
   zoomRecenter: "Zurück zur Mitte",
   zoomOut: "Verkleinern",
-  zoomIn: "Vergrößern"
+  zoomIn: "Vergrößern",
+  settingsPageChanges: "Neuigkeiten",
+  changesSubtitle: "Was sich in jeder Version geändert hat",
+  changesUnreleased: "Unveröffentlicht, schon installiert",
+  changesCurrent: "installiert",
+  changesShowOlder: "Ältere Versionen zeigen",
+  changesEnglishNote: "Das Protokoll wird auf Englisch geführt.",
+  changesNone: "Kein Änderungsprotokoll gefunden."
 }

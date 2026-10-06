@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Costas y husos horarios de Natural Earth (dominio público), en la proyección Equal Earth. Los husos son hora estándar; el horario de verano no se dibuja.",
   sourceGroupSounds: "Sonidos", sourceGroupSoundsDetails: "El tema de sonido freedesktop, reproducido con pw-play. Las señales horarias tienen cinco tonos (pitido, campana, madera, gorjeo, cristal), sintetizados en este equipo (~/.cache/more-time).",
   chimes: "Señales horarias",
-  chimesHint: "Por defecto, un pitido cada cuarto de hora: uno a las :15, dos a las :30, tres a las :45 y cuatro en punto. La señal de la hora indica después la hora con un tono más grave. Silencia con el interruptor de abajo, con m o con la campana junto al reloj, en el widget y la app a la vez.",
+  chimesHint: "Desactivado por defecto. Cada cuarto de hora significa un pitido a las :15, dos a las :30, tres a las :45 y cuatro en punto; después el carillón de la hora la dice en un tono más grave. Siléncialos con el interruptor de abajo, con m o con la campana junto al reloj, para el widget y la app a la vez.",
   chimeInterval: "Señal horaria",
   chimeOff: "Desactivada",
   chimeEveryMinute: "Cada minuto",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Las líneas que explican teclas y gestos, como ↑↓ o Alt 1–9.",
   zoomRecenter: "Volver al centro",
   zoomOut: "Alejar",
-  zoomIn: "Acercar"
+  zoomIn: "Acercar",
+  settingsPageChanges: "Novedades",
+  changesSubtitle: "Qué cambió en cada versión",
+  changesUnreleased: "Sin publicar, ya instalado",
+  changesCurrent: "instalada",
+  changesShowOlder: "Mostrar versiones anteriores",
+  changesEnglishNote: "El registro está en inglés.",
+  changesNone: "No se encontró el registro de cambios."
 }

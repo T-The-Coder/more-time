@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Costas e fusos horários do Natural Earth (domínio público), na projeção Equal Earth. Os fusos são hora padrão; o horário de verão não é desenhado.",
   sourceGroupSounds: "Sons", sourceGroupSoundsDetails: "O tema de sons freedesktop, tocado com pw-play. Os sinais horários têm cinco timbres (bipe, sino, madeira, gorjeio, vidro), sintetizados neste computador (~/.cache/more-time).",
   chimes: "Sinais horários",
-  chimesHint: "Por padrão, um bipe a cada quarto de hora: um às :15, dois às :30, três às :45 e quatro na hora cheia. O sinal das horas diz depois a hora num tom mais grave. Silencie com o interruptor abaixo, com m ou com o sino ao lado do relógio, no widget e no app ao mesmo tempo.",
+  chimesHint: "Desligado por predefinição. Cada quarto de hora significa um bipe às :15, dois às :30, três às :45, quatro à hora certa; depois o toque da hora diz a hora num tom mais grave. Silencie-os com o interruptor abaixo, com m ou com o sino junto ao relógio, para o widget e a app de uma vez.",
   chimeInterval: "Sinal horário",
   chimeOff: "Desligado",
   chimeEveryMinute: "A cada minuto",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "As linhas que explicam teclas e gestos, como ↑↓ ou Alt 1–9.",
   zoomRecenter: "Voltar ao centro",
   zoomOut: "Diminuir zoom",
-  zoomIn: "Aumentar zoom"
+  zoomIn: "Aumentar zoom",
+  settingsPageChanges: "Novidades",
+  changesSubtitle: "O que mudou em cada versão",
+  changesUnreleased: "Não publicado, já instalado",
+  changesCurrent: "instalada",
+  changesShowOlder: "Mostrar versões anteriores",
+  changesEnglishNote: "O registo é mantido em inglês.",
+  changesNone: "Nenhum registo de alterações encontrado."
 }

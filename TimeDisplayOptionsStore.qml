@@ -51,7 +51,7 @@ Item {
     pomodoroLongEvery: 0,
     pomodoroAuto: true,
     showHints: true,
-    chimeInterval: "quarter",
+    chimeInterval: "off",
     chimeMinutes: 30,
     chimeDailyHour: 12,
     hourChime: "off",

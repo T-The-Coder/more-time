@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Kuster och tidszoner från Natural Earth (allmän egendom), i Equal Earth-projektionen. Zonerna visar normaltid; sommartid ritas inte.",
   sourceGroupSounds: "Ljud", sourceGroupSoundsDetails: "Ljudtemat från freedesktop, spelat med pw-play. Tidssignalerna finns i fem klanger (pip, klocka, trä, kvitter, glas), skapade på den här datorn (~/.cache/more-time).",
   chimes: "Tidssignaler",
-  chimesHint: "Som standard ett pip varje kvart: ett vid :15, två vid :30, tre vid :45 och fyra vid hel timme. Timslaget räknar sedan timmen med en lägre ton. Stäng av ljudet med reglaget nedan, med m eller med klockan bredvid uret, för widgeten och appen samtidigt.",
+  chimesHint: "Av som standard. Varje kvart betyder ett pip vid :15, två vid :30, tre vid :45, fyra vid hel timme; timslaget säger sedan timmen i en lägre ton. Tysta dem med reglaget nedan, med m eller med klockan vid uret, för widget och app på en gång.",
   chimeInterval: "Tidssignal",
   chimeOff: "Av",
   chimeEveryMinute: "Varje minut",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Raderna som förklarar tangenter och gester, som ↑↓ eller Alt 1–9.",
   zoomRecenter: "Tillbaka till mitten",
   zoomOut: "Zooma ut",
-  zoomIn: "Zooma in"
+  zoomIn: "Zooma in",
+  settingsPageChanges: "Nyheter",
+  changesSubtitle: "Vad som ändrades i varje version",
+  changesUnreleased: "Ej utgivet, redan installerat",
+  changesCurrent: "installerad",
+  changesShowOlder: "Visa äldre versioner",
+  changesEnglishNote: "Loggen förs på engelska.",
+  changesNone: "Ingen ändringslogg hittades."
 }

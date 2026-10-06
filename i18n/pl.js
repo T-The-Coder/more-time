@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Wybrzeża i strefy czasowe z Natural Earth (domena publiczna), w odwzorowaniu Equal Earth. Strefy pokazują czas standardowy; czasu letniego nie rysuje się.",
   sourceGroupSounds: "Dźwięki", sourceGroupSoundsDetails: "Motyw dźwiękowy freedesktop, odtwarzany przez pw-play. Sygnały czasu mają pięć brzmień (pisk, dzwon, drewno, ćwierk, szkło), syntezowanych na tym komputerze (~/.cache/more-time).",
   chimes: "Sygnały czasu",
-  chimesHint: "Domyślnie sygnał co kwadrans: jeden o :15, dwa o :30, trzy o :45 i cztery o pełnej godzinie. Wybijanie godzin podaje potem godzinę niższym tonem. Wycisz je przełącznikiem poniżej, klawiszem m lub dzwonkiem obok zegara — w widżecie i aplikacji jednocześnie.",
+  chimesHint: "Domyślnie wyłączone. Co kwadrans oznacza jeden sygnał o :15, dwa o :30, trzy o :45, cztery o pełnej godzinie; potem kurant godzinny podaje godzinę niższym tonem. Wycisz je przełącznikiem poniżej, klawiszem m lub dzwonkiem obok zegara, dla widżetu i aplikacji naraz.",
   chimeInterval: "Sygnał czasu",
   chimeOff: "Wyłączony",
   chimeEveryMinute: "Co minutę",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Wiersze objaśniające klawisze i gesty, takie jak ↑↓ czy Alt 1–9.",
   zoomRecenter: "Z powrotem na środek",
   zoomOut: "Oddal",
-  zoomIn: "Przybliż"
+  zoomIn: "Przybliż",
+  settingsPageChanges: "Co nowego",
+  changesSubtitle: "Co zmieniło się w każdej wersji",
+  changesUnreleased: "Niewydane, już zainstalowane",
+  changesCurrent: "zainstalowana",
+  changesShowOlder: "Pokaż starsze wersje",
+  changesEnglishNote: "Dziennik jest prowadzony po angielsku.",
+  changesNone: "Nie znaleziono dziennika zmian."
 }

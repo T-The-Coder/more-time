@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Kusten en tijdzones van Natural Earth (publiek domein), in de Equal Earth-projectie. De zones tonen standaardtijd; zomertijd is niet getekend.",
   sourceGroupSounds: "Geluiden", sourceGroupSoundsDetails: "Het freedesktop-geluidsthema, afgespeeld met pw-play. De tijdsignalen zijn er in vijf klanken (piep, bel, hout, tjirp, glas), op deze computer gemaakt (~/.cache/more-time).",
   chimes: "Tijdsignalen",
-  chimesHint: "Standaard een piep elk kwartier: één om :15, twee om :30, drie om :45 en vier op het hele uur. De uurslag telt daarna het uur in een lagere toon. Demp ze met de schakelaar hieronder, met m of met de bel naast de klok, voor widget en app tegelijk.",
+  chimesHint: "Standaard uit. Elk kwartier betekent één piep om :15, twee om :30, drie om :45, vier op het hele uur; de uurslag noemt daarna het uur in een lagere toon. Demp ze met de schakelaar hieronder, met m of met de bel naast de klok, voor widget en app tegelijk.",
   chimeInterval: "Tijdsignaal",
   chimeOff: "Uit",
   chimeEveryMinute: "Elke minuut",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "De regels die toetsen en gebaren uitleggen, zoals ↑↓ of Alt 1–9.",
   zoomRecenter: "Terug naar het midden",
   zoomOut: "Uitzoomen",
-  zoomIn: "Inzoomen"
+  zoomIn: "Inzoomen",
+  settingsPageChanges: "Wat is er nieuw",
+  changesSubtitle: "Wat er in elke versie veranderde",
+  changesUnreleased: "Nog niet uitgebracht, al geïnstalleerd",
+  changesCurrent: "geïnstalleerd",
+  changesShowOlder: "Oudere versies tonen",
+  changesEnglishNote: "Het logboek wordt in het Engels bijgehouden.",
+  changesNone: "Geen wijzigingslogboek gevonden."
 }

@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Côtes et fuseaux horaires de Natural Earth (domaine public), en projection Equal Earth. Les fuseaux sont en heure normale ; l’heure d’été n’est pas dessinée.",
   sourceGroupSounds: "Sons", sourceGroupSoundsDetails: "Le thème sonore freedesktop, joué avec pw-play. Les bips horaires existent en cinq timbres (bip, cloche, bois, gazouillis, verre), synthétisés sur cet ordinateur (~/.cache/more-time).",
   chimes: "Bips horaires",
-  chimesHint: "Par défaut, un bip chaque quart d’heure : un à :15, deux à :30, trois à :45, quatre à l’heure pile. La sonnerie des heures donne ensuite l’heure dans un ton plus grave. Coupez-les avec l’interrupteur ci-dessous, avec m ou avec la cloche près de l’horloge, pour le widget et l’app à la fois.",
+  chimesHint: "Désactivé par défaut. Chaque quart d’heure signifie un bip à :15, deux à :30, trois à :45, quatre à l’heure pile ; le carillon horaire annonce ensuite l’heure dans un ton plus grave. Coupez-les avec l’interrupteur ci-dessous, avec m ou la cloche à côté de l’horloge, pour le widget et l’app à la fois.",
   chimeInterval: "Bip horaire",
   chimeOff: "Désactivé",
   chimeEveryMinute: "Chaque minute",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Les lignes qui expliquent les touches et les gestes, comme ↑↓ ou Alt 1–9.",
   zoomRecenter: "Retour au centre",
   zoomOut: "Zoom arrière",
-  zoomIn: "Zoom avant"
+  zoomIn: "Zoom avant",
+  settingsPageChanges: "Nouveautés",
+  changesSubtitle: "Ce qui a changé dans chaque version",
+  changesUnreleased: "Non publié, déjà installé",
+  changesCurrent: "installée",
+  changesShowOlder: "Afficher les versions plus anciennes",
+  changesEnglishNote: "Le journal est tenu en anglais.",
+  changesNone: "Aucun journal des modifications trouvé."
 }

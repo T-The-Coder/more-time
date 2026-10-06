@@ -4,6 +4,10 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **What's new in the settings:** a sixth page shows this change log, a card
+  per version, newest first, read from the installed plugin.
+- **Chimes are off by default** for fresh settings, the hour chime too;
+  settings saved before keep their chimes.
 - **Sunrise and sunset as in More Weather:** the clock's sun line now draws
   them like More Weather's daily rows (a horizon with an arrow, 11 points,
   2 from the time) in the Sun's gold, as the city list does; the golden and

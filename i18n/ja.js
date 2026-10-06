@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Natural Earth（パブリックドメイン）の海岸線とタイムゾーンを Equal Earth 図法で表示。ゾーンは標準時で、夏時間は描かれません。",
   sourceGroupSounds: "サウンド", sourceGroupSoundsDetails: "freedesktop のサウンドテーマを pw-play で再生します。時報には 5 つの音色（ビープ、ベル、ウッド、チャープ、グラス）があり、このコンピューターで合成します（~/.cache/more-time）。",
   chimes: "時報",
-  chimesHint: "既定では 15 分ごとにビープ音: :15 に 1 回、:30 に 2 回、:45 に 3 回、正時に 4 回。続いて正時の時報が低い音で時刻を知らせます。下のスイッチ、m キー、時計の横のベルでミュートでき、ウィジェットとアプリに同時に反映されます。",
+  chimesHint: "既定ではオフ。15 分ごとにすると、:15 に 1 回、:30 に 2 回、:45 に 3 回、正時に 4 回鳴ります。続いて時報が低い音で時刻を告げます。下のスイッチ、m キー、時計の横のベルで、ウィジェットとアプリの両方をまとめて消音できます。",
   chimeInterval: "時報",
   chimeOff: "オフ",
   chimeEveryMinute: "毎分",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "↑↓ や Alt 1–9 など、キーと操作を説明する行。",
   zoomRecenter: "中央に戻る",
   zoomOut: "縮小",
-  zoomIn: "拡大"
+  zoomIn: "拡大",
+  settingsPageChanges: "新着情報",
+  changesSubtitle: "各バージョンの変更点",
+  changesUnreleased: "未リリース（インストール済み）",
+  changesCurrent: "インストール済み",
+  changesShowOlder: "古いバージョンを表示",
+  changesEnglishNote: "この記録は英語で書かれています。",
+  changesNone: "変更履歴が見つかりません。"
 }

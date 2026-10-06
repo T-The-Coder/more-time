@@ -348,7 +348,7 @@ Panel {
 
   // The chimes (Settings → Sounds → Chimes), for Model.chimePlan.
   readonly property var chimeSettings: ({
-    chimeInterval: generalSetting("chimeInterval", "quarter"),
+    chimeInterval: generalSetting("chimeInterval", "off"),
     chimeMinutes: generalSetting("chimeMinutes", 30),
     chimeDailyHour: generalSetting("chimeDailyHour", 12),
     hourChime: generalSetting("hourChime", "off")
@@ -381,7 +381,12 @@ Panel {
   // popup opens over other windows, so it starts with less.
 
   property bool settingsOpen: false
-  readonly property var settingsPages: ["general", "display", "sounds", "shortcuts", "sources"]
+  readonly property var settingsPages: ["general", "display", "sounds", "shortcuts", "sources", "changes"]
+  // A settings page's name ("What's new" has a key of its own, shared with
+  // More Weather).
+  function settingsPageName(key) {
+    return i18n(key === "changes" ? "settingsPageChanges" : "settingsPage_" + key)
+  }
   property string settingsPage: "general"
   property string settingsTargetSurface: activeSurface
   property bool appDisplayOptionsLoaded: false

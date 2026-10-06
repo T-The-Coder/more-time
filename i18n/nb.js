@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Kyster og tidssoner fra Natural Earth (fritt tilgjengelig), i Equal Earth-projeksjonen. Sonene viser normaltid; sommertid tegnes ikke.",
   sourceGroupSounds: "Lyder", sourceGroupSoundsDetails: "Lydtemaet fra freedesktop, spilt med pw-play. Tidssignalene finnes i fem klanger (pip, bjelle, tre, kvitter, glass), laget på denne datamaskinen (~/.cache/more-time).",
   chimes: "Tidssignaler",
-  chimesHint: "Som standard et pip hvert kvarter: ett ved :15, to ved :30, tre ved :45 og fire ved hel time. Timeslaget teller deretter timen med en dypere tone. Demp dem med bryteren nedenfor, med m eller med bjella ved klokken, for widgeten og appen samtidig.",
+  chimesHint: "Av som standard. Hvert kvarter betyr ett pip på :15, to på :30, tre på :45, fire på hel time; timeslaget sier deretter timen i en dypere tone. Demp dem med bryteren nedenfor, med m eller med klokken ved uret, for widget og app samtidig.",
   chimeInterval: "Tidssignal",
   chimeOff: "Av",
   chimeEveryMinute: "Hvert minutt",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "Linjene som forklarer taster og bevegelser, som ↑↓ eller Alt 1–9.",
   zoomRecenter: "Tilbake til midten",
   zoomOut: "Zoom ut",
-  zoomIn: "Zoom inn"
+  zoomIn: "Zoom inn",
+  settingsPageChanges: "Nyheter",
+  changesSubtitle: "Hva som endret seg i hver versjon",
+  changesUnreleased: "Ikke utgitt, allerede installert",
+  changesCurrent: "installert",
+  changesShowOlder: "Vis eldre versjoner",
+  changesEnglishNote: "Loggen føres på engelsk.",
+  changesNone: "Fant ingen endringslogg."
 }

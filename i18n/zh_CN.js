@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "海岸线和时区来自 Natural Earth（公有领域），采用 Equal Earth 投影。时区为标准时间，未绘制夏令时。",
   sourceGroupSounds: "声音", sourceGroupSoundsDetails: "freedesktop 声音主题，用 pw-play 播放。报时有五种音色（哔声、钟声、木琴、啾鸣、玻璃），在本机合成（~/.cache/more-time）。",
   chimes: "报时",
-  chimesHint: "默认每刻钟响一次：:15 一声，:30 两声，:45 三声，整点四声。整点报时随后以更低的音调报出钟点。可用下方开关、m 键或时钟旁的铃铛静音，小组件和应用同时生效。",
+  chimesHint: "默认关闭。每刻钟表示 :15 响一声、:30 两声、:45 三声、整点四声；随后报时用较低的音报出几点。用下面的开关、m 键或时钟旁的铃铛，可同时为小组件和应用静音。",
   chimeInterval: "报时",
   chimeOff: "关闭",
   chimeEveryMinute: "每分钟",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "说明按键和手势的行，例如 ↑↓ 或 Alt 1–9。",
   zoomRecenter: "回到中央",
   zoomOut: "缩小",
-  zoomIn: "放大"
+  zoomIn: "放大",
+  settingsPageChanges: "新功能",
+  changesSubtitle: "每个版本的变化",
+  changesUnreleased: "未发布，已安装",
+  changesCurrent: "已安装",
+  changesShowOlder: "显示更早的版本",
+  changesEnglishNote: "日志以英文记录。",
+  changesNone: "未找到更新日志。"
 }

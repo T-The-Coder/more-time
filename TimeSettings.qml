@@ -614,6 +614,8 @@ Rectangle {
     var down = key === Qt.Key_Down || text === "j" || text === "J"
     var up = key === Qt.Key_Up || text === "k" || text === "K"
     if (!searching && panel.settingsPage !== "display" && panel.settingsPage !== "general" && panel.settingsPage !== "sounds") {
+      // What's new: Enter shows the older versions.
+      if (panel.settingsPage === "changes" && (key === Qt.Key_Return || key === Qt.Key_Enter)) return changesPage.activate()
       if (down || up) {
         scrollBy((down ? 1 : -1) * Style.space(48))
         return true
@@ -914,6 +916,7 @@ Rectangle {
             text: panel.settingsPage === "shortcuts" ? panel.i18n("shortcutsSubtitle")
               : (panel.settingsPage === "general" ? panel.i18n("generalSubtitle")
               : (panel.settingsPage === "sources" ? panel.i18n("sourcesSubtitle")
+              : panel.settingsPage === "changes" ? panel.i18n("changesSubtitle")
               : panel.settingsPage === "sounds" ? panel.i18n("soundsSubtitle")
                 : panel.i18n(panel.settingsTargetSurface + "Settings")))
             color: panel.mutedText
@@ -943,7 +946,7 @@ Rectangle {
           Rectangle {
             required property string modelData
             readonly property bool selected: panel.settingsPage === modelData
-            // Five pages share the popup's width: narrower than 96 when
+            // The pages share the popup's width: narrower than 96 when
             // needed, never narrower than the name.
             width: Math.max(pageLabel.implicitWidth + Style.space(12), Math.min(Style.space(96),
               Math.max(pageLabel.implicitWidth + Style.space(20),
@@ -956,7 +959,7 @@ Rectangle {
               textFormat: Text.PlainText
               id: pageLabel
               anchors.centerIn: parent
-              text: panel.upperLabel(panel.i18n("settingsPage_" + parent.modelData))
+              text: panel.upperLabel(panel.settingsPageName(parent.modelData))
               color: parent.selected ? Style.hoverStateColor(panel.foreground, Color.accent) : panel.mutedText
               font.family: panel.fontFamily
               font.pixelSize: Style.font.caption
@@ -1071,6 +1074,13 @@ Rectangle {
 
       TimeSourcesPage {
         visible: settingsView.page === "sources"
+        width: parent.width
+        panel: settingsView.panel
+      }
+
+      TimeChangesPage {
+        id: changesPage
+        visible: settingsView.page === "changes"
         width: parent.width
         panel: settingsView.panel
       }

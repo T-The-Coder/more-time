@@ -110,7 +110,7 @@ var catalog = {
   sourceGroupMapDetails: "Natural Earth(퍼블릭 도메인)의 해안선과 시간대를 Equal Earth 도법으로 표시합니다. 시간대는 표준시이며 서머타임은 그리지 않습니다.",
   sourceGroupSounds: "소리", sourceGroupSoundsDetails: "freedesktop 사운드 테마를 pw-play로 재생합니다. 시보에는 다섯 가지 음색(삐, 종, 나무, 지저귐, 유리)이 있으며 이 컴퓨터에서 합성합니다(~/.cache/more-time).",
   chimes: "시보",
-  chimesHint: "기본값은 15분마다 삐 소리: :15에 한 번, :30에 두 번, :45에 세 번, 정각에 네 번. 이어서 정각 시보가 더 낮은 음으로 시각을 알립니다. 아래 스위치, m 키 또는 시계 옆 종으로 음소거하며, 위젯과 앱에 함께 적용됩니다.",
+  chimesHint: "기본값은 꺼짐입니다. 15분마다로 하면 :15에 한 번, :30에 두 번, :45에 세 번, 정각에 네 번 울리고, 이어서 시보가 낮은 음으로 시각을 알립니다. 아래 스위치, m 키 또는 시계 옆 종으로 위젯과 앱에서 한 번에 음소거하세요.",
   chimeInterval: "시보",
   chimeOff: "끔",
   chimeEveryMinute: "1분마다",
@@ -454,5 +454,12 @@ var catalog = {
   showHintsHint: "↑↓나 Alt 1–9처럼 키와 동작을 설명하는 줄.",
   zoomRecenter: "가운데로",
   zoomOut: "축소",
-  zoomIn: "확대"
+  zoomIn: "확대",
+  settingsPageChanges: "새로운 점",
+  changesSubtitle: "버전마다 바뀐 점",
+  changesUnreleased: "미출시, 이미 설치됨",
+  changesCurrent: "설치됨",
+  changesShowOlder: "이전 버전 보기",
+  changesEnglishNote: "기록은 영어로 작성됩니다.",
+  changesNone: "변경 기록을 찾을 수 없습니다."
 }
