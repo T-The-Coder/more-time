@@ -39,6 +39,30 @@ ShellRoot {
     content.height = h
   }
 
+  // Every glyph-only control in view: a visible Text of one or two
+  // non-letter characters whose parent is a small box (≤ 60 × 48). Logged
+  // as GLYPH <view> <code points> box x y w h, in the shot's pixels, for
+  // tools/ measuring the ink's centre in the box.
+  function dumpGlyphs(view) {
+    var root = panel.contentRoot
+    function walk(item) {
+      if (!item || !item.visible) return
+      var text = item.text
+      if (typeof text === "string" && item.font !== undefined && item.parent && text.length >= 1 && text.length <= 2
+          && !/[A-Za-z0-9]/.test(text)) {
+        var box = item.parent
+        if (box.width > 0 && box.width <= 100 && box.height > 0 && box.height <= 48) {
+          var p = box.mapToItem(root, 0, 0)
+          var codes = []
+          for (var c = 0; c < text.length; c++) codes.push(text.charCodeAt(c).toString(16))
+          console.log("GLYPH", view, codes.join("+"), Math.round(p.x), Math.round(p.y), Math.round(box.width), Math.round(box.height))
+        }
+      }
+      for (var i = 0; i < item.children.length; i++) walk(item.children[i])
+    }
+    walk(root)
+  }
+
   readonly property var steps: [
     function() {
       panel.motionForced = true
@@ -77,7 +101,7 @@ ShellRoot {
     // The timer of a second and a half rings now: the banner.
     function() { shot("11-ringing-banner") },
     function() { panel.ringer.stopNewest() },
-    function() { shot("10-world-map") },
+    function() { shot("10-world-map"); dumpGlyphs("10-world-map") },
     function() { display("worldStyle", "globe"); display("worldMoon", true) },
     function() { shot("12-world-globe") },
     function() { findNamed(panel.contentRoot, "timeWorld").showAt(Date.UTC(2026, 5, 21, 12, 0)) },
@@ -88,7 +112,7 @@ ShellRoot {
     function() { panel.searchOpen = false; panel.activeTab = "alarms" },
     function() { shot("20-alarms") },
     function() { panel.editingId = panel.itemsStore.items.alarms[0].id },
-    function() { shot("21-alarm-editor") },
+    function() { shot("21-alarm-editor"); dumpGlyphs("21-alarm-editor") },
     function() { panel.editingId = ""; panel.activeTab = "timers" },
     function() { shot("22-timers") },
     function() { panel.newTimerOpen = true },
@@ -100,7 +124,7 @@ ShellRoot {
     function() { panel.editingId = panel.itemsStore.items.pomodoros[0].id },
     function() { shot("26-pomodoro-editor") },
     function() { panel.editingId = ""; panel.activeTab = "astro" },
-    function() { shot("30-astro") },
+    function() { shot("30-astro"); dumpGlyphs("30-astro") },
     function() {
       var a = astro()
       var jupiter = a.hits.filter(function(h) { return h.key === "jupiter" })[0]
@@ -111,10 +135,10 @@ ShellRoot {
     function() { shot("32-astro-lapse-menu") },
     function() { var v = astro().parent; v.lapseMenuOpen = false; v.infoExpanded = true; v.eventsOpen = true },
     function() { panel.scrollBy(10000) },
-    function() { shot("33-astro-info-events") },
+    function() { shot("33-astro-info-events"); dumpGlyphs("33-astro-info-events") },
     function() { var v = astro().parent; v.infoExpanded = false; v.eventsOpen = false; panel.scrollBy(-10000) },
     function() { panel.openSettings("general") },
-    function() { shot("40-settings-general") },
+    function() { shot("40-settings-general"); dumpGlyphs("40-settings-general") },
     function() { panel.settingsItem.scrollBy(700) },
     function() { shot("41-settings-general-more") },
     function() { panel.settingsItem.scrollBy(10000) },

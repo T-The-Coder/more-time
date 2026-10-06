@@ -310,10 +310,11 @@ Panel {
     return dateFor(ms, offset, "short") + " " + (year < 0 ? "−" + (-year) : year) + " " + clockFor(ms, offset, false)
   }
 
-  // A line of pieces joined by " · " for a wrapping Text: the separator
-  // stays at the end of a line, never starts one.
+  // A line of pieces joined by " · " for a wrapping Text: each piece ("e
+  // edit") stays whole and the line breaks only after a "·", never before
+  // one (as in More Weather).
   function keepSeparators(text) {
-    return String(text).replace(/ · /g, "\u00a0· ")
+    return String(text).split(" · ").map(function(group) { return group.replace(/ /g, "\u00a0") }).join("\u00a0· ")
   }
 
   // A number in the interface language with `decimals` places, Latin digits.

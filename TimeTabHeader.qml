@@ -45,6 +45,7 @@ Item {
     panel: header.panel
     width: height
     label: "+"
+    labelSize: Style.font.body
     tooltip: header.addLabel
     onActivated: header.add()
   }
