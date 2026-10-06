@@ -4,6 +4,11 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Chips show "on" plainly:** a chip that is on (under the World and Astro
+  views, the time-lapse speeds) has the selected fill and accent text, as a
+  toggled button, readable on light themes too; the settings search sits
+  above the pages, the test buttons and the presets field have the
+  dropdowns' height, and Astro's "Info line" setting is called "Info".
 - **What's new in the settings:** a sixth page shows this change log, a card
   per version, newest first, read from the installed plugin.
 - **Chimes are off by default** for fresh settings, the hour chime too;

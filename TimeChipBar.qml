@@ -52,7 +52,10 @@ Item {
           width: chipRow.implicitWidth + Style.space(14)
           height: Style.space(24)
           radius: Style.cornerRadius
-          color: on || chipMouse.containsMouse ? Style.hoverFillFor(bar.panel.foreground, Color.accent) : "transparent"
+          // On: the selected fill and accent text (as a toggled icon
+          // button), clear on light and dark themes; hover: the hover fill.
+          color: on ? Style.selectedFillFor(bar.panel.foreground, Color.accent)
+            : (chipMouse.containsMouse ? Style.hoverFillFor(bar.panel.foreground, Color.accent) : "transparent")
           border.color: on ? "transparent" : Qt.rgba(bar.panel.foreground.r, bar.panel.foreground.g,
             bar.panel.foreground.b, 0.18)
           border.width: Style.spacing.hairline
@@ -66,7 +69,7 @@ Item {
               textFormat: Text.PlainText
               anchors.verticalCenter: parent.verticalCenter
               text: slot.modelData.glyph
-              color: chip.on ? Style.hoverStateColor(bar.panel.foreground, Color.accent) : bar.panel.mutedText
+              color: chip.on ? Color.accent : bar.panel.mutedText
               font.family: bar.panel.fontFamily
               font.pixelSize: Style.font.body
             }
@@ -75,7 +78,7 @@ Item {
               visible: !bar.glyphOnly
               anchors.verticalCenter: parent.verticalCenter
               text: bar.panel.i18n(slot.modelData.label)
-              color: chip.on ? Style.hoverStateColor(bar.panel.foreground, Color.accent) : bar.panel.mutedText
+              color: chip.on ? Color.accent : bar.panel.mutedText
               font.family: bar.panel.fontFamily
               font.pixelSize: Style.font.caption
               font.bold: chip.on

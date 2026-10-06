@@ -408,7 +408,8 @@ Column {
           width: speedLabel.implicitWidth + Style.space(14)
           height: Style.space(24)
           radius: Style.cornerRadius
-          color: picked || speedMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
+          color: picked ? Style.selectedFillFor(view.panel.foreground, Color.accent)
+            : (speedMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent")
           border.color: picked ? "transparent" : Qt.rgba(view.panel.foreground.r, view.panel.foreground.g, view.panel.foreground.b, 0.18)
           border.width: Style.spacing.hairline
           Text {
@@ -416,7 +417,7 @@ Column {
             textFormat: Text.PlainText
             anchors.centerIn: parent
             text: view.panel.i18n("lapseShort_" + parent.modelData)
-            color: parent.picked ? Style.hoverStateColor(view.panel.foreground, Color.accent) : view.panel.mutedText
+            color: parent.picked ? Color.accent : view.panel.mutedText
             font.family: view.panel.fontFamily
             font.pixelSize: Style.font.caption
             font.bold: parent.picked

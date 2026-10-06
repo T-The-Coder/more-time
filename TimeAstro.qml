@@ -2194,7 +2194,8 @@ Column {
         width: lapseText.implicitWidth + Style.space(14)
         height: Style.space(24)
         radius: Style.cornerRadius
-        color: view.lapseMenuOpen || lapseMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
+        color: view.lapseMenuOpen ? Style.selectedFillFor(view.panel.foreground, Color.accent)
+          : (lapseMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent")
         border.color: view.lapseMenuOpen ? "transparent" : Qt.rgba(view.panel.foreground.r, view.panel.foreground.g, view.panel.foreground.b, 0.18)
         border.width: Style.spacing.hairline
         Text {
@@ -2202,7 +2203,7 @@ Column {
           textFormat: Text.PlainText
           anchors.centerIn: parent
           text: view.panel.i18n("lapse_" + sky.lapseId) + " ▾"
-          color: view.lapseMenuOpen ? Style.hoverStateColor(view.panel.foreground, Color.accent) : view.panel.mutedText
+          color: view.lapseMenuOpen ? Color.accent : view.panel.mutedText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.caption
         }

@@ -761,6 +761,8 @@ Rectangle {
             || dropdownRow.modelData.parse(text) !== null
           visible: dropdownRow.kind === "field"
           width: dropdownRow.modelData.fieldWidth || Style.space(110)
+          // The dropdowns' height.
+          height: Style.spacing.controlHeight
           text: visible ? settingsView.dropdownValue(dropdownRow.modelData.id) : ""
           foreground: panel.foreground
           font.family: panel.fontFamily
@@ -786,6 +788,7 @@ Rectangle {
 
         TimeButton {
           id: testButton
+          compact: true
           visible: !!dropdownRow.modelData.test
           panel: settingsView.panel
           label: "\u{f040a}  " + panel.i18n("testSound")
@@ -937,6 +940,34 @@ Rectangle {
         }
       }
 
+      // Search across every page, above the pages as in More Weather (/
+      // focuses it, Esc clears, ↓ goes to the results).
+      TextField {
+        id: searchField
+        width: parent.width
+        foreground: panel.foreground
+        font.family: panel.fontFamily
+        font.pixelSize: Style.font.bodySmall
+        placeholderText: panel.i18n("settingsSearch")
+        onTextChanged: settingsView.searchQuery = text
+        onActiveFocusChanged: {
+          if (activeFocus) panel.activeTextField = searchField
+          else if (panel.activeTextField === searchField) panel.activeTextField = null
+        }
+        onAccepted: {
+          panel.restoreKeyFocus()
+          settingsView.moveFocus(1)
+        }
+        Keys.onDownPressed: {
+          panel.restoreKeyFocus()
+          settingsView.moveFocus(1)
+        }
+        Keys.onEscapePressed: {
+          if (text !== "") text = ""
+          else panel.restoreKeyFocus()
+        }
+      }
+
       // Pages, styled like the view's tabs so they read as navigation. They
       // share the popup's width (narrower than 96 when needed, never
       // narrower than the name); names too long for one line (German,
@@ -1066,34 +1097,6 @@ Rectangle {
         font.family: panel.fontFamily
         font.pixelSize: Style.font.caption
         wrapMode: Text.WordWrap
-      }
-
-      // Search across every page (/ focuses it, Esc clears, ↓ goes to the
-      // results).
-      TextField {
-        id: searchField
-        width: parent.width
-        foreground: panel.foreground
-        font.family: panel.fontFamily
-        font.pixelSize: Style.font.bodySmall
-        placeholderText: panel.i18n("settingsSearch")
-        onTextChanged: settingsView.searchQuery = text
-        onActiveFocusChanged: {
-          if (activeFocus) panel.activeTextField = searchField
-          else if (panel.activeTextField === searchField) panel.activeTextField = null
-        }
-        onAccepted: {
-          panel.restoreKeyFocus()
-          settingsView.moveFocus(1)
-        }
-        Keys.onDownPressed: {
-          panel.restoreKeyFocus()
-          settingsView.moveFocus(1)
-        }
-        Keys.onEscapePressed: {
-          if (text !== "") text = ""
-          else panel.restoreKeyFocus()
-        }
       }
 
       // The results: grouped under "Page › Card › Section".
