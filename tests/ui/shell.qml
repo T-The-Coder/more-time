@@ -14,6 +14,7 @@ ShellRoot {
   readonly property string shots: Quickshell.env("MT_SHOTS") || "/tmp"
   property int step: 0
   property var backdrop: null
+  property var dpmsFile: null
 
   function shot(name) {
     var target = panel.contentRoot
@@ -858,6 +859,20 @@ ShellRoot {
     function() { general("showHints", true); panel.scrollBy(-10000) },
     function() { shot("47c-astro-hints-on") },
     function() { panel.activeTab = "world" },
+    // The monitor turned off (the fake hyprctl's DPMS state): screenOn
+    // false, then on again at the next look.
+    function() {
+      harness.dpmsFile = Qt.createQmlObject('import Quickshell.Io; FileView { path: "' + Quickshell.env("FAKE_DPMS") + '" }', harness)
+      harness.dpmsFile.setText("off\n")
+    },
+    function() { panel.screenState.probe() },
+    function() {
+      var known = panel.screenState.hyprland
+      console.log("CHECK screen off", panel.screenOn, known ? (panel.screenOn === false ? "ok" : "WRONG") : "skipped (no Hyprland)")
+      harness.dpmsFile.setText("on\n")
+    },
+    function() { panel.screenState.probe() },
+    function() { console.log("CHECK screen on again", panel.screenOn, panel.screenOn ? "ok" : "WRONG") },
     // Deleting a city before the current one keeps the same city current.
     function() {
       panel.setCurrentPlace(2)

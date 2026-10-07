@@ -4,6 +4,10 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **Nothing moves while the monitor is off:** with the screen turned off
+  (DPMS: a key binding, or Omarchy on idle) the turns, the time lapses and
+  the ISS refresh rest as on another workspace, and go on at once when it
+  is back (`ScreenState.qml`, shared with More Weather, asks Hyprland).
 - **The globe and the solar system turn evenly and reliably:** turning by
   itself no longer stops when the pointer (and with it the keyboard focus)
   leaves the app window, nor waits the whole delay again when it comes

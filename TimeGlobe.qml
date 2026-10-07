@@ -258,9 +258,13 @@ Item {
   property bool rotating: false
   // Tilted it turns too (round its axis, the tilt kept); zoomed in it does
   // not.
-  readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "world"
-    && visible && !mouse.pressed && zoom === 0
-  onCanRotateChanged: if (!canRotate) rotating = false
+  // rotateWanted: the option and the view allow it; a press, the tab left
+  // or a zoom ends the turn (it waits the delay again). canRotate: and it
+  // can be seen now; the window out of view (another workspace, the
+  // monitor off) only pauses it, so it goes on at once when back.
+  readonly property bool rotateWanted: autoRotate && panel.currentTab === "world" && visible && !mouse.pressed && zoom === 0
+  readonly property bool canRotate: rotateWanted && panel.motionAllowed
+  onRotateWantedChanged: if (!rotateWanted) rotating = false
 
   function touched() {
     rotating = false

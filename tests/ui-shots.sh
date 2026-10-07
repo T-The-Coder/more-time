@@ -25,7 +25,12 @@ cat > "$work/home/.local/state/omarchy/settings/more-weather-locations.json" <<'
 JSON
 theme="${MT_THEME:-$HOME/.local/state/omarchy/current/theme}"
 [ -e "$theme" ] && ln -s "$theme" "$work/home/.local/state/omarchy/current/theme"
-HOME="$work/home" XDG_CACHE_HOME="$work/home/.cache" MORE_PLUGINS_OFFLINE=1 MORE_TIME_SOUND_DRY_RUN=1 XDG_RUNTIME_DIR="$work/run" MT_SHOTS="$out" QT_QPA_PLATFORM=offscreen \
+# A fake hyprctl first in PATH: the monitor's DPMS state from $work/dpms
+# (ScreenState.qml; the harness turns it off and on).
+mkdir -p "$work/bin"
+cp "$root/tests/ui/fake-hyprctl" "$work/bin/hyprctl"
+echo on > "$work/dpms"
+PATH="$work/bin:$PATH" FAKE_DPMS="$work/dpms" HOME="$work/home" XDG_CACHE_HOME="$work/home/.cache" MORE_PLUGINS_OFFLINE=1 MORE_TIME_SOUND_DRY_RUN=1 XDG_RUNTIME_DIR="$work/run" MT_SHOTS="$out" QT_QPA_PLATFORM=offscreen \
   timeout 450 qs -n -p "$work/config" >"$work/log.txt" 2>&1
 echo "log: $work/log.txt"
 echo "shots: $out"

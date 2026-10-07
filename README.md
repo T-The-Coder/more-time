@@ -85,7 +85,8 @@ control.
     itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4
     (default) or 8 minutes, at 8, 15 (default), 24 or 30 frames a second (only
     while you can see it: the popup open or the app window shown, focused or
-    not, standing still on another workspace and costing no CPU there; a
+    not, standing still on another workspace or with the monitor off and
+    costing no CPU there; a
     click, drag or the wheel stops it, the pointer merely resting on it does
     not, and the tooltips keep working; tilted it turns round its axis; each
     step is timed from the frame last shown, so the pace stays even). While it turns it is drawn more simply (flat

@@ -892,9 +892,11 @@ Column {
 
     // ---- Turning by itself (the globe's options under astro* keys) ----
     property bool rotating: false
-    readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "astro"
+    // As on the globe: out of view only pauses the turn.
+    readonly property bool rotateWanted: autoRotate && panel.currentTab === "astro"
       && visible && !mouse.pressed && !playing && !traveling
-    onCanRotateChanged: if (!canRotate) rotating = false
+    readonly property bool canRotate: rotateWanted && panel.motionAllowed
+    onRotateWantedChanged: if (!rotateWanted) rotating = false
     readonly property int rotateDelaySeconds: Number(panel.generalSetting("motionDelay", "10")) || 10
     readonly property int rotateTurnMinutes: Number(panel.generalSetting("motionSpeed", "4")) || 4
 
