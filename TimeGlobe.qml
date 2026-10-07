@@ -293,6 +293,8 @@ Item {
     id: rotateGate
     active: globe.canRotate && globe.rotating
     fps: globe.rotateFps
+    // Frames stopped: ask at once whether the monitor went off.
+    onShownChanged: if (!shown) globe.panel.screenState.probe()
     onStep: function(elapsed) {
       if (!turnAnimation.running) globe.centerLon += elapsed * 360 / (globe.rotateTurnMinutes * 60000)
     }

@@ -919,6 +919,8 @@ Column {
       id: rotateGate
       active: sky.canRotate && sky.rotating
       fps: sky.rotateFps
+      // Frames stopped: ask at once whether the monitor went off.
+      onShownChanged: if (!shown) sky.panel.screenState.probe()
       onStep: function(elapsed) {
         if (!turnAnimation.running) sky.azimuth += elapsed * 360 / (sky.rotateTurnMinutes * 60000)
       }
