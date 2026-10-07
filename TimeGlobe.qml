@@ -256,8 +256,10 @@ Item {
   // tab). A press, drag, wheel or selection change stops it and restarts the
   // wait; a pointer resting on it does not, and the tooltip follows the turn.
   property bool rotating: false
+  // Tilted it turns too (round its axis, the tilt kept); zoomed in it does
+  // not.
   readonly property bool canRotate: autoRotate && panel.motionAllowed && panel.currentTab === "world"
-    && visible && !mouse.pressed && !tilted
+    && visible && !mouse.pressed && zoom === 0
   onCanRotateChanged: if (!canRotate) rotating = false
 
   function touched() {
@@ -281,17 +283,13 @@ Item {
   // advances by the time elapsed. While turning it is drawn the cheap way
   // (cheapFrames).
   readonly property int rotateFps: Number(panel.generalSetting("motionFps", "15")) || 15
-  Timer {
-    id: rotateTimer
-    interval: Math.round(1000 / Math.max(1, globe.rotateFps))
-    repeat: true
-    running: globe.canRotate && globe.rotating
-    property double last: 0
-    onRunningChanged: last = Date.now()
-    onTriggered: {
-      var now = Date.now()
-      var elapsed = Math.min(500, now - last)
-      last = now
+  // One step per frame shown (MotionGate), so the turn keeps step with the
+  // display and stops by itself on another workspace.
+  MotionGate {
+    id: rotateGate
+    active: globe.canRotate && globe.rotating
+    fps: globe.rotateFps
+    onStep: function(elapsed) {
       if (!turnAnimation.running) globe.centerLon += elapsed * 360 / (globe.rotateTurnMinutes * 60000)
     }
   }

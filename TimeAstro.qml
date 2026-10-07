@@ -912,17 +912,12 @@ Column {
     // Frames a second as set (General → Motion, 15 unless changed); the turn
     // advances by the time elapsed.
     readonly property int rotateFps: Number(panel.generalSetting("motionFps", "15")) || 15
-    Timer {
-      id: rotateTimer
-      interval: Math.round(1000 / Math.max(1, sky.rotateFps))
-      repeat: true
-      running: sky.canRotate && sky.rotating
-      property double last: 0
-      onRunningChanged: last = Date.now()
-      onTriggered: {
-        var now = Date.now()
-        var elapsed = Math.min(500, now - last)
-        last = now
+    // One step per frame shown (MotionGate), as on the globe.
+    MotionGate {
+      id: rotateGate
+      active: sky.canRotate && sky.rotating
+      fps: sky.rotateFps
+      onStep: function(elapsed) {
         if (!turnAnimation.running) sky.azimuth += elapsed * 360 / (sky.rotateTurnMinutes * 60000)
       }
     }

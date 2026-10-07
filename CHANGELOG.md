@@ -4,6 +4,12 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **The globe and the solar system turn evenly and reliably:** turning by
+  itself no longer stops when the pointer (and with it the keyboard focus)
+  leaves the app window, nor waits the whole delay again when it comes
+  back; a tilted globe keeps turning round its axis; each step is timed
+  from the last frame shown (the new shared `MotionGate.qml`), and on
+  another workspace the turn rests, using next to no CPU.
 - **Chips show "on" plainly:** a chip that is on (under the World and Astro
   views, the time-lapse speeds) has the selected fill and accent text, as a
   toggled button, readable on light themes too; the settings search sits

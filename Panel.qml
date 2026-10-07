@@ -1786,13 +1786,14 @@ Panel {
   readonly property Item popupContentHost: popupLoader.item ? popupLoader.item.contentHost : null
   readonly property real contentHeight: contentColumn.implicitHeight
   // Whether anything may move by itself (the globe and the solar system
-  // turning): the popup open in the bar, or the app's window shown and
-  // focused. An app window left open in the background, unfocused or on
-  // another workspace, stays still. motionForced: the screenshot harness,
-  // whose offscreen window never has the focus.
+  // turning): the popup open in the bar, or the app's window shown, focused
+  // or not (keyboard focus follows the pointer in Omarchy, so the pointer
+  // leaving must not stop it). On another workspace it stays still all the
+  // same: the motion rides on the frames the window shows (MotionGate.qml),
+  // and the compositor shows none there. motionForced: the screenshot
+  // harness.
   property bool motionForced: false
-  readonly property bool motionAllowed: opened && (!standaloneMode
-    || (standaloneWindow.visible && (keyCatcher.Window.active || motionForced)))
+  readonly property bool motionAllowed: opened && (!standaloneMode || standaloneWindow.visible || motionForced)
   // The height the content shows at once, and where the tab's content
   // starts in it: the World tab fits its globe or map into what is visible.
   // In the popup its cap, not its height, which follows the content.

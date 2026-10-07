@@ -84,9 +84,11 @@ control.
     hand, the vertical wheel scrolls the tab, and if you like it turns by
     itself after 5, 10 or 30 seconds without a touch, one turn in 1, 2, 4
     (default) or 8 minutes, at 8, 15 (default), 24 or 30 frames a second (only
-    while you can see it: the popup open or the app window focused; a click,
-    drag or the wheel stops it, the pointer merely resting on it does not, and
-    the tooltips keep working). While it turns it is drawn more simply (flat
+    while you can see it: the popup open or the app window shown, focused or
+    not, standing still on another workspace and costing no CPU there; a
+    click, drag or the wheel stops it, the pointer merely resting on it does
+    not, and the tooltips keep working; tilted it turns round its axis; each
+    step is timed from the frame last shown, so the pace stays even). While it turns it is drawn more simply (flat
     instead of hatched zones, a coarser coast, only the chosen place named,
     the fills at a lower resolution), so turning stays light on the
     processor.
@@ -101,7 +103,7 @@ control.
     across. Zoomed in, a drag turns and tilts the globe (seen from any
     latitude) or pans the map; the ruler hides while the map is zoomed.
     `0` shows the whole earth again. The globe turns by itself only when
-    zoomed out.
+    zoomed out (tilted or not).
   - Optionally the Moon on the map and the globe, where it stands at the
     zenith right now: a small shaded sphere floating above its shadow, its
     phase lit towards the Sun (the same phase numbers as More Weather);
