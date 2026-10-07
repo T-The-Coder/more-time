@@ -9,7 +9,8 @@ All notable changes to More Time are documented here.
   leaves the app window, nor waits the whole delay again when it comes
   back; a tilted globe keeps turning round its axis; each step is timed
   from the last frame shown (the new shared `MotionGate.qml`), and on
-  another workspace the turn rests, using next to no CPU.
+  another workspace (asked of Hyprland) the turn, the time lapses and the
+  ISS's refresh rest, using next to no CPU.
 - **Chips show "on" plainly:** a chip that is on (under the World and Astro
   views, the time-lapse speeds) has the selected fill and accent text, as a
   toggled button, readable on light themes too; the settings search sits

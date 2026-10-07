@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import qs.Commons
 import qs.Ui
 import "Model.js" as Model
@@ -1786,14 +1787,53 @@ Panel {
   readonly property Item popupContentHost: popupLoader.item ? popupLoader.item.contentHost : null
   readonly property real contentHeight: contentColumn.implicitHeight
   // Whether anything may move by itself (the globe and the solar system
-  // turning): the popup open in the bar, or the app's window shown, focused
-  // or not (keyboard focus follows the pointer in Omarchy, so the pointer
-  // leaving must not stop it). On another workspace it stays still all the
-  // same: the motion rides on the frames the window shows (MotionGate.qml),
-  // and the compositor shows none there. motionForced: the screenshot
-  // harness.
+  // turning, the time lapses, the ISS's refresh, the events while time
+  // runs): the popup open, or the app's window shown (not minimised or
+  // hidden) on a workspace in view (appOnScreen). Not "active": with
+  // Omarchy's focus following the mouse, the window lost the keys whenever
+  // the pointer left it and the globe stopped. Hyprland keeps drawing
+  // windows on other workspaces, so the workspace is asked for. The
+  // screenshot harness, whose windows are never shown on a screen, forces
+  // them (the same rule as More Weather's).
   property bool motionForced: false
-  readonly property bool motionAllowed: opened && (!standaloneMode || standaloneWindow.visible || motionForced)
+  readonly property bool appWindowShown: !!contentRoot && !!contentRoot.Window.window && contentRoot.Window.window.visible
+    && contentRoot.Window.window.visibility !== Window.Minimized && contentRoot.Window.window.visibility !== Window.Hidden
+  // The app's window on a workspace in view, not under a fullscreen window
+  // (Hyprland's toplevel of this process, by pid). Unknown (not Hyprland,
+  // or not found yet): taken as shown.
+  property int ownPid: 0
+  property FileView ownStatFile: FileView {
+    path: root.standaloneMode ? "/proc/self/stat" : ""
+    printErrors: false
+    onLoaded: root.ownPid = Number(String(text()).split(" ")[0]) || 0
+  }
+  readonly property var ownToplevel: {
+    if (!standaloneMode || ownPid <= 0) return null
+    var list = Hyprland.toplevels ? Hyprland.toplevels.values : []
+    for (var i = 0; i < list.length; i++) {
+      var info = list[i].lastIpcObject
+      if (info && info.pid === ownPid) return list[i]
+    }
+    return null
+  }
+  // lastIpcObject (pid, fullscreen) is filled by a refresh: on start and
+  // whenever windows open, close or move.
+  Connections {
+    target: root.standaloneMode ? Hyprland : null
+    function onRawEvent(event) {
+      var name = event.name
+      if (name === "openwindow" || name === "closewindow" || name === "movewindowv2" || name === "fullscreen")
+        Hyprland.refreshToplevels()
+    }
+  }
+  onOwnPidChanged: if (ownPid > 0) Hyprland.refreshToplevels()
+  readonly property bool appOnScreen: {
+    var top = ownToplevel
+    if (!top || !top.workspace) return true
+    var info = top.lastIpcObject || {}
+    return top.workspace.active && !(top.workspace.hasFullscreen && !info.fullscreen)
+  }
+  readonly property bool motionAllowed: motionForced || (opened && (!standaloneMode || (appWindowShown && appOnScreen)))
   // The height the content shows at once, and where the tab's content
   // starts in it: the World tab fits its globe or map into what is visible.
   // In the popup its cap, not its height, which follows the content.

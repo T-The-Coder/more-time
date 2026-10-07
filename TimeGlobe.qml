@@ -396,7 +396,7 @@ Item {
   Timer {
     interval: 5000
     repeat: true
-    running: globe.panel.opened && globe.panel.currentTab === "world" && globe.visible
+    running: globe.panel.motionAllowed && globe.panel.currentTab === "world" && globe.visible
     onRunningChanged: {
       globe.perfLast = null
       if (running) globe.panel.globeItem = globe

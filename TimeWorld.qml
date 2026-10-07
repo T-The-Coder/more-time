@@ -367,7 +367,7 @@ Column {
     preset: view.lapse
     fps: view.lapseFps
     shownMs: view.panel.worldShownMs
-    running: view.playing && view.panel.opened && view.panel.currentTab === "world"
+    running: view.playing && view.panel.motionAllowed && view.panel.currentTab === "world"
     onAdvanced: function(ms, stopped) {
       view.showAt(ms)
       if (stopped) view.playing = false

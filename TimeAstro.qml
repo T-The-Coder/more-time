@@ -426,7 +426,7 @@ Column {
       preset: sky.lapse
       fps: Math.max(15, sky.rotateFps)
       shownMs: sky.minuteMs
-      running: sky.playing && sky.panel.opened && sky.panel.currentTab === "astro"
+      running: sky.playing && sky.panel.motionAllowed && sky.panel.currentTab === "astro"
       onAdvanced: function(ms, stopped) {
         sky.showAt(ms)
         if (stopped) sky.playing = false
@@ -468,7 +468,7 @@ Column {
     Timer {
       interval: 33
       repeat: true
-      running: sky.traveling && sky.panel.opened
+      running: sky.traveling && sky.panel.motionAllowed
       onTriggered: {
         var t = (Date.now() - sky.travelStart) / AstroDate.TRAVEL_MS
         if (t >= 1) {
