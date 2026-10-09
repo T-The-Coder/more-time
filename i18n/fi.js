@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Maailma", alarmsTab: "Herätykset", timersTab: "Ajastimet", stopwatchesTab: "Sekuntikello", pomodorosTab: "Pomodoro",
-  worldTabHint: "Aikavyöhykkeiden kartta tai karttapallo ja kaupunkiesi kellonajat.",
+  worldTabHint: "Aikavyöhykkeiden kartta tai karttapallo, yö, hämärä, aurinko ja kuu, ja alla aikajana.",
   alarmsTabHint: "Herätykset soivat tiettyyn aikaan, kerran tai valittuina päivinä.",
   timersTabHint: "Ajastimet laskevat alaspäin ja soivat lopuksi.",
   stopwatchesTabHint: "Sekuntikellot laskevat ylöspäin ja ottavat kierrosaikoja.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Avaa widget osoitettaessa", citiesCount: "Kaupungit palkissa", clockSection: "Kello",
   optionSeconds: "Sekunnit", optionDate: "Päiväys", optionWeek: "Viikkonumero", optionDayOfYear: "Vuoden päivä",
   optionZone: "Aikavyöhyke", optionAnalog: "Kellotaulu", optionNextAlarm: "Seuraava herätys", optionMap: "Kartta", optionNight: "Yöpuoli",
-  optionRuler: "Tunnit kartan ylä- ja alapuolella", optionMapLabels: "Kaupunkien nimet kartalla", optionCityList: "Kaupunkiluettelo",
+  optionRuler: "Tunnit kartan ylä- ja alapuolella", optionMapLabels: "Kaupunkien nimet kartalla",
   optionDifference: "Päivä ja ero tänne", optionHundredths: "Sadasosat", defaultTab: "Välilehti avattaessa",
   shortcutsGroupGeneral: "Yleiset", shortcutsGroupItems: "Herätykset, ajastimet, sekuntikellot, pomodorot",
   shortcutsGroupEditor: "Muokattaessa", shortcutsGroupWorld: "Maailma", shortcutsGroupRinging: "Kun jokin soi",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Näkymän alla olevat sirut vaihtavat samoja asioita.",
   sectionMap: "Kartta",
   sectionSky: "Taivas",
-  sectionCityList: "Kaupunkiluettelo",
   sectionShown: "Näkyvät",
   sectionObjects: "Kohteet",
   sectionTime: "Aika",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "asennettu",
   changesShowOlder: "Näytä vanhemmat versiot",
   changesEnglishNote: "Lokia pidetään englanniksi.",
-  changesNone: "Muutoslokia ei löytynyt."
+  changesNone: "Muutoslokia ei löytynyt.",
+  placesTab: "Paikat",
+  placesTabHint: "Täällä ja kaupunkisi: niiden aika, päivä ja ero tähän, auringonnousu ja -lasku sekä kellotaulu jokaiselle."
 }

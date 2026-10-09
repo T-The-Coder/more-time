@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Verden", alarmsTab: "Alarmer", timersTab: "Timere", stopwatchesTab: "Stopur", pomodorosTab: "Pomodoro",
-  worldTabHint: "Et kort eller en globus over tidszonerne og klokken i dine byer.",
+  worldTabHint: "Et kort eller en globus over tidszonerne med natten, tusmørket, Solen og Månen og en tidslinje nedenunder.",
   alarmsTabHint: "Alarmer ringer på et klokkeslæt, én gang eller på valgte ugedage.",
   timersTabHint: "Timere tæller ned og ringer, når tiden er gået.",
   stopwatchesTabHint: "Stopure tæller op og tager omgange.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Åbn widgetten ved peger", citiesCount: "Byer i linjen", clockSection: "Ur",
   optionSeconds: "Sekunder", optionDate: "Dato", optionWeek: "Ugenummer", optionDayOfYear: "Dag i året",
   optionZone: "Tidszone", optionAnalog: "Urskive", optionNextAlarm: "Næste alarm", optionMap: "Kort", optionNight: "Natsiden",
-  optionRuler: "Timer over og under kortet", optionMapLabels: "Bynavne på kortet", optionCityList: "Byliste",
+  optionRuler: "Timer over og under kortet", optionMapLabels: "Bynavne på kortet",
   optionDifference: "Dag og forskel fra her", optionHundredths: "Hundrededele", defaultTab: "Fane ved åbning",
   shortcutsGroupGeneral: "Generelt", shortcutsGroupItems: "Alarmer, timere, stopure, pomodoroer",
   shortcutsGroupEditor: "Under redigering", shortcutsGroupWorld: "Verden", shortcutsGroupRinging: "Når noget ringer",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Knapperne under visningen slår det samme til og fra.",
   sectionMap: "Kort",
   sectionSky: "Himmel",
-  sectionCityList: "Byliste",
   sectionShown: "Vist",
   sectionObjects: "Objekter",
   sectionTime: "Tid",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "installeret",
   changesShowOlder: "Vis ældre versioner",
   changesEnglishNote: "Loggen føres på engelsk.",
-  changesNone: "Ingen ændringslog fundet."
+  changesNone: "Ingen ændringslog fundet.",
+  placesTab: "Steder",
+  placesTabHint: "Her og dine byer: deres tid, dagen og forskellen til her, solopgang og solnedgang og en urskive til hver."
 }

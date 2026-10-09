@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Wereld", alarmsTab: "Wekkers", timersTab: "Timers", stopwatchesTab: "Stopwatch", pomodorosTab: "Pomodoro",
-  worldTabHint: "Een kaart of een globe van de tijdzones en de tijd in je steden.",
+  worldTabHint: "Een kaart of een globe van de tijdzones, met de nacht, de schemering, de zon en de maan, en daaronder een tijdlijn.",
   alarmsTabHint: "Wekkers gaan af op een tijd van de dag, eenmalig of op gekozen dagen.",
   timersTabHint: "Timers tellen af en gaan af als ze klaar zijn.",
   stopwatchesTabHint: "Stopwatches tellen op en nemen rondes.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Widget openen bij aanwijzen", citiesCount: "Steden in de balk", clockSection: "Klok",
   optionSeconds: "Seconden", optionDate: "Datum", optionWeek: "Weeknummer", optionDayOfYear: "Dag van het jaar",
   optionZone: "Tijdzone", optionAnalog: "Wijzerplaat", optionNextAlarm: "Volgende wekker", optionMap: "Kaart", optionNight: "Nachtzijde",
-  optionRuler: "Uren boven en onder de kaart", optionMapLabels: "Plaatsnamen op de kaart", optionCityList: "Stedenlijst",
+  optionRuler: "Uren boven en onder de kaart", optionMapLabels: "Plaatsnamen op de kaart",
   optionDifference: "Dag en verschil met hier", optionHundredths: "Honderdsten", defaultTab: "Tabblad bij openen",
   shortcutsGroupGeneral: "Algemeen", shortcutsGroupItems: "Wekkers, timers, stopwatches, pomodoro’s",
   shortcutsGroupEditor: "Tijdens bewerken", shortcutsGroupWorld: "Wereld", shortcutsGroupRinging: "Als er iets afgaat",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "De chips onder het beeld schakelen hetzelfde.",
   sectionMap: "Kaart",
   sectionSky: "Hemel",
-  sectionCityList: "Stedenlijst",
   sectionShown: "Getoond",
   sectionObjects: "Objecten",
   sectionTime: "Tijd",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "geïnstalleerd",
   changesShowOlder: "Oudere versies tonen",
   changesEnglishNote: "Het logboek wordt in het Engels bijgehouden.",
-  changesNone: "Geen wijzigingslogboek gevonden."
+  changesNone: "Geen wijzigingslogboek gevonden.",
+  placesTab: "Plaatsen",
+  placesTabHint: "Hier en je steden: hun tijd, de dag en het verschil met hier, zonsopkomst en zonsondergang, en voor elk een wijzerplaat."
 }

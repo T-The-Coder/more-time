@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Világ", alarmsTab: "Ébresztők", timersTab: "Időzítők", stopwatchesTab: "Stopper", pomodorosTab: "Pomodoro",
-  worldTabHint: "Az időzónák térképe vagy földgömbje és az idő a városaidban.",
+  worldTabHint: "Az időzónák térképe vagy földgömbje az éjszakával, a szürkülettel, a Nappal és a Holddal, alatta idővonallal.",
   alarmsTabHint: "Az ébresztők a nap egy időpontjában szólnak, egyszer vagy a kiválasztott napokon.",
   timersTabHint: "Az időzítők visszaszámolnak, és a végén megszólalnak.",
   stopwatchesTabHint: "A stopperek felfelé számolnak és köröket mérnek.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Widget megnyitása rámutatáskor", citiesCount: "Városok a sávban", clockSection: "Óra",
   optionSeconds: "Másodpercek", optionDate: "Dátum", optionWeek: "Hét száma", optionDayOfYear: "Az év napja",
   optionZone: "Időzóna", optionAnalog: "Számlap", optionNextAlarm: "Következő ébresztő", optionMap: "Térkép", optionNight: "Éjszakai oldal",
-  optionRuler: "Órák a térkép felett és alatt", optionMapLabels: "Városnevek a térképen", optionCityList: "Városlista",
+  optionRuler: "Órák a térkép felett és alatt", optionMapLabels: "Városnevek a térképen",
   optionDifference: "Nap és eltérés innen", optionHundredths: "Századok", defaultTab: "Lap megnyitáskor",
   shortcutsGroupGeneral: "Általános", shortcutsGroupItems: "Ébresztők, időzítők, stopperek, pomodorók",
   shortcutsGroupEditor: "Szerkesztés közben", shortcutsGroupWorld: "Világ", shortcutsGroupRinging: "Amikor valami szól",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "A nézet alatti gombok ugyanezt kapcsolják.",
   sectionMap: "Térkép",
   sectionSky: "Égbolt",
-  sectionCityList: "Városlista",
   sectionShown: "Látható",
   sectionObjects: "Objektumok",
   sectionTime: "Idő",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "telepítve",
   changesShowOlder: "Régebbi verziók mutatása",
   changesEnglishNote: "A napló angolul készül.",
-  changesNone: "Nem található változásnapló."
+  changesNone: "Nem található változásnapló.",
+  placesTab: "Helyek",
+  placesTabHint: "Itt és a városaid: az idejük, a nap és az eltérés ehhez képest, napkelte és napnyugta, és mindegyiknek egy számlap."
 }

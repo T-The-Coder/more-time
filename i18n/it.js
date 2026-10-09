@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Mondo", alarmsTab: "Sveglie", timersTab: "Timer", stopwatchesTab: "Cronometro", pomodorosTab: "Pomodoro",
-  worldTabHint: "Una mappa o un globo dei fusi orari e l’ora nelle tue città.",
+  worldTabHint: "Una mappa o un globo dei fusi orari, con la notte, il crepuscolo, il Sole e la Luna, e una linea del tempo sotto.",
   alarmsTabHint: "Le sveglie suonano a un’ora del giorno, una volta o nei giorni scelti.",
   timersTabHint: "I timer fanno il conto alla rovescia e suonano alla fine.",
   stopwatchesTabHint: "I cronometri contano e prendono i giri.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Apri il widget al passaggio", citiesCount: "Città nella barra", clockSection: "Orologio",
   optionSeconds: "Secondi", optionDate: "Data", optionWeek: "Numero di settimana", optionDayOfYear: "Giorno dell’anno",
   optionZone: "Fuso orario", optionAnalog: "Quadrante", optionNextAlarm: "Prossima sveglia", optionMap: "Mappa", optionNight: "Lato notturno",
-  optionRuler: "Ore sopra e sotto la mappa", optionMapLabels: "Nomi delle città sulla mappa", optionCityList: "Elenco città",
+  optionRuler: "Ore sopra e sotto la mappa", optionMapLabels: "Nomi delle città sulla mappa",
   optionDifference: "Giorno e differenza da qui", optionHundredths: "Centesimi", defaultTab: "Scheda all’apertura",
   shortcutsGroupGeneral: "Generale", shortcutsGroupItems: "Sveglie, timer, cronometri, pomodori",
   shortcutsGroupEditor: "Durante la modifica", shortcutsGroupWorld: "Mondo", shortcutsGroupRinging: "Mentre qualcosa suona",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "I chip sotto la vista cambiano le stesse cose.",
   sectionMap: "Mappa",
   sectionSky: "Cielo",
-  sectionCityList: "Elenco città",
   sectionShown: "Mostrato",
   sectionObjects: "Oggetti",
   sectionTime: "Tempo",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "installata",
   changesShowOlder: "Mostra versioni precedenti",
   changesEnglishNote: "Il registro è tenuto in inglese.",
-  changesNone: "Nessun registro delle modifiche trovato."
+  changesNone: "Nessun registro delle modifiche trovato.",
+  placesTab: "Luoghi",
+  placesTabHint: "Qui e le tue città: l’ora, il giorno e la differenza da qui, alba e tramonto, e un quadrante per ciascuna."
 }

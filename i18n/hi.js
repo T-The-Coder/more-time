@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "विश्व", alarmsTab: "अलार्म", timersTab: "टाइमर", stopwatchesTab: "स्टॉपवॉच", pomodorosTab: "पोमोडोरो",
-  worldTabHint: "समय क्षेत्रों का नक़्शा या ग्लोब और आपके शहरों का समय।",
+  worldTabHint: "समय क्षेत्रों का नक्शा या ग्लोब, रात, गोधूलि, सूर्य और चंद्रमा के साथ, और नीचे एक समयरेखा।",
   alarmsTabHint: "अलार्म दिन के तय समय पर बजते हैं, एक बार या चुने हुए दिनों पर।",
   timersTabHint: "टाइमर उल्टी गिनती करते हैं और ख़त्म होने पर बजते हैं।",
   stopwatchesTabHint: "स्टॉपवॉच समय गिनती हैं और लैप लेती हैं।",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "होवर पर विजेट खोलें", citiesCount: "बार में शहर", clockSection: "घड़ी",
   optionSeconds: "सेकंड", optionDate: "तारीख़", optionWeek: "सप्ताह संख्या", optionDayOfYear: "वर्ष का दिन",
   optionZone: "समय क्षेत्र", optionAnalog: "डायल", optionNextAlarm: "अगला अलार्म", optionMap: "नक़्शा", optionNight: "रात का हिस्सा",
-  optionRuler: "नक़्शे के ऊपर और नीचे घंटे", optionMapLabels: "नक़्शे पर शहरों के नाम", optionCityList: "शहरों की सूची",
+  optionRuler: "नक़्शे के ऊपर और नीचे घंटे", optionMapLabels: "नक़्शे पर शहरों के नाम",
   optionDifference: "दिन और यहाँ से अंतर", optionHundredths: "सौवाँ हिस्सा", defaultTab: "खोलने पर टैब",
   shortcutsGroupGeneral: "सामान्य", shortcutsGroupItems: "अलार्म, टाइमर, स्टॉपवॉच, पोमोडोरो",
   shortcutsGroupEditor: "संपादन के दौरान", shortcutsGroupWorld: "विश्व", shortcutsGroupRinging: "जब कुछ बजे",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "दृश्य के नीचे के चिप वही चीज़ें बदलते हैं।",
   sectionMap: "नक्शा",
   sectionSky: "आकाश",
-  sectionCityList: "शहरों की सूची",
   sectionShown: "दिखाया",
   sectionObjects: "पिंड",
   sectionTime: "समय",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "इंस्टॉल",
   changesShowOlder: "पुराने संस्करण दिखाएँ",
   changesEnglishNote: "लॉग अंग्रेज़ी में रखा जाता है।",
-  changesNone: "कोई बदलाव लॉग नहीं मिला।"
+  changesNone: "कोई बदलाव लॉग नहीं मिला।",
+  placesTab: "स्थान",
+  placesTabHint: "यहाँ और आपके शहर: उनका समय, दिन और यहाँ से अंतर, सूर्योदय और सूर्यास्त, और हर एक के लिए एक घड़ी का डायल।"
 }

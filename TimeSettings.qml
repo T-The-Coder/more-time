@@ -230,13 +230,14 @@ Rectangle {
         { value: "space", label: panel.i18n("moonStyleSpace") }, { value: "earth", label: panel.i18n("moonStyleEarth") }] },
       { key: "worldTimeline", title: panel.i18n("optionWorldTimeline"), dependsOn: "worldMap", hint: panel.i18n("optionWorldTimelineHint") },
       { key: "worldLapse", title: panel.i18n("optionLapseSpeed"), dependsOn: "worldTimeline",
-        choices: lapseChoices(["realTime", "dayInMinute", "dayIn10Seconds", "seasonsInMinute"]) },
-      { key: "worldList", title: panel.i18n("optionCityList"), section: "sectionCityList" },
-      { key: "worldDifference", title: panel.i18n("optionDifference"), dependsOn: "worldList" },
-      { key: "worldDials", title: panel.i18n("optionWorldDials"), dependsOn: "worldList" },
-      { key: "worldSunrise", title: panel.i18n("sunrise"), dependsOn: "worldList" },
-      { key: "worldSunset", title: panel.i18n("sunset"), dependsOn: "worldList" },
-      { key: "worldSunNext", title: panel.i18n("sunNext"), dependsOn: "worldList" }
+        choices: lapseChoices(["realTime", "dayInMinute", "dayIn10Seconds", "seasonsInMinute"]) }
+    ],
+    places: [
+      { key: "worldDifference", title: panel.i18n("optionDifference") },
+      { key: "worldDials", title: panel.i18n("optionWorldDials") },
+      { key: "worldSunrise", title: panel.i18n("sunrise") },
+      { key: "worldSunset", title: panel.i18n("sunset") },
+      { key: "worldSunNext", title: panel.i18n("sunNext") }
     ],
     alarms: [],
     timers: [],

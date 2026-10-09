@@ -9,7 +9,7 @@ var catalog = {
   timersTab: "Timer",
   stopwatchesTab: "Stoppuhr",
   pomodorosTab: "Pomodoro",
-  worldTabHint: "Eine Karte oder ein Globus der Zeitzonen und die Uhrzeit in deinen Städten.",
+  worldTabHint: "Eine Karte oder ein Globus der Zeitzonen mit Nacht, Dämmerung, Sonne und Mond, darunter eine Zeitleiste.",
   alarmsTabHint: "Wecker klingeln zu einer Uhrzeit, einmal oder an gewählten Wochentagen.",
   timersTabHint: "Timer zählen herunter und klingeln, wenn sie ablaufen.",
   stopwatchesTabHint: "Stoppuhren zählen hoch und nehmen Runden.",
@@ -183,7 +183,6 @@ var catalog = {
   optionNight: "Nachtseite",
   optionRuler: "Stunden über und unter der Karte",
   optionMapLabels: "Städtenamen auf der Karte",
-  optionCityList: "Städteliste",
   optionDifference: "Tag und Abstand zu hier",
   optionHundredths: "Hundertstel",
   defaultTab: "Tab beim Öffnen",
@@ -468,7 +467,6 @@ var catalog = {
   chipsHint: "Die Chips unter der Ansicht schalten dasselbe.",
   sectionMap: "Karte",
   sectionSky: "Himmel",
-  sectionCityList: "Städteliste",
   sectionShown: "Gezeigt",
   sectionObjects: "Objekte",
   sectionTime: "Zeit",
@@ -595,5 +593,7 @@ var catalog = {
   changesCurrent: "installiert",
   changesShowOlder: "Ältere Versionen zeigen",
   changesEnglishNote: "Das Protokoll wird auf Englisch geführt.",
-  changesNone: "Kein Änderungsprotokoll gefunden."
+  changesNone: "Kein Änderungsprotokoll gefunden.",
+  placesTab: "Orte",
+  placesTabHint: "Hier und deine Städte: ihre Uhrzeit, der Tag und der Unterschied zu hier, Sonnenauf- und -untergang und für jeden ein Zifferblatt."
 }

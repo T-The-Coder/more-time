@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "世界", alarmsTab: "アラーム", timersTab: "タイマー", stopwatchesTab: "ストップウォッチ", pomodorosTab: "ポモドーロ",
-  worldTabHint: "タイムゾーンの地図または地球儀と、登録した都市の時刻。",
+  worldTabHint: "夜、薄明、太陽、月を含むタイムゾーンの地図または地球儀と、その下のタイムライン。",
   alarmsTabHint: "アラームは決めた時刻に、一度だけまたは選んだ曜日に鳴ります。",
   timersTabHint: "タイマーはカウントダウンし、終わると鳴ります。",
   stopwatchesTabHint: "ストップウォッチは時間を計り、ラップを記録します。",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "ホバーでウィジェットを開く", citiesCount: "バーに表示する都市数", clockSection: "時計",
   optionSeconds: "秒", optionDate: "日付", optionWeek: "週番号", optionDayOfYear: "年間通算日",
   optionZone: "タイムゾーン", optionAnalog: "文字盤", optionNextAlarm: "次のアラーム", optionMap: "地図", optionNight: "夜の側",
-  optionRuler: "地図の上下に時刻", optionMapLabels: "地図上の都市名", optionCityList: "都市リスト",
+  optionRuler: "地図の上下に時刻", optionMapLabels: "地図上の都市名",
   optionDifference: "日付とここからの時差", optionHundredths: "1/100秒", defaultTab: "開いたときのタブ",
   shortcutsGroupGeneral: "一般", shortcutsGroupItems: "アラーム、タイマー、ストップウォッチ、ポモドーロ",
   shortcutsGroupEditor: "編集中", shortcutsGroupWorld: "世界", shortcutsGroupRinging: "何かが鳴っているとき",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "表示の下のチップで同じ項目を切り替えます。",
   sectionMap: "地図",
   sectionSky: "空",
-  sectionCityList: "都市の一覧",
   sectionShown: "表示",
   sectionObjects: "天体",
   sectionTime: "時間",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "インストール済み",
   changesShowOlder: "古いバージョンを表示",
   changesEnglishNote: "この記録は英語で書かれています。",
-  changesNone: "変更履歴が見つかりません。"
+  changesNone: "変更履歴が見つかりません。",
+  placesTab: "場所",
+  placesTabHint: "ここと登録した都市：それぞれの時刻、日付とこことの差、日の出と日の入り、文字盤。"
 }

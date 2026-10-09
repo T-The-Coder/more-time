@@ -109,15 +109,21 @@ ShellRoot {
     function() { panel.lapStopwatch(panel.itemsStore.items.stopwatches[0].id); panel.activeTab = "world" },
     function() { panel.here.weatherPlace = { name: "Bobingen", lat: 48.27, lon: 10.83 } },
     function() { shot("01-world") },
+    // The Places tab: here and the cities (the list the World tab had).
+    function() { panel.activeTab = "places" },
+    function() { shot("01p-places") },
+    function() { panel.activeTab = "world" },
     // A city as the current place, with the sun line per city.
     function() {
       display("worldSunrise", true)
       display("worldSunset", true)
       display("worldSunNext", true)
+      panel.activeTab = "places"
       panel.setCurrentPlace(2)
       console.log("PLACE", panel.currentPlace, panel.currentName, panel.currentOffset, "stored", panel.placeStore.current, "here", JSON.stringify(panel.here.place))
     },
     function() { shot("01a-world-city-current") },
+    function() { panel.activeTab = "world" },
     function() { panel.cyclePlace(1); panel.cyclePlace(1); panel.cyclePlace(1); console.log("PLACE cycled", panel.selectedCity) },
     function() { panel.setCurrentPlace(-1); display("worldSunrise", false); display("worldSunset", false) },
     // The globe: a city picked turns it there; the night side, the golden
@@ -215,6 +221,7 @@ ShellRoot {
       display("worldSunrise", true)
       display("worldSunset", true)
       display("heroSunNext", true)
+      panel.activeTab = "places"
       panel.dialChooserOpen = true
       console.log("DIALS", panel.cityList.map(function(c) { return c.dial }).join(","), panel.placeStore.hereDial)
     },
@@ -553,6 +560,9 @@ ShellRoot {
     function() { display("worldStyle", "map") },
     function() { mapSize("popup") },
     function() { shot("31f-map-popup") },
+    function() { panel.activeTab = "places" },
+    function() { shot("31g-places-popup") },
+    function() { panel.activeTab = "world" },
     function() { appSizeReset() },
     // Zoomed in: the globe at z2 on Europe (tilted), what a moving frame
     // costs there, and the flat map at z2 on the current place.

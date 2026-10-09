@@ -101,7 +101,7 @@ Item {
         font.letterSpacing: 1
         elide: Text.ElideRight
 
-        TapHandler { onTapped: hero.panel.showTab("world") }
+        TapHandler { onTapped: hero.panel.showTab("places") || hero.panel.showTab("world") }
         HoverHandler { id: nameHover; cursorShape: Qt.PointingHandCursor }
       }
 
@@ -123,7 +123,7 @@ Item {
           anchors.fill: parent
           hoverEnabled: true
           cursorShape: Qt.PointingHandCursor
-          onClicked: hero.panel.showTab("world")
+          onClicked: hero.panel.showTab("places") || hero.panel.showTab("world")
         }
       }
     }

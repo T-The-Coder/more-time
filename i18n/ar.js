@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "العالم", alarmsTab: "المنبهات", timersTab: "المؤقتات", stopwatchesTab: "ساعة الإيقاف", pomodorosTab: "بومودورو",
-  worldTabHint: "خريطة أو كرة أرضية للمناطق الزمنية والوقت في مدنك.",
+  worldTabHint: "خريطة أو كرة أرضية للمناطق الزمنية مع الليل والشفق والشمس والقمر، وتحتها خط زمني.",
   alarmsTabHint: "ترنّ المنبهات في وقت محدد، مرة واحدة أو في الأيام المختارة.",
   timersTabHint: "تعدّ المؤقتات تنازليًا وترنّ عند انتهائها.",
   stopwatchesTabHint: "تعدّ ساعات الإيقاف تصاعديًا وتسجّل اللفات.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "فتح الأداة عند التمرير", citiesCount: "المدن في الشريط", clockSection: "الساعة",
   optionSeconds: "الثواني", optionDate: "التاريخ", optionWeek: "رقم الأسبوع", optionDayOfYear: "يوم السنة",
   optionZone: "المنطقة الزمنية", optionAnalog: "ميناء الساعة", optionNextAlarm: "المنبه التالي", optionMap: "الخريطة", optionNight: "جانب الليل",
-  optionRuler: "الساعات فوق الخريطة وتحتها", optionMapLabels: "أسماء المدن على الخريطة", optionCityList: "قائمة المدن",
+  optionRuler: "الساعات فوق الخريطة وتحتها", optionMapLabels: "أسماء المدن على الخريطة",
   optionDifference: "اليوم والفرق عن هنا", optionHundredths: "أجزاء من مئة", defaultTab: "اللسان عند الفتح",
   shortcutsGroupGeneral: "عام", shortcutsGroupItems: "المنبهات والمؤقتات وساعات الإيقاف وبومودورو",
   shortcutsGroupEditor: "أثناء التحرير", shortcutsGroupWorld: "العالم", shortcutsGroupRinging: "عندما يرنّ شيء",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "الأزرار تحت العرض تبدّل الأشياء نفسها.",
   sectionMap: "الخريطة",
   sectionSky: "السماء",
-  sectionCityList: "قائمة المدن",
   sectionShown: "المعروض",
   sectionObjects: "الأجرام",
   sectionTime: "الوقت",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "مثبت",
   changesShowOlder: "عرض الإصدارات الأقدم",
   changesEnglishNote: "يُكتب السجل بالإنجليزية.",
-  changesNone: "لم يُعثر على سجل التغييرات."
+  changesNone: "لم يُعثر على سجل التغييرات.",
+  placesTab: "الأماكن",
+  placesTabHint: "هنا ومدنك: الوقت فيها، واليوم والفرق عن هنا، والشروق والغروب، ومينا ساعة لكل منها."
 }

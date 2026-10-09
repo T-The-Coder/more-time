@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "جهان", alarmsTab: "زنگ‌ها", timersTab: "تایمرها", stopwatchesTab: "کرنومتر", pomodorosTab: "پومودورو",
-  worldTabHint: "نقشه یا کرهٔ منطقه‌های زمانی و ساعت شهرهای شما.",
+  worldTabHint: "نقشه یا کرهٔ منطقه‌های زمانی با شب، گرگ‌ومیش، خورشید و ماه و یک خط زمان در زیر آن.",
   alarmsTabHint: "زنگ‌ها در ساعتی از روز به صدا درمی‌آیند، یک بار یا در روزهای انتخاب‌شده.",
   timersTabHint: "تایمرها معکوس می‌شمارند و در پایان زنگ می‌زنند.",
   stopwatchesTabHint: "کرنومترها رو به جلو می‌شمارند و دور ثبت می‌کنند.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "باز کردن ابزارک هنگام اشاره", citiesCount: "شهرهای نوار", clockSection: "ساعت",
   optionSeconds: "ثانیه", optionDate: "تاریخ", optionWeek: "شمارهٔ هفته", optionDayOfYear: "روز سال",
   optionZone: "منطقهٔ زمانی", optionAnalog: "صفحهٔ ساعت", optionNextAlarm: "زنگ بعدی", optionMap: "نقشه", optionNight: "سوی شب",
-  optionRuler: "ساعت‌ها بالا و پایین نقشه", optionMapLabels: "نام شهرها روی نقشه", optionCityList: "فهرست شهرها",
+  optionRuler: "ساعت‌ها بالا و پایین نقشه", optionMapLabels: "نام شهرها روی نقشه",
   optionDifference: "روز و اختلاف با اینجا", optionHundredths: "صدم ثانیه", defaultTab: "زبانه هنگام باز شدن",
   shortcutsGroupGeneral: "عمومی", shortcutsGroupItems: "زنگ‌ها، تایمرها، کرنومترها، پومودوروها",
   shortcutsGroupEditor: "هنگام ویرایش", shortcutsGroupWorld: "جهان", shortcutsGroupRinging: "وقتی چیزی زنگ می‌زند",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "تراشه‌های زیر نما همان چیزها را عوض می‌کنند.",
   sectionMap: "نقشه",
   sectionSky: "آسمان",
-  sectionCityList: "فهرست شهرها",
   sectionShown: "نمایش",
   sectionObjects: "اجرام",
   sectionTime: "زمان",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "نصب‌شده",
   changesShowOlder: "نمایش نسخه‌های قدیمی‌تر",
   changesEnglishNote: "این گزارش به انگلیسی نوشته می‌شود.",
-  changesNone: "گزارش تغییراتی پیدا نشد."
+  changesNone: "گزارش تغییراتی پیدا نشد.",
+  placesTab: "مکان‌ها",
+  placesTabHint: "اینجا و شهرهای شما: ساعتشان، روز و اختلاف با اینجا، طلوع و غروب آفتاب و یک صفحهٔ ساعت برای هرکدام."
 }

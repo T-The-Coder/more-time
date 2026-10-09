@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "עולם", alarmsTab: "שעונים מעוררים", timersTab: "טיימרים", stopwatchesTab: "סטופר", pomodorosTab: "פומודורו",
-  worldTabHint: "מפה או גלובוס של אזורי הזמן והשעה בערים שלך.",
+  worldTabHint: "מפה או גלובוס של אזורי הזמן עם הלילה, הדמדומים, השמש והירח, ומתחתיהם ציר זמן.",
   alarmsTabHint: "שעונים מעוררים מצלצלים בשעה שנקבעה, פעם אחת או בימים שנבחרו.",
   timersTabHint: "טיימרים סופרים לאחור ומצלצלים בסיום.",
   stopwatchesTabHint: "סטופרים סופרים קדימה ורושמים הקפות.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "פתיחת הווידג׳ט בריחוף", citiesCount: "ערים בסרגל", clockSection: "שעון",
   optionSeconds: "שניות", optionDate: "תאריך", optionWeek: "מספר שבוע", optionDayOfYear: "יום בשנה",
   optionZone: "אזור זמן", optionAnalog: "לוח שעון", optionNextAlarm: "המעורר הבא", optionMap: "מפה", optionNight: "צד הלילה",
-  optionRuler: "שעות מעל המפה ומתחתיה", optionMapLabels: "שמות ערים על המפה", optionCityList: "רשימת ערים",
+  optionRuler: "שעות מעל המפה ומתחתיה", optionMapLabels: "שמות ערים על המפה",
   optionDifference: "יום והפרש מכאן", optionHundredths: "מאיות", defaultTab: "לשונית בפתיחה",
   shortcutsGroupGeneral: "כללי", shortcutsGroupItems: "מעוררים, טיימרים, סטופרים, פומודורו",
   shortcutsGroupEditor: "בזמן עריכה", shortcutsGroupWorld: "עולם", shortcutsGroupRinging: "כשמשהו מצלצל",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "השבבים מתחת לתצוגה מחליפים את אותם דברים.",
   sectionMap: "מפה",
   sectionSky: "שמיים",
-  sectionCityList: "רשימת ערים",
   sectionShown: "מוצג",
   sectionObjects: "גופים",
   sectionTime: "זמן",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "מותקנת",
   changesShowOlder: "הצגת גרסאות ישנות יותר",
   changesEnglishNote: "היומן נכתב באנגלית.",
-  changesNone: "לא נמצא יומן שינויים."
+  changesNone: "לא נמצא יומן שינויים.",
+  placesTab: "מקומות",
+  placesTabHint: "כאן והערים שלך: השעה בהן, היום וההפרש מכאן, זריחה ושקיעה ושעון לכל אחת."
 }

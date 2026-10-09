@@ -58,22 +58,29 @@ Column {
     {
       title: "shortcutsGroupWorld",
       rows: [
-        { keys: ["/", "n"], action: "shortcutCitySearch" },
-        { keys: ["↑ ↓"], action: "shortcutSearchSelect" },
-        { keys: ["Tab", "⇧ Tab"], action: "shortcutSearchSection" },
-        { keys: ["Enter"], action: "shortcutSearchPick" },
-        { keys: ["+"], action: "shortcutSearchAdd" },
-        { keys: ["−"], action: "shortcutSearchRemove" },
-        { keys: ["Esc"], action: "shortcutSearchCancel" },
         { keys: ["← →", "h l"], action: "shortcutCity" },
-        { keys: ["e"], action: "shortcutDialStyle" },
-        { keys: ["x", "Del"], action: "shortcutCityRemove" },
         { keys: ["Ctrl ← → ↑ ↓"], action: "shortcutGlobeTurn" },
         { keys: ["+", "−"], action: "shortcutGlobeZoom" },
         { keys: ["0"], action: "shortcutGlobeCenter" },
         { keys: [",", "."], action: "shortcutWorldStep" },
         { keys: ["Space"], action: "shortcutWorldPlay" },
         { keys: ["⌫"], action: "shortcutWorldNow" }
+      ]
+    },
+    {
+      title: "placesTab",
+      rows: [
+        { keys: ["↑ ↓", "← →"], action: "shortcutCity" },
+        { keys: ["⇧ ↑ ↓"], action: "shortcutMove" },
+        { keys: ["/", "n", "+"], action: "shortcutCitySearch" },
+        { keys: ["e"], action: "shortcutDialStyle" },
+        { keys: ["x", "Del"], action: "shortcutCityRemove" },
+        { keys: ["↑ ↓"], action: "shortcutSearchSelect" },
+        { keys: ["Tab", "⇧ Tab"], action: "shortcutSearchSection" },
+        { keys: ["Enter"], action: "shortcutSearchPick" },
+        { keys: ["+"], action: "shortcutSearchAdd" },
+        { keys: ["−"], action: "shortcutSearchRemove" },
+        { keys: ["Esc"], action: "shortcutSearchCancel" }
       ]
     },
     {

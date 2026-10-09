@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Monde", alarmsTab: "Alarmes", timersTab: "Minuteurs", stopwatchesTab: "Chrono", pomodorosTab: "Pomodoro",
-  worldTabHint: "Une carte ou un globe des fuseaux horaires et l’heure dans vos villes.",
+  worldTabHint: "Une carte ou un globe des fuseaux horaires, avec la nuit, le crépuscule, le Soleil et la Lune, et une frise temporelle dessous.",
   alarmsTabHint: "Les alarmes sonnent à une heure donnée, une fois ou les jours choisis.",
   timersTabHint: "Les minuteurs décomptent et sonnent à la fin.",
   stopwatchesTabHint: "Les chronos comptent et prennent des tours.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Ouvrir le widget au survol", citiesCount: "Villes dans la barre", clockSection: "Horloge",
   optionSeconds: "Secondes", optionDate: "Date", optionWeek: "Numéro de semaine", optionDayOfYear: "Jour de l’année",
   optionZone: "Fuseau horaire", optionAnalog: "Cadran", optionNextAlarm: "Prochaine alarme", optionMap: "Carte", optionNight: "Côté nuit",
-  optionRuler: "Heures au-dessus et au-dessous de la carte", optionMapLabels: "Noms des villes sur la carte", optionCityList: "Liste des villes",
+  optionRuler: "Heures au-dessus et au-dessous de la carte", optionMapLabels: "Noms des villes sur la carte",
   optionDifference: "Jour et écart avec ici", optionHundredths: "Centièmes", defaultTab: "Onglet à l’ouverture",
   shortcutsGroupGeneral: "Général", shortcutsGroupItems: "Alarmes, minuteurs, chronos, pomodoros",
   shortcutsGroupEditor: "En modification", shortcutsGroupWorld: "Monde", shortcutsGroupRinging: "Quand quelque chose sonne",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Les puces sous la vue règlent les mêmes choses.",
   sectionMap: "Carte",
   sectionSky: "Ciel",
-  sectionCityList: "Liste des villes",
   sectionShown: "Affiché",
   sectionObjects: "Objets",
   sectionTime: "Temps",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "installée",
   changesShowOlder: "Afficher les versions plus anciennes",
   changesEnglishNote: "Le journal est tenu en anglais.",
-  changesNone: "Aucun journal des modifications trouvé."
+  changesNone: "Aucun journal des modifications trouvé.",
+  placesTab: "Lieux",
+  placesTabHint: "Ici et vos villes : leur heure, le jour et l’écart avec ici, le lever et le coucher du soleil, et un cadran pour chacune."
 }

@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Svět", alarmsTab: "Budíky", timersTab: "Časovače", stopwatchesTab: "Stopky", pomodorosTab: "Pomodoro",
-  worldTabHint: "Mapa nebo glóbus časových pásem a čas ve vašich městech.",
+  worldTabHint: "Mapa nebo glóbus časových pásem s nocí, soumrakem, Sluncem a Měsícem a pod ním časová osa.",
   alarmsTabHint: "Budíky zvoní v určený čas, jednou nebo ve vybrané dny.",
   timersTabHint: "Časovače odpočítávají a po skončení zazvoní.",
   stopwatchesTabHint: "Stopky měří čas a zaznamenávají kola.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Otevřít widget při najetí", citiesCount: "Města na liště", clockSection: "Hodiny",
   optionSeconds: "Sekundy", optionDate: "Datum", optionWeek: "Číslo týdne", optionDayOfYear: "Den v roce",
   optionZone: "Časové pásmo", optionAnalog: "Ciferník", optionNextAlarm: "Další budík", optionMap: "Mapa", optionNight: "Noční strana",
-  optionRuler: "Hodiny nad a pod mapou", optionMapLabels: "Názvy měst na mapě", optionCityList: "Seznam měst",
+  optionRuler: "Hodiny nad a pod mapou", optionMapLabels: "Názvy měst na mapě",
   optionDifference: "Den a rozdíl oproti sem", optionHundredths: "Setiny", defaultTab: "Karta při otevření",
   shortcutsGroupGeneral: "Obecné", shortcutsGroupItems: "Budíky, časovače, stopky, pomodora",
   shortcutsGroupEditor: "Při úpravách", shortcutsGroupWorld: "Svět", shortcutsGroupRinging: "Když něco zvoní",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Čipy pod pohledem přepínají totéž.",
   sectionMap: "Mapa",
   sectionSky: "Obloha",
-  sectionCityList: "Seznam měst",
   sectionShown: "Zobrazeno",
   sectionObjects: "Objekty",
   sectionTime: "Čas",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "nainstalováno",
   changesShowOlder: "Zobrazit starší verze",
   changesEnglishNote: "Záznam je veden anglicky.",
-  changesNone: "Záznam změn nebyl nalezen."
+  changesNone: "Záznam změn nebyl nalezen.",
+  placesTab: "Místa",
+  placesTabHint: "Zde a vaše města: jejich čas, den a rozdíl oproti zde, východ a západ slunce a ciferník pro každé."
 }

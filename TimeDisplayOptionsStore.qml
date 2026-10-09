@@ -235,6 +235,10 @@ Item {
       else if (choiceKeys[key]) result[key] = normalizedChoice(key, source[key], defaults[key])
       else result[key] = typeof source[key] === "boolean" ? source[key] : defaults[key]
     }
+    // The city list was a part of the World tab ("worldList"); it is the
+    // Places tab now: shown where the list was (and its tab was).
+    if (typeof source.showPlaces !== "boolean" && typeof source.worldList === "boolean" && "showPlaces" in result)
+      result.showPlaces = source.worldList && source.showWorld !== false
     // The single "worldSun" switch of before: on becomes the next event.
     if (source.worldSun === true && typeof source.worldSunNext !== "boolean" && "worldSunNext" in result)
       result.worldSunNext = true

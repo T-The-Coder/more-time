@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Dunia", alarmsTab: "Alarm", timersTab: "Timer", stopwatchesTab: "Stopwatch", pomodorosTab: "Pomodoro",
-  worldTabHint: "Peta atau bola dunia zona waktu dan jam di kota-kota Anda.",
+  worldTabHint: "Peta atau bola dunia zona waktu dengan malam, senja, Matahari, dan Bulan, serta linimasa di bawahnya.",
   alarmsTabHint: "Alarm berbunyi pada jam tertentu, sekali atau pada hari yang dipilih.",
   timersTabHint: "Timer menghitung mundur dan berbunyi saat habis.",
   stopwatchesTabHint: "Stopwatch menghitung maju dan mencatat putaran.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Buka widget saat diarahkan", citiesCount: "Kota di bilah", clockSection: "Jam",
   optionSeconds: "Detik", optionDate: "Tanggal", optionWeek: "Nomor minggu", optionDayOfYear: "Hari dalam tahun",
   optionZone: "Zona waktu", optionAnalog: "Muka jam", optionNextAlarm: "Alarm berikutnya", optionMap: "Peta", optionNight: "Sisi malam",
-  optionRuler: "Jam di atas dan di bawah peta", optionMapLabels: "Nama kota di peta", optionCityList: "Daftar kota",
+  optionRuler: "Jam di atas dan di bawah peta", optionMapLabels: "Nama kota di peta",
   optionDifference: "Hari dan selisih dari sini", optionHundredths: "Perseratus", defaultTab: "Tab saat dibuka",
   shortcutsGroupGeneral: "Umum", shortcutsGroupItems: "Alarm, timer, stopwatch, pomodoro",
   shortcutsGroupEditor: "Saat mengedit", shortcutsGroupWorld: "Dunia", shortcutsGroupRinging: "Saat ada yang berbunyi",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Chip di bawah tampilan mengalihkan hal yang sama.",
   sectionMap: "Peta",
   sectionSky: "Langit",
-  sectionCityList: "Daftar kota",
   sectionShown: "Tampil",
   sectionObjects: "Objek",
   sectionTime: "Waktu",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "terpasang",
   changesShowOlder: "Tampilkan versi lama",
   changesEnglishNote: "Log ditulis dalam bahasa Inggris.",
-  changesNone: "Log perubahan tidak ditemukan."
+  changesNone: "Log perubahan tidak ditemukan.",
+  placesTab: "Tempat",
+  placesTabHint: "Di sini dan kota-kotamu: waktunya, hari dan selisih dengan di sini, matahari terbit dan terbenam, dan muka jam untuk masing-masing."
 }

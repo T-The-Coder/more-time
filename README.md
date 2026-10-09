@@ -51,7 +51,7 @@ control.
   open the app and the settings.
 - **Current place:** here, or one of your cities, like More Weather's "My
   places". The row above the time shows it: the location pin goes back to here, the name
-  and ▾ open the World tab. With a city current, a line keeps the time here in
+  and ▾ open the Places tab. With a city current, a line keeps the time here in
   view. `Alt 0` is here, `Alt 1`–`9` a city, `Alt ← →` go round, from any tab.
   The bar and the app show the same place, and it is kept across restarts.
   Alarms, chimes and the menu bar always stay on this computer's clock.
@@ -129,7 +129,9 @@ control.
     time lapses, the zoom buttons. Sunrise and sunset are drawn as in More
     Weather (a horizon with an arrow up or down), in the Sun's gold, in the
     clock's sun line and the city list.
-  - Below the map, your place (the location pin and its name, as in More
+- **Places** (its own tab since the World tab became the map alone; the
+  map marks the place selected here, and a click on the map selects it):
+  - Your place (the location pin and its name, as in More
     Weather) and the city list: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
     database, summer time included. Per row, as More Weather's menu bar
@@ -340,7 +342,8 @@ control.
     - Widget and app: the clock (clock, sun, more), which tabs there are,
       their order and the tab on opening; for the World tab the map (shape:
       flat map or globe, ruler, labels, turning by itself), the sky (night,
-      Moon) and the city list; for the Astro tab what is shown, the objects
+      Moon) and the timeline; for the Places tab the differences, the clock
+      faces and the sun times; for the Astro tab what is shown, the objects
       and the time. The chips under the World and Astro views switch the
       same things for the view shown. "Copy to the widget" / "Copy to the
       app" copies one profile to the other (pressed twice).
@@ -406,8 +409,8 @@ too.
 | `0`–`9` | Type the time (`730` → 7:30) |
 | `Space` | Weekday on / off |
 | `Enter` | Done, or type the name |
-| **World** | |
-| `/` / `n` | Add a city (`+` too while the map is hidden) |
+| **Places** (`/`, `n` and `←` `→` also on the World tab) | |
+| `/` / `n` / `+` | Add a city |
 | `↑ ↓` (search) | Move within the results or the saved places |
 | `Tab` / `⇧ Tab` (search) | Switch between results and saved places |
 | `Enter` (search) | Use the result, or switch to the saved place |
@@ -448,8 +451,8 @@ too.
 | Middle click on the clock in the bar | Stop ringing, else start / pause the first pomodoro |
 | Right click on the clock in the bar | What is coming up, as a notification |
 | Click on the pin above the clock | Back to here |
-| Click on the place name or ▾ above the clock | The World tab, to pick the place |
-| Click on a row in the World list | That place becomes current |
+| Click on the place name or ▾ above the clock | The Places tab, to pick the place |
+| Click on a row in the Places list or on a place on the World map | That place becomes current |
 
 ## Data sources
 

@@ -79,7 +79,7 @@ test("every key used in the QML exists", () => {
     used.delete(prefix)
     for (const name of names) used.add(prefix + name)
   }
-  for (const tab of ["world", "alarms", "timers", "stopwatches", "pomodoros", "astro"]) {
+  for (const tab of ["world", "places", "alarms", "timers", "stopwatches", "pomodoros", "astro"]) {
     used.add(tab + "Tab")
     used.add(tab + "TabHint")
   }

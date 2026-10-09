@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Світ", alarmsTab: "Будильники", timersTab: "Таймери", stopwatchesTab: "Секундомір", pomodorosTab: "Помодоро",
-  worldTabHint: "Мапа або глобус часових поясів і час у ваших містах.",
+  worldTabHint: "Мапа або глобус часових поясів із ніччю, сутінками, Сонцем і Місяцем та шкалою часу під ними.",
   alarmsTabHint: "Будильники дзвонять у заданий час, один раз або у вибрані дні.",
   timersTabHint: "Таймери відлічують час і дзвонять наприкінці.",
   stopwatchesTabHint: "Секундоміри рахують час і засікають кола.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Відкривати віджет при наведенні", citiesCount: "Міст на панелі", clockSection: "Годинник",
   optionSeconds: "Секунди", optionDate: "Дата", optionWeek: "Номер тижня", optionDayOfYear: "День року",
   optionZone: "Часовий пояс", optionAnalog: "Циферблат", optionNextAlarm: "Наступний будильник", optionMap: "Мапа", optionNight: "Нічний бік",
-  optionRuler: "Години над і під мапою", optionMapLabels: "Назви міст на мапі", optionCityList: "Список міст",
+  optionRuler: "Години над і під мапою", optionMapLabels: "Назви міст на мапі",
   optionDifference: "День і різниця з тут", optionHundredths: "Соті", defaultTab: "Вкладка під час відкриття",
   shortcutsGroupGeneral: "Загальні", shortcutsGroupItems: "Будильники, таймери, секундоміри, помодоро",
   shortcutsGroupEditor: "Під час редагування", shortcutsGroupWorld: "Світ", shortcutsGroupRinging: "Коли щось дзвонить",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Кнопки під виглядом перемикають те саме.",
   sectionMap: "Мапа",
   sectionSky: "Небо",
-  sectionCityList: "Список міст",
   sectionShown: "Показ",
   sectionObjects: "Об’єкти",
   sectionTime: "Час",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "встановлено",
   changesShowOlder: "Показати старіші версії",
   changesEnglishNote: "Журнал ведеться англійською.",
-  changesNone: "Журнал змін не знайдено."
+  changesNone: "Журнал змін не знайдено.",
+  placesTab: "Місця",
+  placesTabHint: "Тут і ваші міста: їхній час, день і різниця з тутешнім, схід і захід сонця та циферблат для кожного."
 }

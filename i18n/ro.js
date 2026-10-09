@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Lume", alarmsTab: "Alarme", timersTab: "Temporizatoare", stopwatchesTab: "Cronometru", pomodorosTab: "Pomodoro",
-  worldTabHint: "O hartă sau un glob al fusurilor orare și ora din orașele tale.",
+  worldTabHint: "O hartă sau un glob al fusurilor orare, cu noaptea, amurgul, Soarele și Luna, și dedesubt o cronologie.",
   alarmsTabHint: "Alarmele sună la o oră din zi, o dată sau în zilele alese.",
   timersTabHint: "Temporizatoarele numără invers și sună la final.",
   stopwatchesTabHint: "Cronometrele numără și iau ture.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Deschide widgetul la trecere", citiesCount: "Orașe în bară", clockSection: "Ceas",
   optionSeconds: "Secunde", optionDate: "Data", optionWeek: "Numărul săptămânii", optionDayOfYear: "Ziua anului",
   optionZone: "Fus orar", optionAnalog: "Cadran", optionNextAlarm: "Următoarea alarmă", optionMap: "Hartă", optionNight: "Partea de noapte",
-  optionRuler: "Ore deasupra și sub hartă", optionMapLabels: "Nume de orașe pe hartă", optionCityList: "Lista orașelor",
+  optionRuler: "Ore deasupra și sub hartă", optionMapLabels: "Nume de orașe pe hartă",
   optionDifference: "Ziua și diferența față de aici", optionHundredths: "Sutimi", defaultTab: "Fila la deschidere",
   shortcutsGroupGeneral: "General", shortcutsGroupItems: "Alarme, temporizatoare, cronometre, pomodoro",
   shortcutsGroupEditor: "La editare", shortcutsGroupWorld: "Lume", shortcutsGroupRinging: "Când sună ceva",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Cipurile de sub vedere comută aceleași lucruri.",
   sectionMap: "Hartă",
   sectionSky: "Cer",
-  sectionCityList: "Lista orașelor",
   sectionShown: "Afișat",
   sectionObjects: "Obiecte",
   sectionTime: "Timp",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "instalată",
   changesShowOlder: "Arată versiunile mai vechi",
   changesEnglishNote: "Jurnalul este ținut în engleză.",
-  changesNone: "Nu s-a găsit jurnalul de modificări."
+  changesNone: "Nu s-a găsit jurnalul de modificări.",
+  placesTab: "Locuri",
+  placesTabHint: "Aici și orașele tale: ora lor, ziua și diferența față de aici, răsăritul și apusul și câte un cadran pentru fiecare."
 }

@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "世界", alarmsTab: "鬧鐘", timersTab: "計時器", stopwatchesTab: "碼錶", pomodorosTab: "番茄鐘",
-  worldTabHint: "時區地圖或地球儀，以及你所選城市的時間。",
+  worldTabHint: "時區地圖或地球儀，帶夜晚、晨昏、太陽和月亮，下方有時間軸。",
   alarmsTabHint: "鬧鐘在設定時間響起，可響一次或在選定的星期幾重複。",
   timersTabHint: "計時器倒數，結束時響鈴。",
   stopwatchesTabHint: "碼錶正向計時並記錄分圈。",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "懸停時開啟小工具", citiesCount: "列中的城市數", clockSection: "時鐘",
   optionSeconds: "秒", optionDate: "日期", optionWeek: "週數", optionDayOfYear: "一年中的第幾天",
   optionZone: "時區", optionAnalog: "錶盤", optionNextAlarm: "下一個鬧鐘", optionMap: "地圖", optionNight: "夜晚區域",
-  optionRuler: "地圖上下方的時刻", optionMapLabels: "地圖上的城市名", optionCityList: "城市清單",
+  optionRuler: "地圖上下方的時刻", optionMapLabels: "地圖上的城市名",
   optionDifference: "日期和與此地的時差", optionHundredths: "百分之一秒", defaultTab: "開啟時的分頁",
   shortcutsGroupGeneral: "一般", shortcutsGroupItems: "鬧鐘、計時器、碼錶、番茄鐘",
   shortcutsGroupEditor: "編輯時", shortcutsGroupWorld: "世界", shortcutsGroupRinging: "有東西在響時",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "視圖下方的標籤切換同樣的選項。",
   sectionMap: "地圖",
   sectionSky: "天空",
-  sectionCityList: "城市清單",
   sectionShown: "顯示",
   sectionObjects: "天體",
   sectionTime: "時間",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "已安裝",
   changesShowOlder: "顯示較早的版本",
   changesEnglishNote: "紀錄以英文撰寫。",
-  changesNone: "找不到更新紀錄。"
+  changesNone: "找不到更新紀錄。",
+  placesTab: "地點",
+  placesTabHint: "這裡和你的城市：當地時間、日期及與這裡的時差、日出日落，以及各自的錶盤。"
 }

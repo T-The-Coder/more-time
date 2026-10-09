@@ -4,6 +4,14 @@ All notable changes to More Time are documented here.
 
 ## Unreleased
 
+- **World and Places, two tabs:** the World tab is the map or the globe
+  with its chips and timeline; the city list (here and your cities, their
+  difference, clock faces and sun times, the search, `+`, moving and
+  removing) is the new **Places** tab, with its own Display card. The map
+  still marks the place selected there, and a click on the map selects it.
+  Places is shown wherever the list was ("City list" on). The tabs after
+  World move one number on: `1`–`9` and the Display card order count
+  Places as the second tab.
 - **Nothing moves while the monitor is off:** with the screen turned off
   (DPMS: a key binding, or Omarchy on idle) the turns, the time lapses and
   the ISS refresh rest as on another workspace, and go on at once when it

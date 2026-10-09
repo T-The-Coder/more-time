@@ -9,7 +9,7 @@ var catalog = {
   timersTab: "Timers",
   stopwatchesTab: "Stopwatch",
   pomodorosTab: "Pomodoro",
-  worldTabHint: "A map or a globe of the time zones and the time in your cities.",
+  worldTabHint: "A map or a globe of the time zones, with the night, the twilight, the Sun and the Moon, and a timeline below it.",
   alarmsTabHint: "Alarms ring at a time of day, once or on chosen weekdays.",
   timersTabHint: "Timers count down and ring when they run out.",
   stopwatchesTabHint: "Stopwatches count up and take laps.",
@@ -183,7 +183,6 @@ var catalog = {
   optionNight: "Night side",
   optionRuler: "Hours above and below the map",
   optionMapLabels: "City names on the map",
-  optionCityList: "City list",
   optionDifference: "Day and difference to here",
   optionHundredths: "Hundredths",
   defaultTab: "Tab on opening",
@@ -468,7 +467,6 @@ var catalog = {
   chipsHint: "The chips under the view switch the same things.",
   sectionMap: "Map",
   sectionSky: "Sky",
-  sectionCityList: "City list",
   sectionShown: "Shown",
   sectionObjects: "Objects",
   sectionTime: "Time",
@@ -595,5 +593,7 @@ var catalog = {
   changesCurrent: "installed",
   changesShowOlder: "Show older versions",
   changesEnglishNote: "The log is kept in English.",
-  changesNone: "No change log found."
+  changesNone: "No change log found.",
+  placesTab: "Places",
+  placesTabHint: "Here and your cities: their time, the day and the difference to here, sunrise and sunset, and a clock face for each."
 }

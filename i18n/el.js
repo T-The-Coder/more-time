@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Κόσμος", alarmsTab: "Ξυπνητήρια", timersTab: "Χρονόμετρα αντ.", stopwatchesTab: "Χρονόμετρο", pomodorosTab: "Pomodoro",
-  worldTabHint: "Ένας χάρτης ή μια υδρόγειος των ζωνών ώρας και η ώρα στις πόλεις σας.",
+  worldTabHint: "Ένας χάρτης ή μια υδρόγειος των ζωνών ώρας, με τη νύχτα, το λυκόφως, τον Ήλιο και τη Σελήνη, και από κάτω μια χρονογραμμή.",
   alarmsTabHint: "Τα ξυπνητήρια χτυπούν σε μια ώρα της ημέρας, μία φορά ή τις επιλεγμένες ημέρες.",
   timersTabHint: "Οι αντίστροφες μετρήσεις χτυπούν όταν τελειώσουν.",
   stopwatchesTabHint: "Τα χρονόμετρα μετρούν και καταγράφουν γύρους.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Άνοιγμα widget στην κατάδειξη", citiesCount: "Πόλεις στη γραμμή", clockSection: "Ρολόι",
   optionSeconds: "Δευτερόλεπτα", optionDate: "Ημερομηνία", optionWeek: "Αριθμός εβδομάδας", optionDayOfYear: "Ημέρα του έτους",
   optionZone: "Ζώνη ώρας", optionAnalog: "Καντράν", optionNextAlarm: "Επόμενο ξυπνητήρι", optionMap: "Χάρτης", optionNight: "Νυχτερινή πλευρά",
-  optionRuler: "Ώρες πάνω και κάτω από τον χάρτη", optionMapLabels: "Ονόματα πόλεων στον χάρτη", optionCityList: "Λίστα πόλεων",
+  optionRuler: "Ώρες πάνω και κάτω από τον χάρτη", optionMapLabels: "Ονόματα πόλεων στον χάρτη",
   optionDifference: "Ημέρα και διαφορά από εδώ", optionHundredths: "Εκατοστά", defaultTab: "Καρτέλα στο άνοιγμα",
   shortcutsGroupGeneral: "Γενικά", shortcutsGroupItems: "Ξυπνητήρια, μετρήσεις, χρονόμετρα, pomodoro",
   shortcutsGroupEditor: "Κατά την επεξεργασία", shortcutsGroupWorld: "Κόσμος", shortcutsGroupRinging: "Όταν κάτι χτυπά",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Τα κουμπιά κάτω από την όψη αλλάζουν τα ίδια.",
   sectionMap: "Χάρτης",
   sectionSky: "Ουρανός",
-  sectionCityList: "Λίστα πόλεων",
   sectionShown: "Εμφάνιση",
   sectionObjects: "Αντικείμενα",
   sectionTime: "Χρόνος",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "εγκατεστημένη",
   changesShowOlder: "Εμφάνιση παλαιότερων εκδόσεων",
   changesEnglishNote: "Το αρχείο τηρείται στα αγγλικά.",
-  changesNone: "Δεν βρέθηκε αρχείο αλλαγών."
+  changesNone: "Δεν βρέθηκε αρχείο αλλαγών.",
+  placesTab: "Τοποθεσίες",
+  placesTabHint: "Εδώ και οι πόλεις σας: η ώρα τους, η μέρα και η διαφορά από εδώ, η ανατολή και η δύση του ηλίου και ένα καντράν για την καθεμία."
 }

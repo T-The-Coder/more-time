@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Verden", alarmsTab: "Alarmer", timersTab: "Tidtakere", stopwatchesTab: "Stoppeklokke", pomodorosTab: "Pomodoro",
-  worldTabHint: "Et kart eller en globus over tidssonene og klokka i byene dine.",
+  worldTabHint: "Et kart eller en globus over tidssonene med natten, skumringen, Solen og Månen, og en tidslinje under.",
   alarmsTabHint: "Alarmer ringer på et klokkeslett, én gang eller på valgte ukedager.",
   timersTabHint: "Tidtakere teller ned og ringer når tiden er ute.",
   stopwatchesTabHint: "Stoppeklokker teller opp og tar runder.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Åpne widgeten ved peker", citiesCount: "Byer i linjen", clockSection: "Klokke",
   optionSeconds: "Sekunder", optionDate: "Dato", optionWeek: "Ukenummer", optionDayOfYear: "Dag i året",
   optionZone: "Tidssone", optionAnalog: "Urskive", optionNextAlarm: "Neste alarm", optionMap: "Kart", optionNight: "Nattsiden",
-  optionRuler: "Timer over og under kartet", optionMapLabels: "Bynavn på kartet", optionCityList: "Byliste",
+  optionRuler: "Timer over og under kartet", optionMapLabels: "Bynavn på kartet",
   optionDifference: "Dag og forskjell fra her", optionHundredths: "Hundredeler", defaultTab: "Fane ved åpning",
   shortcutsGroupGeneral: "Generelt", shortcutsGroupItems: "Alarmer, tidtakere, stoppeklokker, pomodoroer",
   shortcutsGroupEditor: "Under redigering", shortcutsGroupWorld: "Verden", shortcutsGroupRinging: "Når noe ringer",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Knappene under visningen slår av og på det samme.",
   sectionMap: "Kart",
   sectionSky: "Himmel",
-  sectionCityList: "Byliste",
   sectionShown: "Vist",
   sectionObjects: "Objekter",
   sectionTime: "Tid",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "installert",
   changesShowOlder: "Vis eldre versjoner",
   changesEnglishNote: "Loggen føres på engelsk.",
-  changesNone: "Fant ingen endringslogg."
+  changesNone: "Fant ingen endringslogg.",
+  placesTab: "Steder",
+  placesTabHint: "Her og byene dine: tiden der, dagen og forskjellen til her, soloppgang og solnedgang og en urskive for hver."
 }

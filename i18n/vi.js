@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Thế giới", alarmsTab: "Báo thức", timersTab: "Hẹn giờ", stopwatchesTab: "Bấm giờ", pomodorosTab: "Pomodoro",
-  worldTabHint: "Bản đồ hoặc quả địa cầu múi giờ và giờ tại các thành phố của bạn.",
+  worldTabHint: "Bản đồ hoặc quả địa cầu các múi giờ với đêm, hoàng hôn, Mặt Trời và Mặt Trăng, và một dòng thời gian bên dưới.",
   alarmsTabHint: "Báo thức reo vào một giờ trong ngày, một lần hoặc vào các ngày đã chọn.",
   timersTabHint: "Hẹn giờ đếm ngược và reo khi hết giờ.",
   stopwatchesTabHint: "Bấm giờ đếm lên và ghi vòng.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Mở widget khi rê chuột", citiesCount: "Thành phố trên thanh", clockSection: "Đồng hồ",
   optionSeconds: "Giây", optionDate: "Ngày", optionWeek: "Số tuần", optionDayOfYear: "Ngày trong năm",
   optionZone: "Múi giờ", optionAnalog: "Mặt đồng hồ", optionNextAlarm: "Báo thức kế tiếp", optionMap: "Bản đồ", optionNight: "Phía ban đêm",
-  optionRuler: "Giờ phía trên và dưới bản đồ", optionMapLabels: "Tên thành phố trên bản đồ", optionCityList: "Danh sách thành phố",
+  optionRuler: "Giờ phía trên và dưới bản đồ", optionMapLabels: "Tên thành phố trên bản đồ",
   optionDifference: "Ngày và chênh lệch với đây", optionHundredths: "Phần trăm giây", defaultTab: "Thẻ khi mở",
   shortcutsGroupGeneral: "Chung", shortcutsGroupItems: "Báo thức, hẹn giờ, bấm giờ, pomodoro",
   shortcutsGroupEditor: "Khi sửa", shortcutsGroupWorld: "Thế giới", shortcutsGroupRinging: "Khi có gì đó reo",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Các nút dưới khung nhìn bật tắt cùng các mục ấy.",
   sectionMap: "Bản đồ",
   sectionSky: "Bầu trời",
-  sectionCityList: "Danh sách thành phố",
   sectionShown: "Hiển thị",
   sectionObjects: "Thiên thể",
   sectionTime: "Thời gian",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "đã cài",
   changesShowOlder: "Hiện các phiên bản cũ hơn",
   changesEnglishNote: "Nhật ký được viết bằng tiếng Anh.",
-  changesNone: "Không tìm thấy nhật ký thay đổi."
+  changesNone: "Không tìm thấy nhật ký thay đổi.",
+  placesTab: "Địa điểm",
+  placesTabHint: "Ở đây và các thành phố của bạn: giờ, ngày và chênh lệch so với ở đây, giờ mặt trời mọc và lặn, và một mặt đồng hồ cho mỗi nơi."
 }

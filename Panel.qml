@@ -436,7 +436,7 @@ Panel {
   }
 
   function defaultTabOrder() {
-    return ["world", "alarms", "timers", "stopwatches", "pomodoros", "astro"]
+    return ["world", "places", "alarms", "timers", "stopwatches", "pomodoros", "astro"]
   }
 
   function defaultEntryOrder() {
@@ -470,7 +470,7 @@ Panel {
       worldMoonStyle: "space",
       worldTimeline: true,
       worldLapse: "dayInMinute",
-      worldList: true,
+      showPlaces: true,
       worldDifference: true,
       worldDials: true,
       worldSunrise: false,
@@ -594,7 +594,7 @@ Panel {
   // ---- Tabs ----
 
   readonly property var tabMasterKeys: ({
-    world: "showWorld", alarms: "showAlarms", timers: "showTimers",
+    world: "showWorld", places: "showPlaces", alarms: "showAlarms", timers: "showTimers",
     stopwatches: "showStopwatches", pomodoros: "showPomodoros", astro: "showAstro"
   })
   readonly property var displayTabs: sanitizedOrder(displaySetting("tabOrder", null), "tabOrder")
@@ -623,9 +623,9 @@ Panel {
   }
 
   function tabGlyph(key) {
-    return key === "world" ? "\u{f01e7}" : (key === "alarms" ? "\u{f0020}"
+    return key === "world" ? "\u{f01e7}" : (key === "places" ? "\u{f0350}" : (key === "alarms" ? "\u{f0020}"
       : (key === "timers" ? "\u{f051f}" : (key === "stopwatches" ? "\u{f13ab}"
-      : (key === "astro" ? "\u{f15db}" : "\u{f0996}"))))
+      : (key === "astro" ? "\u{f15db}" : "\u{f0996}")))))
   }
 
   // A display option of the surface shown now (the chips under the views),
@@ -1055,8 +1055,12 @@ Panel {
     if (armedDeleteId !== id) armedDeleteId = ""
   }
 
+  // The city list's tabs: Places, and World, whose map marks the selected
+  // city (↑ ↓ pick it there too).
+  function isCityTab(tab) { return tab === "places" || tab === "world" }
+
   function stepSelection(tab, delta) {
-    if (tab === "world") {
+    if (isCityTab(tab)) {
       selectedCity = Math.max(-1, Math.min(cityList.length - 1, selectedCity + delta))
       return
     }
@@ -1067,7 +1071,7 @@ Panel {
   }
 
   function moveSelected(tab, delta) {
-    if (tab === "world") {
+    if (isCityTab(tab)) {
       // The place store follows the selected city to its new index.
       if (selectedCity >= 0) citiesStore.move(selectedCity, delta)
       return
@@ -1079,7 +1083,7 @@ Panel {
   function addItem(tab) {
     var now = Date.now()
     nowMs = now
-    if (tab === "world") {
+    if (isCityTab(tab)) {
       openCitySearch()
     } else if (tab === "alarms") {
       var next = new Date(now + 3600000)
@@ -1393,7 +1397,9 @@ Panel {
     return "city:" + index
   }
 
+  // The search lives in the Places tab: from World (n, +) it goes there.
   function openCitySearch() {
+    if (currentTab === "world" && displayTabs.indexOf("places") >= 0) activeTab = "places"
     searchOpen = true
     citySearch.query = ""
   }
@@ -1565,7 +1571,15 @@ Panel {
 
     var left = key === Qt.Key_Left || text === "h"
     var right = key === Qt.Key_Right || text === "l"
-    if (tab === "world" ? handleWorldListKey(event, left, right) : handleItemKey(tab, event, left, right)) event.accepted = true
+    // Places: the list's keys; World: ← → the city its map marks.
+    if (tab === "places") {
+      if (handleWorldListKey(event, left, right)) event.accepted = true
+    } else if (tab === "world") {
+      if (left || right) {
+        stepSelection("places", (right ? 1 : -1) * (LayoutMirroring.enabled ? -1 : 1))
+        event.accepted = true
+      }
+    } else if (handleItemKey(tab, event, left, right)) event.accepted = true
   }
 
   // The World tab's list (from handlePanelKey): the clock face chooser
@@ -1698,7 +1712,7 @@ Panel {
     function hide(): void { root.close() }
     function toggle(): void { root.toggle() }
     function settings(): void { root.openFromHotkey(); root.openSettings() }
-    // A tab by name (world, alarms, timers, stopwatches, pomodoros, astro).
+    // A tab by name (world, places, alarms, timers, stopwatches, pomodoros, astro).
     function tab(name: string): void { root.openFromHotkey(); root.showTab(name) }
     // The World tab with city n (1-based) selected; the next / previous city.
     // The current place: city n (from 1), the next / previous one, or here.
@@ -1876,6 +1890,7 @@ Panel {
 
   function tabComponent(key) {
     if (key === "world") return worldComponent
+    if (key === "places") return placesComponent
     if (key === "alarms") return alarmsComponent
     if (key === "timers") return timersComponent
     if (key === "stopwatches") return stopwatchesComponent
@@ -1884,6 +1899,7 @@ Panel {
   }
 
   Component { id: worldComponent; TimeWorld { panel: root } }
+  Component { id: placesComponent; TimePlaces { panel: root } }
   Component { id: alarmsComponent; TimeAlarms { panel: root } }
   Component { id: timersComponent; TimeTimers { panel: root } }
   Component { id: stopwatchesComponent; TimeStopwatches { panel: root } }

@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Świat", alarmsTab: "Budziki", timersTab: "Minutniki", stopwatchesTab: "Stoper", pomodorosTab: "Pomodoro",
-  worldTabHint: "Mapa lub globus stref czasowych i godzina w twoich miastach.",
+  worldTabHint: "Mapa lub globus stref czasowych z nocą, zmierzchem, Słońcem i Księżycem, a pod nią oś czasu.",
   alarmsTabHint: "Budziki dzwonią o wybranej godzinie, raz lub w wybrane dni.",
   timersTabHint: "Minutniki odliczają i dzwonią po upływie czasu.",
   stopwatchesTabHint: "Stopery liczą czas i mierzą okrążenia.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Otwórz widżet po najechaniu", citiesCount: "Miasta na pasku", clockSection: "Zegar",
   optionSeconds: "Sekundy", optionDate: "Data", optionWeek: "Numer tygodnia", optionDayOfYear: "Dzień roku",
   optionZone: "Strefa czasowa", optionAnalog: "Tarcza", optionNextAlarm: "Następny budzik", optionMap: "Mapa", optionNight: "Strona nocna",
-  optionRuler: "Godziny nad i pod mapą", optionMapLabels: "Nazwy miast na mapie", optionCityList: "Lista miast",
+  optionRuler: "Godziny nad i pod mapą", optionMapLabels: "Nazwy miast na mapie",
   optionDifference: "Dzień i różnica względem tutaj", optionHundredths: "Setne części", defaultTab: "Karta przy otwarciu",
   shortcutsGroupGeneral: "Ogólne", shortcutsGroupItems: "Budziki, minutniki, stopery, pomodoro",
   shortcutsGroupEditor: "Podczas edycji", shortcutsGroupWorld: "Świat", shortcutsGroupRinging: "Gdy coś dzwoni",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Przyciski pod widokiem przełączają to samo.",
   sectionMap: "Mapa",
   sectionSky: "Niebo",
-  sectionCityList: "Lista miast",
   sectionShown: "Widoczne",
   sectionObjects: "Obiekty",
   sectionTime: "Czas",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "zainstalowana",
   changesShowOlder: "Pokaż starsze wersje",
   changesEnglishNote: "Dziennik jest prowadzony po angielsku.",
-  changesNone: "Nie znaleziono dziennika zmian."
+  changesNone: "Nie znaleziono dziennika zmian.",
+  placesTab: "Miejsca",
+  placesTabHint: "Tutaj i twoje miasta: ich czas, dzień i różnica względem tutaj, wschód i zachód słońca oraz tarcza zegara dla każdego."
 }

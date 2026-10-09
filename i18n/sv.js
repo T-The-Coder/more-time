@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Världen", alarmsTab: "Alarm", timersTab: "Timer", stopwatchesTab: "Stoppur", pomodorosTab: "Pomodoro",
-  worldTabHint: "En karta eller en jordglob över tidszonerna och tiden i dina städer.",
+  worldTabHint: "En karta eller en jordglob över tidszonerna med natten, skymningen, solen och månen, och en tidslinje under.",
   alarmsTabHint: "Alarm ringer vid en tid på dygnet, en gång eller valda veckodagar.",
   timersTabHint: "Timer räknar ner och ringer när tiden är ute.",
   stopwatchesTabHint: "Stoppur räknar upp och tar varv.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Öppna widgeten vid hovring", citiesCount: "Städer i fältet", clockSection: "Klocka",
   optionSeconds: "Sekunder", optionDate: "Datum", optionWeek: "Veckonummer", optionDayOfYear: "Dag på året",
   optionZone: "Tidszon", optionAnalog: "Urtavla", optionNextAlarm: "Nästa alarm", optionMap: "Karta", optionNight: "Nattsida",
-  optionRuler: "Timmar över och under kartan", optionMapLabels: "Stadsnamn på kartan", optionCityList: "Stadslista",
+  optionRuler: "Timmar över och under kartan", optionMapLabels: "Stadsnamn på kartan",
   optionDifference: "Dag och skillnad mot här", optionHundredths: "Hundradelar", defaultTab: "Flik vid öppning",
   shortcutsGroupGeneral: "Allmänt", shortcutsGroupItems: "Alarm, timer, stoppur, pomodoros",
   shortcutsGroupEditor: "Vid redigering", shortcutsGroupWorld: "Världen", shortcutsGroupRinging: "När något ringer",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Knapparna under vyn växlar samma saker.",
   sectionMap: "Karta",
   sectionSky: "Himmel",
-  sectionCityList: "Stadslista",
   sectionShown: "Visas",
   sectionObjects: "Objekt",
   sectionTime: "Tid",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "installerad",
   changesShowOlder: "Visa äldre versioner",
   changesEnglishNote: "Loggen förs på engelska.",
-  changesNone: "Ingen ändringslogg hittades."
+  changesNone: "Ingen ändringslogg hittades.",
+  placesTab: "Platser",
+  placesTabHint: "Här och dina städer: deras tid, dagen och skillnaden mot här, soluppgång och solnedgång, och en urtavla för var och en."
 }

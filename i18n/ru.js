@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Мир", alarmsTab: "Будильники", timersTab: "Таймеры", stopwatchesTab: "Секундомер", pomodorosTab: "Помидоро",
-  worldTabHint: "Карта или глобус часовых поясов и время в ваших городах.",
+  worldTabHint: "Карта или глобус часовых поясов с ночью, сумерками, Солнцем и Луной и шкалой времени под ними.",
   alarmsTabHint: "Будильники звонят в заданное время, один раз или в выбранные дни.",
   timersTabHint: "Таймеры отсчитывают время и звонят по окончании.",
   stopwatchesTabHint: "Секундомеры считают время и засекают круги.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Открывать виджет при наведении", citiesCount: "Городов на панели", clockSection: "Часы",
   optionSeconds: "Секунды", optionDate: "Дата", optionWeek: "Номер недели", optionDayOfYear: "День года",
   optionZone: "Часовой пояс", optionAnalog: "Циферблат", optionNextAlarm: "Следующий будильник", optionMap: "Карта", optionNight: "Ночная сторона",
-  optionRuler: "Часы над и под картой", optionMapLabels: "Названия городов на карте", optionCityList: "Список городов",
+  optionRuler: "Часы над и под картой", optionMapLabels: "Названия городов на карте",
   optionDifference: "День и разница со здесь", optionHundredths: "Сотые", defaultTab: "Вкладка при открытии",
   shortcutsGroupGeneral: "Общие", shortcutsGroupItems: "Будильники, таймеры, секундомеры, помидоро",
   shortcutsGroupEditor: "При редактировании", shortcutsGroupWorld: "Мир", shortcutsGroupRinging: "Когда что-то звонит",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Кнопки под видом переключают то же самое.",
   sectionMap: "Карта",
   sectionSky: "Небо",
-  sectionCityList: "Список городов",
   sectionShown: "Показ",
   sectionObjects: "Объекты",
   sectionTime: "Время",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "установлена",
   changesShowOlder: "Показать старые версии",
   changesEnglishNote: "Журнал ведётся на английском.",
-  changesNone: "Журнал изменений не найден."
+  changesNone: "Журнал изменений не найден.",
+  placesTab: "Места",
+  placesTabHint: "Здесь и ваши города: их время, день и разница со здешним, восход и закат и циферблат для каждого."
 }

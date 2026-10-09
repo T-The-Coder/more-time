@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Dünya", alarmsTab: "Alarmlar", timersTab: "Zamanlayıcılar", stopwatchesTab: "Kronometre", pomodorosTab: "Pomodoro",
-  worldTabHint: "Saat dilimlerinin haritası ya da küresi ve şehirlerinizdeki saat.",
+  worldTabHint: "Gece, alacakaranlık, Güneş ve Ay ile saat dilimlerinin haritası ya da küresi, altında bir zaman çizelgesi.",
   alarmsTabHint: "Alarmlar günün bir saatinde, bir kez ya da seçilen günlerde çalar.",
   timersTabHint: "Zamanlayıcılar geri sayar ve bitince çalar.",
   stopwatchesTabHint: "Kronometreler ileri sayar ve tur alır.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Üzerine gelince widget’ı aç", citiesCount: "Çubuktaki şehirler", clockSection: "Saat",
   optionSeconds: "Saniye", optionDate: "Tarih", optionWeek: "Hafta numarası", optionDayOfYear: "Yılın günü",
   optionZone: "Saat dilimi", optionAnalog: "Kadran", optionNextAlarm: "Sonraki alarm", optionMap: "Harita", optionNight: "Gece tarafı",
-  optionRuler: "Haritanın üstünde ve altında saatler", optionMapLabels: "Haritada şehir adları", optionCityList: "Şehir listesi",
+  optionRuler: "Haritanın üstünde ve altında saatler", optionMapLabels: "Haritada şehir adları",
   optionDifference: "Gün ve buraya göre fark", optionHundredths: "Salise", defaultTab: "Açılıştaki sekme",
   shortcutsGroupGeneral: "Genel", shortcutsGroupItems: "Alarmlar, zamanlayıcılar, kronometreler, pomodorolar",
   shortcutsGroupEditor: "Düzenlerken", shortcutsGroupWorld: "Dünya", shortcutsGroupRinging: "Bir şey çalarken",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Görünümün altındaki çipler aynı şeyleri değiştirir.",
   sectionMap: "Harita",
   sectionSky: "Gökyüzü",
-  sectionCityList: "Şehir listesi",
   sectionShown: "Gösterilen",
   sectionObjects: "Nesneler",
   sectionTime: "Zaman",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "kurulu",
   changesShowOlder: "Eski sürümleri göster",
   changesEnglishNote: "Günlük İngilizce tutulur.",
-  changesNone: "Değişiklik günlüğü bulunamadı."
+  changesNone: "Değişiklik günlüğü bulunamadı.",
+  placesTab: "Yerler",
+  placesTabHint: "Burası ve şehirlerin: saatleri, gün ve buraya göre fark, gün doğumu ve batımı, her biri için bir kadran."
 }

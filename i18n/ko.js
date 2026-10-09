@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "세계", alarmsTab: "알람", timersTab: "타이머", stopwatchesTab: "스톱워치", pomodorosTab: "뽀모도로",
-  worldTabHint: "시간대 지도나 지구본과 내 도시들의 시각.",
+  worldTabHint: "밤, 박명, 해와 달이 있는 시간대 지도 또는 지구본과 그 아래 타임라인.",
   alarmsTabHint: "알람은 정한 시각에 한 번 또는 선택한 요일마다 울립니다.",
   timersTabHint: "타이머는 거꾸로 세다가 끝나면 울립니다.",
   stopwatchesTabHint: "스톱워치는 시간을 재고 랩을 기록합니다.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "마우스 오버 시 위젯 열기", citiesCount: "막대의 도시 수", clockSection: "시계",
   optionSeconds: "초", optionDate: "날짜", optionWeek: "주 번호", optionDayOfYear: "연중 일수",
   optionZone: "시간대", optionAnalog: "시계판", optionNextAlarm: "다음 알람", optionMap: "지도", optionNight: "밤 지역",
-  optionRuler: "지도 위아래의 시각", optionMapLabels: "지도의 도시 이름", optionCityList: "도시 목록",
+  optionRuler: "지도 위아래의 시각", optionMapLabels: "지도의 도시 이름",
   optionDifference: "날짜와 이곳과의 차이", optionHundredths: "1/100초", defaultTab: "열 때의 탭",
   shortcutsGroupGeneral: "일반", shortcutsGroupItems: "알람, 타이머, 스톱워치, 뽀모도로",
   shortcutsGroupEditor: "편집 중", shortcutsGroupWorld: "세계", shortcutsGroupRinging: "무언가 울릴 때",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "보기 아래의 칩이 같은 항목을 전환합니다.",
   sectionMap: "지도",
   sectionSky: "하늘",
-  sectionCityList: "도시 목록",
   sectionShown: "표시",
   sectionObjects: "천체",
   sectionTime: "시간",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "설치됨",
   changesShowOlder: "이전 버전 보기",
   changesEnglishNote: "기록은 영어로 작성됩니다.",
-  changesNone: "변경 기록을 찾을 수 없습니다."
+  changesNone: "변경 기록을 찾을 수 없습니다.",
+  placesTab: "장소",
+  placesTabHint: "여기와 등록한 도시: 각 도시의 시각, 날짜와 여기와의 차이, 일출과 일몰, 그리고 도시마다 시계 문자판."
 }

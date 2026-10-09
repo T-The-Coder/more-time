@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "Mundo", alarmsTab: "Alarmes", timersTab: "Timers", stopwatchesTab: "Cronômetro", pomodorosTab: "Pomodoro",
-  worldTabHint: "Um mapa ou um globo dos fusos horários e a hora nas suas cidades.",
+  worldTabHint: "Um mapa ou um globo dos fusos horários, com a noite, o crepúsculo, o Sol e a Lua, e uma linha do tempo por baixo.",
   alarmsTabHint: "Alarmes tocam numa hora do dia, uma vez ou nos dias escolhidos.",
   timersTabHint: "Timers fazem contagem regressiva e tocam ao terminar.",
   stopwatchesTabHint: "Cronômetros contam o tempo e marcam voltas.",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "Abrir o widget ao passar o ponteiro", citiesCount: "Cidades na barra", clockSection: "Relógio",
   optionSeconds: "Segundos", optionDate: "Data", optionWeek: "Número da semana", optionDayOfYear: "Dia do ano",
   optionZone: "Fuso horário", optionAnalog: "Mostrador", optionNextAlarm: "Próximo alarme", optionMap: "Mapa", optionNight: "Lado noturno",
-  optionRuler: "Horas acima e abaixo do mapa", optionMapLabels: "Nomes de cidades no mapa", optionCityList: "Lista de cidades",
+  optionRuler: "Horas acima e abaixo do mapa", optionMapLabels: "Nomes de cidades no mapa",
   optionDifference: "Dia e diferença para aqui", optionHundredths: "Centésimos", defaultTab: "Aba ao abrir",
   shortcutsGroupGeneral: "Geral", shortcutsGroupItems: "Alarmes, timers, cronômetros, pomodoros",
   shortcutsGroupEditor: "Ao editar", shortcutsGroupWorld: "Mundo", shortcutsGroupRinging: "Enquanto algo toca",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "Os chips sob a vista mudam o mesmo.",
   sectionMap: "Mapa",
   sectionSky: "Céu",
-  sectionCityList: "Lista de cidades",
   sectionShown: "Mostrado",
   sectionObjects: "Objetos",
   sectionTime: "Tempo",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "instalada",
   changesShowOlder: "Mostrar versões anteriores",
   changesEnglishNote: "O registo é mantido em inglês.",
-  changesNone: "Nenhum registo de alterações encontrado."
+  changesNone: "Nenhum registo de alterações encontrado.",
+  placesTab: "Locais",
+  placesTabHint: "Aqui e as suas cidades: a hora, o dia e a diferença para aqui, o nascer e o pôr do sol, e um mostrador para cada uma."
 }

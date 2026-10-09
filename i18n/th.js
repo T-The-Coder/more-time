@@ -4,7 +4,7 @@
 // missing here falls back to it.
 var catalog = {
   worldTab: "โลก", alarmsTab: "นาฬิกาปลุก", timersTab: "ตัวจับเวลา", stopwatchesTab: "นาฬิกาจับเวลา", pomodorosTab: "โพโมโดโร",
-  worldTabHint: "แผนที่หรือลูกโลกของเขตเวลาและเวลาในเมืองของคุณ",
+  worldTabHint: "แผนที่หรือลูกโลกของเขตเวลา พร้อมกลางคืน แสงสนธยา ดวงอาทิตย์และดวงจันทร์ และไทม์ไลน์ด้านล่าง",
   alarmsTabHint: "นาฬิกาปลุกดังตามเวลาที่ตั้ง ครั้งเดียวหรือในวันที่เลือก",
   timersTabHint: "ตัวจับเวลานับถอยหลังและดังเมื่อหมดเวลา",
   stopwatchesTabHint: "นาฬิกาจับเวลานับขึ้นและบันทึกรอบ",
@@ -72,7 +72,7 @@ var catalog = {
   openWidgetOnHover: "เปิดวิดเจ็ตเมื่อชี้เมาส์", citiesCount: "จำนวนเมืองในแถบ", clockSection: "นาฬิกา",
   optionSeconds: "วินาที", optionDate: "วันที่", optionWeek: "เลขสัปดาห์", optionDayOfYear: "วันของปี",
   optionZone: "เขตเวลา", optionAnalog: "หน้าปัด", optionNextAlarm: "นาฬิกาปลุกถัดไป", optionMap: "แผนที่", optionNight: "ฝั่งกลางคืน",
-  optionRuler: "ชั่วโมงเหนือและใต้แผนที่", optionMapLabels: "ชื่อเมืองบนแผนที่", optionCityList: "รายการเมือง",
+  optionRuler: "ชั่วโมงเหนือและใต้แผนที่", optionMapLabels: "ชื่อเมืองบนแผนที่",
   optionDifference: "วันและความต่างจากที่นี่", optionHundredths: "ร้อยละวินาที", defaultTab: "แท็บเมื่อเปิด",
   shortcutsGroupGeneral: "ทั่วไป", shortcutsGroupItems: "นาฬิกาปลุก ตัวจับเวลา นาฬิกาจับเวลา โพโมโดโร",
   shortcutsGroupEditor: "ขณะแก้ไข", shortcutsGroupWorld: "โลก", shortcutsGroupRinging: "เมื่อมีสิ่งใดดัง",
@@ -329,7 +329,6 @@ var catalog = {
   chipsHint: "ชิปใต้มุมมองสลับสิ่งเดียวกัน",
   sectionMap: "แผนที่",
   sectionSky: "ท้องฟ้า",
-  sectionCityList: "รายชื่อเมือง",
   sectionShown: "แสดง",
   sectionObjects: "วัตถุ",
   sectionTime: "เวลา",
@@ -456,5 +455,7 @@ var catalog = {
   changesCurrent: "ติดตั้งแล้ว",
   changesShowOlder: "แสดงเวอร์ชันเก่ากว่า",
   changesEnglishNote: "บันทึกนี้เขียนเป็นภาษาอังกฤษ",
-  changesNone: "ไม่พบบันทึกการเปลี่ยนแปลง"
+  changesNone: "ไม่พบบันทึกการเปลี่ยนแปลง",
+  placesTab: "สถานที่",
+  placesTabHint: "ที่นี่และเมืองของคุณ: เวลา วันและความต่างจากที่นี่ เวลาพระอาทิตย์ขึ้นและตก และหน้าปัดนาฬิกาของแต่ละเมือง"
 }
