@@ -643,6 +643,9 @@ Panel {
     return true
   }
 
+  // Where the places are picked: Places, else the World map.
+  function showPlacesTab() { return showTab("places") || showTab("world") }
+
   // ---- Menu bar --------------------------------------------------------------
   // Each entry shows always ("<key>"), only when it matters ("<key>WhenRelevant")
   // or only while the pointer rests on the widget ("<key>OnHover").
@@ -992,7 +995,7 @@ Panel {
   readonly property var tabKinds: ({ alarms: "alarms", timers: "timers", stopwatches: "stopwatches", pomodoros: "pomodoros" })
   // Selected item id per tab, and the selected city's index.
   property var selection: ({})
-  // The World tab's selection is the current place as well: -1 is here,
+  // The Places tab's selection is the current place as well: -1 is here,
   // 0… a city. The clock on top shows the current place; alarms, chimes and
   // the menu bar stay on this computer's clock.
   property int selectedCity: -1
@@ -1582,7 +1585,7 @@ Panel {
     } else if (handleItemKey(tab, event, left, right)) event.accepted = true
   }
 
-  // The World tab's list (from handlePanelKey): the clock face chooser
+  // The Places tab's list (from handlePanelKey): the clock face chooser
   // (← → style; Enter, Space, e close), e opens it, / the search, ← → the
   // current place, x or Delete removes the city. True when taken.
   function handleWorldListKey(event, left, right) {
@@ -1714,16 +1717,16 @@ Panel {
     function settings(): void { root.openFromHotkey(); root.openSettings() }
     // A tab by name (world, places, alarms, timers, stopwatches, pomodoros, astro).
     function tab(name: string): void { root.openFromHotkey(); root.showTab(name) }
-    // The World tab with city n (1-based) selected; the next / previous city.
-    // The current place: city n (from 1), the next / previous one, or here.
+    // The current place: city n (from 1), the next / previous one, or here,
+    // shown on the Places tab (the World tab when Places is hidden).
     function city(n: int): void {
       root.openFromHotkey()
-      root.showTab("world")
+      root.showPlacesTab()
       if (n >= 1 && n <= root.cityList.length) root.selectedCity = n - 1
     }
-    function here(): void { root.openFromHotkey(); root.showTab("world"); root.setCurrentPlace(-1) }
-    function nextCity(): void { root.openFromHotkey(); root.showTab("world"); root.cyclePlace(1) }
-    function previousCity(): void { root.openFromHotkey(); root.showTab("world"); root.cyclePlace(-1) }
+    function here(): void { root.openFromHotkey(); root.showPlacesTab(); root.setCurrentPlace(-1) }
+    function nextCity(): void { root.openFromHotkey(); root.showPlacesTab(); root.cyclePlace(1) }
+    function previousCity(): void { root.openFromHotkey(); root.showPlacesTab(); root.cyclePlace(-1) }
     function stopRinging(): void { root.ringer.stopAll() }
     function snooze(): void { root.ringer.snoozeNewest() }
     // The chimes, for every instance (a general setting).

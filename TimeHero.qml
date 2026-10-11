@@ -4,7 +4,7 @@ import qs.Ui
 import "Model.js" as Model
 
 // The clock itself, on top, for the current place (here, or the city
-// picked in the World tab): the place's name, the time large, seconds,
+// picked in the Places tab): the place's name, the time large, seconds,
 // date, week, day of the year, its zone, sunrise and sunset with the golden
 // and blue hour, and the next alarm; optionally a dial. With a city current,
 // a line keeps the time here in view. The
@@ -27,7 +27,7 @@ Item {
     return panel.hour12 ? text.replace(/\s*\S+$/, "") : text
   }
 
-  // The current place's clock face, in its style (e in the World tab).
+  // The current place's clock face, in its style (e in the Places tab).
   TimeDial {
     id: dial
     visible: hero.panel.displaySetting("heroAnalog", true)
@@ -101,7 +101,7 @@ Item {
         font.letterSpacing: 1
         elide: Text.ElideRight
 
-        TapHandler { onTapped: hero.panel.showTab("places") || hero.panel.showTab("world") }
+        TapHandler { onTapped: hero.panel.showPlacesTab() }
         HoverHandler { id: nameHover; cursorShape: Qt.PointingHandCursor }
       }
 
@@ -123,7 +123,7 @@ Item {
           anchors.fill: parent
           hoverEnabled: true
           cursorShape: Qt.PointingHandCursor
-          onClicked: hero.panel.showTab("places") || hero.panel.showTab("world")
+          onClicked: hero.panel.showPlacesTab()
         }
       }
     }

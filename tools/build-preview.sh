@@ -21,7 +21,7 @@ work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
 mkdir -p "$root/screenshots"
-for scene in world-globe world-map alarms timers pomodoros settings-sounds; do
+for scene in world-globe world-map places astro astro-eclipse alarms timers pomodoros settings-changes; do
   cp "$in/$scene.png" "$root/screenshots/$scene.png"
 done
 
@@ -29,19 +29,20 @@ done
 # the accent line of the bar's edge between them.
 magick "$in/bar.png" -gravity center -crop 512x32+0+0 +repage "$work/bar.png"
 magick "$work/bar.png" \( -size 512x2 "xc:$accent" \) \( -size 512x8 "xc:$bg" \) \
-  \( "$in/widget.png" -bordercolor "$accent" -border 1 -gravity north -crop 512x1000+0+0 +repage \) \
+  \( "$in/widget.png" -gravity north -crop 512x660+0+0 +repage -bordercolor "$accent" -border 1 -gravity north -crop 512x662+0+0 +repage \) \
   -append +repage "$root/screenshots/menubar-widget.png"
 
 # The preview: the list on the left, the bar and the popup in the middle,
-# the clock with the globe and the flat map on the right.
+# the clock with the globe (New York, 12 hours) and the Astro tab's solar
+# system before the stars on the right.
 panel() {  # source crop-geometry width output
   magick "$1" -crop "$2" +repage -resize "$3x" -bordercolor "$line" -border 3 "$4"
 }
 panel "$in/world-globe.png" 941x672+0+0 900 "$work/p1.png"
-panel "$in/world-map.png" 941x520+0+190 900 "$work/p2.png"
-magick "$root/screenshots/menubar-widget.png" -resize x1000 -bordercolor "$line" -border 3 "$work/w.png"
+panel "$in/astro.png" 941x540+0+30 900 "$work/p2.png"
+magick "$root/screenshots/menubar-widget.png" -resize 480x -bordercolor "$line" -border 3 "$work/w.png"
 
-bullets=("World clock: map or globe" "Alarms, timers, pomodoros" "Chimes, sun, moon & sky")
+bullets=("New: Astro, the sky as a clock" "World map, globe & Places" "Alarms, timers, pomodoros")
 args=()
 y=560
 for text in "${bullets[@]}"; do
@@ -52,14 +53,14 @@ done
 
 magick -size 2400x1350 "xc:$bg" \
   -fill "$accent" -draw "roundrectangle 90,150 470,206 8,8" \
-  -font "$bold" -pointsize 30 -fill "$bg" -annotate +118+190 "NEW · VERSION 1.0" \
+  -font "$bold" -pointsize 30 -fill "$bg" -annotate +118+190 "NEW · VERSION 1.1" \
   -font "$bold" -pointsize 92 -fill "$accent" -annotate +86+330 "More Time" \
   -font "$font" -pointsize 40 -fill "$fg" -annotate +92+398 "for the Omarchy bar" \
   "${args[@]}" \
   -font "$font" -pointsize 30 -fill "$muted" -annotate +98+1040 "30 languages · 24 h / 12 h" \
   -annotate +98+1080 "full keyboard control" \
-  "$work/w.png" -geometry +880+170 -composite \
+  "$work/w.png" -geometry +860+330 -composite \
   "$work/p1.png" -geometry +1440+110 -composite \
-  "$work/p2.png" -geometry +1440+770 -composite \
+  "$work/p2.png" -geometry +1440+760 -composite \
   "$root/preview.png"
 echo "preview.png and screenshots/ updated"

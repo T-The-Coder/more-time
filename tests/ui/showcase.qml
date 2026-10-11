@@ -6,7 +6,8 @@ import "Time/WorldMap.js" as WorldMap
 
 // The README pictures (tests/ui-showcase.sh): the app at 941 × 1150, the
 // popup's view at 480 wide and the menu bar, with the cities, alarms,
-// timers and pomodoros the script wrote. A step is 1.2 s.
+// timers and pomodoros the script wrote. Each scene sets its clock format
+// (12 or 24 hours) and the moment it shows (scene()). A step is 1.2 s.
 ShellRoot {
   id: harness
   readonly property string shots: Quickshell.env("MT_SHOTS") || "/tmp"
@@ -65,6 +66,30 @@ ShellRoot {
     return null
   }
 
+  function findNamed(item, name) {
+    if (!item) return null
+    if (item.objectName === name) return item
+    for (var i = 0; i < item.children.length; i++) {
+      var found = findNamed(item.children[i], name)
+      if (found) return found
+    }
+    return null
+  }
+  function astro() { return findNamed(panel.contentRoot, "timeAstro") }
+  function astroView() { return astro().parent }
+  function cityIndex(name) {
+    for (var i = 0; i < panel.cityList.length; i++)
+      if (panel.cityList[i].name === name) return i
+    return -1
+  }
+  // A scene: its clock format ("12" or "24") and the moment it shows (ms,
+  // UTC; 0 is the script's moment, against which the items were written).
+  function scene(hours, moment) {
+    panel.displayOptionsStore.setGeneralSetting("timeFormat", hours)
+    panel.clockOffsetMs = (moment || harness.clockAt) > 0 ? (moment || harness.clockAt) - Date.now() : 0
+    console.log("SHOWCASE scene", hours + " h", new Date(moment || harness.clockAt).toISOString())
+  }
+
   readonly property var steps: [].concat(
     [function() {
       panel.clockOffsetMs = harness.clockOffset()
@@ -74,31 +99,89 @@ ShellRoot {
       app("heroBlueHour", true)
       app("worldMoon", true)
       app("worldDials", true)
-      app("worldSunNext", true)
+      app("worldSunrise", true)
+      app("worldSunset", true)
+      app("worldSunNext", false)
       app("worldRuler", true)
+      app("astroConstellations", true)
       panel.setCurrentPlace(-1)
       panel.activeTab = "world"
     }],
-    wait(4),
-    // (1) The clock and the globe turned to the Atlantic: Berlin, the
-    // twilight bands, the Moon, the cities with their faces.
-    // Facing the Atlantic while the sun is up there; at night there the
-    // sunlit side with the evening line in view instead.
+    wait(3),
+    // (1) The globe from New York in 12 hours, at 7:13 AM there (11:13
+    // UTC), just after sunrise: the morning line west of the city with the
+    // golden and the blue band, the day over the Atlantic. The scenes move
+    // the clock only back from the script's moment, so nothing comes due.
     [function() {
-      var g = findGlobe(panel.contentRoot)
-      if (!g) return
-      g.finishTurn()
-      var now = panel.nowMs
-      g.centerLon = WorldMap.sunElevation(30, -28, now) > 5 ? -28 : WorldMap.subsolarPoint(now).lon - 45
+      harness.scene("12", Date.UTC(2026, 9, 11, 11, 13))
+      panel.setCurrentPlace(harness.cityIndex("New York"))
     }],
+    wait(3),
+    [function() { var g = findGlobe(panel.contentRoot); if (g) g.finishTurn() }],
     wait(2),
     [function() { press(Qt.Key_Home) }, function() { shot("world-globe") }],
-    // (2) The flat map with the hour ruler, the night in three steps and the sun.
-    [function() { app("worldStyle", "map") }],
-    wait(2),
-    [function() { shot("world-map") }],
-    // (3) Alarms, one at Tokyo's time, its editor open on the place.
+    // (2) The flat map from Tokyo in 24 hours, at 17:10 there (08:10 UTC),
+    // just before its sunset; the morning line over the Atlantic.
     [function() {
+      harness.scene("24", Date.UTC(2026, 9, 11, 8, 10))
+      panel.setCurrentPlace(harness.cityIndex("Tokyo"))
+      app("worldStyle", "map")
+    }],
+    wait(3),
+    [function() { press(Qt.Key_Home) }, function() { shot("world-map") }],
+    // (3) Places in 24 hours: Berlin as here, the cities with their clock
+    // faces, sunrise and sunset.
+    [function() {
+      harness.scene("24", 0)
+      panel.setCurrentPlace(-1)
+      panel.activeTab = "places"
+    }],
+    wait(2),
+    [function() { press(Qt.Key_Home) }, function() { shot("places") }],
+    // (4) Astro: the solar system before the stars and the constellations,
+    // the sky events open on the eclipses.
+    [function() {
+      panel.activeTab = "astro"
+      var a = harness.astro()
+      a.zoomIndex = 0
+      a.azimuth = -35
+      a.elevation = 34
+      var v = harness.astroView()
+      v.eventsOpen = true
+      v.eventsFilter = "eclipses"
+    }],
+    wait(3),
+    // Scrolled to the end: the model, the chips, the timeline and the events.
+    [function() { harness.astroView().computeEvents(); press(Qt.Key_End) }],
+    wait(1),
+    [function() { shot("astro") }],
+    // (5) The total solar eclipse of 2 August 2027 (10:07 UTC) in the Earth
+    // and Moon view: the Moon's shadow on Earth, the stars behind. The
+    // Sun stands at 130° ecliptic longitude from Earth; the camera looks
+    // from 35° beside it (azimuth = longitude + 90°, AstroView.view).
+    [function() {
+      var a = harness.astro()
+      a.showAt(Date.UTC(2027, 7, 2, 10, 7))
+      a.zoomIndex = 2
+      a.azimuth = 130 + 90 + 35
+      a.elevation = 35
+      harness.astroView().eventsOpen = false
+    }],
+    wait(3),
+    [function() {
+      var a = harness.astro()
+      console.log("SHOWCASE eclipse", JSON.stringify(a.eclipseNow ? { type: a.eclipseNow.e.type } : null))
+      press(Qt.Key_Home)
+    }],
+    wait(1),
+    [function() { shot("astro-eclipse") }],
+    [function() {
+      var a = harness.astro()
+      a.backToNow(); a.finishTravel(); a.zoomIndex = 0; a.elevation = 30
+    }],
+    // (6) Alarms in 12 hours, one at Tokyo's time, its editor open on the place.
+    [function() {
+      harness.scene("12", 0)
       panel.activeTab = "alarms"
       panel.select("alarms", "a2")
       panel.editingId = "a2"
@@ -106,32 +189,33 @@ ShellRoot {
     }],
     wait(2),
     [function() { shot("alarms") }, function() { panel.editingId = "" }],
-    // (4) Timers running, one named.
-    [function() { panel.activeTab = "timers"; panel.select("timers", "t1") }],
+    // (7) Timers running in 24 hours, one named.
+    [function() { harness.scene("24", 0); panel.activeTab = "timers"; panel.select("timers", "t1") }],
     wait(2),
     [function() { shot("timers") }],
-    // (5) Pomodoros: one in focus, one in its break, and the tally.
-    [function() { app("heroPomodoroTally", true); panel.activeTab = "pomodoros" }],
+    // (8) Pomodoros in 12 hours: one in focus, one in its break, the tally.
+    [function() { harness.scene("12", 0); app("heroPomodoroTally", true); panel.activeTab = "pomodoros" }],
     wait(2),
     [function() { shot("pomodoros") }],
-    // (6) Settings → Sounds: the chimes.
-    [function() { app("heroPomodoroTally", false); panel.openSettings("sounds") }],
+    // (9) Settings → What's new, in 24 hours.
+    [function() { harness.scene("24", 0); app("heroPomodoroTally", false); panel.openSettings("changes") }],
     wait(2),
-    [function() { shot("settings-sounds") }, function() { panel.settingsOpen = false }],
-    // The popup's view, 480 wide, and the menu bar with coloured values:
-    // the time, two cities, a running timer and the bell of a timer that
-    // has just run out.
+    [function() { shot("settings-changes") }, function() { panel.settingsOpen = false }],
+    // The popup's view, 480 wide, in 24 hours on the map from Berlin, and
+    // the menu bar with coloured values: the time, two cities, a running
+    // timer and a pomodoro.
     [function() {
       onSurface("menubar", "cities", true)
       onSurface("menubar", "citiesCount", "2")
       onSurface("menubar", "timers", true)
       onSurface("menubar", "menubarAccents", "always")
+      onSurface("widget", "worldStyle", "map")
       panel.activeTab = "world"
       panel.contentRoot.parent = widgetHost
     }],
     wait(3),
     [function() { press(Qt.Key_Home) }, function() { shot("widget") },
-      function() { panel.startTimer(1000, "Eggs"); barHost.active = true }],
+      function() { barHost.active = true }],
     wait(5),
     [function() {
       var barPanel = harness.findPanel(barHost.item)
@@ -139,8 +223,7 @@ ShellRoot {
       console.log("SHOWCASE bar", barPanel ? "clock moved" : "panel not found")
     }],
     wait(2),
-    // The bell blinks: catch it lit.
-    [function() { if (barHost.item) barHost.item.blinkOn = true; shot("bar", barHost) },
+    [function() { shot("bar", barHost) },
       function() { Qt.quit() }]
   )
 

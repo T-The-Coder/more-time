@@ -1,8 +1,10 @@
 # More Time
 
 A clock plugin for the [Omarchy](https://omarchy.org) bar with a world clock on
-a map of the time zones, alarms, timers, stopwatches and pomodoros, as many of
-each as you like. The same view also runs as a standalone app window. It works
+a map or a globe of the time zones, your places with their clock faces and sun
+times, alarms, timers, stopwatches and pomodoros, as many of each as you like,
+and the solar system as a clock before the real star sky, with eclipses and
+other sky events. The same view also runs as a standalone app window. It works
 the way [More Weather](https://github.com/T-The-Coder/more-weather) does: the same
 popup, settings, hover entries in the bar, 30 languages and full keyboard
 control.
@@ -49,8 +51,8 @@ control.
   and the next alarm. In the popup a click on the time opens the app; the
   buttons in the corner mute the chimes (shown while a chime is set up) and
   open the app and the settings.
-- **Current place:** here, or one of your cities, like More Weather's "My
-  places". The row above the time shows it: the location pin goes back to here, the name
+- **Current place:** here, or one of your cities from the Places tab. The
+  row above the time shows it: the location pin goes back to here, the name
   and ▾ open the Places tab. With a city current, a line keeps the time here in
   view. `Alt 0` is here, `Alt 1`–`9` a city, `Alt ← →` go round, from any tab.
   The bar and the app show the same place, and it is kept across restarts.
@@ -121,18 +123,18 @@ control.
     seasons: a year in a minute, each day at the same clock time), `,` `.`
     step a day, `⌫` or **Now** go back. The night, the twilight bands, the
     Sun and the Moon follow the shown instant, which a label on the map
-    names; the city list keeps the real time. On the GPU surface a frame
+    names; the Places tab keeps the real time. On the GPU surface a frame
     of it changes only the Sun's direction.
   - Buttons whose glyph says it all show only the glyph, their name as a
     tooltip after a moment (and to screen readers): "+" for a new city,
     alarm, stopwatch or pomodoro, ‹ › to page the sky events, ▶ for the
     time lapses, the zoom buttons. Sunrise and sunset are drawn as in More
     Weather (a horizon with an arrow up or down), in the Sun's gold, in the
-    clock's sun line and the city list.
+    clock's sun line and in Places.
 - **Places** (its own tab since the World tab became the map alone; the
   map marks the place selected here, and a click on the map selects it):
   - Your place (the location pin and its name, as in More
-    Weather) and the city list: time, day/night, today, tomorrow
+    Weather) and your cities: time, day/night, today, tomorrow
     or yesterday, and the difference to here, all from the system's time zone
     database, summer time included. Per row, as More Weather's menu bar
     entries do it, the sunrise, the sunset and the next of the two with a
@@ -168,7 +170,7 @@ control.
   - As many as you like, each with a time, the weekdays it repeats on (none: once),
     a name and its own snooze length.
   - Optionally at a city's time: the editor's **Place** picks here or a city of
-    the World tab, and the alarm rings at that time there, summer time
+    the Places tab, and the alarm rings at that time there, summer time
     included (from the zone's own changes). The card shows both, e.g.
     "7:00 Tokyo · 12:00 AM here"; a zone this computer does not know is
     marked.
@@ -360,17 +362,21 @@ control.
 
 ## Screenshots
 
-| Berlin with the globe, golden and blue hour, the cities' clock faces | The flat map: hour ruler, three-step night, the sun | Alarms: one at Tokyo's time, the editor open |
+| The globe from New York at sunrise (12 hours): the golden and blue hour on the morning line | The map from Tokyo just before sunset (24 hours): the hour ruler, the night in three steps, the timeline | Places: Berlin as here and the cities with their clock faces, sunrise and sunset (24 hours) |
 |---|---|---|
-| ![Globe](screenshots/world-globe.png) | ![Map](screenshots/world-map.png) | ![Alarms](screenshots/alarms.png) |
+| ![Globe](screenshots/world-globe.png) | ![Map](screenshots/world-map.png) | ![Places](screenshots/places.png) |
 
-| Timers running, one named | Pomodoros: focus, a break, today's tally | Menu bar with coloured values, and the widget |
+| Astro: the solar system before the stars and constellations, the next eclipses | Astro: the total solar eclipse of 2 August 2027, the Moon's shadow on Earth | Alarms (12 hours): one at Tokyo's time, the editor open |
+|---|---|---|
+| ![Astro](screenshots/astro.png) | ![Solar eclipse](screenshots/astro-eclipse.png) | ![Alarms](screenshots/alarms.png) |
+
+| Timers running, one named (24 hours) | Pomodoros (12 hours): focus, a break, today's tally | Menu bar with coloured values over the widget (24 hours) |
 |---|---|---|
 | ![Timers](screenshots/timers.png) | ![Pomodoros](screenshots/pomodoros.png) | ![Menu bar and widget](screenshots/menubar-widget.png) |
 
-| Settings → Sounds: the chimes |
+| Settings → What's new: this change log, read from the plugin |
 |---|
-| ![Sounds settings](screenshots/settings-sounds.png) |
+| ![What's new](screenshots/settings-changes.png) |
 
 ## Keyboard
 
@@ -409,7 +415,18 @@ too.
 | `0`–`9` | Type the time (`730` → 7:30) |
 | `Space` | Weekday on / off |
 | `Enter` | Done, or type the name |
-| **Places** (`/`, `n` and `←` `→` also on the World tab) | |
+| **World** | |
+| `← →` / `h l` | Select a place: here or a city, marked on the map |
+| `+` / `−` | Zoom the globe or the map in / out (also `Ctrl` + wheel at the pointer, a double click, the buttons) |
+| `0` | The whole globe or map, on the current place |
+| `Ctrl ← → ↑ ↓` | Turn and tilt the zoomed globe, or pan the zoomed map |
+| `,` / `.` | A day back / forward on the timeline |
+| `Space` | Play or pause the time lapse |
+| `⌫` | Back to now |
+| `/` / `n` | Add a city (the search opens in Places) |
+| **Places** | |
+| `↑ ↓` / `j k` | Select a place: here or a city (`← →` / `h l` too) |
+| `⇧ ↑ ↓` / `J K` | Move the selected city |
 | `/` / `n` / `+` | Add a city |
 | `↑ ↓` (search) | Move within the results or the saved places |
 | `Tab` / `⇧ Tab` (search) | Switch between results and saved places |
@@ -417,12 +434,8 @@ too.
 | `+` (search) | In the saved cities (Tab): add the marked result |
 | `−` (search) | In the saved cities (Tab): remove the marked city |
 | `Esc` (search) | Close the search |
-| `← →` / `h l` | Select a place: here or a city (`↑ ↓` / `j k` too) |
 | `e` | Clock face style of the selected place (`← →` pick, `Enter` / `Esc` close) |
 | `x` / `Del` | Remove the city (press twice) |
-| `+` / `−` | Zoom the globe or the map in / out (also `Ctrl` + wheel at the pointer, a double click, the buttons) |
-| `0` | The whole globe or map, on the current place |
-| `Ctrl ← → ↑ ↓` | Turn and tilt the zoomed globe, or pan the zoomed map |
 | **Astro** | |
 | `Ctrl ← →` | Turn the view (also a drag or the sideways wheel) |
 | `Ctrl ↑ ↓` | Tilt the view (also a drag up or down) |
@@ -432,6 +445,8 @@ too.
 | `Space` | Play or pause the timeline |
 | `n` / `⌫` | Back to now (a time lapse) |
 | `g` | Go to a date (`Enter` travels, `Esc` leaves the field or stops the travel) |
+| `i` | Unfold / fold the info |
+| `e` | Show / hide the sky events (`↑ ↓` and `Enter` travel to one) |
 | **While something rings** | |
 | `Space` / `Enter` | Stop |
 | `s` | Snooze |
@@ -488,6 +503,15 @@ too.
   Small-Body Database, Halley from JPL Horizons' elements, the large moons from
   JPL's satellite mean elements, the spacecraft from Horizons' state vectors
   (`AstroBodies.js`).
+- **Sky:** the stars to magnitude 5 from the
+  [Yale Bright Star Catalogue](https://cdsarc.cds.unistra.fr/ftp/V/50/) (public
+  domain, with the IAU's star names), the constellation figures and names from
+  [d3-celestial](https://github.com/ofrohn/d3-celestial) (BSD 3-Clause), the
+  eclipses from NASA's [Five Millennium Catalogs](https://eclipse.gsfc.nasa.gov/SEcat5/)
+  ("Eclipse Predictions by Fred Espenak (NASA's GSFC)"), all shipped in
+  `data/` (`tools/build-astro-stars.py`, `tools/build-astro-eclipses.py`); the
+  Moon as seen from a place after Meeus (`MoonView.js`). Nothing is fetched;
+  `ASTRO-SKY.md` has the details.
 - **ISS:** one two-line element set (NORAD 25544) from
   [CelesTrak](https://celestrak.org/), only while the Astro option ISS is on and
   the tab shows, at most every 12 hours; checked (checksums, catalogue number)
@@ -549,7 +573,12 @@ the bar, or the app while no bar is running.
 omarchy plugin update more-time
 ```
 
-See [CHANGELOG.md](CHANGELOG.md) for release notes.
+See [CHANGELOG.md](CHANGELOG.md) for release notes; Settings → What's new
+shows them in the app, read from the installed plugin. Your settings, cities
+and items stay as they are. From 1.0 to 1.1: the city list moves to its own
+Places tab (hidden if you had switched the list off), so the number keys of
+the tabs after World move one on; chimes you set up keep ringing (only fresh
+settings start with them off).
 
 ## Removal
 
@@ -604,10 +633,10 @@ qs ipc -p /usr/share/omarchy/shell call more-time toggleChimes
 |---|---|
 | `open`, `close`, `toggle` (`show`, `hide`) | The popup |
 | `settings` | Opens the popup with the settings |
-| `tab <name>` | Opens the popup on a tab: `world`, `alarms`, `timers`, `stopwatches`, `pomodoros`, `astro` |
-| `city <n>` | Opens the popup on the World tab with city *n* (from 1) as the current place |
-| `here` | Opens the popup on the World tab with here as the current place |
-| `nextCity`, `previousCity` | Opens the popup on the World tab and makes the next / previous place current (here and the cities in turn) |
+| `tab <name>` | Opens the popup on a tab: `world`, `places`, `alarms`, `timers`, `stopwatches`, `pomodoros`, `astro` |
+| `city <n>` | Opens the popup on the Places tab (the World tab if Places is hidden) with city *n* (from 1) as the current place |
+| `here` | Opens the popup on the Places tab with here as the current place |
+| `nextCity`, `previousCity` | Opens the popup on the Places tab and makes the next / previous place current (here and the cities in turn) |
 | `startTimer <minutes>` | Starts a timer |
 | `toggleStopwatch`, `togglePomodoro` | Starts or pauses the first one (adds one if there is none) |
 | `stopRinging`, `snooze` | Stops everything that rings / snoozes the newest alarm |
@@ -624,7 +653,7 @@ Node's built-in test runner:
 node --test tests/*.test.mjs
 tests/qml-syntax.sh    # every QML file parses (qmllint)
 tests/ui-shots.sh      # screenshots of every view, offscreen, with a throwaway HOME
-tests/ui-showcase.sh   # the README pictures: cities, alarms, timers, pomodoros, Berlin as here
+tests/ui-showcase.sh   # the README pictures: each scene in 12 or 24 hours at a set moment
 ```
 
 Every `Text` sets `textFormat: Text.PlainText`, so a place name or label

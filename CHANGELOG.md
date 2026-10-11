@@ -2,185 +2,139 @@
 
 All notable changes to More Time are documented here.
 
-## Unreleased
+## 1.1.0 — 2026-10-11
 
-- **World and Places, two tabs:** the World tab is the map or the globe
-  with its chips and timeline; the city list (here and your cities, their
-  difference, clock faces and sun times, the search, `+`, moving and
-  removing) is the new **Places** tab, with its own Display card. The map
-  still marks the place selected there, and a click on the map selects it.
-  Places is shown wherever the list was ("City list" on). The tabs after
-  World move one number on: `1`–`9` and the Display card order count
-  Places as the second tab.
-- **Nothing moves while the monitor is off:** with the screen turned off
-  (DPMS: a key binding, or Omarchy on idle) the turns, the time lapses and
-  the ISS refresh rest as on another workspace, and go on at once when it
-  is back (`ScreenState.qml`, shared with More Weather, asks Hyprland).
-- **The globe and the solar system turn evenly and reliably:** turning by
-  itself no longer stops when the pointer (and with it the keyboard focus)
-  leaves the app window, nor waits the whole delay again when it comes
-  back; a tilted globe keeps turning round its axis; each step is timed
-  from the last frame shown (the new shared `MotionGate.qml`), and on
-  another workspace (asked of Hyprland) the turn, the time lapses and the
-  ISS's refresh rest, using next to no CPU.
-- **Chips show "on" plainly:** a chip that is on (under the World and Astro
-  views, the time-lapse speeds) has the selected fill and accent text, as a
-  toggled button, readable on light themes too; the settings search sits
-  above the pages, the test buttons and the presets field have the
-  dropdowns' height, and Astro's "Info line" setting is called "Info".
-- **What's new in the settings:** a sixth page shows this change log, a card
-  per version, newest first, read from the installed plugin.
-- **Chimes are off by default** for fresh settings, the hour chime too;
-  settings saved before keep their chimes.
-- **Sunrise and sunset as in More Weather:** the clock's sun line now draws
-  them like More Weather's daily rows (a horizon with an arrow, 11 points,
-  2 from the time) in the Sun's gold, as the city list does; the golden and
-  blue hour keep their glyphs, the golden one in gold.
-- **Fewer words on buttons:** "+" for a new city, alarm, stopwatch or
-  pomodoro and ‹ › for the sky events' pages, with their full names as
-  tooltips (also on ▶ and the zoom buttons) and for screen readers.
-- **Control hints** (Settings › General › App, on by default): off, the
-  lines that explain keys and gestures disappear and leave their room to
-  the content; the Shortcuts page stays.
-- **Astro: time lapse.** The timeline plays as a time lapse from real
-  time to a year in a minute, chosen from a list; the shown date and time
-  stay in view and count. "Play on opening" starts it with the tab.
-- **World: a timeline under the map** (on by default in the app): a day in
-  a minute, a day in ten seconds or the seasons (a year in a minute at the
-  same clock time); the night, the twilight, the Sun and the Moon follow
-  it, a label on the map names the instant, the city list keeps the real
-  time. `,` `.` a day, `Space` play, `⌫` now.
-- **Astro: sky events** (`e`, on by default in the app): eclipses from
-  NASA's five-millennium catalogues (with whether they can be seen from the
-  current place), the Moon's phases, the seasons, oppositions,
-  conjunctions, greatest elongations, close planet pairs, perihelion and
-  aphelion around the shown moment, filtered and paged; a click travels
-  there. A solar eclipse shows the Moon's shadow on Earth, a lunar one a
-  copper Moon. The info names the next eclipses, the hovers the zodiac
-  constellation.
-- **Astro: more room for the model:** the info folds to one line (`i`
-  unfolds it), the events sit behind a button beside it, and the model
-  keeps at least 55 % of the visible height. Hovering a constellation
-  figure highlights and names it.
-- **Astro: the stars behind everything** (on by default): the stars to
-  magnitude 5 from the Yale Bright Star Catalogue where they stand on the
+- **New Astro tab: the solar system as a clock.** The Sun and the eight
+  planets where they stand now (JPL's approximate Keplerian elements,
+  computed on this computer), at a slant from above, distances as r^0.45 so
+  all orbits fit. A drag turns and tilts the view, `Ctrl` + arrows too;
+  `+` `−`, `Ctrl` + wheel or the buttons at the top right switch between
+  the whole system, the inner system and Earth's neighbourhood, `0` resets;
+  it can turn by itself like the globe. A month ring around Earth's orbit
+  makes Earth the hand of the year, with the equinoxes and solstices marked;
+  the pointer on a body shows its distances, period, day and axial tilt. On
+  in the app, off in the widget; `tab astro` over IPC.
+- **Astro: the real star sky.** Behind everything (on by default) the stars
+  to magnitude 5 from the Yale Bright Star Catalogue where they stand on the
   sky, turning with the view; a bright star under the pointer is named with
-  its constellation. **Constellations** (off by default): the stick figures
-  with their Latin names (d3-celestial, BSD licence, shown on the Sources
-  page). Both have chips under the view.
-- **The Moon as seen from here, for real:** Display → Moon view (formerly
-  "Moon") "As seen from here" now tilts the lit side as the Moon stands in
-  the sky of the current place at that moment, lights a thin crescent's
-  dark side with earthshine and dims the Moon while it is below the
-  horizon. Its hover, the Astro Moon label and the info line add its
-  height and direction and when it rises and sets there.
-- **One Sun colour:** the map, the globe (also on the GPU), Astro and the
-  sunrise and sunset icons in the city list draw the Sun in the same gold,
-  softened towards the text colour until it reads at 3:1 (shared with More
-  Weather).
-- **Settings, reorganised:** a search across every page (`/`), finding
-  settings in the interface language or in English; General in sections
-  (language and format, location, defaults for new items, motion, app, back
-  up and restore); sub-headings in the long cards (World: map, sky, city
-  list; Astro: shown, objects, time; Clock: clock, sun, more); one Motion
-  group in General for every view that turns by itself (the delay, the speed
-  and the frames per second were set per surface and per view; the app's
-  globe values come over once); "Copy to the widget / app" in Display; the
-  map's choice is now called Shape.
-- **Chips under the World and Astro views** switch the map's shape, the
-  night, the twilight bands, the Moon, the labels and the ruler, and what
-  the solar system shows, for the view shown.
-- **Astro: the ISS** (an option, off by default): the space station over
-  its place in the Earth and Moon view and the inset, with its ground track
-  and on hover where it is, its height and its orbit. Its orbit data come
-  from CelesTrak (at most twice a day, only while the option is on and the
-  tab shows) and are propagated with SGP4 on this computer.
+  its constellation. Constellations (off by default) add the stick figures
+  with their Latin names (d3-celestial, BSD licence, credited on the Sources
+  page); hovering a figure highlights and names it.
+- **Astro: Earth, the Moon and the planets turning.** Earth is a real globe
+  in the Earth–Moon zoom and in a corner inset (a click zooms there): its
+  land and its night, turned and tilted as it is now; the Moon circles it lit
+  by the Sun, its near side always towards Earth. The planets show their
+  tilt and turning, Uranus lies on its side, Saturn wears its rings in their
+  plane.
 - **Astro: belts, dwarf planets, Halley, moons and spacecraft.** The
   asteroid and Kuiper belts and Ceres, Pluto and Eris (on by default),
   Halley's Comet with its tail, the large moons of Jupiter and Saturn close
   up on the planet under the pointer or clicked, Voyager 1 and 2 and New
-  Horizons as arrows at the edge with their distance and JWST near L2 in
-  the Earth and Moon view; each group has its own switch, and the pointer
-  names each body with its distances, period or speed.
+  Horizons as arrows at the edge with their distance and JWST near L2; each
+  group has its own switch.
+- **Astro: the ISS,** an option off by default: the space station over its
+  place in the Earth and Moon view and the inset, with its ground track and,
+  on hover, where it is, its height and its orbit. Its orbit data come from
+  CelesTrak (at most twice a day, only while the option is on and the tab
+  shows) and are propagated with SGP4 on this computer.
+- **Astro: timeline, time lapse and Go to date.** Under the model a
+  timeline over the year either side of today (drag it, `,` `.` a day, `n`
+  now) plays as a time lapse (`Space`, ▶) at a speed from real time to a
+  year in a minute; the shown date and time count beside it, and Play on
+  opening starts it with the tab. Go to date (`g`) travels to any moment
+  from 3000 BC to 3000 AD and stays there until Now (outside 1800–2050 from
+  JPL's long-range elements, marked approximate). Everything in the view
+  follows the shown moment.
+- **Astro: sky events,** behind `e` (on by default in the app): eclipses from
+  NASA's five-millennium catalogues (with whether they can be seen from the
+  current place), the Moon's phases, the seasons, oppositions, conjunctions,
+  greatest elongations, close planet pairs, perihelion and aphelion around
+  the shown moment, filtered and paged with ‹ ›; a click travels there. A
+  solar eclipse shows the Moon's shadow on Earth, a lunar one a copper Moon.
+- **Astro: the info, folded.** One line under the model (`i` or a click
+  unfolds it) names the Moon's phase with the next new and full moon, the
+  Moon at the current place, the next equinox or solstice, opposition and
+  eclipses, and the planets in the evening and the morning sky; the model
+  keeps at least 55 % of the visible height. The pointer on the Sun, a
+  planet or the Moon names the zodiac constellation it stands in.
+- **World and Places, two tabs:** the World tab is the map or the globe
+  with its chips, timeline and zoom; the new Places tab holds here and your
+  cities (their time, the day and the difference to here, sunrise and
+  sunset, a clock face each), the city search, `+`, moving and removing,
+  with its own Display card. The map marks the place selected in Places,
+  and a click on the map selects it. Settings saved with the old city list
+  off keep Places hidden. The tabs after World move one number on: `1`–`9`
+  count Places as the second tab.
+- **World: a timeline under the map,** on by default in the app: a day in
+  a minute, a day in ten seconds or the seasons (a year in a minute at the
+  same clock time); the night, the twilight, the Sun and the Moon follow
+  it, a label on the map names the instant, Places keeps the real time.
+  `,` `.` a day, `Space` play, `⌫` now.
+- **World: zoom, chips and a globe that fills the window.** A cluster at
+  the top right (crosshair, −, +), `+` `−`, `Ctrl` + wheel at the pointer
+  or a double click zoom the globe and the map in three steps (to about
+  1,600 km across); zoomed in, a drag turns and tilts the globe to any
+  latitude or pans the map, `0` shows the whole earth. The globe takes the
+  height visible in the app or the popup (at least 240 points) and follows
+  the window; the flat map narrows, centred, when it would not fit. Chips
+  under the view switch the shape, the night, the twilight bands, the Moon,
+  the labels and the ruler.
 - **The globe and the map on the GPU:** where the graphics allow it, the
-  World tab's globe and map draw the zones, the land and the night with a
-  shader (shared with More Weather) from a picture painted once per change,
-  so turning by itself costs little; lines, the golden and blue bands, the
-  Sun, the Moon and the places stay as they were. Without GPU drawing, and
-  zoomed in to the last step, it draws as before. The IPC status reports the
-  globe's frames and processor share. The coast, the grid and the golden and blue
-  bands are part of the GPU picture too, so while the globe turns only the
-  Sun, the Moon and the places are drawn per frame.
-- **Astro: timeline, Go to date and the info line.** A timeline under the
-  solar system shows the year either side of today, with a track to drag
-  and `,` `.` `Space` `n` keys; **Go
-  to date** (`g`) travels in a time lapse to any moment from 3000 BC to
-  3000 AD and stays there until **Now** brings it back (outside 1800–2050
-  from JPL's long-range elements, marked approximate). The info names
-  the Moon's phase and its next new and full moon, the next equinox or
-  solstice, the next opposition and the planets in the evening and the
-  morning sky. Everything in the view follows the shown moment.
-- **Zoom on the globe and the map, buttons in the Astro tab:** a small
-  cluster at the top right (crosshair, −, +) as on More Weather's globe. The
-  globe and the flat map zoom in three steps (to about 1,600 km across) with
-  the buttons, `+` `−`, `Ctrl` + wheel at the pointer or a double click; the
-  zoomed globe turns and tilts to any latitude under a drag, the zoomed map
-  pans; `0` shows the whole earth. In the World tab `+` now zooms (`/` and
-  `n` still add a city). In the Astro tab the crosshair returns to the start
-  view and − + step between the whole system, the inner system and Earth.
-- **Astro: Earth, Moon and the bodies turning.** Earth is a real globe in
-  the Earth–Moon zoom and in a new corner inset (a click zooms there): its
-  land, its night, turned and tilted as it is now and seen from the
-  camera's side; the Moon circles it lit by the Sun, its near side always
-  towards Earth, with phase, distance and age on hover. The planets show
-  their tilt and turning (latitude bands, a meridian), Uranus lies on its
-  side, Saturn wears its rings in their plane; hover adds the day's length
-  and the axial tilt. The Sun is drawn in warm gold. New options: rotation
-  and tilt, the Earth and Moon inset.
+  zones, the land, the coast, the grid, the night and the golden and blue
+  bands are drawn by a shader (shared with More Weather) from a picture
+  painted once per change, so while the globe turns only the Sun, the Moon
+  and the places are drawn per frame. Without GPU drawing, and zoomed in to
+  the last step, it draws as before. The IPC status reports the globe's
+  frames and processor share.
+- **Motion that rests when nobody looks:** the globe and the solar system
+  turn by themselves only while you can see them, with the popup open or
+  the app window shown, focused or not; on another workspace or with the
+  monitor off (both asked of Hyprland) the turns, the time lapses and the
+  ISS refresh rest and use next to no CPU, and go on at once when you are
+  back. Each step is timed from the last frame shown, so the pace stays
+  even; a tilted globe turns round its axis. While turning the globe is
+  drawn more simply, and one Motion group in General sets the delay, the
+  speed and the frames per second (8, 15, 24 or 30; 15 by default) for
+  every view that turns.
+- **The Moon as seen from here:** Display → Moon view → "As seen from here"
+  draws the Moon on the map and the globe as it stands in the sky of the
+  current place at that moment: its lit side tilted as you see it there, a
+  thin crescent's dark side lit by earthshine, dimmed while it is below the
+  horizon. Its hover, the Astro Moon label and the info add its height and
+  direction and when it rises and sets there.
+- **One Sun, drawn as in More Weather:** the map, the globe, Astro and the
+  sun icons draw the Sun in the same gold, softened towards the text colour
+  until it reads at 3:1; sunrise and sunset are a horizon with an arrow, in
+  the clock's sun line and in Places. On the map and the globe the blue
+  hour deepens from the day/night line towards the night.
+- **Settings, reorganised:** a search across every page (`/`), finding
+  settings in the interface language or in English, above the pages;
+  General in sections (language and format, location, defaults for new
+  items, motion, app, back up and restore); sub-headings in the long cards
+  (World: map, sky; Astro: shown, objects, time; Clock: clock, sun, more);
+  "Copy to the widget / app" in Display; the map's choice is now called
+  Shape and Astro's "Info line" Info.
+- **What's new in the settings:** a sixth page shows this change log, a card
+  per version, newest first, read from the installed plugin.
+- **Control hints,** a switch in Settings › General › App (on by default):
+  off, the lines that explain keys and gestures disappear and leave their room to
+  the content; the Shortcuts page stays.
+- **Chimes are off by default:** for fresh settings, the hour chime too;
+  settings saved before keep their chimes.
+- **Fewer words on buttons, clearer chips:** "+" for a new city, alarm,
+  stopwatch or pomodoro and ‹ › for the sky events' pages, with their full
+  names as tooltips (also on ▶ and the zoom buttons) and for screen
+  readers. A chip that is on has the selected fill and accent text, readable
+  on light themes too; buttons and fields share the dropdowns' height.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.
-- **The turning globe no longer keeps a processor core busy:** it (and the
-  solar system) turns by itself only while you can see it, with the popup
-  open or the app window focused, not while the app sits unfocused or on
-  another workspace; it starts again after the delay when you come back.
-  While turning it is drawn more simply (flat zones, a coarser coast, the
-  fills at a third of the resolution and refreshed eight times a second),
-  and a new setting picks the frames per second (8, 15, 24 or 30; 15 by
-  default). At 840 px and 15 frames a second it takes about a third of one
-  core, still about 1 % when nothing turns.
-- **New Astro tab: the solar system as a clock.** The Sun and the eight
-  planets where they stand now (JPL's approximate Keplerian elements,
-  computed on this computer, redrawn every minute), at a slant from above,
-  distances as r^0.45 so all orbits fit. A drag turns and tilts the view,
-  `Ctrl` + arrows too, `+` `−` or `Ctrl` + wheel zoom between the whole
-  system, the inner system and Earth's neighbourhood, `0` resets; it can turn
-  by itself like the globe. A month ring around Earth's orbit makes Earth the
-  hand of the year, with the equinoxes and solstices marked; the pointer on a
-  body shows its distances and period. On in the app, off in the widget;
-  `tab astro` over IPC.
-- **The globe fills the window:** instead of stopping at a fixed size, it
-  takes the height visible below it in the app or the popup (the popup's
-  full height), at most the page's width and at least 240 points, and
-  follows the window as you resize it. The flat map narrows, centred and in
-  its proportions, when it would not fit the visible height.
-- **The blue hour deepens towards the night:** on the map and the globe the
-  blue band is now lightest at the day/night line and deepest towards the
-  night, running into the night steps; the golden band stays strongest at
-  the line.
-- **The Moon as seen from here:** a new choice under Display → Moon draws
-  it as you see it in the sky from the current place (lit on the right
-  while waxing and on the left while waning, mirrored south of the
-  equator) instead of lit from the Sun's direction as seen from space; on
-  the map and the globe alike.
-- **Groundwork for More Weather's globe (nothing changes in More Time):**
-  the sun and sky calculations moved to `Sky.js`; `Globe.js` gained a view
-  that tilts to any latitude, the poles included, and zooms, with the land
-  outline in latitude and longitude (`data/globe-land.json`, built by
-  `tools/build-globe-land.py`). The flat map's Equal Earth projection and
-  its twilight polygons moved to `EqualEarth.js`, which can also put that
-  land on a flat map. These files and their tests are shared with More
-  Weather.
+- **Shared with More Weather:** the sun and sky calculations (`Sky.js`),
+  the tilting and zooming globe (`Globe.js`, `data/globe-land.json`), the
+  Equal Earth map (`EqualEarth.js`), the Moon (`Moon.js`, `MoonView.js`),
+  the GPU surface, the change log reader (`Changelog.js`) and the motion and screen helpers
+  (`MotionGate.qml`, `ScreenState.qml`) are the same files in both plugins,
+  with their tests.
 
 ## 1.0.1 — 2026-10-03
 

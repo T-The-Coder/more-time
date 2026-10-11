@@ -5,7 +5,7 @@ import "Model.js" as Model
 
 // Alarms, as many as needed: a time, the weekdays it repeats on (none: once),
 // a place, a name and the snooze length. They ring on this computer's clock,
-// or at that time in a city of the World tab (its zone, summer time
+// or at that time in a city of the Places tab (its zone, summer time
 // included), with the panel closed too (TimeRinger in the bar).
 Column {
   id: view
@@ -359,7 +359,7 @@ Column {
           }
         }
 
-        // The place: here, or a city of the World tab.
+        // The place: here, or a city of the Places tab.
         Row {
           spacing: Style.space(8)
 
