@@ -130,7 +130,8 @@ Column {
       }
       Keys.onUpPressed: view.search.step(-1)
       Keys.onDownPressed: view.search.step(1)
-      Keys.onPressed: function(event) {
+      // Before the field's own Tab (focus on) and Enter.
+      keyFilter: function(event) {
         var text = String(event.text || "")
         var plain = !(event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier))
         if (event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab) {

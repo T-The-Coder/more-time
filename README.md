@@ -660,9 +660,10 @@ Every `Text` sets `textFormat: Text.PlainText`, so a place name or label
 holding HTML is never rendered as rich text; `tests/plain-text.test.mjs`
 checks the texts fed by the identifiers in `tests/plain-text-sources.json`.
 Texts for `notify-send` go through `Model.notificationText()`. Every text
-input is `TimeTextField.qml`, read-only until it has the keyboard focus, so
-the clipboard is read only when you paste into a field
-(`tests/text-fields.test.mjs`).
+input is `TimeTextField.qml`: one line on TextEdit, read-only until it has the
+keyboard focus. Qt 6.11 and 6.12.0 read the clipboard payload for TextInput's
+canPaste; TextEdit only checks the offered formats, so the clipboard is read
+only when you paste into a field (`tests/text-fields.test.mjs`).
 
 The texts of the 30 languages live in `i18n/<language>.js`, one file each
 (`en.js`, `de.js`, … `zh_TW.js`); `I18n.js` imports them and holds the

@@ -126,9 +126,12 @@ All notable changes to More Time are documented here.
   names as tooltips (also on ▶ and the zoom buttons) and for screen
   readers. A chip that is on has the selected fill and accent text, readable
   on light themes too; buttons and fields share the dropdowns' height.
-- **Text fields rest while idle:** every input is read-only until it has
-  the keyboard focus, so Qt never consults the clipboard for an idle field;
-  the clipboard is read only when you paste.
+- **Text fields leave the clipboard alone:** every input is one line built
+  on TextEdit, read-only until it has the keyboard focus. Qt 6.11 and 6.12.0
+  read the clipboard payload for TextInput's canPaste (a read with no limit
+  on Wayland, which a misbehaving clipboard owner could stall); TextEdit only
+  checks the offered formats, and an idle field not even those, so the
+  clipboard is read only when you paste.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.
