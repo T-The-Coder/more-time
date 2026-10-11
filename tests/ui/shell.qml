@@ -24,6 +24,28 @@ ShellRoot {
     })
   }
 
+  // Text fields: a key as typed into the panel, and the field it focused.
+  property var fieldsSeen: []
+  property var lastField: null
+  function typeKey(key, text) {
+    panel.handlePanelKey({ key: key, text: text, modifiers: 0, accepted: false })
+  }
+  function checkField(name) {
+    var f = panel.activeTextField
+    if (f && harness.fieldsSeen.indexOf(f) < 0) harness.fieldsSeen.push(f)
+    console.log("CHECK field " + name, f ? "focus " + f.activeFocus + " readOnly " + f.readOnly : "none",
+      f && f.activeFocus && !f.readOnly ? "ok" : "WRONG")
+    harness.lastField = f
+    return f
+  }
+  // The field last checked, once the focus has left it (if it still exists).
+  function checkIdle(name) {
+    var f = harness.lastField
+    var alive = !!f && typeof f.readOnly === "boolean"
+    console.log("CHECK field " + name + " idle", alive ? "focus " + f.activeFocus + " readOnly " + f.readOnly : "gone",
+      !alive || (!f.activeFocus && f.readOnly) ? "ok" : "WRONG")
+  }
+
   function general(key, value) { panel.displayOptionsStore.setGeneralSetting(key, value) }
   function display(key, value) { panel.displayOptionsStore.setSettingsDisplaySetting(key, value) }
 
@@ -910,6 +932,73 @@ ShellRoot {
       var items = panel.itemsStore.items
       console.log("CHECK early change after load", "timers", items.timers.length,
         items.timers.some(function(t) { return t.label === "Race" }) ? "ok" : "WRONG")
+    },
+    // Text fields rest while idle (TimeTextField): each one the keys open
+    // has the focus and is writable, its selection kept (selectAll after
+    // the focus), and is read-only again once the focus leaves.
+    function() {
+      harness.fieldsSeen = []
+      panel.activeTab = "places"
+      harness.typeKey(Qt.Key_Slash, "/")
+    },
+    function() {
+      var f = harness.checkField("city search")
+      if (f) f.insert(f.cursorPosition, "Tok")
+    },
+    function() {
+      console.log("CHECK city search typed", JSON.stringify(panel.citySearch.query),
+        panel.citySearch.query === "Tok" ? "ok" : "WRONG")
+      harness.typeKey(Qt.Key_Escape, "")
+    },
+    function() { harness.checkIdle("city search") },
+    function() { panel.activeTab = "timers"; panel.newTimerOpen = true },
+    function() {
+      var f = harness.checkField("new timer")
+      if (f) { f.insert(f.cursorPosition, "7 Typed"); f.accepted() }
+    },
+    function() {
+      harness.checkIdle("new timer")
+      var t = panel.itemsStore.items.timers.filter(function(x) { return x.label === "Typed" })[0]
+      console.log("CHECK new timer typed", t ? t.duration : "none", t && t.duration === 7 * 60000 ? "ok" : "WRONG")
+      if (t) panel.select("timers", t.id)
+      harness.typeKey(Qt.Key_E, "e")
+    },
+    function() {
+      var f = harness.checkField("timer name")
+      console.log("CHECK timer name selected", JSON.stringify(f ? f.selectedText : null),
+        f && f.text === "Typed" && f.selectedText === "Typed" ? "ok" : "WRONG")
+      if (f) { f.remove(0, f.length); f.insert(0, "Renamed"); f.accepted() }
+    },
+    function() {
+      harness.checkIdle("timer name")
+      var named = panel.itemsStore.items.timers.some(function(x) { return x.label === "Renamed" })
+      console.log("CHECK timer name typed", named ? "ok" : "WRONG")
+      panel.activeTab = "astro"
+    },
+    function() { harness.typeKey(Qt.Key_G, "g") },
+    function() {
+      var f = harness.checkField("go to date")
+      if (f) { f.selectAll(); f.insert(f.cursorPosition, "1969-07-20 20:17"); f.accepted() }
+    },
+    function() {
+      harness.checkIdle("go to date")
+      var a = astro()
+      a.finishTravel()
+      var shown = new Date(a.minuteMs).toISOString()
+      console.log("CHECK go to date typed", shown, shown.indexOf("1969-07-") === 0 ? "ok" : "WRONG")
+      a.backToNow(); a.finishTravel()
+      panel.openSettings("general")
+    },
+    function() { harness.typeKey(Qt.Key_Slash, "/") },
+    function() {
+      var f = harness.checkField("settings search")
+      if (f) f.insert(f.cursorPosition, "chime")
+    },
+    function() { panel.restoreKeyFocus() },
+    function() {
+      harness.checkIdle("settings search")
+      panel.settingsOpen = false
+      console.log("CHECK fields focused", harness.fieldsSeen.length, harness.fieldsSeen.length === 5 ? "ok" : "WRONG")
     },
     function() { console.log("STATUS", panel.statusSummary().join(" | ")); Qt.quit() }
   ]

@@ -126,6 +126,9 @@ All notable changes to More Time are documented here.
   names as tooltips (also on ▶ and the zoom buttons) and for screen
   readers. A chip that is on has the selected fill and accent text, readable
   on light themes too; buttons and fields share the dropdowns' height.
+- **Text fields rest while idle:** every input is read-only until it has
+  the keyboard focus, so Qt never consults the clipboard for an idle field;
+  the clipboard is read only when you paste.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.

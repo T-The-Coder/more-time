@@ -50,7 +50,7 @@ Column {
       text: entry.placeholderText
     }
 
-    TextField {
+    TimeTextField {
       id: entry
       width: Math.min(view.width, Math.max(Style.space(150),
         Math.ceil(placeholderMetrics.advanceWidth) + leftPadding + rightPadding + Style.space(4)))

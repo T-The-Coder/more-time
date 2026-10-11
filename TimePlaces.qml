@@ -108,7 +108,7 @@ Column {
     width: parent.width
     spacing: Style.space(4)
 
-    TextField {
+    TimeTextField {
       id: searchField
       width: parent.width
       foreground: view.panel.foreground

@@ -756,7 +756,7 @@ Rectangle {
 
         // A typed value (custom chime minutes, timer presets), checked by the
         // entry's parse().
-        TextField {
+        TimeTextField {
           id: numberField
           readonly property bool valid: dropdownRow.kind !== "field" || text === ""
             || dropdownRow.modelData.parse(text) !== null
@@ -943,7 +943,7 @@ Rectangle {
 
       // Search across every page, above the pages as in More Weather (/
       // focuses it, Esc clears, ↓ goes to the results).
-      TextField {
+      TimeTextField {
         id: searchField
         width: parent.width
         foreground: panel.foreground
@@ -1199,7 +1199,7 @@ Rectangle {
             font.pixelSize: Style.font.bodySmall
           }
 
-          TextField {
+          TimeTextField {
             id: transferPathField
             width: Math.min(parent.width, Style.space(460))
             text: panel.settingsTransfer.shown(panel.settingsTransfer.defaultPath)

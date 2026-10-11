@@ -659,7 +659,10 @@ tests/ui-showcase.sh   # the README pictures: each scene in 12 or 24 hours at a 
 Every `Text` sets `textFormat: Text.PlainText`, so a place name or label
 holding HTML is never rendered as rich text; `tests/plain-text.test.mjs`
 checks the texts fed by the identifiers in `tests/plain-text-sources.json`.
-Texts for `notify-send` go through `Model.notificationText()`.
+Texts for `notify-send` go through `Model.notificationText()`. Every text
+input is `TimeTextField.qml`, read-only until it has the keyboard focus, so
+the clipboard is read only when you paste into a field
+(`tests/text-fields.test.mjs`).
 
 The texts of the 30 languages live in `i18n/<language>.js`, one file each
 (`en.js`, `de.js`, … `zh_TW.js`); `I18n.js` imports them and holds the
@@ -728,7 +731,7 @@ diagonal), drawn on their own Canvas that repaints only when the view turns.
 Moon from here, time lapses) and their sources.
 
 Some files are shared with [More Weather](https://github.com/T-The-Coder/more-weather)
-(the switches, buttons, bar placement, app launcher entry, the request helper,
+(the switches, buttons, text fields, bar placement, app launcher entry, the request helper,
 the place search with `PlaceSearch.js` and its test, the Moon with `Moon.js`,
 `MoonView.js`, their tests and the `MoonSphere` component, `Sky.js`, `EqualEarth.js`, `Globe.js`
 and `data/globe-land.json` with their tests, and parts of the test setup). With both repositories side by side,

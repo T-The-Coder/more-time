@@ -39,7 +39,7 @@ Item {
     }
   }
 
-  TextField {
+  TimeTextField {
     id: field
     visible: labelField.editing
     width: Math.min(parent.width, Style.space(260))

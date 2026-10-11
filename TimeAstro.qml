@@ -2161,7 +2161,7 @@ Column {
       width: parent.width
       spacing: Style.space(10)
 
-      TextField {
+      TimeTextField {
         id: dateField
         width: Math.min(Style.space(200), parent.width / 3)
         foreground: view.panel.foreground
