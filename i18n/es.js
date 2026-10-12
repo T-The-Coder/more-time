@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "¿Reemplazar ajustes?",
   settingsTransferHint: "Ajustes, ciudades, alarmas, temporizadores, cronómetros y pomodoros en un archivo. Una importación guarda antes los actuales en {backup}.",
   settingsExported: "Guardado en {path}.", settingsExportFailed: "No se pudo escribir {path}.",
+  settingsExportNotJson: "Elige un nombre de archivo que termine en .json.",
+  settingsExportExists: "Este archivo ya existe y no es una exportación de este plugin. Pulsa de nuevo para sobrescribirlo.",
   settingsBackupFailed: "No se pudo guardar la copia; no se importó nada.", settingsImportMissing: "No se pudo leer {path}.",
   settingsImportInvalid: "{path} no es un archivo de ajustes de More Time.",
   settingsImported: "Importado de {path}. Los ajustes anteriores están en {backup}.", settingsRestored: "Restaurado de {path}.",

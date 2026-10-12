@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Замінити налаштування?",
   settingsTransferHint: "Налаштування, міста, будильники, таймери, секундоміри й помодоро в одному файлі. Імпорт спершу зберігає поточні в {backup}.",
   settingsExported: "Збережено в {path}.", settingsExportFailed: "Не вдалося записати {path}.",
+  settingsExportNotJson: "Виберіть назву файлу, що закінчується на .json.",
+  settingsExportExists: "Цей файл уже існує і не є експортом цього плагіна. Натисніть ще раз, щоб перезаписати його.",
   settingsBackupFailed: "Не вдалося зберегти резервну копію; нічого не імпортовано.", settingsImportMissing: "Не вдалося прочитати {path}.",
   settingsImportInvalid: "{path} — не файл налаштувань More Time.",
   settingsImported: "Імпортовано з {path}. Попередні налаштування в {backup}.", settingsRestored: "Відновлено з {path}.",

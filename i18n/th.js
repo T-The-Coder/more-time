@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "แทนที่การตั้งค่า?",
   settingsTransferHint: "การตั้งค่า เมือง นาฬิกาปลุก ตัวจับเวลา นาฬิกาจับเวลา และโพโมโดโรในไฟล์เดียว การนำเข้าจะบันทึกค่าปัจจุบันไว้ที่ {backup} ก่อน",
   settingsExported: "บันทึกที่ {path} แล้ว", settingsExportFailed: "เขียน {path} ไม่ได้",
+  settingsExportNotJson: "เลือกชื่อไฟล์ที่ลงท้ายด้วย .json",
+  settingsExportExists: "ไฟล์นี้มีอยู่แล้วและไม่ใช่ไฟล์ส่งออกของปลั๊กอินนี้ กดอีกครั้งเพื่อเขียนทับ",
   settingsBackupFailed: "บันทึกสำรองไม่ได้ ไม่ได้นำเข้าอะไรเลย", settingsImportMissing: "อ่าน {path} ไม่ได้",
   settingsImportInvalid: "{path} ไม่ใช่ไฟล์การตั้งค่าของ More Time",
   settingsImported: "นำเข้าจาก {path} แล้ว การตั้งค่าเดิมอยู่ที่ {backup}", settingsRestored: "กู้คืนจาก {path} แล้ว",

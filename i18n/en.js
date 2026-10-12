@@ -140,6 +140,8 @@ var catalog = {
   settingsImportConfirm: "Replace settings?",
   settingsTransferHint: "Settings, cities, alarms, timers, stopwatches and pomodoros in one file. An import first saves the current ones to {backup}.",
   settingsExported: "Saved to {path}.",
+  settingsExportNotJson: "Choose a file name ending in .json.",
+  settingsExportExists: "This file exists and is not an export of this plugin. Press again to overwrite it.",
   settingsExportFailed: "Could not write {path}.",
   settingsBackupFailed: "Could not save the backup; nothing was imported.",
   settingsImportMissing: "{path} could not be read.",

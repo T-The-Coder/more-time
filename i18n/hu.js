@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Lecseréled a beállításokat?",
   settingsTransferHint: "Beállítások, városok, ébresztők, időzítők, stopperek és pomodorók egy fájlban. Az importálás előbb elmenti a jelenlegieket ide: {backup}.",
   settingsExported: "Mentve ide: {path}.", settingsExportFailed: "{path} nem írható.",
+  settingsExportNotJson: "Válassz .json végződésű fájlnevet.",
+  settingsExportExists: "Ez a fájl már létezik, és nem ennek a bővítménynek az exportja. Nyomd meg újra a felülíráshoz.",
   settingsBackupFailed: "A biztonsági mentés nem sikerült; semmi sem lett importálva.", settingsImportMissing: "{path} nem olvasható.",
   settingsImportInvalid: "{path} nem More Time beállításfájl.",
   settingsImported: "Importálva innen: {path}. A korábbi beállítások itt vannak: {backup}.", settingsRestored: "Visszaállítva innen: {path}.",

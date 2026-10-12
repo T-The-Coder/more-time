@@ -229,3 +229,15 @@ test("solar visibility against the Besselian elements and known cases", () => {
   assert.equal(E.visibleFrom(onDay(2025, 3, 29, "solar")[0], 51.51, -0.13), true) // London, partial
   assert.equal(E.visibleFrom(onDay(2025, 3, 29, "solar")[0], -33.87, 151.21), false)
 })
+
+// A chunk's record length is the kind's, not the one it declares: a stride
+// of 0 would loop for ever.
+test("a chunk with a wrong stride or no data array is refused", () => {
+  const before = E.addChunk(null)
+  const started = Date.now()
+  assert.equal(E.addChunk({ kind: "solar", key: "x0", stride: 0, t0: 0, data: [1, 2, 3, 4, 5, 6, 7] }), before)
+  assert.equal(E.addChunk({ kind: "lunar", key: "x1", stride: 7, t0: 0, data: [1, 2, 3, 4, 5, 6, 7, 8] }), before)
+  assert.equal(E.addChunk({ kind: "solar", key: "x2", stride: 7, t0: 0, data: { length: 4e9 } }), before)
+  assert.equal(E.addChunk({ kind: "other", key: "x3", stride: 7, t0: 0, data: [] }), before)
+  assert.ok(Date.now() - started < 1000)
+})

@@ -88,10 +88,81 @@ QtObject {
     busy = false
   }
 
+  // An export goes only to a name ending in .json, and replaces an existing
+  // file only when that is an export of this plugin, or after a second
+  // press (within overwriteWindowMs) on a file that is not.
+  readonly property int overwriteWindowMs: 10000
+  property string overwritePath: ""
+  property double overwriteAt: 0
+  property string probeText: ""
+
   function exportTo(path) {
     var target = expanded(path)
     if (!target || busy) return
+    if (!/\.json$/i.test(target)) {
+      finish({ key: "settingsExportNotJson", path: target, error: true })
+      return
+    }
     busy = true
+    if (overwritePath === target && Date.now() - overwriteAt < overwriteWindowMs) {
+      overwritePath = ""
+      writeExport(target)
+      return
+    }
+    overwritePath = ""
+    probeText = ""
+    exportProbe.exitCode = -1
+    exportProbe.streamed = false
+    exportProbe.target = target
+    // Exit 3: no such file. Otherwise its first bytes (up to the import
+    // limit, one more to tell a larger file).
+    exportProbe.command = ["sh", "-c", "[ -e \"$1\" ] || [ -L \"$1\" ] || exit 3; head -c \"$2\" -- \"$1\"",
+      "more-time-export-probe", target, String(maxImportBytes + 1)]
+    exportProbe.running = true
+  }
+
+  function isExport(text) {
+    if (text.length > maxImportBytes) return false
+    var data = null
+    try { data = JSON.parse(text) } catch (e) { data = null }
+    return !!data && typeof data === "object" && data.app === "more-time"
+  }
+
+  // Decided once both the exit code and the output are in, whichever
+  // comes first.
+  property Process exportProbe: Process {
+    property string target: ""
+    property int exitCode: -1
+    property bool streamed: false
+    stdout: StdioCollector {
+      onStreamFinished: {
+        transfer.probeText = text
+        transfer.exportProbe.streamed = true
+        transfer.decideExport()
+      }
+    }
+    onExited: function(code) {
+      exportProbe.exitCode = code
+      transfer.decideExport()
+    }
+  }
+
+  function decideExport() {
+    var probe = exportProbe
+    if (probe.exitCode < 0 || !probe.streamed) return
+    var code = probe.exitCode
+    probe.exitCode = -1
+    probe.streamed = false
+    if (code === 3 || (code === 0 && isExport(probeText))) {
+      writeExport(probe.target)
+      return
+    }
+    overwritePath = probe.target
+    overwriteAt = Date.now()
+    finish({ key: "settingsExportExists", path: probe.target, error: true })
+  }
+
+  function writeExport(target) {
     writer.purpose = "export"
     writer.path = target
     writer.setText(JSON.stringify(snapshot(), null, 2) + "\n")
@@ -123,10 +194,37 @@ QtObject {
     onLoadFailed: transfer.finish({ key: "settingsImportMissing", path: path, error: true })
   }
 
+  // An export is a few kilobytes; a file far larger is not one, and is not
+  // read into memory at all: its size is asked first.
+  readonly property int maxImportBytes: 1024 * 1024
+  property Process sizeProc: Process {
+    // The size comes on stdout (then it decides); a failed stat prints
+    // nothing there and exits non-zero: no such file.
+    stdout: StdioCollector {
+      onStreamFinished: {
+        var size = /^\d+$/.test(text.trim()) ? Number(text.trim()) : NaN
+        if (isNaN(size)) return
+        transfer.sized = true
+        if (size > transfer.maxImportBytes)
+          transfer.finish({ key: "settingsImportInvalid", path: transfer.importPath, error: true })
+        else {
+          // A path set again to the same file would not read it anew.
+          transfer.reader.path = ""
+          transfer.reader.path = transfer.importPath
+        }
+      }
+    }
+    onExited: function(code) {
+      if (code !== 0 && !transfer.sized)
+        transfer.finish({ key: "settingsImportMissing", path: transfer.importPath, error: true })
+    }
+  }
+  property bool sized: false
+
   function startImport() {
-    // A path set again to the same file would not read it anew.
-    reader.path = ""
-    reader.path = importPath
+    sized = false
+    sizeProc.command = ["stat", "-L", "-c", "%s", "--", importPath]
+    sizeProc.running = true
   }
 
   function apply(raw) {

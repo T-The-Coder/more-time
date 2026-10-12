@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "تنظیمات جایگزین شود؟",
   settingsTransferHint: "تنظیمات، شهرها، زنگ‌ها، تایمرها، کرنومترها و پومودوروها در یک پرونده. درون‌ریزی ابتدا موارد فعلی را در {backup} ذخیره می‌کند.",
   settingsExported: "در {path} ذخیره شد.", settingsExportFailed: "نوشتن {path} ممکن نشد.",
+  settingsExportNotJson: "نام فایلی انتخاب کنید که به ‎.json ختم شود.",
+  settingsExportExists: "این فایل وجود دارد و خروجی این افزونه نیست. برای بازنویسی دوباره فشار دهید.",
   settingsBackupFailed: "ذخیرهٔ پشتیبان ممکن نشد؛ چیزی درون‌ریزی نشد.", settingsImportMissing: "خواندن {path} ممکن نشد.",
   settingsImportInvalid: "{path} پروندهٔ تنظیمات More Time نیست.",
   settingsImported: "از {path} درون‌ریزی شد. تنظیمات قبلی در {backup} است.", settingsRestored: "از {path} بازیابی شد.",

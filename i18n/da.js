@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Erstat indstillingerne?",
   settingsTransferHint: "Indstillinger, byer, alarmer, timere, stopure og pomodoroer i én fil. En import gemmer først de nuværende i {backup}.",
   settingsExported: "Gemt i {path}.", settingsExportFailed: "Kunne ikke skrive {path}.",
+  settingsExportNotJson: "Vælg et filnavn, der ender på .json.",
+  settingsExportExists: "Filen findes og er ikke en eksport fra dette plugin. Tryk igen for at overskrive den.",
   settingsBackupFailed: "Kunne ikke gemme sikkerhedskopien; intet blev importeret.", settingsImportMissing: "Kunne ikke læse {path}.",
   settingsImportInvalid: "{path} er ikke en indstillingsfil fra More Time.",
   settingsImported: "Importeret fra {path}. De tidligere indstillinger ligger i {backup}.", settingsRestored: "Gendannet fra {path}.",

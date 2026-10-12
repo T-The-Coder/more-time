@@ -2,7 +2,7 @@
 
 A clock plugin for the [Omarchy](https://omarchy.org) bar with a world clock on
 a map or a globe of the time zones, your places with their clock faces and sun
-times, alarms, timers, stopwatches and pomodoros, as many of each as you like,
+times, alarms, timers, stopwatches and pomodoros, up to 100 of each,
 and the solar system as a clock before the real star sky, with eclipses and
 other sky events. The same view also runs as a standalone app window. It works
 the way [More Weather](https://github.com/T-The-Coder/more-weather) does: the same
@@ -166,8 +166,9 @@ control.
     More Weather's saved places as cities, in their order, skipping those
     already here. Each gets the zone of a search for its name (when the
     first result lies within 25 km), else the nearest zone-list city's.
+    One import reads at most 100 places.
 - **Alarms:**
-  - As many as you like, each with a time, the weekdays it repeats on (none: once),
+  - Up to 100, each with a time, the weekdays it repeats on (none: once),
     a name and its own snooze length.
   - Optionally at a city's time: the editor's **Place** picks here or a city of
     the Places tab, and the alarm rings at that time there, summer time
@@ -178,16 +179,16 @@ control.
     asleep still rings if it is at most ten minutes late; an older one leaves a
     "missed" notification.
 - **Timers:**
-  - As many as you like, from presets (1, 3, 5, 10, 15, 25 and 60 minutes to
+  - Up to 100, from presets (1, 3, 5, 10, 15, 25 and 60 minutes to
     begin with; Settings → General → Timers takes your own list) or typed: `10`,
     `1:30`, `1h30`, `45s`. A name can follow the length: `10 Tea` starts a
     ten-minute timer called Tea.
   - Each can be paused, given a minute more or less, reset and named (`e`), and
     shows its progress and end time.
-- **Stopwatches:** as many as you like, with hundredths and laps; the fastest
-  lap is marked in the accent colour, the slowest in red.
+- **Stopwatches:** up to 100, with hundredths and laps (the newest 500 are
+  kept); the fastest lap is marked in the accent colour, the slowest in red.
 - **Pomodoros:**
-  - As many as you like, each with its own focus and break lengths (25/5 to begin
+  - Up to 100, each with its own focus and break lengths (25/5 to begin
     with).
   - An optional long break every few rounds.
   - Whether the next phase starts by itself.
@@ -337,7 +338,10 @@ control.
     explain keys and gestures above each tab, in the editors, the ringing
     banner and the settings; off, they go and leave their room to the
     content, the Shortcuts page stays); back up and restore (export and import
-    of everything, More Weather's places, reset).
+    of everything, More Weather's places, reset). An export goes to a file
+    name ending in `.json` and replaces an existing file only if that is a
+    More Time export, or after a second press; an import reads files up to
+    1 MiB, keeping a backup of the settings it replaces.
   - **Display:** separately for the menu bar, the widget and the app.
     - Menu bar: which entries show, when, and in what order; bold while
       hovered; coloured values; the bar's tooltip; open the widget on hover.

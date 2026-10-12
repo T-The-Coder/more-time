@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Заменить настройки?",
   settingsTransferHint: "Настройки, города, будильники, таймеры, секундомеры и помидоро в одном файле. Импорт сначала сохраняет текущие в {backup}.",
   settingsExported: "Сохранено в {path}.", settingsExportFailed: "Не удалось записать {path}.",
+  settingsExportNotJson: "Выберите имя файла, оканчивающееся на .json.",
+  settingsExportExists: "Этот файл уже существует и не является экспортом этого плагина. Нажмите ещё раз, чтобы перезаписать его.",
   settingsBackupFailed: "Не удалось сохранить резервную копию; ничего не импортировано.", settingsImportMissing: "Не удалось прочитать {path}.",
   settingsImportInvalid: "{path} — не файл настроек More Time.",
   settingsImported: "Импортировано из {path}. Прежние настройки в {backup}.", settingsRestored: "Восстановлено из {path}.",

@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Sostituire le impostazioni?",
   settingsTransferHint: "Impostazioni, città, sveglie, timer, cronometri e pomodori in un file. Un’importazione salva prima quelle attuali in {backup}.",
   settingsExported: "Salvato in {path}.", settingsExportFailed: "Impossibile scrivere {path}.",
+  settingsExportNotJson: "Scegli un nome di file che termini con .json.",
+  settingsExportExists: "Questo file esiste e non è un’esportazione di questo plugin. Premi di nuovo per sovrascriverlo.",
   settingsBackupFailed: "Impossibile salvare il backup; nulla è stato importato.", settingsImportMissing: "Impossibile leggere {path}.",
   settingsImportInvalid: "{path} non è un file di impostazioni di More Time.",
   settingsImported: "Importato da {path}. Le impostazioni precedenti sono in {backup}.", settingsRestored: "Ripristinato da {path}.",

@@ -265,9 +265,27 @@ function newId(prefix, nowMs) {
 //   sound, snoozeMinutes, armedAt, snoozeUntil }
 // Alarms ring on this computer's wall clock.
 
+// An IANA zone name as it may reach zdump and TZ=: letters first, then
+// segments of letters, digits, _ + - after single slashes ("Etc/GMT-14",
+// "America/Port-au-Prince"); never a leading "-" (an option) or "/" (a
+// path), never "..". At most 64 characters.
+var ZONE_NAME = /^[A-Za-z][A-Za-z0-9_+-]*(\/[A-Za-z0-9_+-]+)*$/
+
+function isZoneName(tz) {
+  return typeof tz === "string" && tz.length <= 64 && ZONE_NAME.test(tz)
+}
+
+// An array from parsed data, at most `max` entries (the first ones), or []
+// for anything else: an object with a "length" of four billion is not a
+// list to loop over.
+function listOf(value, max) {
+  if (!Array.isArray(value)) return []
+  return max > 0 && value.length > max ? value.slice(0, max) : value
+}
+
 function normalizedDays(days) {
   var result = []
-  var list = days && days.length !== undefined ? days : []
+  var list = listOf(days, 7 * 4)
   for (var i = 0; i < list.length; i++) {
     var day = Math.round(Number(list[i]))
     if (day >= 0 && day <= 6 && result.indexOf(day) < 0) result.push(day)
@@ -662,6 +680,11 @@ function pomodoroReset(pomodoro) {
 
 // ---- Items file --------------------------------------------------------------
 
+// At most this many of each kind (alarms, timers, stopwatches, pomodoros)
+// are read and kept, and this many laps per stopwatch (the newest).
+var MAX_ITEMS = 100
+var MAX_LAPS = 500
+
 function emptyItems() {
   return { version: 1, alarms: [], timers: [], stopwatches: [], pomodoros: [], pomodoroLog: {} }
 }
@@ -701,15 +724,18 @@ function parseItems(raw) {
   try { parsed = JSON.parse(String(raw || "")) } catch (e) { parsed = null }
   var items = emptyItems()
   if (!parsed || typeof parsed !== "object") return items
-  function list(name) { return parsed[name] && parsed[name].length !== undefined ? parsed[name] : [] }
+  function list(name) { return listOf(parsed[name], MAX_ITEMS) }
   function text(value) { return typeof value === "string" ? value.slice(0, 120) : "" }
   function num(value, fallback) { var n = Number(value); return isFinite(n) ? n : fallback }
   function id(value, prefix, index) { return typeof value === "string" && value !== "" ? value : prefix + "-" + index }
   var states = ["idle", "running", "paused", "done"]
-  var log = parsed.pomodoroLog && typeof parsed.pomodoroLog === "object" ? parsed.pomodoroLog : {}
-  for (var key in log) {
-    var rounds = Math.round(num(log[key], 0))
-    if (/^\d{4}-\d{2}-\d{2}$/.test(key) && rounds > 0) items.pomodoroLog[key] = Math.min(rounds, 999)
+  var log = parsed.pomodoroLog && typeof parsed.pomodoroLog === "object" && !Array.isArray(parsed.pomodoroLog) ? parsed.pomodoroLog : {}
+  // The newest days only (pomodoroLogged keeps 60).
+  var days = Object.keys(log).filter(function(key) { return /^\d{4}-\d{2}-\d{2}$/.test(key) })
+    .sort().slice(-POMODORO_LOG_DAYS)
+  for (var k = 0; k < days.length; k++) {
+    var rounds = Math.round(num(log[days[k]], 0))
+    if (rounds > 0) items.pomodoroLog[days[k]] = Math.min(rounds, 999)
   }
   list("alarms").forEach(function(a, i) {
     if (!a || typeof a !== "object") return
@@ -720,7 +746,7 @@ function parseItems(raw) {
       snoozeMinutes: clamp(Math.round(num(a.snoozeMinutes, 9)), 1, 60),
       armedAt: num(a.armedAt, 0), snoozeUntil: num(a.snoozeUntil, 0),
       // A place (its zone and name), or "" for this computer.
-      tz: typeof a.tz === "string" && /^[A-Za-z0-9_+\-\/]+$/.test(a.tz) ? a.tz : "",
+      tz: isZoneName(a.tz) ? a.tz : "",
       placeName: typeof a.tz === "string" && a.tz !== "" ? text(a.placeName).slice(0, 60) : ""
     })
   })
@@ -734,10 +760,10 @@ function parseItems(raw) {
   })
   list("stopwatches").forEach(function(s, i) {
     if (!s || typeof s !== "object") return
-    var laps = (s.laps && s.laps.length !== undefined ? s.laps : []).map(Number).filter(isFinite)
+    var laps = (Array.isArray(s.laps) ? s.laps.slice(-MAX_LAPS) : []).map(Number).filter(isFinite)
     items.stopwatches.push({
       id: id(s.id, "stopwatch", i), label: text(s.label), running: s.running === true,
-      startedAt: num(s.startedAt, 0), accumulated: Math.max(0, num(s.accumulated, 0)), laps: laps.slice(-500)
+      startedAt: num(s.startedAt, 0), accumulated: Math.max(0, num(s.accumulated, 0)), laps: laps
     })
   })
   list("pomodoros").forEach(function(p, i) {
@@ -805,17 +831,19 @@ function dialStyle(value) {
 // The world clock keeps at most this many cities; adding and importing
 // stop there.
 var MAX_CITIES = 24
+// More Weather's places read for an import, each looked up once by name.
+var MAX_IMPORT_PLACES = 100
 
 // A missing file gives the sample cities; an emptied list stays empty.
 function parseCities(raw, missing) {
   if (missing) return defaultCities()
   var parsed
   try { parsed = JSON.parse(String(raw || "")) } catch (e) { return defaultCities() }
-  if (!parsed || parsed.length === undefined) return defaultCities()
+  if (!Array.isArray(parsed)) return defaultCities()
   var result = []
   for (var i = 0; i < parsed.length && result.length < MAX_CITIES; i++) {
     var c = parsed[i]
-    if (!c || typeof c.tz !== "string" || !/^[A-Za-z0-9_+\-\/]+$/.test(c.tz)) continue
+    if (!c || !isZoneName(c.tz)) continue
     var lat = Number(c.lat)
     var lon = Number(c.lon)
     result.push({
@@ -973,7 +1001,8 @@ function zoneForPlace(results, lat, lon, index) {
 function parseWeatherPlaces(raw) {
   var data
   try { data = JSON.parse(String(raw || "")) } catch (e) { return [] }
-  if (!Array.isArray(data)) return []
+  // Each place is looked up over the network: no more than could be useful.
+  data = listOf(data, MAX_IMPORT_PLACES)
   var out = []
   for (var i = 0; i < data.length; i++) {
     var entry = data[i]
@@ -1059,6 +1088,31 @@ function placeFrom(name, lat, lon) {
 function notificationText(text) {
   return String(text === undefined || text === null ? "" : text)
     .replace(/&/g, "\uff06").replace(/</g, "\u2039").replace(/>/g, "\u203a")
+}
+
+// Rings that came due in the same second (several timers, an alarm and a
+// timer) share one notification: [{ key: "at-<second>", rings }] in the
+// order of their first ring.
+function ringGroups(list) {
+  var groups = {}
+  var order = []
+  for (var i = 0; i < (list || []).length; i++) {
+    var key = "at-" + Math.floor(Number(list[i].at) / 1000)
+    if (!groups[key]) {
+      groups[key] = []
+      order.push(key)
+    }
+    groups[key].push(list[i])
+  }
+  return order.map(function(key) { return { key: key, rings: groups[key] } })
+}
+
+// The same as an argument for a command that takes no "--" (Omarchy's
+// omarchy-notification-send): a text that starts with "-" would be read as
+// an option, so a zero-width space goes in front of it.
+function notificationArgument(text) {
+  var value = notificationText(text)
+  return value.charAt(0) === "-" ? "\u200b" + value : value
 }
 
 function weatherLocation(raw) {

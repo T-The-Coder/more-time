@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "替换设置？",
   settingsTransferHint: "设置、城市、闹钟、计时器、秒表和番茄钟保存在一个文件中。导入前会先把当前内容保存到 {backup}。",
   settingsExported: "已保存到 {path}。", settingsExportFailed: "无法写入 {path}。",
+  settingsExportNotJson: "请选择以 .json 结尾的文件名。",
+  settingsExportExists: "此文件已存在，且不是本插件的导出文件。再按一次以覆盖。",
   settingsBackupFailed: "无法保存备份；未导入任何内容。", settingsImportMissing: "无法读取 {path}。",
   settingsImportInvalid: "{path} 不是 More Time 设置文件。",
   settingsImported: "已从 {path} 导入。之前的设置在 {backup}。", settingsRestored: "已从 {path} 恢复。",

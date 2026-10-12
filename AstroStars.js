@@ -39,13 +39,16 @@ function eclipticDirection(raDeg, decDeg) {
 //     nameList: [{ index, name }] }
 // Brightest first, so the stars to a magnitude are a prefix.
 function stars(data) {
-  var n = data && data.ra ? data.ra.length : 0
+  // As many stars as every column has (a short one would read undefined).
+  var columns = data ? [data.ra, data.dec, data.mag, data.color] : []
+  var n = columns.length && columns.every(Array.isArray)
+    ? Math.min.apply(null, columns.map(function(c) { return c.length })) : 0
   var out = { count: n, hr: [], ra: [], dec: [], mag: [], color: [], x: [], y: [], z: [], names: {}, nameList: [] }
   for (var i = 0; i < n; i++) {
     var ra = data.ra[i] / 1000
     var dec = data.dec[i] / 1000
     var v = eclipticDirection(ra, dec)
-    out.hr.push(data.hr ? data.hr[i] : 0)
+    out.hr.push(Array.isArray(data.hr) && i < data.hr.length ? data.hr[i] : 0)
     out.ra.push(ra)
     out.dec.push(dec)
     out.mag.push(data.mag[i] / 100)
@@ -54,8 +57,9 @@ function stars(data) {
     out.y.push(v.y)
     out.z.push(v.z)
   }
-  var names = data && data.names ? data.names : []
+  var names = data && Array.isArray(data.names) ? data.names : []
   for (var k = 0; k < names.length; k++) {
+    if (!Array.isArray(names[k]) || !(names[k][0] >= 0 && names[k][0] < n)) continue
     out.names[names[k][0]] = names[k][1]
     out.nameList.push({ index: names[k][0], name: names[k][1] })
   }

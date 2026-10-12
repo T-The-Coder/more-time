@@ -557,7 +557,7 @@ Panel {
   function sanitizedOrder(value, orderKey) {
     var defaults = orderKey === "entryOrder" ? defaultEntryOrder() : defaultTabOrder()
     var result = []
-    var list = value && value.length !== undefined && typeof value !== "string" ? value : []
+    var list = Array.isArray(value) ? value.slice(0, 4 * defaults.length) : []
     for (var i = 0; i < list.length; i++) {
       var key = String(list[i])
       if (defaults.indexOf(key) >= 0 && result.indexOf(key) < 0) result.push(key)
@@ -1733,8 +1733,10 @@ Panel {
     function muteChimes(): void { root.setChimesMuted(true) }
     function unmuteChimes(): void { root.setChimesMuted(false) }
     function toggleChimes(): void { root.setChimesMuted(!root.chimesMuted) }
-    // A timer of this many minutes, started at once.
-    function startTimer(minutes: int): void { root.startTimer(minutes * 60000, "") }
+    // A timer of this many minutes, started at once: 1 minute to 7 days.
+    function startTimer(minutes: int): void {
+      root.startTimer(Math.max(1, Math.min(7 * 24 * 60, minutes)) * 60000, "")
+    }
     function toggleStopwatch(): void {
       var list = root.itemsStore.items.stopwatches
       if (list.length) root.toggleItem("stopwatches", list[0].id)

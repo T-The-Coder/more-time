@@ -73,3 +73,18 @@ test("SGP4: the ISS where api.wheretheiss.at puts it, within a kilometre", () =>
   near(track[96].lat, track[0].lat, 1, "latitude after one orbit")
   near(((track[0].lon - track[96].lon) + 540) % 360 - 180, 23, 2, "westward shift")
 })
+
+// A TLE that passes its checksums but holds no orbit (mean motion 0 or
+// negative, eccentricity 1 or more) is refused, not propagated to NaN.
+test("a TLE without an orbit is refused", () => {
+  const [name, l1, l2] = fixture.tle.split("\n")
+  const line = (text) => { const s = text.slice(0, 68); return s + I.checksum(s) }
+  const withMotion = (motion) => [name, l1, line(l2.slice(0, 52) + motion + l2.slice(63))].join("\n")
+  assert.equal(I.parseTle(withMotion("00.00000000"), 25544).error, "orbit")
+  assert.equal(I.parseTle(withMotion("99.99999999"), 25544).error, "orbit")
+  const eccentric = [name, l1, line(l2.slice(0, 26) + "9999999" + l2.slice(33))].join("\n")
+  assert.ok(!I.parseTle(eccentric, 25544).error, "0.9999999 is still an orbit")
+  const el = I.parseTle(fixture.tle, 25544)
+  assert.ok(!el.error)
+  assert.equal(I.groundTrack(el, el.epochMs, 1e9).length, 1001)
+})

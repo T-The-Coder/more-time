@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Înlocuiești setările?",
   settingsTransferHint: "Setări, orașe, alarme, temporizatoare, cronometre și pomodoro într-un fișier. Un import salvează mai întâi setările curente în {backup}.",
   settingsExported: "Salvat în {path}.", settingsExportFailed: "Nu s-a putut scrie {path}.",
+  settingsExportNotJson: "Alege un nume de fișier care se termină cu .json.",
+  settingsExportExists: "Acest fișier există și nu este un export al acestui plugin. Apasă din nou pentru a-l suprascrie.",
   settingsBackupFailed: "Copia de rezervă nu s-a putut salva; nu s-a importat nimic.", settingsImportMissing: "{path} nu a putut fi citit.",
   settingsImportInvalid: "{path} nu este un fișier de setări More Time.",
   settingsImported: "Importat din {path}. Setările anterioare sunt în {backup}.", settingsRestored: "Restaurat din {path}.",

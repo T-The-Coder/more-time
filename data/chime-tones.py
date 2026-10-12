@@ -6,13 +6,14 @@
 writes chime-<tone>-interval.wav and chime-<tone>-hour.wav for each tone
 (all five when none is named) that is not there yet. The hour tone is a
 fifth below the interval tone. Only the standard library is used; files are
-written to a temporary name and renamed, so two instances never see half a
-file.
+written to a fresh temporary file (tempfile.mkstemp) and renamed, so two
+instances never see half a file.
 """
 import math
 import os
 import struct
 import sys
+import tempfile
 import wave
 
 RATE = 44100
@@ -54,13 +55,21 @@ def write(path, tone, f, length):
     values = [sample(tone, f, i / RATE, length) for i in range(n)]
     peak = max(abs(v) for v in values) or 1.0
     frames = b"".join(struct.pack("<h", int(0.6 * 32767 * v / peak)) for v in values)
-    temp = "%s.%d" % (path, os.getpid())
-    with wave.open(temp, "wb") as out:
-        out.setnchannels(1)
-        out.setsampwidth(2)
-        out.setframerate(RATE)
-        out.writeframes(frames)
-    os.replace(temp, path)
+    # A fresh temporary file of our own (mkstemp: created exclusively, never
+    # a planted name or symlink), renamed over the target when complete.
+    fd, temp = tempfile.mkstemp(dir=os.path.dirname(path), prefix=".chime-", suffix=".wav")
+    try:
+        with os.fdopen(fd, "wb") as raw, wave.open(raw, "wb") as out:
+            out.setnchannels(1)
+            out.setsampwidth(2)
+            out.setframerate(RATE)
+            out.writeframes(frames)
+        os.chmod(temp, 0o644)
+        os.replace(temp, path)
+    except BaseException:
+        if os.path.exists(temp):
+            os.unlink(temp)
+        raise
 
 
 def main(argv):

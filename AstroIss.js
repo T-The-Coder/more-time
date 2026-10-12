@@ -78,6 +78,12 @@ function parseTle(text, catalog) {
     noKozai: Number(l2.slice(52, 63)) * PI2 / 1440
   }
   for (var k in el) if (!isFinite(el[k])) return { error: "format" }
+  // An orbit at all: 0.05 to 20 revolutions a day (the ISS makes 15.5), an
+  // eccentricity below 1, an inclination of 0° to 180°. Anything else would
+  // propagate to NaN or Infinity.
+  var revsPerDay = el.noKozai * 1440 / PI2
+  if (!(revsPerDay >= 0.05 && revsPerDay <= 20) || !(el.ecco >= 0 && el.ecco < 1)
+      || !(el.inclo >= 0 && el.inclo <= Math.PI)) return { error: "orbit" }
   return el
 }
 
@@ -321,13 +327,14 @@ function stationAt(el, utcMs, state) {
   var pv = propagate(s, t)
   if (!pv) return null
   var sub = subPoint(pv.r, utcMs)
+  if (!isFinite(sub.lat) || !isFinite(sub.lon) || !isFinite(sub.altitude)) return null
   return { lat: sub.lat, lon: sub.lon, altitude: sub.altitude, r: pv.r, v: pv.v, minutes: t, periodMinutes: PI2 / s.no }
 }
 
 // One orbit's ground track from a moment: `count` places { lat, lon }.
 function groundTrack(el, utcMs, count, state) {
   var s = state || init(el)
-  var n = Math.max(8, count || 90)
+  var n = Math.min(1000, Math.max(8, Math.round(Number(count)) || 90))
   var period = PI2 / s.no
   var out = []
   for (var i = 0; i <= n; i++) {
@@ -335,6 +342,7 @@ function groundTrack(el, utcMs, count, state) {
     var pv = propagate(s, (ms - el.epochMs) / 60000)
     if (!pv) break
     var sub = subPoint(pv.r, ms)
+    if (!isFinite(sub.lat) || !isFinite(sub.lon)) break
     out.push({ lat: sub.lat, lon: sub.lon })
   }
   return out

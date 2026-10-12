@@ -140,6 +140,8 @@ var catalog = {
   settingsImportConfirm: "Einstellungen ersetzen?",
   settingsTransferHint: "Einstellungen, Städte, Wecker, Timer, Stoppuhren und Pomodoros in einer Datei. Ein Import sichert vorher die aktuellen nach {backup}.",
   settingsExported: "Gespeichert in {path}.",
+  settingsExportNotJson: "Wähle einen Dateinamen, der auf .json endet.",
+  settingsExportExists: "Diese Datei gibt es schon, und sie ist kein Export dieses Plugins. Drück noch einmal, um sie zu überschreiben.",
   settingsExportFailed: "{path} konnte nicht geschrieben werden.",
   settingsBackupFailed: "Die Sicherung ließ sich nicht speichern; nichts wurde importiert.",
   settingsImportMissing: "{path} ließ sich nicht lesen.",

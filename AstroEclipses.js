@@ -108,11 +108,15 @@ function byTime(a, b) {
 
 // Adds one parsed file; returns how many eclipses are loaded in all.
 function addChunk(data) {
-  if (!data || !data.data || !data.kind) return all.length
+  if (!data || !Array.isArray(data.data) || (data.kind !== "solar" && data.kind !== "lunar")) return all.length
+  // The record length the kind has (its fields), not merely the one the
+  // file declares: a stride of 0 would never end the loop.
+  var n = data.kind === "solar" ? 7 : 8
+  if (data.stride !== n || !isFinite(data.t0)) return all.length
   var id = data.kind + data.key
   if (loaded[id]) return all.length
   loaded[id] = true
-  var d = data.data, n = data.stride, t = data.t0, list = data.kind === "solar" ? solar : lunar
+  var d = data.data, t = data.t0, list = data.kind === "solar" ? solar : lunar
   for (var i = 0; i + n <= d.length; i += n) {
     t += d[i]
     var utcMs = t * 1000

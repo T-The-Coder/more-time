@@ -567,3 +567,58 @@ test("notification texts carry no markup", () => {
   assert.equal(M.notificationText("Tokyo 8:04"), "Tokyo 8:04")
   assert.equal(M.notificationText(undefined), "")
 })
+
+// Parsed files bound their loops by real arrays, never by a count the data
+// declares: an object with a "length" of four billion is no list.
+test("hostile files: array-likes are not lists, counts are capped", () => {
+  const huge = { length: 4e9 }
+  const started = Date.now()
+  const items = M.parseItems(JSON.stringify({
+    alarms: huge, timers: huge, pomodoros: huge,
+    stopwatches: [{ laps: huge }, { laps: Array.from({ length: 2000 }, (_, i) => i) }],
+    pomodoroLog: Object.fromEntries(Array.from({ length: 1000 }, (_, i) =>
+      [new Date(Date.UTC(2020, 0, 1) + i * 86400000).toISOString().slice(0, 10), 1]))
+  }))
+  assert.equal(items.alarms.length, 0)
+  assert.equal(items.timers.length, 0)
+  assert.equal(items.stopwatches[0].laps.length, 0)
+  assert.equal(items.stopwatches[1].laps.length, M.MAX_LAPS)
+  assert.equal(items.stopwatches[1].laps[0], 2000 - M.MAX_LAPS)
+  assert.equal(Object.keys(items.pomodoroLog).length, M.POMODORO_LOG_DAYS)
+  assert.equal(M.normalizedDays(huge).length, 0)
+  assert.deepEqual(M.parseCities(JSON.stringify(huge), false).map((c) => c.tz), M.defaultCities().map((c) => c.tz))
+  const many = M.parseItems(JSON.stringify({ alarms: Array.from({ length: 5000 }, () => ({ hour: 7 })) }))
+  assert.equal(many.alarms.length, M.MAX_ITEMS)
+  assert.equal(M.parseWeatherPlaces(JSON.stringify(huge)).length, 0)
+  const places = Array.from({ length: 1000 }, (_, i) => ({ name: "P" + i, latitude: 1, longitude: 1 }))
+  assert.equal(M.parseWeatherPlaces(JSON.stringify(places)).length, M.MAX_IMPORT_PLACES)
+  assert.ok(Date.now() - started < 2000)
+})
+
+// Zone names reach zdump and TZ=: IANA-shaped only, never an option or a path.
+test("zone names: IANA shape only", () => {
+  for (const tz of ["Europe/Berlin", "America/Port-au-Prince", "Etc/GMT-14", "Etc/GMT+5", "UTC",
+    "America/Argentina/Buenos_Aires"]) assert.ok(M.isZoneName(tz), tz)
+  for (const tz of ["-c", "/dev/zero", "Europe//Berlin", "Europe/", "../etc", "Europe/Ber lin", "", null,
+    "A".repeat(65)]) assert.ok(!M.isZoneName(tz), String(tz))
+  const cities = M.parseCities(JSON.stringify([{ tz: "-c" }, { tz: "/dev/zero" }, { tz: "Asia/Tokyo" }]), false)
+  assert.deepEqual(cities.map((c) => c.tz), ["Asia/Tokyo"])
+  const items = M.parseItems(JSON.stringify({ alarms: [{ hour: 7, tz: "/etc/passwd" }] }))
+  assert.equal(items.alarms[0].tz, "")
+})
+
+// Omarchy's notification script takes no "--": a leading "-" is guarded.
+test("notification arguments never start with a dash", () => {
+  assert.equal(M.notificationArgument("-g x"), "​-g x")
+  assert.equal(M.notificationArgument("--exec"), "​--exec")
+  assert.equal(M.notificationArgument("Tea <b>"), "Tea ‹b›")
+})
+
+// Rings that came due in the same second share a notification.
+test("ring groups: by second, in order", () => {
+  const groups = M.ringGroups([{ key: "a", at: 1000 }, { key: "b", at: 1999 }, { key: "c", at: 2000 },
+    { key: "d", at: 1500 }])
+  assert.deepEqual(groups.map((g) => [g.key, g.rings.map((r) => r.key)]),
+    [["at-1", ["a", "b", "d"]], ["at-2", ["c"]]])
+  assert.equal(M.ringGroups(null).length, 0)
+})

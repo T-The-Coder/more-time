@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Ayarlar değiştirilsin mi?",
   settingsTransferHint: "Ayarlar, şehirler, alarmlar, zamanlayıcılar, kronometreler ve pomodorolar tek dosyada. İçe aktarma önce mevcutları {backup} dosyasına kaydeder.",
   settingsExported: "{path} konumuna kaydedildi.", settingsExportFailed: "{path} yazılamadı.",
+  settingsExportNotJson: ".json ile biten bir dosya adı seçin.",
+  settingsExportExists: "Bu dosya var ve bu eklentinin bir dışa aktarımı değil. Üzerine yazmak için yeniden basın.",
   settingsBackupFailed: "Yedek kaydedilemedi; hiçbir şey içe aktarılmadı.", settingsImportMissing: "{path} okunamadı.",
   settingsImportInvalid: "{path} bir More Time ayar dosyası değil.",
   settingsImported: "{path} konumundan içe aktarıldı. Önceki ayarlar {backup} içinde.", settingsRestored: "{path} konumundan geri yüklendi.",

@@ -132,6 +132,24 @@ All notable changes to More Time are documented here.
   on Wayland, which a misbehaving clipboard owner could stall); TextEdit only
   checks the offered formats, and an idle field not even those, so the
   clipboard is read only when you paste.
+- **Files and answers are read within bounds:** lists in the settings,
+  items and cities files must be real lists, each kind of item is kept to
+  100 (alarms, timers, stopwatches, pomodoros; a new one past that is not
+  added), an import of settings is refused above 1 MiB before it is read,
+  an import of More Weather's places reads at most 100, place search answers
+  at most 50 rows and 200 characters a name, and an ISS orbit that is none
+  (mean motion outside 0.05 to 20 revolutions a day, eccentricity 1 or
+  more) is refused instead of drawn as NaN.
+- **Hardening after review:** an export goes only to a name ending in
+  .json and overwrites a file that is not a More Time export only after a
+  second press; notification texts can no longer pass for options (a "--"
+  for notify-send, a guard for Omarchy's notifications); zone names must
+  look like IANA names before they reach zdump, which gets them after
+  "--"; a failing zone lookup is tried again after ten minutes instead of
+  on every tick; the IPC timer is kept between 1 minute and 7 days; rings
+  that come due in the same second share one notification; the chime tones
+  are written through a fresh temporary file, and the runtime folder is
+  made private even when it already existed.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.

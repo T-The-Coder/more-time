@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Zastąpić ustawienia?",
   settingsTransferHint: "Ustawienia, miasta, budziki, minutniki, stopery i pomodoro w jednym pliku. Import najpierw zapisuje bieżące w {backup}.",
   settingsExported: "Zapisano w {path}.", settingsExportFailed: "Nie można zapisać {path}.",
+  settingsExportNotJson: "Wybierz nazwę pliku kończącą się na .json.",
+  settingsExportExists: "Ten plik istnieje i nie jest eksportem tej wtyczki. Naciśnij ponownie, aby go nadpisać.",
   settingsBackupFailed: "Nie można zapisać kopii; nic nie zaimportowano.", settingsImportMissing: "Nie można odczytać {path}.",
   settingsImportInvalid: "{path} nie jest plikiem ustawień More Time.",
   settingsImported: "Zaimportowano z {path}. Poprzednie ustawienia są w {backup}.", settingsRestored: "Przywrócono z {path}.",

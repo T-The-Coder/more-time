@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "取代設定？",
   settingsTransferHint: "設定、城市、鬧鐘、計時器、碼錶和番茄鐘存成一個檔案。匯入前會先把目前內容存到 {backup}。",
   settingsExported: "已儲存到 {path}。", settingsExportFailed: "無法寫入 {path}。",
+  settingsExportNotJson: "請選擇以 .json 結尾的檔名。",
+  settingsExportExists: "此檔案已存在，且不是本外掛的匯出檔。再按一次以覆寫。",
   settingsBackupFailed: "無法儲存備份；未匯入任何內容。", settingsImportMissing: "無法讀取 {path}。",
   settingsImportInvalid: "{path} 不是 More Time 設定檔。",
   settingsImported: "已從 {path} 匯入。先前的設定在 {backup}。", settingsRestored: "已從 {path} 還原。",

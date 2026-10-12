@@ -227,7 +227,7 @@ BarWidget {
       if (!root.bar || !panel) return
       if (b === Qt.RightButton) {
         var lines = panel.statusSummary()
-        Quickshell.execDetached(["omarchy-notification-send", "-g", "\u{f0150}", Model.notificationText(lines[0]), Model.notificationText(lines.slice(1).join("\n"))])
+        Quickshell.execDetached(["omarchy-notification-send", "-g", "\u{f0150}", Model.notificationArgument(lines[0]), Model.notificationArgument(lines.slice(1).join("\n"))])
       } else if (b === Qt.MiddleButton) {
         // Stops what rings; otherwise starts or pauses the first pomodoro.
         if (panel.ringer.ringing.length) panel.ringer.stopNewest()

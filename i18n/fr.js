@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Remplacer les réglages ?",
   settingsTransferHint: "Réglages, villes, alarmes, minuteurs, chronos et pomodoros dans un fichier. Un import sauvegarde d’abord les actuels dans {backup}.",
   settingsExported: "Enregistré dans {path}.", settingsExportFailed: "Impossible d’écrire {path}.",
+  settingsExportNotJson: "Choisissez un nom de fichier se terminant par .json.",
+  settingsExportExists: "Ce fichier existe et n’est pas un export de ce plugin. Appuyez de nouveau pour l’écraser.",
   settingsBackupFailed: "Impossible d’enregistrer la sauvegarde ; rien n’a été importé.", settingsImportMissing: "Impossible de lire {path}.",
   settingsImportInvalid: "{path} n’est pas un fichier de réglages More Time.",
   settingsImported: "Importé depuis {path}. Les réglages précédents sont dans {backup}.", settingsRestored: "Restauré depuis {path}.",

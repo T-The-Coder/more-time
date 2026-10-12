@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "설정을 바꿀까요?",
   settingsTransferHint: "설정, 도시, 알람, 타이머, 스톱워치, 뽀모도로를 한 파일에. 가져오기는 먼저 현재 설정을 {backup}에 저장합니다.",
   settingsExported: "{path}에 저장했습니다.", settingsExportFailed: "{path}에 쓸 수 없습니다.",
+  settingsExportNotJson: ".json으로 끝나는 파일 이름을 고르세요.",
+  settingsExportExists: "이 파일은 이미 있으며 이 플러그인의 내보내기가 아닙니다. 덮어쓰려면 다시 누르세요.",
   settingsBackupFailed: "백업을 저장하지 못해 아무것도 가져오지 않았습니다.", settingsImportMissing: "{path}을(를) 읽을 수 없습니다.",
   settingsImportInvalid: "{path}은(는) More Time 설정 파일이 아닙니다.",
   settingsImported: "{path}에서 가져왔습니다. 이전 설정은 {backup}에 있습니다.", settingsRestored: "{path}에서 복원했습니다.",

@@ -24,6 +24,17 @@ ShellRoot {
     })
   }
 
+  // Imports: the files go to the throwaway HOME.
+  readonly property string importDir: Quickshell.env("HOME")
+  property string importItems: ""
+  property double importStarted: 0
+  property var readBack: null
+  function writeFile(path, text) {
+    var view = Qt.createQmlObject('import Quickshell.Io; FileView { atomicWrites: false }', harness)
+    view.path = path
+    view.setText(text)
+  }
+
   // Text fields: a key as typed into the panel, and the field it focused.
   property var fieldsSeen: []
   property var lastField: null
@@ -999,6 +1010,81 @@ ShellRoot {
       harness.checkIdle("settings search")
       panel.settingsOpen = false
       console.log("CHECK fields focused", harness.fieldsSeen.length, harness.fieldsSeen.length === 5 ? "ok" : "WRONG")
+    },
+    // Imports: an export read back; a hostile file (a list that is an
+    // object with a huge "length", a stride, counts) parsed quickly and to
+    // nothing; a file over 1 MiB refused before it is read.
+    function() {
+      harness.importItems = JSON.stringify(panel.itemsStore.items)
+      panel.settingsTransfer.exportTo(harness.importDir + "/import-export.json")
+    },
+    function() {
+      var st = panel.settingsTransfer.status
+      console.log("CHECK export", st ? st.key : "none", st && st.key === "settingsExported" ? "ok" : "WRONG")
+      panel.settingsTransfer.importFrom(harness.importDir + "/import-export.json")
+    },
+    function() {
+      var st = panel.settingsTransfer.status
+      console.log("CHECK import", st ? st.key : "none", st && st.key === "settingsImported" ? "ok" : "WRONG")
+      var hostile = { app: "more-time", version: 1,
+        cities: { length: 4000000000 },
+        items: { alarms: { length: 4000000000 }, timers: [{ duration: 60000, label: "x" }],
+          stopwatches: [{ laps: { length: 4000000000 } }], pomodoros: [],
+          pomodoroLog: { length: 4000000000 } },
+        display: { app: { tabOrder: { length: 4000000000 } } } }
+      harness.writeFile(harness.importDir + "/import-hostile.json", JSON.stringify(hostile))
+    },
+    function() {
+      harness.importStarted = Date.now()
+      panel.settingsTransfer.importFrom(harness.importDir + "/import-hostile.json")
+    },
+    function() {
+      var st = panel.settingsTransfer.status
+      var items = panel.itemsStore.items
+      console.log("CHECK hostile import", st ? st.key : "none", "alarms", items.alarms.length, "timers", items.timers.length,
+        "laps", items.stopwatches.length ? items.stopwatches[0].laps.length : "-",
+        st && st.key === "settingsImported" && items.alarms.length === 0 && items.timers.length === 1 ? "ok" : "WRONG")
+      var big = "{\"app\": \"more-time\", \"pad\": \"" + new Array(1100 * 1024).join("x") + "\"}"
+      harness.writeFile(harness.importDir + "/import-big.json", big)
+    },
+    function() { panel.settingsTransfer.importFrom(harness.importDir + "/import-big.json") },
+    function() {
+      var st = panel.settingsTransfer.status
+      console.log("CHECK big import refused", st ? st.key : "none", st && st.key === "settingsImportInvalid" ? "ok" : "WRONG")
+      panel.settingsTransfer.importFrom(harness.importDir + "/import-export.json")
+    },
+    function() {
+      var restored = JSON.stringify(panel.itemsStore.items) === harness.importItems
+      console.log("CHECK import restores", restored ? "ok" : "WRONG")
+      // Export rules: a .json name; an existing export is replaced at once,
+      // a foreign file only after a second press.
+      panel.settingsTransfer.exportTo(harness.importDir + "/notes.txt")
+    },
+    function() {
+      var st = panel.settingsTransfer.status
+      console.log("CHECK export not json", st ? st.key : "none", st && st.key === "settingsExportNotJson" ? "ok" : "WRONG")
+      panel.settingsTransfer.exportTo(harness.importDir + "/import-export.json")
+    },
+    function() {
+      var st = panel.settingsTransfer.status
+      console.log("CHECK export over export", st ? st.key : "none", st && st.key === "settingsExported" ? "ok" : "WRONG")
+      harness.writeFile(harness.importDir + "/foreign.json", "{\"mine\": true}\n")
+    },
+    function() { panel.settingsTransfer.exportTo(harness.importDir + "/foreign.json") },
+    function() {
+      var st = panel.settingsTransfer.status
+      console.log("CHECK export foreign asks", st ? st.key : "none", st && st.key === "settingsExportExists" ? "ok" : "WRONG")
+      harness.readBack = Qt.createQmlObject('import Quickshell.Io; FileView { blockLoading: true }', harness)
+      harness.readBack.path = harness.importDir + "/foreign.json"
+      console.log("CHECK foreign kept", harness.readBack.text().indexOf("mine") >= 0 ? "ok" : "WRONG")
+      panel.settingsTransfer.exportTo(harness.importDir + "/foreign.json")
+    },
+    function() {
+      var st = panel.settingsTransfer.status
+      var view = Qt.createQmlObject('import Quickshell.Io; FileView { blockLoading: true }', harness)
+      view.path = harness.importDir + "/foreign.json"
+      console.log("CHECK export foreign second press", st ? st.key : "none",
+        st && st.key === "settingsExported" && view.text().indexOf("more-time") >= 0 ? "ok" : "WRONG")
     },
     function() { console.log("STATUS", panel.statusSummary().join(" | ")); Qt.quit() }
   ]

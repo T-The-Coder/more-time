@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Αντικατάσταση ρυθμίσεων;",
   settingsTransferHint: "Ρυθμίσεις, πόλεις, ξυπνητήρια, μετρήσεις, χρονόμετρα και pomodoro σε ένα αρχείο. Η εισαγωγή αποθηκεύει πρώτα τις τρέχουσες στο {backup}.",
   settingsExported: "Αποθηκεύτηκε στο {path}.", settingsExportFailed: "Δεν ήταν δυνατή η εγγραφή του {path}.",
+  settingsExportNotJson: "Επιλέξτε ένα όνομα αρχείου που τελειώνει σε .json.",
+  settingsExportExists: "Το αρχείο υπάρχει και δεν είναι εξαγωγή αυτού του πρόσθετου. Πατήστε ξανά για αντικατάσταση.",
   settingsBackupFailed: "Το αντίγραφο ασφαλείας δεν αποθηκεύτηκε· δεν εισήχθη τίποτα.", settingsImportMissing: "Δεν ήταν δυνατή η ανάγνωση του {path}.",
   settingsImportInvalid: "Το {path} δεν είναι αρχείο ρυθμίσεων του More Time.",
   settingsImported: "Εισήχθη από το {path}. Οι προηγούμενες ρυθμίσεις είναι στο {backup}.", settingsRestored: "Επαναφέρθηκε από το {path}.",

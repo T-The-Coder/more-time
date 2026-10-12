@@ -79,8 +79,9 @@ Item {
     write(next)
   }
 
+  // No more than the items file keeps (Model.MAX_ITEMS of a kind).
   function add(kind, item) {
-    change(kind, function(list) { return list.concat([item]) })
+    change(kind, function(list) { return list.length >= Model.MAX_ITEMS ? list : list.concat([item]) })
   }
 
   function remove(kind, id) {

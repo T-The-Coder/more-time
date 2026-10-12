@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "استبدال الإعدادات؟",
   settingsTransferHint: "الإعدادات والمدن والمنبهات والمؤقتات وساعات الإيقاف وبومودورو في ملف واحد. يحفظ الاستيراد الحالية أولًا في {backup}.",
   settingsExported: "حُفظ في {path}.", settingsExportFailed: "تعذّرت كتابة {path}.",
+  settingsExportNotJson: "اختر اسم ملف ينتهي بـ ‎.json.",
+  settingsExportExists: "هذا الملف موجود وليس تصديرًا من هذه الإضافة. اضغط مرة أخرى للكتابة فوقه.",
   settingsBackupFailed: "تعذّر حفظ النسخة الاحتياطية؛ لم يُستورد شيء.", settingsImportMissing: "تعذّرت قراءة {path}.",
   settingsImportInvalid: "{path} ليس ملف إعدادات More Time.",
   settingsImported: "استُورد من {path}. الإعدادات السابقة في {backup}.", settingsRestored: "تمت الاستعادة من {path}.",

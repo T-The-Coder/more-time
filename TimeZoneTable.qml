@@ -27,7 +27,7 @@ Item {
 
   readonly property string script: "export LC_ALL=C; y=$(date +%Y); for z in \"$@\"; do "
     + "printf '== %s %s %s\\n' \"$z\" \"$(TZ=$z date +%z)\" \"$(TZ=$z date +%Z)\"; "
-    + "zdump -v -c \"$y,$((y + 4))\" \"$z\"; done"
+    + "zdump -v -c \"$y,$((y + 4))\" -- \"$z\"; done"
 
   // The zones to keep offsets for; a change fetches the table again.
   function want(list) {
@@ -44,8 +44,15 @@ Item {
     return fetchedAt === 0 || nowMs - fetchedAt > 86400000 || (expiresAt > 0 && nowMs > expiresAt)
   }
 
+  // A run that failed or found no zone (no zdump, no tzdata) is tried
+  // again after retryMs, not on every tick.
+  readonly property int retryMs: 10 * 60000
+  property double failedAt: 0
+  property bool foundZones: false
+
   // Called from the panel's clock tick; cheap unless a refetch is due.
   function check(nowMs) {
+    if (nowMs - failedAt < retryMs && failedAt <= nowMs) return
     if (wanted.length && stale(nowMs) && !proc.running) fetch()
   }
 
@@ -55,9 +62,11 @@ Item {
       pendingZones = wanted
       return
     }
-    // Zone names come from tzdata or the geocoder and were checked against
-    // [A-Za-z0-9_+-/]; they travel as arguments, never through the shell.
-    proc.command = ["bash", "-c", script, "more-time-zones"].concat(wanted)
+    // Zone names come from tzdata or the geocoder and were checked
+    // (Model.isZoneName, again here); they travel as arguments, never
+    // through the shell, and after "--" for zdump.
+    foundZones = false
+    proc.command = ["bash", "-c", script, "more-time-zones"].concat(wanted.filter(Model.isZoneName))
     proc.running = true
   }
 
@@ -79,7 +88,9 @@ Item {
         var parsed = Model.parseZoneDump(collector.text)
         var count = 0
         for (var key in parsed) count++
+        table.foundZones = count > 0
         if (count > 0) {
+          table.failedAt = 0
           table.zones = parsed
           table.fetchedAt = Date.now()
           table.expiresAt = Model.zoneTableExpires(parsed)
@@ -88,7 +99,10 @@ Item {
       }
     }
     onExited: function(exitCode) {
-      if (exitCode !== 0) console.warn("more-time: zone lookup failed with exit code", exitCode)
+      // (The output may still be on its way: onStreamFinished clears this
+      // again when it brings zones.)
+      if (exitCode !== 0 || !table.foundZones) table.failedAt = Date.now()
+      if (exitCode !== 0) console.warn("more-time: zone lookup failed (exit code " + exitCode + "); trying again in 10 minutes")
       table.fetched = true
       if (table.pendingZones.length) {
         table.pendingZones = []

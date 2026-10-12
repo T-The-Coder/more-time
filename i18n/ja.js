@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "設定を置き換えますか？",
   settingsTransferHint: "設定、都市、アラーム、タイマー、ストップウォッチ、ポモドーロを1つのファイルに。読み込み前に現在の内容を {backup} に保存します。",
   settingsExported: "{path} に保存しました。", settingsExportFailed: "{path} に書き込めませんでした。",
+  settingsExportNotJson: "末尾が .json のファイル名を選んでください。",
+  settingsExportExists: "このファイルは既にあり、このプラグインのエクスポートではありません。上書きするにはもう一度押してください。",
   settingsBackupFailed: "バックアップを保存できなかったため、何も読み込んでいません。", settingsImportMissing: "{path} を読み込めませんでした。",
   settingsImportInvalid: "{path} は More Time の設定ファイルではありません。",
   settingsImported: "{path} から読み込みました。以前の設定は {backup} にあります。", settingsRestored: "{path} から復元しました。",

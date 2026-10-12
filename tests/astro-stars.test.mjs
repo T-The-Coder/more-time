@@ -189,3 +189,14 @@ test("the Sun's constellation in the middle of Wikipedia's ranges", () => {
     assert.equal(S.zodiacAt(sunLon(mid)), abbr, `${abbr} ${new Date(mid).toISOString()}`)
   }
 })
+
+// Columns of different lengths give as many stars as the shortest, and a
+// name for a star that is not there is left out.
+test("star data: short columns and stray names", () => {
+  const s = S.stars({ ra: [0, 1000, 2000], dec: [0, 1000], mag: [100, 200, 300], color: [1, 1, 1],
+    names: [[0, "A"], [5, "Far"], "junk"] })
+  assert.equal(s.count, 2)
+  assert.ok(s.x.every(Number.isFinite))
+  assert.deepEqual(Object.keys(s.names), ["0"])
+  assert.equal(S.stars({ ra: { length: 4e9 } }).count, 0)
+})

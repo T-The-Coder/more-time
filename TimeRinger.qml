@@ -71,7 +71,9 @@ Item {
   Component.onCompleted: mkdirProc.running = true
 
   property Process mkdirProc: Process {
-    command: ["mkdir", "-p", "-m", "700", ringer.runtimeDir]
+    // mkdir -m sets the mode only of a folder it creates: chmod also
+    // tightens one that was there already.
+    command: ["sh", "-c", "mkdir -p -m 700 -- \"$1\" && chmod 700 -- \"$1\"", "more-time-mkdir", ringer.runtimeDir]
     onExited: {
       ringer.dirReady = true
       runtimeFile.reload()
@@ -117,7 +119,8 @@ Item {
     var parsed = parseObject(raw)
     return {
       leader: parsed.leader && typeof parsed.leader.id === "string" ? parsed.leader : null,
-      ringing: parsed.ringing && parsed.ringing.length !== undefined ? parsed.ringing : [],
+      // A list, of a size that can ring (one per item at most).
+      ringing: Array.isArray(parsed.ringing) ? parsed.ringing.slice(0, 4 * Model.MAX_ITEMS) : [],
       chimedAt: Number(parsed.chimedAt) || 0
     }
   }
@@ -321,10 +324,10 @@ Item {
 
   function syncEffects() {
     var wantKeys = {}
-    for (var i = 0; i < ringing.length; i++) {
-      var ring = ringing[i]
-      wantKeys[ring.key] = true
-      if (!notifiers[ring.key]) startNotifier(ring)
+    var groups = Model.ringGroups(ringing)
+    for (var i = 0; i < groups.length; i++) {
+      wantKeys[groups[i].key] = true
+      if (!notifiers[groups[i].key]) startNotifier(groups[i])
     }
     for (var key in notifiers) {
       if (wantKeys[key]) continue
@@ -454,7 +457,9 @@ Item {
   property Component notifierComponent: Component {
     Process {
       id: notifier
+      // The group's key (in notifiers) and the rings it stands for.
       property string ringKey: ""
+      property var ringKeys: []
       property string notificationId: ""
       property bool closing: false
       stdout: SplitParser {
@@ -465,27 +470,40 @@ Item {
             notifier.notificationId = value
             return
           }
-          if (value === "snooze") ringer.snooze(notifier.ringKey)
-          else ringer.stop(notifier.ringKey)
+          // Snooze snoozes the group's alarms (and ends its timers' rings,
+          // which have no snooze); Stop stops them all.
+          for (var i = 0; i < notifier.ringKeys.length; i++) {
+            if (value === "snooze") ringer.snooze(notifier.ringKeys[i])
+            else ringer.stop(notifier.ringKeys[i])
+          }
         }
       }
       // Closing the notification without a choice stops the ringing too.
       onExited: {
-        if (!notifier.closing) ringer.stop(notifier.ringKey)
+        if (!notifier.closing) for (var i = 0; i < notifier.ringKeys.length; i++) ringer.stop(notifier.ringKeys[i])
         ringer.forgetNotifier(notifier.ringKey, notifier)
       }
     }
   }
 
-  function startNotifier(ring) {
+  // One notification for a group (Model.ringGroups): one ring's title and text,
+  // or every ring's title on the first line and their texts below.
+  function startNotifier(group) {
+    var rings = group.rings
+    var alarm = rings.filter(function(r) { return r.kind === "alarm" })[0]
     var args = ["notify-send", "--app-name=More Time", "--icon=more-time", "--urgency=critical",
       "--print-id", "--wait", "--action=stop=" + Model.notificationText(panel.i18n("stop"))]
-    if (ring.kind === "alarm") args.push("--action=snooze=" + Model.notificationText(panel.i18n("snoozeFor",
-      { minutes: panel.alarmSnoozeMinutes(ring.itemId) })))
-    args.push(Model.notificationText(ring.title), Model.notificationText(ring.body))
-    var proc = notifierComponent.createObject(ringer, { ringKey: ring.key, command: args })
+    if (alarm) args.push("--action=snooze=" + Model.notificationText(panel.i18n("snoozeFor",
+      { minutes: panel.alarmSnoozeMinutes(alarm.itemId) })))
+    var title = rings.map(function(r) { return r.title }).join(" · ")
+    var body = rings.length === 1 ? rings[0].body
+      : rings.map(function(r) { return r.title + ": " + r.body }).join("\n")
+    // "--": a title or text that starts with "-" (a label) is no option.
+    args.push("--", Model.notificationText(title), Model.notificationText(body))
+    var proc = notifierComponent.createObject(ringer, { ringKey: group.key,
+      ringKeys: rings.map(function(r) { return r.key }), command: args })
     var next = Object.assign({}, notifiers)
-    next[ring.key] = proc
+    next[group.key] = proc
     notifiers = next
     proc.running = true
   }
@@ -513,7 +531,7 @@ Item {
 
   function notify(title, body, urgency) {
     Quickshell.execDetached(["notify-send", "--app-name=More Time", "--icon=more-time",
-      "--urgency=" + (urgency || "normal"), Model.notificationText(title), Model.notificationText(body)])
+      "--urgency=" + (urgency || "normal"), "--", Model.notificationText(title), Model.notificationText(body)])
   }
 
   // ---- Stop and snooze, from any instance ----

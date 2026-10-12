@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Erstatte innstillingene?",
   settingsTransferHint: "Innstillinger, byer, alarmer, tidtakere, stoppeklokker og pomodoroer i én fil. En import lagrer først de nåværende i {backup}.",
   settingsExported: "Lagret i {path}.", settingsExportFailed: "Kunne ikke skrive {path}.",
+  settingsExportNotJson: "Velg et filnavn som slutter på .json.",
+  settingsExportExists: "Filen finnes og er ikke en eksport fra denne utvidelsen. Trykk igjen for å overskrive den.",
   settingsBackupFailed: "Kunne ikke lagre sikkerhetskopien; ingenting ble importert.", settingsImportMissing: "Kunne ikke lese {path}.",
   settingsImportInvalid: "{path} er ikke en innstillingsfil for More Time.",
   settingsImported: "Importert fra {path}. De forrige innstillingene ligger i {backup}.", settingsRestored: "Gjenopprettet fra {path}.",

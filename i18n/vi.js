@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Thay cài đặt?",
   settingsTransferHint: "Cài đặt, thành phố, báo thức, hẹn giờ, bấm giờ và pomodoro trong một tệp. Khi nhập, cài đặt hiện tại được lưu trước vào {backup}.",
   settingsExported: "Đã lưu vào {path}.", settingsExportFailed: "Không ghi được {path}.",
+  settingsExportNotJson: "Hãy chọn tên tệp kết thúc bằng .json.",
+  settingsExportExists: "Tệp này đã tồn tại và không phải bản xuất của plugin này. Nhấn lần nữa để ghi đè.",
   settingsBackupFailed: "Không lưu được bản sao lưu; chưa nhập gì.", settingsImportMissing: "Không đọc được {path}.",
   settingsImportInvalid: "{path} không phải tệp cài đặt More Time.",
   settingsImported: "Đã nhập từ {path}. Cài đặt trước đó ở {backup}.", settingsRestored: "Đã khôi phục từ {path}.",

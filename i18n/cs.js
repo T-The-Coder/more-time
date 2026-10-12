@@ -57,6 +57,8 @@ var catalog = {
   settingsImportConfirm: "Nahradit nastavení?",
   settingsTransferHint: "Nastavení, města, budíky, časovače, stopky a pomodora v jednom souboru. Import nejdřív uloží současná do {backup}.",
   settingsExported: "Uloženo do {path}.", settingsExportFailed: "{path} nelze zapsat.",
+  settingsExportNotJson: "Zvolte název souboru končící na .json.",
+  settingsExportExists: "Tento soubor existuje a není exportem tohoto pluginu. Stiskněte znovu pro přepsání.",
   settingsBackupFailed: "Zálohu nelze uložit; nic nebylo importováno.", settingsImportMissing: "{path} nelze přečíst.",
   settingsImportInvalid: "{path} není soubor nastavení More Time.",
   settingsImported: "Importováno z {path}. Předchozí nastavení jsou v {backup}.", settingsRestored: "Obnoveno z {path}.",
