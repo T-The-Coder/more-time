@@ -150,6 +150,7 @@ All notable changes to More Time are documented here.
   that come due in the same second share one notification; the chime tones
   are written through a fresh temporary file, and the runtime folder is
   made private even when it already existed.
+- **Pasting into a text field is bounded:** Ctrl+V, Shift+Insert and the middle button read at most 4 KiB from the clipboard within one second, through wl-paste (wl-clipboard), and insert it as typed text; Qt's own paste, which has no byte limit, never runs.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.

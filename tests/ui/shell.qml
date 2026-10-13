@@ -961,7 +961,17 @@ ShellRoot {
         panel.citySearch.query === "Tok" ? "ok" : "WRONG")
       harness.typeKey(Qt.Key_Escape, "")
     },
-    function() { harness.checkIdle("city search") },
+    function() {
+      harness.checkIdle("city search")
+      // Pasting goes through the bounded reader (wl-paste), never Qt's own:
+      // paste() changes nothing at once, and an idle field starts no reader.
+      var f = harness.lastField
+      var alive = !!f && typeof f.readOnly === "boolean"
+      var before = alive ? f.text : ""
+      if (alive) f.paste()
+      console.log("CHECK paste-bounded-idle", alive ? "text kept " + (f.text === before) + " reader " + f._paste.running : "gone",
+        alive && f.text === before && !f._paste.running ? "ok" : "WRONG")
+    },
     function() { panel.activeTab = "timers"; panel.newTimerOpen = true },
     function() {
       var f = harness.checkField("new timer")

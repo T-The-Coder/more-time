@@ -387,6 +387,8 @@ control.
 The same keys work in the popup and in the app; Settings → Shortcuts lists them
 too.
 
+Pasting into a text field (Ctrl+V, Shift+Insert or the middle button) reads at most 4 KiB from the clipboard within one second, through wl-paste (wl-clipboard).
+
 | Keys | Action |
 |---|---|
 | **General** | |
