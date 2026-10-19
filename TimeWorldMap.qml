@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import "Model.js" as Model
 import "WorldMap.js" as WorldMap
 import "Moon.js" as Moon
@@ -26,7 +27,7 @@ Item {
   // The twilight layers and their caps (projected), once a minute.
   readonly property var twilight: {
     var layers = WorldMap.twilightLayers({ golden: showGolden, blue: showBlue, night: showNight },
-      panel.rgbOf(Color.popups.background))
+      panel.rgbOf(Commons.Color.popups.background))
     var shapes = {}
     var elevations = WorldMap.twilightElevations(layers)
     // On the GPU surface the shader draws them from the Sun alone.
@@ -205,7 +206,7 @@ Item {
     night: map.showNight
     goldenBand: map.showGolden
     blueBand: map.showBlue
-    background: Color.popups.background
+    background: Commons.Color.popups.background
     baseColor: Qt.rgba(map.panel.foreground.r, map.panel.foreground.g, map.panel.foreground.b, 0.03)
     textureSource: surfaceTexture
   }
@@ -219,8 +220,8 @@ Item {
     id: canvas
     anchors.fill: parent
     property color ink: map.panel.foreground
-    property color accent: Color.accent
-    property color urgent: Color.urgent
+    property color accent: Commons.Color.accent
+    property color urgent: Commons.Color.urgent
     onInkChanged: requestPaint()
     onAccentChanged: requestPaint()
 
@@ -336,7 +337,7 @@ Item {
       var sunNow = WorldMap.subsolarPoint(map.minuteMs)
       if (map.showNight) {
         var sun = map.px(WorldMap.project(sunNow.lat, sunNow.lon))
-        WorldMap.paintSun(ctx, sun.x, sun.y, map.panel.sunColor, map.panel.rgbOf(Color.popups.background))
+        WorldMap.paintSun(ctx, sun.x, sun.y, map.panel.sunColor, map.panel.rgbOf(Commons.Color.popups.background))
       }
       // The Moon floats a little up-left of its sub-lunar point, where its
       // shadow falls; drawn after the clip so it may stand out of the map.
@@ -442,7 +443,7 @@ Item {
           if (rect.x < 0 || rect.x + w > width || rect.y < 0 || rect.y + h > height) continue
           if (!free(rect) && !selected) continue
           taken.push(rect)
-          ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.78)
+          ctx.fillStyle = Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.78)
           ctx.fillRect(rect.x, rect.y, w, h)
           ctx.fillStyle = selected ? accent : ink
           ctx.textAlign = "left"

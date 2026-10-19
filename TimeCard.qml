@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // One item of a tab's list (an alarm, a timer …): a bordered card that a
 // click selects. The keyboard acts on the selected card; a delete waiting
 // for its second press shows in the urgent colour.
@@ -16,9 +16,9 @@ Rectangle {
   width: parent ? parent.width : 0
   height: inner.implicitHeight + Style.space(20)
   radius: Style.cornerRadius
-  color: highlighted ? Style.selectedFillFor(panel.foreground, Color.accent)
-    : (cardMouse.containsMouse ? Style.hoverFillFor(panel.foreground, Color.accent) : "transparent")
-  border.color: armed ? Color.urgent : (selected ? Color.accent : panel.subtleText)
+  color: highlighted ? Style.selectedFillFor(panel.foreground, Commons.Color.accent)
+    : (cardMouse.containsMouse ? Style.hoverFillFor(panel.foreground, Commons.Color.accent) : "transparent")
+  border.color: armed ? Commons.Color.urgent : (selected ? Commons.Color.accent : panel.subtleText)
   border.width: Style.spacing.hairline
 
   // Behind the content, so buttons inside keep their own clicks.

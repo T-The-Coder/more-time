@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -217,7 +218,7 @@ Column {
             textFormat: Text.PlainText
             visible: view.panel.alarmZoneUnknown(card.modelData)
             text: visible ? view.panel.i18n("alarmZoneUnknown", { zone: card.modelData.tz }) : ""
-            color: Color.urgent
+            color: Commons.Color.urgent
             font.family: view.panel.fontFamily
             font.pixelSize: Style.font.caption
           }
@@ -330,16 +331,16 @@ Column {
               width: Style.space(38)
               height: Style.space(28)
               radius: Style.cornerRadius
-              color: chosen ? Style.selectedFillFor(view.panel.foreground, Color.accent)
-                : (dayMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent")
-              border.color: kbFocused ? Color.accent : view.panel.subtleText
+              color: chosen ? Style.selectedFillFor(view.panel.foreground, Commons.Color.accent)
+                : (dayMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent")
+              border.color: kbFocused ? Commons.Color.accent : view.panel.subtleText
               border.width: Style.spacing.hairline
 
               Text {
                 textFormat: Text.PlainText
                 anchors.centerIn: parent
                 text: view.panel.weekdayName(parent.modelData, false)
-                color: parent.chosen ? Style.selectedStateColor(view.panel.foreground, Color.accent) : view.panel.foreground
+                color: parent.chosen ? Style.selectedStateColor(view.panel.foreground, Commons.Color.accent) : view.panel.foreground
                 font.family: view.panel.fontFamily
                 font.pixelSize: Style.font.caption
                 font.bold: parent.chosen

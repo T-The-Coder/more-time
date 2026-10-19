@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 // The small button cluster over the globe, the flat map and the solar
@@ -17,8 +18,8 @@ BorderSurface {
   width: zoomRow.implicitWidth + Style.space(10)
   height: Style.space(28)
   radius: Style.cornerRadius
-  color: Color.popups.background
-  borderSpec: Border.surfaceSpec("popups", "border", Color.popups.border, Style.normalBorderWidth)
+  color: Commons.Color.popups.background
+  borderSpec: Border.surfaceSpec("popups", "border", Commons.Color.popups.border, Style.normalBorderWidth)
 
   Row {
     id: zoomRow
@@ -42,14 +43,14 @@ BorderSurface {
         Accessible.role: Accessible.Button
         Accessible.name: controls.panel.i18n(modelData.tip)
         opacity: enabled ? 1 : 0.38
-        color: Style.controlFill(false, buttonMouse.containsMouse, Color.popups.text, Color.accent)
-        borderSpec: Border.controlSpec(buttonMouse.containsMouse ? "hover-cursor" : "normal", Color.popups.text, Color.accent)
+        color: Style.controlFill(false, buttonMouse.containsMouse, Commons.Color.popups.text, Commons.Color.accent)
+        borderSpec: Border.controlSpec(buttonMouse.containsMouse ? "hover-cursor" : "normal", Commons.Color.popups.text, Commons.Color.accent)
 
         Text {
           textFormat: Text.PlainText
           anchors.centerIn: parent
           text: zoomButton.modelData.glyph
-          color: buttonMouse.containsMouse ? Style.hoverStateColor(Color.popups.text, Color.accent) : Color.popups.text
+          color: buttonMouse.containsMouse ? Style.hoverStateColor(Commons.Color.popups.text, Commons.Color.accent) : Commons.Color.popups.text
           font.family: controls.panel.fontFamily
           font.pixelSize: Style.font.caption
           font.bold: true

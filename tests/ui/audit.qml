@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import "Time" as Time
 import qs.Commons
-
+import qs.Commons as Commons
 // Interface audit for tests/ui-shots.sh (MT_HARNESS=audit): every view once
 // at one width (MT_WIDTH, the popup's 500 by default), with sample items,
 // in English: hero, each tab with its editor, empty states, the ringing
@@ -72,7 +72,7 @@ ShellRoot {
       general("pomodoroSound", "none")
       size(harness.width, 900)
       // The window's background, which the grab leaves out.
-      Qt.createQmlObject('import QtQuick; import qs.Commons; Rectangle { anchors.fill: parent; z: -1; color: Color.popups.background }',
+      Qt.createQmlObject('import QtQuick; import qs.Commons; import qs.Commons as Commons; Rectangle { anchors.fill: parent; z: -1; color: Commons.Color.popups.background }',
         panel.contentRoot)
       panel.here.weatherPlace = { name: "Bobingen", lat: 48.27, lon: 10.83 }
     },

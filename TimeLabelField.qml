@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 // An item's name: plain text, or a text field while the item is edited
@@ -35,7 +36,7 @@ Item {
       anchors.top: parent.bottom
       width: Math.min(parent.width, parent.implicitWidth)
       height: Style.space(2)
-      color: Color.accent
+      color: Commons.Color.accent
     }
   }
 

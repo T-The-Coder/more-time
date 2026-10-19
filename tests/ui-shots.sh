@@ -35,3 +35,12 @@ PATH="$work/bin:$PATH" FAKE_DPMS="$work/dpms" HOME="$work/home" XDG_CACHE_HOME="
 echo "log: $work/log.txt"
 echo "shots: $out"
 grep -E "SHOT|MENUBAR|TOOLTIP|ASTRO|SKY|PLACE|GLOBE|DIALS|MOON|CHECK|IMPORT|SEARCH|STATUS|CHIME|dry run|STEP FAILED|ERROR|WARN|Error|error" "$work/log.txt" | grep -v "^$" | head -80
+# Script errors fail the run: a TypeError, a ReferenceError or an undefined
+# assigned to a property (as when a type of a newer Qt hides a singleton)
+# is breakage even when every picture was taken.
+errors=$(grep -E "TypeError|ReferenceError|Unable to assign \[undefined\]" "$work/log.txt")
+if [ -n "$errors" ]; then
+  echo "SCRIPT ERRORS:"
+  echo "$errors" | sort | uniq -c | sort -rn | head -40
+  exit 1
+fi

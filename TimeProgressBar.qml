@@ -1,12 +1,12 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // A thin bar from 0 to 1, for timers and pomodoros.
 Rectangle {
   id: bar
   required property var panel
   property real progress: 0
-  property color tint: Color.accent
+  property color tint: Commons.Color.accent
 
   height: Style.space(4)
   radius: height / 2

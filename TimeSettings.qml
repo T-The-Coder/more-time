@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "I18n.js" as I18n
 import "Model.js" as Model
@@ -16,7 +17,7 @@ Rectangle {
   readonly property var settingsPageLines: settingsColumn.settingsPageLines
   anchors.fill: parent
   z: 100
-  color: Color.popups.background
+  color: Commons.Color.popups.background
 
   MouseArea { anchors.fill: parent }
 
@@ -823,7 +824,7 @@ Rectangle {
       Hint {
         visible: !!dropdownRow.modelData.hint
         text: visible ? panel.i18n(dropdownRow.modelData.hint) : ""
-        color: numberField.valid ? panel.mutedText : Color.urgent
+        color: numberField.valid ? panel.mutedText : Commons.Color.urgent
       }
     }
   }
@@ -1058,14 +1059,14 @@ Rectangle {
                 width: modelData.width
                 height: Style.space(28)
                 radius: Style.cornerRadius
-                color: selected || pageMouse.containsMouse ? Style.hoverFillFor(panel.foreground, Color.accent) : "transparent"
+                color: selected || pageMouse.containsMouse ? Style.hoverFillFor(panel.foreground, Commons.Color.accent) : "transparent"
 
                 Text {
                   textFormat: Text.PlainText
                   id: pageLabel
                   anchors.centerIn: parent
                   text: panel.upperLabel(panel.settingsPageName(parent.modelData.key))
-                  color: parent.selected ? Style.hoverStateColor(panel.foreground, Color.accent) : panel.mutedText
+                  color: parent.selected ? Style.hoverStateColor(panel.foreground, Commons.Color.accent) : panel.mutedText
                   font.family: panel.fontFamily
                   font.pixelSize: Style.font.caption
                   font.bold: parent.selected
@@ -1244,7 +1245,7 @@ Rectangle {
             width: parent.width
             text: status ? panel.i18n(status.key, { path: panel.settingsTransfer.shown(status.path),
               backup: panel.settingsTransfer.shown(panel.settingsTransfer.backupPath) }) : ""
-            color: status && status.error ? Color.urgent : panel.foreground
+            color: status && status.error ? Commons.Color.urgent : panel.foreground
             font.family: panel.fontFamily
             font.pixelSize: Style.font.caption
             wrapMode: Text.WrapAnywhere
@@ -1335,7 +1336,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: panel.i18n(parent.modelData)
                 color: parent.selected || surfaceMouse.containsMouse
-                  ? Style.hoverStateColor(panel.foreground, Color.accent) : panel.mutedText
+                  ? Style.hoverStateColor(panel.foreground, Commons.Color.accent) : panel.mutedText
                 font.family: panel.fontFamily
                 font.pixelSize: Style.font.bodySmall
                 font.bold: parent.selected
@@ -1347,7 +1348,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 height: Style.space(2)
-                color: Color.accent
+                color: Commons.Color.accent
               }
 
               MouseArea {

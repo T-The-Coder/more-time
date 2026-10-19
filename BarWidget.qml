@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -71,7 +72,7 @@ BarWidget {
   // carries its colour.
   function roleColor(role) {
     if (String(role).indexOf("sky#") === 0) return String(role).slice(3)
-    return role === "accent" ? Color.accent : (role === "urgent" ? Color.urgent
+    return role === "accent" ? Commons.Color.accent : (role === "urgent" ? Commons.Color.urgent
       : (role === "muted" && panelLoader.item ? panelLoader.item.mutedText : button.foreground))
   }
 
@@ -154,7 +155,7 @@ BarWidget {
             visible: entryRow.modelData.glyph !== ""
             anchors.verticalCenter: parent.verticalCenter
             text: entryRow.modelData.glyph
-            color: entryRow.modelData.urgent ? Color.urgent : root.roleColor(entryRow.modelData.color)
+            color: entryRow.modelData.urgent ? Commons.Color.urgent : root.roleColor(entryRow.modelData.color)
             opacity: entryRow.modelData.urgent && !root.blinkOn ? 0.25 : 1
             font.family: root.bar ? root.bar.fontFamily : Style.font.family
             font.pixelSize: Style.font.body
@@ -212,7 +213,7 @@ BarWidget {
           required property int index
           anchors.horizontalCenter: parent.horizontalCenter
           text: modelData
-          color: index === 2 ? Color.urgent : button.foreground
+          color: index === 2 ? Commons.Color.urgent : button.foreground
           opacity: index === 2 && !root.blinkOn ? 0.25 : 1
           font.family: root.bar ? root.bar.fontFamily : Style.font.family
           font.pixelSize: Style.font.body

@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 // The tab strip: world clock, alarms, timers, stopwatches, pomodoros, astro, in the
@@ -40,7 +41,7 @@ Column {
         height: Style.space(28)
         radius: Style.cornerRadius
         color: selected || tabMouse.containsMouse
-          ? Style.hoverFillFor(tabsSection.panel.foreground, Color.accent) : "transparent"
+          ? Style.hoverFillFor(tabsSection.panel.foreground, Commons.Color.accent) : "transparent"
 
         Row {
           anchors.centerIn: parent
@@ -53,7 +54,7 @@ Column {
             anchors.verticalCenter: parent.verticalCenter
             text: tabsSection.panel.tabGlyph(parent.parent.modelData)
             color: parent.parent.selected
-              ? Style.hoverStateColor(tabsSection.panel.foreground, Color.accent)
+              ? Style.hoverStateColor(tabsSection.panel.foreground, Commons.Color.accent)
               : tabsSection.panel.mutedText
             font.family: tabsSection.panel.fontFamily
             font.pixelSize: Style.font.body
@@ -66,7 +67,7 @@ Column {
             width: Math.min(implicitWidth, parent.parent.width - Style.space(8) - tabGlyph.width - parent.spacing)
             text: tabsSection.panel.tabLabel(parent.parent.modelData)
             color: parent.parent.selected
-              ? Style.hoverStateColor(tabsSection.panel.foreground, Color.accent)
+              ? Style.hoverStateColor(tabsSection.panel.foreground, Commons.Color.accent)
               : tabsSection.panel.mutedText
             font.family: tabsSection.panel.fontFamily
             font.pixelSize: Style.font.caption

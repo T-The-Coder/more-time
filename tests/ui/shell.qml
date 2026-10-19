@@ -5,7 +5,7 @@ import "Time/WorldMap.js" as WorldMap
 import "Time/Moon.js" as Moon
 import "Time/MoonView.js" as MoonView
 import qs.Commons
-
+import qs.Commons as Commons
 // Screenshot run for tests/ui-shots.sh: the app view with sample items, every
 // tab, the editors and every settings page, in English, German and Arabic
 // (right to left). Pictures go to $MT_SHOTS.
@@ -457,7 +457,7 @@ ShellRoot {
     // the contrast on the popup background.
     function() {
       panel.here.weatherPlace = { name: "Bobingen", lat: 48.27, lon: 10.83 }
-      var bg = [Color.popups.background.r, Color.popups.background.g, Color.popups.background.b]
+      var bg = [Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b]
       ;[12, 19, 20, 23].forEach(function(h) {
         var ms = new Date(2026, 9, 2, h, 0).getTime()
         var hex = panel.skyColorAt(ms)
@@ -498,7 +498,7 @@ ShellRoot {
       // view (the window's colour is not part of a grab).
       panel.ringer.stopAll()
       panel.itemsStore.items.timers.forEach(function(t) { if (t.state === "done") panel.resetItem("timers", t.id) })
-      harness.backdrop = Qt.createQmlObject('import QtQuick; import qs.Commons; Rectangle { anchors.fill: parent; z: -1; color: Color.popups.background }',
+      harness.backdrop = Qt.createQmlObject('import QtQuick; import qs.Commons; import qs.Commons as Commons; Rectangle { anchors.fill: parent; z: -1; color: Commons.Color.popups.background }',
         panel.contentRoot)
       panel.settingsOpen = false
       panel.settingsTargetSurface = "app"

@@ -1,12 +1,12 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // Sunrise or sunset as More Weather draws it (Panel.paintSunEventIcon): a
 // horizon line and an arrow up (rising) or down.
 Canvas {
   id: icon
   property bool rising: true
-  property color iconColor: Color.foreground
+  property color iconColor: Commons.Color.foreground
   property bool bold: false
   implicitWidth: Style.space(11)
   implicitHeight: Style.space(11)

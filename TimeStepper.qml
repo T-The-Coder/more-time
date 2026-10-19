@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // A number in an editor (hours, minutes, lengths) with − and +; ↑ ↓ change
 // it while the keyboard is on it (kbFocused).
 Column {
@@ -27,8 +27,8 @@ Column {
     width: Math.max(Style.space(86), valueLabel.implicitWidth + Style.space(60))
     height: Style.space(32)
     radius: Style.cornerRadius
-    color: stepper.kbFocused ? Style.hoverFillFor(stepper.panel.foreground, Color.accent) : "transparent"
-    border.color: stepper.kbFocused ? Color.accent : stepper.panel.subtleText
+    color: stepper.kbFocused ? Style.hoverFillFor(stepper.panel.foreground, Commons.Color.accent) : "transparent"
+    border.color: stepper.kbFocused ? Commons.Color.accent : stepper.panel.subtleText
     border.width: Style.spacing.hairline
 
     MouseArea {

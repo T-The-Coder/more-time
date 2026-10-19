@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // Settings page describing where More Time's data comes from: the system's
 // time zone database (offsets and the offline city list), Open-Meteo's
 // geocoder and Nominatim (other places), Natural Earth (the map), where "here" is (IP
@@ -157,7 +157,7 @@ Column {
               ? sourcesPage.label("sourceInUse") + " · " + sourceCard.modelData.inUse
               : sourcesPage.label("sourceNotInUse")
             color: sourceCard.modelData.inUse !== ""
-              ? Color.accent : sourcesPage.panel.subtleText
+              ? Commons.Color.accent : sourcesPage.panel.subtleText
             font.family: sourcesPage.panel.fontFamily
             font.pixelSize: Style.font.caption
             font.bold: sourceCard.modelData.inUse !== ""
@@ -200,7 +200,7 @@ Column {
               required property var modelData
               text: modelData[0] + " ↗"
               color: linkMouse.containsMouse
-                ? Style.hoverStateColor(sourcesPage.panel.foreground, Color.accent)
+                ? Style.hoverStateColor(sourcesPage.panel.foreground, Commons.Color.accent)
                 : sourcesPage.panel.subtleText
               font.family: sourcesPage.panel.fontFamily
               font.pixelSize: Style.font.caption

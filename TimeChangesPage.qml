@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import "Changelog.js" as Changelog
 
 // Settings page "What's new": the plugin's own CHANGELOG.md, read from its
@@ -133,7 +134,7 @@ Column {
             anchors.right: parent.right
             anchors.verticalCenter: versionTitle.verticalCenter
             text: changesPage.panel.i18n("changesCurrent")
-            color: Color.accent
+            color: Commons.Color.accent
             font.family: changesPage.panel.fontFamily
             font.pixelSize: Style.font.caption
             font.bold: true

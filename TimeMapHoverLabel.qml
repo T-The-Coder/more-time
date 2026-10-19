@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // The label over the flat map and the globe for what the pointer rests on:
 // a zone ("UTC+2 · 7:42 PM (standard time)": the maps draw standard time, so
 // the label says so rather than show an hour that may be off) or the Moon
@@ -17,7 +17,7 @@ Rectangle {
   width: text.implicitWidth + Style.space(12)
   height: text.implicitHeight + Style.space(6)
   radius: Style.cornerRadius
-  color: Color.popups.background
+  color: Commons.Color.popups.background
   border.color: panel.subtleText
   border.width: Style.spacing.hairline
 

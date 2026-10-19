@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -19,7 +20,7 @@ Item {
   readonly property bool showSeconds: panel.displaySetting("heroSeconds", true)
   readonly property var zoneState: ({ abbr: panel.currentAbbr(), offset: panel.currentOffset })
   readonly property color timeColor: timeOpenMouse.containsMouse
-    ? Style.hoverStateColor(panel.foreground, Color.accent) : panel.foreground
+    ? Style.hoverStateColor(panel.foreground, Commons.Color.accent) : panel.foreground
 
   // Hours and minutes large, seconds small beside them; AM/PM after that.
   readonly property string mainText: {
@@ -70,7 +71,7 @@ Item {
           textFormat: Text.PlainText
           anchors.centerIn: parent
           text: "\uf041"
-          color: pinMouse.containsMouse ? Style.hoverStateColor(hero.panel.foreground, Color.accent) : hero.panel.mutedText
+          color: pinMouse.containsMouse ? Style.hoverStateColor(hero.panel.foreground, Commons.Color.accent) : hero.panel.mutedText
           font.family: hero.panel.fontFamily
           font.pixelSize: Style.font.bodySmall
         }
@@ -95,7 +96,7 @@ Item {
         width: Math.min(implicitWidth, Math.max(Style.space(90), textColumn.width - Style.space(40)))
         anchors.verticalCenter: parent.verticalCenter
         text: hero.panel.upperLabel(hero.panel.currentName)
-        color: nameHover.hovered ? Style.hoverStateColor(hero.panel.foreground, Color.accent) : hero.panel.mutedText
+        color: nameHover.hovered ? Style.hoverStateColor(hero.panel.foreground, Commons.Color.accent) : hero.panel.mutedText
         font.family: hero.panel.fontFamily
         font.pixelSize: Style.font.bodySmall
         font.letterSpacing: 1

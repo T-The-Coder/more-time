@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Astro.js" as Astro
 import "AstroRotation.js" as AstroRotation
@@ -1113,7 +1114,7 @@ Column {
       id: canvas
       anchors.fill: parent
       property color ink: sky.panel.foreground
-      property color accent: Color.accent
+      property color accent: Commons.Color.accent
       onInkChanged: requestPaint()
       onAccentChanged: requestPaint()
 
@@ -1331,7 +1332,7 @@ Column {
         }
         var sub = em.subsolar
         var antiLon = sub.lon > 0 ? sub.lon - 180 : sub.lon + 180
-        var layers = Sky.twilightLayers({ night: true }, sky.panel.rgbOf(Color.popups.background))
+        var layers = Sky.twilightLayers({ night: true }, sky.panel.rgbOf(Commons.Color.popups.background))
         ctx.fillRule = Qt.OddEvenFill
         for (var k = 0; k < layers.length; k++) {
           var layer = layers[k]
@@ -1381,7 +1382,7 @@ Column {
         var angle = Math.atan2(-dot(s, axes.up), dot(s, axes.right))
         var lit = (1 + dot(s, axes.toward)) / 2
         Moon.paintMoon(ctx, x, y, r, angle, lit, "238,236,226",
-          Moon.rgbText(Sky.nightFill(sky.panel.rgbOf(Color.popups.background))), Moon.rgbText(ink))
+          Moon.rgbText(Sky.nightFill(sky.panel.rgbOf(Commons.Color.popups.background))), Moon.rgbText(ink))
         // A lunar eclipse: copper in Earth's umbra, a faint dimming in a
         // penumbral one.
         var ecl = sky.eclipseNow
@@ -1683,7 +1684,7 @@ Column {
             var rect = { x: spots[sp].x, y: spots[sp].y, w: tw, h: th }
             if (rect.x < 0 || rect.x + tw > w || rect.y < 0 || rect.y + th > h || !free(rect)) continue
             taken.push(rect)
-            ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.72)
+            ctx.fillStyle = Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.72)
             ctx.fillRect(rect.x, rect.y, tw, th)
             ctx.fillStyle = item.key === sky.pinned ? accent : rgba(ink, 0.9)
             ctx.textAlign = "left"
@@ -1710,7 +1711,7 @@ Column {
           ctx.setLineDash([])
         }
         ctx.save()
-        ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.92)
+        ctx.fillStyle = Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.92)
         ctx.fillRect(ix, iy, insetSize, insetSize)
         ctx.strokeStyle = rgba(ink, 0.35)
         ctx.strokeRect(ix + 0.5, iy + 0.5, insetSize - 1, insetSize - 1)
@@ -1731,7 +1732,7 @@ Column {
         ctx.font = sky.panel.canvasFont(Style.font.caption, true, false)
         var tw = ctx.measureText(text).width + 10
         var th = Style.font.caption + 8
-        ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.85)
+        ctx.fillStyle = Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.85)
         ctx.fillRect(4, height - th - 4, tw, th)
         ctx.fillStyle = accent
         ctx.textAlign = "left"
@@ -1770,7 +1771,7 @@ Column {
             var label = sky.panel.i18n("astroBody_" + it.key)
             var lw = ctx.measureText(label).width + 6
             var lx = it.x + it.r + 4, ly = it.y - (fontPx + 4) / 2
-            ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.72)
+            ctx.fillStyle = Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.72)
             ctx.fillRect(lx, ly, lw, fontPx + 4)
             ctx.fillStyle = it.key === sky.pinned ? accent : rgba(ink, 0.9)
             ctx.fillText(label, lx + 3, ly + (fontPx + 4) / 2 + 0.5)
@@ -2124,7 +2125,7 @@ Column {
           anchors.verticalCenter: parent.verticalCenter
           width: Style.space(2)
           height: Style.space(12)
-          color: Color.accent
+          color: Commons.Color.accent
         }
         Rectangle {
           x: parent.width * track.fraction - width / 2
@@ -2132,7 +2133,7 @@ Column {
           width: Style.space(10)
           height: width
           radius: width / 2
-          color: sky.timePinned ? Color.accent : view.panel.foreground
+          color: sky.timePinned ? Commons.Color.accent : view.panel.foreground
         }
         MouseArea {
           anchors.fill: parent
@@ -2193,8 +2194,8 @@ Column {
         width: lapseText.implicitWidth + Style.space(14)
         height: Style.space(24)
         radius: Style.cornerRadius
-        color: view.lapseMenuOpen ? Style.selectedFillFor(view.panel.foreground, Color.accent)
-          : (lapseMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent")
+        color: view.lapseMenuOpen ? Style.selectedFillFor(view.panel.foreground, Commons.Color.accent)
+          : (lapseMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent")
         border.color: view.lapseMenuOpen ? "transparent" : Qt.rgba(view.panel.foreground.r, view.panel.foreground.g, view.panel.foreground.b, 0.18)
         border.width: Style.spacing.hairline
         Text {
@@ -2202,7 +2203,7 @@ Column {
           textFormat: Text.PlainText
           anchors.centerIn: parent
           text: view.panel.i18n("lapse_" + sky.lapseId) + " ▾"
-          color: view.lapseMenuOpen ? Color.accent : view.panel.mutedText
+          color: view.lapseMenuOpen ? Commons.Color.accent : view.panel.mutedText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.caption
         }
@@ -2221,7 +2222,7 @@ Column {
           width: Style.space(200)
           height: lapseColumn.implicitHeight + Style.space(8)
           radius: Style.cornerRadius
-          color: Color.popups.background
+          color: Commons.Color.popups.background
           border.color: view.panel.subtleText
           border.width: Style.spacing.hairline
           Column {
@@ -2236,14 +2237,14 @@ Column {
                 width: lapseColumn.width
                 height: Style.space(24)
                 radius: Style.cornerRadius
-                color: presetMouse.containsMouse ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.15) : "transparent"
+                color: presetMouse.containsMouse ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.15) : "transparent"
                 Text {
                   textFormat: Text.PlainText
                   anchors.verticalCenter: parent.verticalCenter
                   x: Style.space(6)
                   width: parent.width - Style.space(12)
                   text: view.panel.i18n("lapse_" + parent.modelData.id)
-                  color: parent.modelData.id === sky.lapseId ? Color.accent : view.panel.foreground
+                  color: parent.modelData.id === sky.lapseId ? Commons.Color.accent : view.panel.foreground
                   font.family: view.panel.fontFamily
                   font.pixelSize: Style.font.caption
                   elide: Text.ElideRight
@@ -2275,8 +2276,8 @@ Column {
             + (Astro.isApproximate(dateField.parsed.ms) ? " · " + view.panel.i18n("astroApproximate") : "")
             : view.panel.i18n(dateField.parsed.reason === "range" ? "astroOutOfRange" : "astroNotADate"))
           : view.panel.momentWithYear(sky.minuteMs) + (sky.approximate ? " · " + view.panel.i18n("astroApproximate") : "")
-        color: dateField.text !== "" && !dateField.parsed.ok ? Color.urgent
-          : (dateField.text === "" && sky.timePinned ? Color.accent : view.panel.mutedText)
+        color: dateField.text !== "" && !dateField.parsed.ok ? Commons.Color.urgent
+          : (dateField.text === "" && sky.timePinned ? Commons.Color.accent : view.panel.mutedText)
         font.family: view.panel.fontFamily
         font.pixelSize: Style.font.caption
         elide: Text.ElideRight
@@ -2402,8 +2403,8 @@ Column {
         width: eventsPanel.width
         height: Math.max(whenText.implicitHeight, eventText.implicitHeight) + Style.space(4)
         radius: Style.cornerRadius
-        color: view.eventSelected === index ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.2)
-          : (rowMouse.containsMouse ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.1) : "transparent")
+        color: view.eventSelected === index ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.2)
+          : (rowMouse.containsMouse ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.1) : "transparent")
         Text {
           id: whenText
           textFormat: Text.PlainText

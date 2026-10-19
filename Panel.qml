@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 import "WorldMap.js" as WorldMap
@@ -68,7 +69,7 @@ Panel {
     settingsTargetSurface = activeSurface
     root.defer(function() { displayOptionsStore.reloadAll() })
   }
-  readonly property color foreground: root.bar ? root.bar.foreground : Color.popups.text
+  readonly property color foreground: root.bar ? root.bar.foreground : Commons.Color.popups.text
   readonly property string fontFamily: root.bar && root.bar.fontFamily
     ? root.bar.fontFamily : Style.font.family
   // The two secondary text tones used everywhere: muted for labels and
@@ -77,10 +78,10 @@ Panel {
   // them darker than the text itself, so there it is faded towards the
   // background instead (muted keeps 4.5:1, subtle about 3:1). The same
   // rule as More Weather's.
-  readonly property bool lightBackground: (0.2126 * Color.popups.background.r + 0.7152 * Color.popups.background.g
-    + 0.0722 * Color.popups.background.b) > 0.5
+  readonly property bool lightBackground: (0.2126 * Commons.Color.popups.background.r + 0.7152 * Commons.Color.popups.background.g
+    + 0.0722 * Commons.Color.popups.background.b) > 0.5
   function fadedText(share) {
-    return Qt.tint(foreground, Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, share))
+    return Qt.tint(foreground, Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, share))
   }
   readonly property color mutedText: lightBackground ? fadedText(0.18) : Qt.darker(foreground, 1.35)
   readonly property color subtleText: lightBackground ? fadedText(0.34) : Qt.darker(foreground, 1.7)
@@ -89,7 +90,7 @@ Panel {
   // The Sun wherever it is drawn (the maps' sun marker, the Astro tab): the
   // golden hour's gold, softened towards the text and kept at 3:1 on the
   // background like the sky-coloured time (WorldMap.skyColor at 0°).
-  readonly property color sunColor: WorldMap.sunColor(rgbOf(foreground), rgbOf(Color.popups.background))
+  readonly property color sunColor: WorldMap.sunColor(rgbOf(foreground), rgbOf(Commons.Color.popups.background))
   // The lines that explain keys and gestures (General › App › Control
   // hints); off, they leave their room to the content.
   readonly property bool showHints: generalSetting("showHints", true) !== false
@@ -673,7 +674,7 @@ Panel {
     var place = here.place
     if (!place) return ""
     return WorldMap.skyColor(WorldMap.sunElevation(place.lat, place.lon, utcMs),
-      rgbOf(foreground), rgbOf(Color.popups.background))
+      rgbOf(foreground), rgbOf(Commons.Color.popups.background))
   }
   readonly property bool menubarOpenWidgetOnHover: !standaloneMode && menubarDisplaySetting("openWidgetOnHover", false)
   readonly property int menubarCitiesCount: Number(menubarDisplaySetting("citiesCount", "2")) || 2
@@ -1215,7 +1216,7 @@ Panel {
     var look = moonLook(style, moon, spaceAngle, ms)
     ctx.globalAlpha = look.alpha
     Moon.paintMoon(ctx, x, y, r, look.angle, look.illuminated, "238,236,226",
-      Moon.rgbText(WorldMap.nightFill(rgbOf(Color.popups.background))), Moon.rgbText(ink), look.earthshine)
+      Moon.rgbText(WorldMap.nightFill(rgbOf(Commons.Color.popups.background))), Moon.rgbText(ink), look.earthshine)
     ctx.globalAlpha = 1
     return { x: x, y: y, moon: moon, ms: ms }
   }
@@ -1876,7 +1877,7 @@ Panel {
     id: standaloneWindow
     visible: root.standaloneMode && root.opened
     title: root.i18n("appTitle")
-    color: Color.popups.background
+    color: Commons.Color.popups.background
     implicitWidth: Style.space(620)
     implicitHeight: Style.space(820)
     minimumSize: Qt.size(Style.space(420), Style.space(480))

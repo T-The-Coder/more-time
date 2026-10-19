@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Commons
-
+import qs.Commons as Commons
 // What rings right now, above everything else, with Stop and Snooze. Shown
 // in every instance; the leader (TimeRinger) plays the sound.
 Column {
@@ -17,8 +17,8 @@ Column {
       width: banner.width
       height: Style.space(52)
       radius: Style.cornerRadius
-      color: Style.selectedFillFor(banner.panel.foreground, Color.urgent)
-      border.color: Color.urgent
+      color: Style.selectedFillFor(banner.panel.foreground, Commons.Color.urgent)
+      border.color: Commons.Color.urgent
       border.width: Style.spacing.hairline
 
       Text {
@@ -28,7 +28,7 @@ Column {
         anchors.leftMargin: Style.space(12)
         anchors.verticalCenter: parent.verticalCenter
         text: "\u{f009e}"
-        color: Color.urgent
+        color: Commons.Color.urgent
         font.family: banner.panel.fontFamily
         font.pixelSize: Style.font.heading
 

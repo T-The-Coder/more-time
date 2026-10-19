@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import "WorldMap.js" as WorldMap
 import "Moon.js" as Moon
 import "Globe.js" as Globe
@@ -209,7 +210,7 @@ Item {
   readonly property var twilight: {
     var ms = minuteMs
     var layers = WorldMap.twilightLayers({ golden: showGolden, blue: showBlue, night: showNight },
-      panel.rgbOf(Color.popups.background))
+      panel.rgbOf(Commons.Color.popups.background))
     var shapes = {}
     var elevations = WorldMap.twilightElevations(layers)
     // On the GPU surface the shader draws them from the Sun alone, so a
@@ -381,7 +382,7 @@ Item {
     night: globe.showNight
     goldenBand: globe.showGolden
     blueBand: globe.showBlue
-    background: Color.popups.background
+    background: Commons.Color.popups.background
     baseColor: Qt.rgba(globe.panel.foreground.r, globe.panel.foreground.g, globe.panel.foreground.b, 0.03)
     textureSource: surfaceTexture
   }
@@ -480,7 +481,7 @@ Item {
     id: canvas
     anchors.fill: parent
     property color ink: globe.panel.foreground
-    property color accent: Color.accent
+    property color accent: Commons.Color.accent
     onInkChanged: requestPaint()
     onAccentChanged: requestPaint()
 
@@ -638,7 +639,7 @@ Item {
       var tw = globe.twilight
       if (globe.showNight) {
         var sun = screenPoint(tw.sun.lat, tw.sun.lon, lon)
-        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor, globe.panel.rgbOf(Color.popups.background))
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor, globe.panel.rgbOf(Commons.Color.popups.background))
       }
       // The Moon floats above its sub-lunar point, lifted along the view
       // direction (1.15 of its distance from the centre), its shadow on the
@@ -763,7 +764,7 @@ Item {
       }
       if (globe.showNight) {
         var sun = toScreen(tw.sun.lat, tw.sun.lon)
-        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor, globe.panel.rgbOf(Color.popups.background))
+        if (sun.visible) WorldMap.paintSun(ctx, sun.x, sun.y, globe.panel.sunColor, globe.panel.rgbOf(Commons.Color.popups.background))
       }
       var moon = globe.showMoon ? Moon.moonPosition(globe.minuteMs) : null
       var moonAt = moon ? toScreen(moon.lat, moon.lon) : null
@@ -851,7 +852,7 @@ Item {
           if (rect.x < 0 || rect.x + w > width || rect.y < 0 || rect.y + h > height) continue
           if (!free(rect) && !selected) continue
           taken.push(rect)
-          ctx.fillStyle = Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.78)
+          ctx.fillStyle = Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.78)
           ctx.fillRect(rect.x, rect.y, w, h)
           ctx.fillStyle = selected ? accent : ink
           ctx.textAlign = "left"

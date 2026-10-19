@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 import "AstroLapse.js" as AstroLapse
@@ -69,15 +70,15 @@ Column {
       width: shownLabel.implicitWidth + Style.space(12)
       height: shownLabel.implicitHeight + Style.space(6)
       radius: Style.cornerRadius
-      color: Qt.rgba(Color.popups.background.r, Color.popups.background.g, Color.popups.background.b, 0.85)
-      border.color: Color.accent
+      color: Qt.rgba(Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b, 0.85)
+      border.color: Commons.Color.accent
       border.width: Style.spacing.hairline
       Text {
         id: shownLabel
         textFormat: Text.PlainText
         anchors.centerIn: parent
         text: view.panel.i18n("astroShown", { date: view.shownText() })
-        color: Color.accent
+        color: Commons.Color.accent
         font.family: view.panel.fontFamily
         font.pixelSize: Style.font.caption
         font.bold: true
@@ -194,8 +195,8 @@ Column {
           width: speedLabel.implicitWidth + Style.space(14)
           height: Style.space(24)
           radius: Style.cornerRadius
-          color: picked ? Style.selectedFillFor(view.panel.foreground, Color.accent)
-            : (speedMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent")
+          color: picked ? Style.selectedFillFor(view.panel.foreground, Commons.Color.accent)
+            : (speedMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent")
           border.color: picked ? "transparent" : Qt.rgba(view.panel.foreground.r, view.panel.foreground.g, view.panel.foreground.b, 0.18)
           border.width: Style.spacing.hairline
           Text {
@@ -203,7 +204,7 @@ Column {
             textFormat: Text.PlainText
             anchors.centerIn: parent
             text: view.panel.i18n("lapseShort_" + parent.modelData)
-            color: parent.picked ? Color.accent : view.panel.mutedText
+            color: parent.picked ? Commons.Color.accent : view.panel.mutedText
             font.family: view.panel.fontFamily
             font.pixelSize: Style.font.caption
             font.bold: parent.picked
@@ -223,7 +224,7 @@ Column {
       anchors.verticalCenter: parent.verticalCenter
       width: parent.width - worldPlay.width - worldSpeeds.width - worldNow.width - 3 * parent.spacing
       text: view.shownText()
-      color: view.panel.worldTimePinned ? Color.accent : view.panel.mutedText
+      color: view.panel.worldTimePinned ? Commons.Color.accent : view.panel.mutedText
       font.family: view.panel.fontFamily
       font.pixelSize: Style.font.caption
       elide: Text.ElideRight

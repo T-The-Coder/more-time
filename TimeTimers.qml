@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -96,7 +97,7 @@ Column {
       text: entry.parsed > 0
         ? "= " + view.panel.durationText(entry.parsed) + (entry.parsedEntry.label ? " · " + entry.parsedEntry.label : "")
         : view.panel.i18n("timerEntryInvalid")
-      color: entry.parsed > 0 ? view.panel.mutedText : Color.urgent
+      color: entry.parsed > 0 ? view.panel.mutedText : Commons.Color.urgent
       font.family: view.panel.fontFamily
       font.pixelSize: Style.font.caption
     }
@@ -152,7 +153,7 @@ Column {
             textFormat: Text.PlainText
             text: card.modelData.state === "done" ? view.panel.i18n("timerExpired")
               : view.panel.durationText(card.remaining, { countdown: true })
-            color: card.modelData.state === "done" ? Color.urgent
+            color: card.modelData.state === "done" ? Commons.Color.urgent
               : (card.modelData.state === "running" ? view.panel.foreground : view.panel.mutedText)
             font.family: view.panel.fontFamily
             font.pixelSize: Style.font.displayLarge
@@ -201,7 +202,7 @@ Column {
         panel: view.panel
         width: parent.width
         progress: Model.timerProgress(card.modelData, view.panel.nowMs)
-        tint: card.modelData.state === "done" ? Color.urgent : Color.accent
+        tint: card.modelData.state === "done" ? Commons.Color.urgent : Commons.Color.accent
       }
     }
   }

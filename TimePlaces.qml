@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -55,8 +56,8 @@ Column {
           width: Style.space(40)
           height: width
           radius: Style.cornerRadius
-          color: choiceMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
-          border.color: choice.picked ? Color.accent : "transparent"
+          color: choiceMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent"
+          border.color: choice.picked ? Commons.Color.accent : "transparent"
           border.width: Style.spacing.hairline
 
           TimeDial {
@@ -82,7 +83,7 @@ Column {
           textFormat: Text.PlainText
           anchors.horizontalCenter: parent.horizontalCenter
           text: view.panel.i18n("dial_" + choice.modelData)
-          color: choice.picked ? Style.hoverStateColor(view.panel.foreground, Color.accent) : view.panel.mutedText
+          color: choice.picked ? Style.hoverStateColor(view.panel.foreground, Commons.Color.accent) : view.panel.mutedText
           font.family: view.panel.fontFamily
           font.pixelSize: Style.font.caption
         }
@@ -165,8 +166,8 @@ Column {
         width: parent.width
         height: Style.space(30)
         radius: Style.cornerRadius
-        color: current || resultMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
-        border.color: current ? Color.accent : "transparent"
+        color: current || resultMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent"
+        border.color: current ? Commons.Color.accent : "transparent"
         border.width: Style.spacing.hairline
 
         Text {
@@ -213,7 +214,7 @@ Column {
       visible: view.cities.length >= Model.MAX_CITIES
       width: parent.width
       text: view.panel.i18n("citiesFull")
-      color: Color.urgent
+      color: Commons.Color.urgent
       font.family: view.panel.fontFamily
       font.pixelSize: Style.font.caption
       wrapMode: Text.WordWrap
@@ -257,8 +258,8 @@ Column {
       width: parent.width
       height: Math.max(Style.space(48), hereColumn.implicitHeight + Style.space(12))
       radius: Style.cornerRadius
-      color: hereMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
-      border.color: selected ? Color.accent : view.panel.subtleText
+      color: hereMouse.containsMouse ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent"
+      border.color: selected ? Commons.Color.accent : view.panel.subtleText
       border.width: Style.spacing.hairline
 
       MouseArea {
@@ -393,8 +394,8 @@ Column {
         width: parent.width
         height: Math.max(Style.space(48), nameColumn.implicitHeight + Style.space(12))
         radius: Style.cornerRadius
-        color: rowMouse.containsMouse || marked ? Style.hoverFillFor(view.panel.foreground, Color.accent) : "transparent"
-        border.color: armed ? Color.urgent : (selected || marked ? Color.accent : view.panel.subtleText)
+        color: rowMouse.containsMouse || marked ? Style.hoverFillFor(view.panel.foreground, Commons.Color.accent) : "transparent"
+        border.color: armed ? Commons.Color.urgent : (selected || marked ? Commons.Color.accent : view.panel.subtleText)
         border.width: Style.spacing.hairline
 
         MouseArea {
@@ -497,7 +498,7 @@ Column {
             text: (row.dayShift === 0 ? view.panel.i18n("today")
                 : (row.dayShift > 0 ? view.panel.i18n("tomorrow") : view.panel.i18n("yesterday")))
               + "  ·  " + view.panel.offsetDifferenceText(row.offset === null ? 0 : row.offset - view.panel.localOffset)
-            color: row.dayShift !== 0 ? Color.accent : view.panel.mutedText
+            color: row.dayShift !== 0 ? Commons.Color.accent : view.panel.mutedText
             font.family: view.panel.fontFamily
             font.pixelSize: Style.font.caption
           }

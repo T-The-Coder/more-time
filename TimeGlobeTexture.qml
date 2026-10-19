@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import "WorldMap.js" as WorldMap
 
 // The World tab's picture of the earth for the GPU surface
@@ -19,7 +20,7 @@ Canvas {
   property var globeData: null
   property int homeZone: 99999
   property color ink: "white"
-  property color accent: Color.accent
+  property color accent: Commons.Color.accent
   // What painting costs (ms, the last repaint), for the status.
   property real lastMs: 0
 

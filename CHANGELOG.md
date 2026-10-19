@@ -151,6 +151,7 @@ All notable changes to More Time are documented here.
   are written through a fresh temporary file, and the runtime folder is
   made private even when it already existed.
 - **Pasting into a text field is bounded:** Ctrl+V, Shift+Insert and the middle button read at most 4 KiB from the clipboard within one second, through wl-paste (wl-clipboard), and insert it as typed text; Qt's own paste, which has no byte limit, never runs.
+- **Works with Qt 6.12 (Omarchy 4.0.5):** QtQuick 6.12 ships its own `Color` type that hid the shell's theme colours; the plugin now addresses them as `Commons.Color`, so controls are coloured again and the standalone app follows theme switches.
 - **Tooltip on hover:** a new menu bar option (off by default) shows the
   bar's tooltip with every entry of the clock, the hover ones included, one
   per line with a word for each symbol, updated while it is shown.

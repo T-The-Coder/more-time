@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import "Model.js" as Model
 import "WorldMap.js" as WorldMap
 
@@ -27,7 +28,7 @@ Canvas {
   height: width
 
   property color ink: panel.foreground
-  property color accent: Color.accent
+  property color accent: Commons.Color.accent
   readonly property string paintKey: style + "|" + parts.hour + ":" + parts.minute + ":" + (showSeconds ? parts.second : "")
     + "|" + (sun ? sun.sunrise + "-" + sun.sunset + sun.polar : "")
   onPaintKeyChanged: requestPaint()
@@ -54,7 +55,7 @@ Canvas {
 
     // The 24-hour face: night shaded first, under the marks.
     if (s === "twentyFour" && sun) {
-      var nf = WorldMap.nightFill([Color.popups.background.r, Color.popups.background.g, Color.popups.background.b])
+      var nf = WorldMap.nightFill([Commons.Color.popups.background.r, Commons.Color.popups.background.g, Commons.Color.popups.background.b])
       ctx.fillStyle = Qt.rgba(nf.r, nf.g, nf.b, nf.a)
       if (sun.polar === "night") {
         ctx.beginPath()

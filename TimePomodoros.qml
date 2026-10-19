@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -149,7 +150,7 @@ Column {
               textFormat: Text.PlainText
               anchors.baseline: remainingText.baseline
               text: view.panel.upperLabel(view.panel.pomodoroPhaseName(card.modelData.phase))
-              color: card.onBreak ? Color.accent : view.panel.foreground
+              color: card.onBreak ? Commons.Color.accent : view.panel.foreground
               font.family: view.panel.fontFamily
               font.pixelSize: Style.font.caption
               font.bold: true
@@ -168,7 +169,7 @@ Column {
                 width: Style.space(6)
                 height: width
                 radius: width / 2
-                color: Color.accent
+                color: Commons.Color.accent
               }
             }
             Text {
@@ -233,7 +234,7 @@ Column {
         panel: view.panel
         width: parent.width
         progress: Model.pomodoroProgress(card.modelData, view.panel.nowMs)
-        tint: card.onBreak ? view.panel.mutedText : Color.accent
+        tint: card.onBreak ? view.panel.mutedText : Commons.Color.accent
       }
 
       // The editor (e): lengths, long breaks, auto start, name.

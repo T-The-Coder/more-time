@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import "Time" as Time
 import "Time/WorldMap.js" as WorldMap
 
@@ -245,7 +246,7 @@ ShellRoot {
     implicitHeight: 1150
     Rectangle {
       anchors.fill: parent
-      color: Color.popups.background
+      color: Commons.Color.popups.background
       Item { id: appHost; anchors.fill: parent; anchors.margins: 14 }
     }
   }
@@ -257,7 +258,7 @@ ShellRoot {
     implicitHeight: 1000
     Rectangle {
       anchors.fill: parent
-      color: Color.popups.background
+      color: Commons.Color.popups.background
       Item { id: widgetHost; anchors.fill: parent; anchors.margins: 16 }
     }
   }
@@ -273,7 +274,7 @@ ShellRoot {
       property alias active: barLoader.active
       readonly property alias item: barLoader.item
       anchors.fill: parent
-      color: Color.bar ? Color.bar.background : Color.popups.background
+      color: Commons.Color.bar ? Commons.Color.bar.background : Commons.Color.popups.background
 
       Loader {
         id: barLoader

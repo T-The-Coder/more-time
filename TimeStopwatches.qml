@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -154,8 +155,8 @@ Column {
               width: Style.space(90)
               horizontalAlignment: Text.AlignRight
               text: view.panel.durationText(parent.modelData.split, { hundredths: view.hundredths })
-              color: parent.modelData.fastest ? Color.accent
-                : (parent.modelData.slowest ? Color.urgent : view.panel.foreground)
+              color: parent.modelData.fastest ? Commons.Color.accent
+                : (parent.modelData.slowest ? Commons.Color.urgent : view.panel.foreground)
               font.family: view.panel.fontFamily
               font.pixelSize: Style.font.bodySmall
               font.bold: parent.modelData.fastest || parent.modelData.slowest
