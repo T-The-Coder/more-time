@@ -145,7 +145,7 @@ ShellRoot {
     function() { shot("41-settings-general-more") },
     function() { panel.settingsItem.scrollBy(10000) },
     function() { shot("42-settings-general-end") },
-    function() { panel.openSettings("display"); panel.settingsTargetSurface = "app" },
+    function() { panel.openSettings("app") },
     function() { shot("43-settings-display") },
     function() { panel.settingsItem.scrollBy(1400) },
     function() { shot("44-settings-display-world") },

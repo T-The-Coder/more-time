@@ -272,7 +272,7 @@ Item {
     if (idleTimer.running) idleTimer.restart()
   }
 
-  // Settings → Display → World: after how many idle seconds it starts, and
+  // Settings → Widget/App → World: after how many idle seconds it starts, and
   // in how many minutes it makes one turn.
   readonly property int rotateDelaySeconds: Number(panel.generalSetting("motionDelay", "10")) || 10
   readonly property int rotateTurnMinutes: Number(panel.generalSetting("motionSpeed", "4")) || 4

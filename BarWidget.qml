@@ -136,11 +136,14 @@ BarWidget {
 
     Row {
       id: clockBarContent
+      // Omarchy 4.5 shrinks a held bar glyph a little; the content follows
+      // it (1 on older shells, which have no pressScale).
+      scale: button.pressScale || 1
       visible: !root.vertical
       anchors.centerIn: parent
       spacing: Style.space(7)
 
-      // Entries in the order chosen under Settings → Display → Menu bar.
+      // Entries in the order chosen under Settings → Menu bar.
       Repeater {
         model: panelLoader.item ? panelLoader.item.menubarEntries : []
 
@@ -191,6 +194,9 @@ BarWidget {
     // A bar on a screen edge: hours over minutes, and the bell when it rings.
     Column {
       id: verticalClock
+      // Omarchy 4.5 shrinks a held bar glyph a little; the content follows
+      // it (1 on older shells, which have no pressScale).
+      scale: button.pressScale || 1
       visible: root.vertical
       anchors.centerIn: parent
       spacing: 0

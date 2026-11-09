@@ -46,7 +46,7 @@ var catalog = {
   general: "כללי", language: "שפה", languageAuto: "אוטומטי ({language})", timeFormat: "תבנית שעה",
   timeFormatAuto: "אוטומטי ({example})", timeFormat24: "24 שעות (14:30)", timeFormat12: "12 שעות (2:30 PM)",
   barPosition: "מיקום בסרגל", barPositionLeft: "שמאל", barPositionCenter: "מרכז", barPositionRight: "ימין",
-  barPositionTop: "למעלה", barPositionBottom: "למטה", sounds: "צלילים", alarmSound: "מעורר", timerSound: "טיימר",
+  barPositionTop: "למעלה", barPositionBottom: "למטה", barPositionLeftOfCenter: "משמאל למרכז", barPositionRightOfCenter: "מימין למרכז", barPositionAboveCenter: "מעל המרכז", barPositionBelowCenter: "מתחת למרכז", barPositionTray: "מגירת המגש", sounds: "צלילים", alarmSound: "מעורר", timerSound: "טיימר",
   pomodoroSound: "שלב פומודורו", sound_alarm: "שעון מעורר", sound_bell: "פעמון", sound_complete: "צלצול",
   sound_message: "הודעה", sound_phone: "טלפון", sound_none: "שקט", testSound: "בדיקה", volume: "עוצמה",
   snoozeDefault: "נודניק למעוררים חדשים",

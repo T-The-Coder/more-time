@@ -46,7 +46,7 @@ var catalog = {
   general: "Chung", language: "Ngôn ngữ", languageAuto: "Tự động ({language})", timeFormat: "Định dạng giờ",
   timeFormatAuto: "Tự động ({example})", timeFormat24: "24 giờ (14:30)", timeFormat12: "12 giờ (2:30 PM)",
   barPosition: "Vị trí trên thanh", barPositionLeft: "Trái", barPositionCenter: "Giữa", barPositionRight: "Phải",
-  barPositionTop: "Trên", barPositionBottom: "Dưới", sounds: "Âm thanh", alarmSound: "Báo thức", timerSound: "Hẹn giờ",
+  barPositionTop: "Trên", barPositionBottom: "Dưới", barPositionLeftOfCenter: "Bên trái giữa", barPositionRightOfCenter: "Bên phải giữa", barPositionAboveCenter: "Phía trên giữa", barPositionBelowCenter: "Phía dưới giữa", barPositionTray: "Ngăn khay hệ thống", sounds: "Âm thanh", alarmSound: "Báo thức", timerSound: "Hẹn giờ",
   pomodoroSound: "Giai đoạn pomodoro", sound_alarm: "Đồng hồ báo thức", sound_bell: "Chuông", sound_complete: "Tiếng ngân",
   sound_message: "Tin nhắn", sound_phone: "Điện thoại", sound_none: "Im lặng", testSound: "Thử", volume: "Âm lượng",
   snoozeDefault: "Báo lại cho báo thức mới",

@@ -46,7 +46,7 @@ var catalog = {
   general: "Allmänt", language: "Språk", languageAuto: "Automatiskt ({language})", timeFormat: "Tidsformat",
   timeFormatAuto: "Automatiskt ({example})", timeFormat24: "24 timmar (14:30)", timeFormat12: "12 timmar (2:30 PM)",
   barPosition: "Placering i fältet", barPositionLeft: "Vänster", barPositionCenter: "Mitten", barPositionRight: "Höger",
-  barPositionTop: "Överst", barPositionBottom: "Nederst", sounds: "Ljud", alarmSound: "Alarm", timerSound: "Timer",
+  barPositionTop: "Överst", barPositionBottom: "Nederst", barPositionLeftOfCenter: "Vänster om mitten", barPositionRightOfCenter: "Höger om mitten", barPositionAboveCenter: "Ovanför mitten", barPositionBelowCenter: "Under mitten", barPositionTray: "Systemfältets låda", sounds: "Ljud", alarmSound: "Alarm", timerSound: "Timer",
   pomodoroSound: "Pomodorofas", sound_alarm: "Väckarklocka", sound_bell: "Klocka", sound_complete: "Klang",
   sound_message: "Meddelande", sound_phone: "Telefon", sound_none: "Tyst", testSound: "Testa", volume: "Volym",
   snoozeDefault: "Snooze för nya alarm",

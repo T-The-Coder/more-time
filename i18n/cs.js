@@ -46,7 +46,7 @@ var catalog = {
   general: "Obecné", language: "Jazyk", languageAuto: "Automaticky ({language})", timeFormat: "Formát času",
   timeFormatAuto: "Automaticky ({example})", timeFormat24: "24 hodin (14:30)", timeFormat12: "12 hodin (2:30 PM)",
   barPosition: "Umístění na liště", barPositionLeft: "Vlevo", barPositionCenter: "Uprostřed", barPositionRight: "Vpravo",
-  barPositionTop: "Nahoře", barPositionBottom: "Dole", sounds: "Zvuky", alarmSound: "Budík", timerSound: "Časovač",
+  barPositionTop: "Nahoře", barPositionBottom: "Dole", barPositionLeftOfCenter: "Vlevo od středu", barPositionRightOfCenter: "Vpravo od středu", barPositionAboveCenter: "Nad středem", barPositionBelowCenter: "Pod středem", barPositionTray: "Zásuvka oznamovací oblasti", sounds: "Zvuky", alarmSound: "Budík", timerSound: "Časovač",
   pomodoroSound: "Fáze pomodora", sound_alarm: "Budík", sound_bell: "Zvonek", sound_complete: "Gong",
   sound_message: "Zpráva", sound_phone: "Telefon", sound_none: "Ticho", testSound: "Vyzkoušet", volume: "Hlasitost",
   snoozeDefault: "Odložení u nových budíků",

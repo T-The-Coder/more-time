@@ -346,11 +346,11 @@ ShellRoot {
       shot("08e-hero-chimes-muted")
     },
     function() { general("chimesMuted", false); panel.ringer.testChime("hourChime") },
-    function() { panel.openSettings("display"); panel.settingsTargetSurface = "menubar" },
+    function() { panel.openSettings("menubar") },
     function() { shot("09-settings-menubar") },
-    function() { panel.settingsTargetSurface = "app" },
+    function() { panel.settingsPage = "app" },
     function() { shot("10-settings-app") },
-    function() { panel.openSettings("display"); panel.settingsTargetSurface = "app" },
+    function() { panel.openSettings("app") },
     function() { display("worldStyle", "globe"); display("globeAutoRotate", true) },
     function() { panel.settingsItem.focusId = "heroDial" },
     function() { shot("10a-settings-clock-face") },
@@ -483,9 +483,7 @@ ShellRoot {
       console.log("MENUBAR off", JSON.stringify(panel.menubarEntries.map(function(e) {
         return e.key + ":" + e.color + "/" + e.parts.map(function(p) { return p.color }).join(",")
       })))
-      panel.settingsPage = "display"
-      panel.openSettings("display")
-      panel.settingsTargetSurface = "menubar"
+      panel.openSettings("menubar")
       general("language", "en")
       panel.displayOptionsStore.setSettingsDisplaySetting("menubarAccents", "always")
     },
@@ -538,7 +536,7 @@ ShellRoot {
     function() { shot("readme-pomodoros") },
     function() { panel.openSettings("sounds") },
     function() { shot("readme-sounds") },
-    function() { panel.openSettings("display"); panel.settingsTargetSurface = "app" },
+    function() { panel.openSettings("app") },
     function() { shot("readme-display") },
     function() { panel.settingsOpen = false; panel.activeTab = "world"; display("worldMoon", false); harness.backdrop.destroy() },
     // The globe and the map fill the visible height: the app at 941×1150,

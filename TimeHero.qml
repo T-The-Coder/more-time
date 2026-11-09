@@ -36,7 +36,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     width: Style.space(96)
     panel: hero.panel
-    // Settings → Display → Clock → Clock face: the place's own, or one for
+    // Settings → Widget/App → Clock → Clock face: the place's own, or one for
     // all places.
     readonly property string chosen: String(hero.panel.displaySetting("heroDial", "place"))
     style: chosen === "place" ? hero.panel.dialStyleFor(hero.panel.selectedCity) : Model.dialStyle(chosen)

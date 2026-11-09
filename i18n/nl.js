@@ -46,7 +46,7 @@ var catalog = {
   general: "Algemeen", language: "Taal", languageAuto: "Automatisch ({language})", timeFormat: "Tijdnotatie",
   timeFormatAuto: "Automatisch ({example})", timeFormat24: "24 uur (14:30)", timeFormat12: "12 uur (2:30 PM)",
   barPosition: "Positie in de balk", barPositionLeft: "Links", barPositionCenter: "Midden", barPositionRight: "Rechts",
-  barPositionTop: "Boven", barPositionBottom: "Onder", sounds: "Geluiden", alarmSound: "Wekker", timerSound: "Timer",
+  barPositionTop: "Boven", barPositionBottom: "Onder", barPositionLeftOfCenter: "Links van het midden", barPositionRightOfCenter: "Rechts van het midden", barPositionAboveCenter: "Boven het midden", barPositionBelowCenter: "Onder het midden", barPositionTray: "Systeemvaklade", sounds: "Geluiden", alarmSound: "Wekker", timerSound: "Timer",
   pomodoroSound: "Pomodorofase", sound_alarm: "Wekker", sound_bell: "Bel", sound_complete: "Gong",
   sound_message: "Bericht", sound_phone: "Telefoon", sound_none: "Stil", testSound: "Test", volume: "Volume",
   snoozeDefault: "Snooze voor nieuwe wekkers",

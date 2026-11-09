@@ -2,6 +2,18 @@
 
 All notable changes to More Time are documented here.
 
+## 1.2.0 — 2026-11-09
+
+- **Omarchy 4.5's bar sections.** The bar now has five sections (left, left
+  of center, center, right of center, right); Settings → General → Position in
+  the bar offers all five and finds the clock in any of them, also in the
+  tray's drawer. Before, a clock right or left of the center box counted as
+  "not on the bar". The bar content gives a little while pressed, as Omarchy
+  4.5's own icons do.
+- **Menu bar, Widget and App are settings pages of their own**, next to
+  General, instead of tabs inside a Display page. `1` `2` `3` still switch
+  between them.
+
 ## 1.1.0 — 2026-10-11
 
 - **New Astro tab: the solar system as a clock.** The Sun and the eight

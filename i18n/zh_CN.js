@@ -46,7 +46,7 @@ var catalog = {
   general: "通用", language: "语言", languageAuto: "自动（{language}）", timeFormat: "时间格式",
   timeFormatAuto: "自动（{example}）", timeFormat24: "24 小时制（14:30）", timeFormat12: "12 小时制（2:30 PM）",
   barPosition: "在栏中的位置", barPositionLeft: "左", barPositionCenter: "中", barPositionRight: "右",
-  barPositionTop: "上", barPositionBottom: "下", sounds: "声音", alarmSound: "闹钟", timerSound: "计时器",
+  barPositionTop: "上", barPositionBottom: "下", barPositionLeftOfCenter: "中间偏左", barPositionRightOfCenter: "中间偏右", barPositionAboveCenter: "中间偏上", barPositionBelowCenter: "中间偏下", barPositionTray: "托盘抽屉", sounds: "声音", alarmSound: "闹钟", timerSound: "计时器",
   pomodoroSound: "番茄钟阶段", sound_alarm: "闹铃", sound_bell: "铃声", sound_complete: "提示音",
   sound_message: "消息", sound_phone: "电话", sound_none: "静音", testSound: "试听", volume: "音量",
   snoozeDefault: "新闹钟的稍后提醒",

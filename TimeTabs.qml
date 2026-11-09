@@ -4,7 +4,7 @@ import qs.Commons as Commons
 import qs.Ui
 
 // The tab strip: world clock, alarms, timers, stopwatches, pomodoros, astro, in the
-// order chosen under Settings → Display. The number keys pick them the same
+// order chosen under Settings → Widget/App. The number keys pick them the same
 // way. The picked tab's content is created below by the panel.
 Column {
   id: tabsSection

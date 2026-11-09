@@ -106,10 +106,7 @@ Rectangle {
     ])
     // App: the position in the bar (when the widget is in one) and the
     // launcher entry.
-    if (barPositionUsable) list.push({ id: "barPosition", title: panel.i18n("barPosition"), section: "app", options: [
-      { value: "left", label: panel.i18n(panel.barPlacement.verticalBar ? "barPositionTop" : "barPositionLeft") },
-      { value: "center", label: panel.i18n("barPositionCenter") },
-      { value: "right", label: panel.i18n(panel.barPlacement.verticalBar ? "barPositionBottom" : "barPositionRight") }] })
+    if (barPositionUsable) list.push({ id: "barPosition", title: panel.i18n("barPosition"), section: "app", options: panel.barPlacement.options })
     list.push({ id: "launcher", title: panel.i18n("appLauncherEntry"), kind: "launcher", hint: "appLauncherEntryHint",
       section: barPositionUsable ? undefined : "app" })
     list.push({ id: "showHints", title: panel.i18n("showHints"), kind: "switch", hint: "showHintsHint" })
@@ -296,6 +293,8 @@ Rectangle {
   readonly property bool searching: searchQuery.trim() !== ""
   // The page drawn: none while the results show.
   readonly property string page: searching ? "" : panel.settingsPage
+  // On one of the views' pages (menu bar, widget, app), not searching.
+  readonly property bool surfacePage: !searching && panel.settingsSurfacePage
   onSearchingChanged: focusId = ""
 
   // English for a text shown in the interface language (a translated
@@ -336,10 +335,11 @@ Rectangle {
     }
     general(generalPageEntries, "general")
     general(soundsPageEntries, "sounds")
-    var displayName = panel.i18n("settingsPage_display")
-    var surfaceName = panel.i18n(panel.settingsTargetSurface)
+    // The cards of the view picked (menu bar, widget or app), under that
+    // view's page.
+    var displayName = panel.i18n(panel.settingsTargetSurface)
     function display(option, card, section, extra) {
-      var heading = displayName + " › " + card + (section ? " › " + section : "") + " · " + surfaceName
+      var heading = displayName + " › " + card + (section ? " › " + section : "")
       var e = Object.assign({ kind: "display", option: option, heading: heading,
         texts: self.textsFor([option.title, option.hint || "", displayName, card, section]) }, extra || {})
       entries.push(e)
@@ -451,7 +451,7 @@ Rectangle {
       if (!panel.displayOptionsStore.generalIsDefault()) items.push({ id: "restoreGeneral", type: "button" })
       return items
     }
-    if (panel.settingsPage !== "display") return []
+    if (!panel.settingsSurfacePage) return []
     if (panel.settingsTargetSurface === "menubar") {
       items.push({ id: "master:showClock", type: "switch", key: "showClock" })
       if (panel.settingsDisplaySetting("showClock", true)) {
@@ -617,7 +617,7 @@ Rectangle {
     }
     var down = key === Qt.Key_Down || text === "j" || text === "J"
     var up = key === Qt.Key_Up || text === "k" || text === "K"
-    if (!searching && panel.settingsPage !== "display" && panel.settingsPage !== "general" && panel.settingsPage !== "sounds") {
+    if (!searching && !panel.settingsSurfacePage && panel.settingsPage !== "general" && panel.settingsPage !== "sounds") {
       // What's new: Enter shows the older versions.
       if (panel.settingsPage === "changes" && (key === Qt.Key_Return || key === Qt.Key_Enter)) return changesPage.activate()
       if (down || up) {
@@ -626,8 +626,8 @@ Rectangle {
       }
       return false
     }
-    if (panel.settingsPage === "display" && (text === "1" || text === "2" || text === "3")) {
-      panel.settingsTargetSurface = ["menubar", "widget", "app"][Number(text) - 1]
+    if (panel.settingsSurfacePage && (text === "1" || text === "2" || text === "3")) {
+      panel.settingsPage = panel.settingsSurfaces[Number(text) - 1]
       focusId = ""
       return true
     }
@@ -1312,10 +1312,10 @@ Rectangle {
 
       // ================= Display =================
 
-      // Menu bar, widget, app: the profile these cards edit (also while
-      // searching: the Display rows found are this profile's).
+      // While searching: the view (menu bar, widget, app) whose rows are
+      // found; otherwise the page picked is the view.
       Item {
-        visible: settingsView.page === "display" || settingsView.searching
+        visible: settingsView.searching
         width: parent.width
         height: Style.space(30)
 
@@ -1368,7 +1368,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: panel.showHints && settingsView.page === "display"
+        visible: panel.showHints && settingsView.surfacePage
         width: parent.width
         text: panel.keepSeparators(panel.i18n("settingsKeysHint"))
         color: panel.hintText
@@ -1379,7 +1379,7 @@ Rectangle {
 
       Text {
         textFormat: Text.PlainText
-        visible: settingsView.page === "display"
+        visible: settingsView.surfacePage
         width: parent.width
         text: panel.i18n("displaySettingsHint") + " " + panel.i18n(panel.settingsTargetSurface === "menubar"
           ? "menubarHoverHint" : "displayTabsHint")
@@ -1391,7 +1391,7 @@ Rectangle {
 
       // Menu bar: one card with the entries in the bar's order.
       Card {
-        visible: settingsView.page === "display" && panel.settingsTargetSurface === "menubar"
+        visible: settingsView.surfacePage && panel.settingsTargetSurface === "menubar"
         readonly property bool rowsEnabled: panel.settingsDisplaySetting("showClock", true)
 
         TimeSwitchRow {
@@ -1515,7 +1515,7 @@ Rectangle {
 
       // Widget and app: the clock on top, then a card per tab in tab order.
       Card {
-        visible: settingsView.page === "display" && panel.settingsTargetSurface !== "menubar"
+        visible: settingsView.surfacePage && panel.settingsTargetSurface !== "menubar"
 
         SectionTitle {
           height: Style.space(34)
@@ -1562,7 +1562,7 @@ Rectangle {
       }
 
       Repeater {
-        model: settingsView.page === "display" && panel.settingsTargetSurface !== "menubar"
+        model: settingsView.surfacePage && panel.settingsTargetSurface !== "menubar"
           ? panel.settingsOrderFor("tabOrder") : []
 
         Card {
@@ -1636,7 +1636,7 @@ Rectangle {
       }
 
       Item {
-        visible: settingsView.page === "display" && panel.settingsTargetSurface !== "menubar" && panel.settingsTabs.length > 1
+        visible: settingsView.surfacePage && panel.settingsTargetSurface !== "menubar" && panel.settingsTabs.length > 1
         width: parent.width
         height: Style.space(40)
 
@@ -1672,7 +1672,7 @@ Rectangle {
       }
 
       Row {
-        visible: settingsView.page === "display"
+        visible: settingsView.surfacePage
         spacing: Style.space(10)
 
         TimeButton {

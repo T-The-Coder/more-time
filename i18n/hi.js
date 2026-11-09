@@ -46,7 +46,7 @@ var catalog = {
   general: "सामान्य", language: "भाषा", languageAuto: "स्वचालित ({language})", timeFormat: "समय प्रारूप",
   timeFormatAuto: "स्वचालित ({example})", timeFormat24: "24 घंटे (14:30)", timeFormat12: "12 घंटे (2:30 PM)",
   barPosition: "बार में स्थान", barPositionLeft: "बाएँ", barPositionCenter: "बीच", barPositionRight: "दाएँ",
-  barPositionTop: "ऊपर", barPositionBottom: "नीचे", sounds: "ध्वनियाँ", alarmSound: "अलार्म", timerSound: "टाइमर",
+  barPositionTop: "ऊपर", barPositionBottom: "नीचे", barPositionLeftOfCenter: "बीच के बाईं ओर", barPositionRightOfCenter: "बीच के दाईं ओर", barPositionAboveCenter: "बीच के ऊपर", barPositionBelowCenter: "बीच के नीचे", barPositionTray: "ट्रे ड्रॉअर", sounds: "ध्वनियाँ", alarmSound: "अलार्म", timerSound: "टाइमर",
   pomodoroSound: "पोमोडोरो चरण", sound_alarm: "अलार्म घड़ी", sound_bell: "घंटी", sound_complete: "झंकार",
   sound_message: "संदेश", sound_phone: "फ़ोन", sound_none: "मौन", testSound: "जाँचें", volume: "आवाज़",
   snoozeDefault: "नए अलार्म के लिए स्नूज़",

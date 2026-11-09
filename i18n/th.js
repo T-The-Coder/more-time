@@ -46,7 +46,7 @@ var catalog = {
   general: "ทั่วไป", language: "ภาษา", languageAuto: "อัตโนมัติ ({language})", timeFormat: "รูปแบบเวลา",
   timeFormatAuto: "อัตโนมัติ ({example})", timeFormat24: "24 ชั่วโมง (14:30)", timeFormat12: "12 ชั่วโมง (2:30 PM)",
   barPosition: "ตำแหน่งในแถบ", barPositionLeft: "ซ้าย", barPositionCenter: "กลาง", barPositionRight: "ขวา",
-  barPositionTop: "บน", barPositionBottom: "ล่าง", sounds: "เสียง", alarmSound: "นาฬิกาปลุก", timerSound: "ตัวจับเวลา",
+  barPositionTop: "บน", barPositionBottom: "ล่าง", barPositionLeftOfCenter: "ซ้ายของกึ่งกลาง", barPositionRightOfCenter: "ขวาของกึ่งกลาง", barPositionAboveCenter: "เหนือกึ่งกลาง", barPositionBelowCenter: "ใต้กึ่งกลาง", barPositionTray: "ลิ้นชักถาดระบบ", sounds: "เสียง", alarmSound: "นาฬิกาปลุก", timerSound: "ตัวจับเวลา",
   pomodoroSound: "ช่วงโพโมโดโร", sound_alarm: "นาฬิกาปลุก", sound_bell: "กระดิ่ง", sound_complete: "เสียงกังวาน",
   sound_message: "ข้อความ", sound_phone: "โทรศัพท์", sound_none: "เงียบ", testSound: "ทดสอบ", volume: "ระดับเสียง",
   snoozeDefault: "เลื่อนสำหรับนาฬิกาปลุกใหม่",

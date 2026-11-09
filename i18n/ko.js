@@ -46,7 +46,7 @@ var catalog = {
   general: "일반", language: "언어", languageAuto: "자동 ({language})", timeFormat: "시각 형식",
   timeFormatAuto: "자동 ({example})", timeFormat24: "24시간 (14:30)", timeFormat12: "12시간 (2:30 PM)",
   barPosition: "막대 내 위치", barPositionLeft: "왼쪽", barPositionCenter: "가운데", barPositionRight: "오른쪽",
-  barPositionTop: "위", barPositionBottom: "아래", sounds: "소리", alarmSound: "알람", timerSound: "타이머",
+  barPositionTop: "위", barPositionBottom: "아래", barPositionLeftOfCenter: "가운데 왼쪽", barPositionRightOfCenter: "가운데 오른쪽", barPositionAboveCenter: "가운데 위", barPositionBelowCenter: "가운데 아래", barPositionTray: "트레이 서랍", sounds: "소리", alarmSound: "알람", timerSound: "타이머",
   pomodoroSound: "뽀모도로 단계", sound_alarm: "자명종", sound_bell: "종", sound_complete: "차임",
   sound_message: "메시지", sound_phone: "전화", sound_none: "무음", testSound: "들어보기", volume: "음량",
   snoozeDefault: "새 알람의 다시 알림",

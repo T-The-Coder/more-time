@@ -46,7 +46,7 @@ var catalog = {
   general: "Общие", language: "Язык", languageAuto: "Автоматически ({language})", timeFormat: "Формат времени",
   timeFormatAuto: "Автоматически ({example})", timeFormat24: "24 часа (14:30)", timeFormat12: "12 часов (2:30 PM)",
   barPosition: "Положение на панели", barPositionLeft: "Слева", barPositionCenter: "По центру", barPositionRight: "Справа",
-  barPositionTop: "Сверху", barPositionBottom: "Снизу", sounds: "Звуки", alarmSound: "Будильник", timerSound: "Таймер",
+  barPositionTop: "Сверху", barPositionBottom: "Снизу", barPositionLeftOfCenter: "Слева от центра", barPositionRightOfCenter: "Справа от центра", barPositionAboveCenter: "Над центром", barPositionBelowCenter: "Под центром", barPositionTray: "Ящик трея", sounds: "Звуки", alarmSound: "Будильник", timerSound: "Таймер",
   pomodoroSound: "Фаза помидоро", sound_alarm: "Будильник", sound_bell: "Колокол", sound_complete: "Перезвон",
   sound_message: "Сообщение", sound_phone: "Телефон", sound_none: "Без звука", testSound: "Проверить", volume: "Громкость",
   snoozeDefault: "Отсрочка для новых будильников",

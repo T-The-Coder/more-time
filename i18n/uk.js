@@ -46,7 +46,7 @@ var catalog = {
   general: "Загальні", language: "Мова", languageAuto: "Автоматично ({language})", timeFormat: "Формат часу",
   timeFormatAuto: "Автоматично ({example})", timeFormat24: "24 години (14:30)", timeFormat12: "12 годин (2:30 PM)",
   barPosition: "Розташування на панелі", barPositionLeft: "Ліворуч", barPositionCenter: "По центру", barPositionRight: "Праворуч",
-  barPositionTop: "Угорі", barPositionBottom: "Унизу", sounds: "Звуки", alarmSound: "Будильник", timerSound: "Таймер",
+  barPositionTop: "Угорі", barPositionBottom: "Унизу", barPositionLeftOfCenter: "Ліворуч від центру", barPositionRightOfCenter: "Праворуч від центру", barPositionAboveCenter: "Над центром", barPositionBelowCenter: "Під центром", barPositionTray: "Шухляда трею", sounds: "Звуки", alarmSound: "Будильник", timerSound: "Таймер",
   pomodoroSound: "Фаза помодоро", sound_alarm: "Будильник", sound_bell: "Дзвін", sound_complete: "Передзвін",
   sound_message: "Повідомлення", sound_phone: "Телефон", sound_none: "Без звуку", testSound: "Перевірити", volume: "Гучність",
   snoozeDefault: "Відкладання для нових будильників",

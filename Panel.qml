@@ -66,7 +66,7 @@ Panel {
   property bool standaloneMode: false
   readonly property string activeSurface: standaloneMode ? "app" : "widget"
   onStandaloneModeChanged: {
-    settingsTargetSurface = activeSurface
+    settingsTargetSurface = settingsSurfaces.indexOf(settingsPage) >= 0 ? settingsPage : activeSurface
     root.defer(function() { displayOptionsStore.reloadAll() })
   }
   readonly property color foreground: root.bar ? root.bar.foreground : Commons.Color.popups.text
@@ -408,10 +408,17 @@ Panel {
   // popup opens over other windows, so it starts with less.
 
   property bool settingsOpen: false
-  readonly property var settingsPages: ["general", "display", "sounds", "shortcuts", "sources", "changes"]
+  // The three views (menu bar, widget, app) each have a page of their own.
+  readonly property var settingsPages: ["general", "menubar", "widget", "app", "sounds", "shortcuts", "sources", "changes"]
+  readonly property var settingsSurfaces: ["menubar", "widget", "app"]
+  // On one of the views' pages: settingsTargetSurface follows it.
+  readonly property bool settingsSurfacePage: settingsSurfaces.indexOf(settingsPage) >= 0
+  // Reads the list itself: settingsSurfacePage may not have caught up yet.
+  onSettingsPageChanged: if (settingsSurfaces.indexOf(settingsPage) >= 0) settingsTargetSurface = settingsPage
   // A settings page's name ("What's new" has a key of its own, shared with
-  // More Weather).
+  // More Weather; the views' pages are named after the view).
   function settingsPageName(key) {
+    if (settingsSurfaces.indexOf(key) >= 0) return i18n(key)
     return i18n(key === "changes" ? "settingsPageChanges" : "settingsPage_" + key)
   }
   property string settingsPage: "general"
@@ -431,7 +438,7 @@ Panel {
   function openSettings(page) {
     closeEditors()
     settingsPage = page || "general"
-    settingsTargetSurface = activeSurface
+    settingsTargetSurface = settingsSurfaces.indexOf(settingsPage) >= 0 ? settingsPage : activeSurface
     displayOptionsStore.reloadAll()
     settingsOpen = true
   }

@@ -46,7 +46,7 @@ var catalog = {
   general: "Általános", language: "Nyelv", languageAuto: "Automatikus ({language})", timeFormat: "Időformátum",
   timeFormatAuto: "Automatikus ({example})", timeFormat24: "24 órás (14:30)", timeFormat12: "12 órás (2:30 PM)",
   barPosition: "Hely a sávban", barPositionLeft: "Balra", barPositionCenter: "Középen", barPositionRight: "Jobbra",
-  barPositionTop: "Fent", barPositionBottom: "Lent", sounds: "Hangok", alarmSound: "Ébresztő", timerSound: "Időzítő",
+  barPositionTop: "Fent", barPositionBottom: "Lent", barPositionLeftOfCenter: "Középtől balra", barPositionRightOfCenter: "Középtől jobbra", barPositionAboveCenter: "Közép fölött", barPositionBelowCenter: "Közép alatt", barPositionTray: "Tálcafiók", sounds: "Hangok", alarmSound: "Ébresztő", timerSound: "Időzítő",
   pomodoroSound: "Pomodoro-szakasz", sound_alarm: "Ébresztőóra", sound_bell: "Csengő", sound_complete: "Gong",
   sound_message: "Üzenet", sound_phone: "Telefon", sound_none: "Néma", testSound: "Próba", volume: "Hangerő",
   snoozeDefault: "Szundi az új ébresztőknél",

@@ -46,7 +46,7 @@ var catalog = {
   general: "General", language: "Limbă", languageAuto: "Automat ({language})", timeFormat: "Formatul orei",
   timeFormatAuto: "Automat ({example})", timeFormat24: "24 de ore (14:30)", timeFormat12: "12 ore (2:30 PM)",
   barPosition: "Poziția în bară", barPositionLeft: "Stânga", barPositionCenter: "Centru", barPositionRight: "Dreapta",
-  barPositionTop: "Sus", barPositionBottom: "Jos", sounds: "Sunete", alarmSound: "Alarmă", timerSound: "Temporizator",
+  barPositionTop: "Sus", barPositionBottom: "Jos", barPositionLeftOfCenter: "La stânga centrului", barPositionRightOfCenter: "La dreapta centrului", barPositionAboveCenter: "Deasupra centrului", barPositionBelowCenter: "Sub centru", barPositionTray: "Sertarul zonei de notificare", sounds: "Sunete", alarmSound: "Alarmă", timerSound: "Temporizator",
   pomodoroSound: "Fază pomodoro", sound_alarm: "Ceas deșteptător", sound_bell: "Clopoțel", sound_complete: "Gong",
   sound_message: "Mesaj", sound_phone: "Telefon", sound_none: "Silențios", testSound: "Testează", volume: "Volum",
   snoozeDefault: "Amânare pentru alarme noi",

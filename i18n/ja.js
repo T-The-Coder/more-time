@@ -46,7 +46,7 @@ var catalog = {
   general: "一般", language: "言語", languageAuto: "自動（{language}）", timeFormat: "時刻の形式",
   timeFormatAuto: "自動（{example}）", timeFormat24: "24時間（14:30）", timeFormat12: "12時間（2:30 PM）",
   barPosition: "バー内の位置", barPositionLeft: "左", barPositionCenter: "中央", barPositionRight: "右",
-  barPositionTop: "上", barPositionBottom: "下", sounds: "サウンド", alarmSound: "アラーム", timerSound: "タイマー",
+  barPositionTop: "上", barPositionBottom: "下", barPositionLeftOfCenter: "中央の左", barPositionRightOfCenter: "中央の右", barPositionAboveCenter: "中央の上", barPositionBelowCenter: "中央の下", barPositionTray: "トレイの引き出し", sounds: "サウンド", alarmSound: "アラーム", timerSound: "タイマー",
   pomodoroSound: "ポモドーロのフェーズ", sound_alarm: "目覚まし時計", sound_bell: "ベル", sound_complete: "チャイム",
   sound_message: "メッセージ", sound_phone: "電話", sound_none: "無音", testSound: "試聴", volume: "音量",
   snoozeDefault: "新しいアラームのスヌーズ",

@@ -46,7 +46,7 @@ var catalog = {
   general: "عام", language: "اللغة", languageAuto: "تلقائي ({language})", timeFormat: "تنسيق الوقت",
   timeFormatAuto: "تلقائي ({example})", timeFormat24: "24 ساعة (14:30)", timeFormat12: "12 ساعة (2:30 PM)",
   barPosition: "الموضع في الشريط", barPositionLeft: "يسار", barPositionCenter: "الوسط", barPositionRight: "يمين",
-  barPositionTop: "أعلى", barPositionBottom: "أسفل", sounds: "الأصوات", alarmSound: "المنبه", timerSound: "المؤقت",
+  barPositionTop: "أعلى", barPositionBottom: "أسفل", barPositionLeftOfCenter: "يسار الوسط", barPositionRightOfCenter: "يمين الوسط", barPositionAboveCenter: "فوق الوسط", barPositionBelowCenter: "تحت الوسط", barPositionTray: "درج علبة النظام", sounds: "الأصوات", alarmSound: "المنبه", timerSound: "المؤقت",
   pomodoroSound: "مرحلة بومودورو", sound_alarm: "ساعة منبه", sound_bell: "جرس", sound_complete: "رنين",
   sound_message: "رسالة", sound_phone: "هاتف", sound_none: "صامت", testSound: "تجربة", volume: "مستوى الصوت",
   snoozeDefault: "التأجيل للمنبهات الجديدة",

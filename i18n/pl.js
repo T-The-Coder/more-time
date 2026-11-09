@@ -46,7 +46,7 @@ var catalog = {
   general: "Ogólne", language: "Język", languageAuto: "Automatycznie ({language})", timeFormat: "Format godziny",
   timeFormatAuto: "Automatycznie ({example})", timeFormat24: "24 godziny (14:30)", timeFormat12: "12 godzin (2:30 PM)",
   barPosition: "Położenie na pasku", barPositionLeft: "Lewo", barPositionCenter: "Środek", barPositionRight: "Prawo",
-  barPositionTop: "Góra", barPositionBottom: "Dół", sounds: "Dźwięki", alarmSound: "Budzik", timerSound: "Minutnik",
+  barPositionTop: "Góra", barPositionBottom: "Dół", barPositionLeftOfCenter: "Na lewo od środka", barPositionRightOfCenter: "Na prawo od środka", barPositionAboveCenter: "Nad środkiem", barPositionBelowCenter: "Pod środkiem", barPositionTray: "Szuflada zasobnika", sounds: "Dźwięki", alarmSound: "Budzik", timerSound: "Minutnik",
   pomodoroSound: "Faza pomodoro", sound_alarm: "Budzik", sound_bell: "Dzwonek", sound_complete: "Gong",
   sound_message: "Wiadomość", sound_phone: "Telefon", sound_none: "Cisza", testSound: "Test", volume: "Głośność",
   snoozeDefault: "Drzemka dla nowych budzików",

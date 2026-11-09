@@ -46,7 +46,7 @@ var catalog = {
   general: "Umum", language: "Bahasa", languageAuto: "Otomatis ({language})", timeFormat: "Format jam",
   timeFormatAuto: "Otomatis ({example})", timeFormat24: "24 jam (14:30)", timeFormat12: "12 jam (2:30 PM)",
   barPosition: "Posisi di bilah", barPositionLeft: "Kiri", barPositionCenter: "Tengah", barPositionRight: "Kanan",
-  barPositionTop: "Atas", barPositionBottom: "Bawah", sounds: "Suara", alarmSound: "Alarm", timerSound: "Timer",
+  barPositionTop: "Atas", barPositionBottom: "Bawah", barPositionLeftOfCenter: "Kiri tengah", barPositionRightOfCenter: "Kanan tengah", barPositionAboveCenter: "Di atas tengah", barPositionBelowCenter: "Di bawah tengah", barPositionTray: "Laci baki", sounds: "Suara", alarmSound: "Alarm", timerSound: "Timer",
   pomodoroSound: "Fase pomodoro", sound_alarm: "Jam weker", sound_bell: "Lonceng", sound_complete: "Denting",
   sound_message: "Pesan", sound_phone: "Telepon", sound_none: "Senyap", testSound: "Uji", volume: "Volume",
   snoozeDefault: "Tunda untuk alarm baru",

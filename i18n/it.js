@@ -46,7 +46,7 @@ var catalog = {
   general: "Generale", language: "Lingua", languageAuto: "Automatica ({language})", timeFormat: "Formato dell’ora",
   timeFormatAuto: "Automatico ({example})", timeFormat24: "24 ore (14:30)", timeFormat12: "12 ore (2:30 PM)",
   barPosition: "Posizione nella barra", barPositionLeft: "Sinistra", barPositionCenter: "Centro", barPositionRight: "Destra",
-  barPositionTop: "In alto", barPositionBottom: "In basso", sounds: "Suoni", alarmSound: "Sveglia", timerSound: "Timer",
+  barPositionTop: "In alto", barPositionBottom: "In basso", barPositionLeftOfCenter: "A sinistra del centro", barPositionRightOfCenter: "A destra del centro", barPositionAboveCenter: "Sopra il centro", barPositionBelowCenter: "Sotto il centro", barPositionTray: "Cassetto dell'area di notifica", sounds: "Suoni", alarmSound: "Sveglia", timerSound: "Timer",
   pomodoroSound: "Fase del pomodoro", sound_alarm: "Sveglia", sound_bell: "Campana", sound_complete: "Carillon",
   sound_message: "Messaggio", sound_phone: "Telefono", sound_none: "Muto", testSound: "Prova", volume: "Volume",
   snoozeDefault: "Posticipo per le nuove sveglie",

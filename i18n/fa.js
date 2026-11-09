@@ -46,7 +46,7 @@ var catalog = {
   general: "عمومی", language: "زبان", languageAuto: "خودکار ({language})", timeFormat: "قالب ساعت",
   timeFormatAuto: "خودکار ({example})", timeFormat24: "۲۴ ساعته (14:30)", timeFormat12: "۱۲ ساعته (2:30 PM)",
   barPosition: "جای در نوار", barPositionLeft: "چپ", barPositionCenter: "وسط", barPositionRight: "راست",
-  barPositionTop: "بالا", barPositionBottom: "پایین", sounds: "صداها", alarmSound: "زنگ", timerSound: "تایمر",
+  barPositionTop: "بالا", barPositionBottom: "پایین", barPositionLeftOfCenter: "چپِ وسط", barPositionRightOfCenter: "راستِ وسط", barPositionAboveCenter: "بالای وسط", barPositionBelowCenter: "پایین وسط", barPositionTray: "کشوی سینی سیستم", sounds: "صداها", alarmSound: "زنگ", timerSound: "تایمر",
   pomodoroSound: "مرحلهٔ پومودورو", sound_alarm: "ساعت زنگ‌دار", sound_bell: "زنگوله", sound_complete: "نوای کوتاه",
   sound_message: "پیام", sound_phone: "تلفن", sound_none: "بی‌صدا", testSound: "آزمایش", volume: "بلندی صدا",
   snoozeDefault: "تعویق برای زنگ‌های تازه",

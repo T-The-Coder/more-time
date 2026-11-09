@@ -112,7 +112,7 @@ control.
     phase lit towards the Sun (the same phase numbers as More Weather);
     hovering it names the phase ("Moon · 61 % · waxing") and how it stands
     at the current place ("Berlin: 23° high · SE · sets 7:10 AM · rises
-    6:42 PM", or "below the horizon"). Display → Moon view switches it to
+    6:42 PM", or "below the horizon"). Widget/App → Moon view switches it to
     "As seen from here": the Moon as it stands in the sky of the current
     place (here or the selected city) at that moment, its lit side tilted
     as you see it there, a thin crescent's dark side faintly lit by
@@ -146,7 +146,7 @@ control.
     24 hours (one turn a day, 00 at the bottom, the night part shaded from
     that place's sunset to sunrise) and dots. The clock on top shows the
     current place's; with **Clock faces in the list** (on in the app) each row
-    shows its own small one. Settings → Display → Clock → **Clock face style**
+    shows its own small one. Settings → Widget/App → Clock → **Clock face style**
     sets one style for the clock on top instead ("Same as the place" by
     default). `e` or the pencil on the selected row (any row) opens a
     chooser under it (`← →` or a click picks, `Enter` / `Esc` close). The style
@@ -287,7 +287,7 @@ control.
     only for the years shown); before 1600 and after 2100 their times are
     marked ≈. At a solar eclipse the Earth and Moon view shows the Moon's
     shadow on Earth, at a lunar eclipse the Moon turns copper.
-  - Settings → Display → Astro: orbits, names, the month ring, rotation and
+  - Settings → Widget/App → Astro: orbits, names, the month ring, rotation and
     tilt, the Earth and Moon inset, the info, the events, the belts, the
     dwarf planets, Halley's Comet, the large moons, the spacecraft, the
     ISS, the stars, the constellations (hovering a figure highlights and
@@ -342,7 +342,8 @@ control.
     name ending in `.json` and replaces an existing file only if that is a
     More Time export, or after a second press; an import reads files up to
     1 MiB, keeping a backup of the settings it replaces.
-  - **Display:** separately for the menu bar, the widget and the app.
+  - **Menu bar, Widget, App:** a page each, with the display settings of
+    that view.
     - Menu bar: which entries show, when, and in what order; bold while
       hovered; coloured values; the bar's tooltip; open the widget on hover.
     - Widget and app: the clock (clock, sun, more), which tabs there are,
@@ -458,7 +459,7 @@ Pasting into a text field (Ctrl+V, Shift+Insert or the middle button) reads at m
 | `s` | Snooze |
 | **Settings** | |
 | `Tab` / `⇧ Tab` | Previous / next settings page |
-| `1` `2` `3` | Menu bar / widget / app settings (Display) |
+| `1` `2` `3` | Menu bar / widget / app settings pages |
 | `/` | Search the settings (`Esc` clears, `↓` to the results) |
 | `↑ ↓` / `j k` | Previous / next setting |
 | `← →` / `h l` | Change the value or pick the switch column |

@@ -46,7 +46,7 @@ var catalog = {
   general: "Genel", language: "Dil", languageAuto: "Otomatik ({language})", timeFormat: "Saat biçimi",
   timeFormatAuto: "Otomatik ({example})", timeFormat24: "24 saat (14:30)", timeFormat12: "12 saat (2:30 PM)",
   barPosition: "Çubuktaki konum", barPositionLeft: "Sol", barPositionCenter: "Orta", barPositionRight: "Sağ",
-  barPositionTop: "Üst", barPositionBottom: "Alt", sounds: "Sesler", alarmSound: "Alarm", timerSound: "Zamanlayıcı",
+  barPositionTop: "Üst", barPositionBottom: "Alt", barPositionLeftOfCenter: "Ortanın solu", barPositionRightOfCenter: "Ortanın sağı", barPositionAboveCenter: "Ortanın üstü", barPositionBelowCenter: "Ortanın altı", barPositionTray: "Tepsi çekmecesi", sounds: "Sesler", alarmSound: "Alarm", timerSound: "Zamanlayıcı",
   pomodoroSound: "Pomodoro evresi", sound_alarm: "Çalar saat", sound_bell: "Zil", sound_complete: "Çan",
   sound_message: "Mesaj", sound_phone: "Telefon", sound_none: "Sessiz", testSound: "Dene", volume: "Ses düzeyi",
   snoozeDefault: "Yeni alarmlarda erteleme",

@@ -46,7 +46,7 @@ var catalog = {
   general: "Yleiset", language: "Kieli", languageAuto: "Automaattinen ({language})", timeFormat: "Ajan muoto",
   timeFormatAuto: "Automaattinen ({example})", timeFormat24: "24 tuntia (14:30)", timeFormat12: "12 tuntia (2:30 PM)",
   barPosition: "Sijainti palkissa", barPositionLeft: "Vasen", barPositionCenter: "Keskellä", barPositionRight: "Oikea",
-  barPositionTop: "Ylhäällä", barPositionBottom: "Alhaalla", sounds: "Äänet", alarmSound: "Herätys", timerSound: "Ajastin",
+  barPositionTop: "Ylhäällä", barPositionBottom: "Alhaalla", barPositionLeftOfCenter: "Keskeltä vasemmalle", barPositionRightOfCenter: "Keskeltä oikealle", barPositionAboveCenter: "Keskikohdan yläpuolella", barPositionBelowCenter: "Keskikohdan alapuolella", barPositionTray: "Ilmoitusalueen laatikko", sounds: "Äänet", alarmSound: "Herätys", timerSound: "Ajastin",
   pomodoroSound: "Pomodoron vaihe", sound_alarm: "Herätyskello", sound_bell: "Kello", sound_complete: "Kilahdus",
   sound_message: "Viesti", sound_phone: "Puhelin", sound_none: "Äänetön", testSound: "Kokeile", volume: "Äänenvoimakkuus",
   snoozeDefault: "Torkku uusille herätyksille",

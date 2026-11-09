@@ -46,7 +46,7 @@ var catalog = {
   general: "Γενικά", language: "Γλώσσα", languageAuto: "Αυτόματα ({language})", timeFormat: "Μορφή ώρας",
   timeFormatAuto: "Αυτόματα ({example})", timeFormat24: "24ωρη (14:30)", timeFormat12: "12ωρη (2:30 PM)",
   barPosition: "Θέση στη γραμμή", barPositionLeft: "Αριστερά", barPositionCenter: "Κέντρο", barPositionRight: "Δεξιά",
-  barPositionTop: "Πάνω", barPositionBottom: "Κάτω", sounds: "Ήχοι", alarmSound: "Ξυπνητήρι", timerSound: "Αντίστροφη μέτρηση",
+  barPositionTop: "Πάνω", barPositionBottom: "Κάτω", barPositionLeftOfCenter: "Αριστερά του κέντρου", barPositionRightOfCenter: "Δεξιά του κέντρου", barPositionAboveCenter: "Πάνω από το κέντρο", barPositionBelowCenter: "Κάτω από το κέντρο", barPositionTray: "Συρτάρι πλαισίου", sounds: "Ήχοι", alarmSound: "Ξυπνητήρι", timerSound: "Αντίστροφη μέτρηση",
   pomodoroSound: "Φάση pomodoro", sound_alarm: "Ξυπνητήρι", sound_bell: "Καμπάνα", sound_complete: "Κουδούνισμα",
   sound_message: "Μήνυμα", sound_phone: "Τηλέφωνο", sound_none: "Σιωπή", testSound: "Δοκιμή", volume: "Ένταση",
   snoozeDefault: "Αναβολή για νέα ξυπνητήρια",

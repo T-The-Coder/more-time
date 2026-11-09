@@ -46,7 +46,7 @@ var catalog = {
   general: "Generelt", language: "Sprog", languageAuto: "Automatisk ({language})", timeFormat: "Tidsformat",
   timeFormatAuto: "Automatisk ({example})", timeFormat24: "24 timer (14:30)", timeFormat12: "12 timer (2:30 PM)",
   barPosition: "Placering i linjen", barPositionLeft: "Venstre", barPositionCenter: "Midten", barPositionRight: "Højre",
-  barPositionTop: "Øverst", barPositionBottom: "Nederst", sounds: "Lyde", alarmSound: "Alarm", timerSound: "Timer",
+  barPositionTop: "Øverst", barPositionBottom: "Nederst", barPositionLeftOfCenter: "Venstre for midten", barPositionRightOfCenter: "Højre for midten", barPositionAboveCenter: "Over midten", barPositionBelowCenter: "Under midten", barPositionTray: "Bakkeskuffe", sounds: "Lyde", alarmSound: "Alarm", timerSound: "Timer",
   pomodoroSound: "Pomodorofase", sound_alarm: "Vækkeur", sound_bell: "Klokke", sound_complete: "Klang",
   sound_message: "Besked", sound_phone: "Telefon", sound_none: "Lydløs", testSound: "Test", volume: "Lydstyrke",
   snoozeDefault: "Snooze for nye alarmer",
